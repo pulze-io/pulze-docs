@@ -1,0 +1,108 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Pulze",
+  "colors": {
+    "primary": "#232323",
+    "light": "#FFFFFF",
+    "dark": "#232323"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Home",
+        "groups": [
+          {
+            "group": "Pulze",
+            "pages": [
+              "index",
+              "about",
+              "faq",
+              "contact"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Scene Manager",
+        "groups": [
+          {
+            "group": "Scene Manager",
+            "pages": [
+              "products/scene-manager/index",
+              "products/scene-manager/getting-started",
+              "products/scene-manager/features"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "RenderFlow",
+        "groups": [
+          {
+            "group": "RenderFlow",
+            "pages": [
+              "products/renderflow/index",
+              "products/renderflow/getting-started",
+              "products/renderflow/features"
+            ]
+          },
+          {
+            "group": "Developer Docs",
+            "pages": [
+              "products/renderflow/developers/overview",
+              "products/renderflow/developers/authentication",
+              "products/renderflow/developers/webhooks"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "products/renderflow/api-reference/introduction"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Project Dream",
+        "groups": [
+          {
+            "group": "Project Dream",
+            "pages": [
+              "products/project-dream/index",
+              "products/project-dream/getting-started",
+              "products/project-dream/features"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@pulze.io"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://pulze.io"
+    }
+  },
+  "footer": {
+    "socials": {
+      "instagram": "https://instagram.com/pulzeio",
+      "discord": "https://discord.gg/BxtBs9aN4E",
+      "github": "https://github.com/pulze-io",
+      "linkedin": "https://linkedin.com/company/pulze-io",
+      "website": "https://pulze.io"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+---
+title: "Webhooks"
+description: "Set up webhook notifications for RenderFlow events."
+---
+
+## Webhooks
+
+Webhooks let you receive real-time HTTP notifications when events occur in RenderFlow, such as when a render job completes or fails.
+
+### Setting up webhooks
+
+1. Navigate to **Settings > Webhooks** in your Pulze dashboard.
+2. Click **Add Webhook** and enter your endpoint URL.
+3. Select the events you want to subscribe to.
+4. Save the webhook configuration.
+
+### Event types
+
+| Event | Description |
+|---|---|
+| `job.submitted` | A new render job was submitted |
+| `job.started` | A render job started processing |
+| `job.completed` | A render job completed successfully |
+| `job.failed` | A render job failed |
+| `job.cancelled` | A render job was cancelled |
+
+### Payload format
+
+Webhook payloads are sent as `POST` requests with a JSON body:
+
+```json
+{
+  "event": "job.completed",
+  "timestamp": "2026-01-15T10:30:00Z",
+  "data": {
+    "job_id": "rj_abc123",
+    "status": "completed",
+    "duration_seconds": 1200
+  }
+}
+```
+
+### Verifying webhooks
+
+Each webhook request includes a signature in the `X-Pulze-Signature` header. Verify this signature to ensure the request came from Pulze.
+
+<Info>
+  Webhook endpoints must respond with a `200` status code within 30 seconds. Failed deliveries will be retried up to 3 times with exponential backoff.
+</Info>
