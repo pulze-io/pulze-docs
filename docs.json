@@ -96,6 +96,14 @@
       "href": "https://pulze.io"
     }
   },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
+  },
   "footer": {
     "socials": {
       "instagram": "https://instagram.com/pulzeio",
