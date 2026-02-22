@@ -1,0 +1,63 @@
+---
+title: "Collecting Logs"
+description: "How to gather logs and diagnostic information when contacting RenderFlow support."
+---
+
+When you encounter an issue you can't resolve, our support team is here to help. This guide shows you how to collect the information we need.
+
+## Quick method: Error report collector
+
+The fastest way to gather logs from multiple computers at once.
+
+1. Go to **Menu → Support → Error report collector**
+2. Select the nodes experiencing issues
+3. Optionally select related jobs (helps narrow down the problem)
+4. Click **Collect**
+5. Send the generated archive to support
+
+<Frame caption="Error report collector dialog">
+  <img src="https://placehold.co/700x450?text=Error+Report+Collector" alt="Error report collector" />
+</Frame>
+
+## Manual collection
+
+If the collector isn't available, find logs in these locations:
+
+| Log Type | Location |
+|----------|----------|
+| Service log | `C:\ProgramData\RenderFlow\logs\service-YYYY-MM-DD.log` |
+| Database log | `C:\ProgramData\RenderFlow\logs\database-YYYY-MM-DD.log` |
+| Job logs | `C:\ProgramData\RenderFlow\logs\<jobid>.log` |
+| 3ds Max plugin log | `%TEMP%\RenderFlowMax.YYYYMMDD.log` |
+| 3ds Max network log | `%LOCALAPPDATA%\Autodesk\3dsMax\<version>\ENU\Network\Max.log` |
+
+## Viewing logs in RenderFlow
+
+### Service logs
+
+View your computer's logs directly in the app:
+
+**Menu → Support → Open logs**
+
+<Frame caption="Service log viewer">
+  <img src="https://placehold.co/900x400?text=Service+Log+Viewer" alt="Service log viewer" />
+</Frame>
+
+### Job logs
+
+When a task fails, check the job logs:
+
+1. Open the job details
+2. Find the **Nodes** section
+3. Click **Open logs**
+4. Filter, select, and copy or save logs as needed
+
+<Frame caption="Job log viewer">
+  <img src="https://placehold.co/900x400?text=Job+Log+Viewer" alt="Job log viewer" />
+</Frame>
+
+---
+
+<Note>
+**Privacy:** Per our EULA, all files sent to support are stored securely, used only for debugging, and deleted after 90 days.
+</Note>

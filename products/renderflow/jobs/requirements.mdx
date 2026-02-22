@@ -1,0 +1,57 @@
+---
+title: "Requirements"
+description: "How RenderFlow matches jobs to nodes based on software and other requirements."
+---
+
+When you submit a job, RenderFlow checks which nodes can render it. A job's **requirements** define what's needed, and only nodes that meet all requirements receive tasks.
+
+<Frame caption="Job requirements panel showing software and version requirements">
+  <img src="https://placehold.co/900x400?text=Job+Requirements+Panel" alt="Job requirements panel" />
+</Frame>
+
+## Software requirements
+
+Every job has software requirements based on your scene:
+
+- **Host Application** — The 3D software (3ds Max, Blender, Cinema 4D, etc.)
+- **Render Engine** — V-Ray, Corona, Arnold, Redshift, Cycles, etc.
+- **Plugins** — Any additional plugins the scene uses
+
+RenderFlow automatically detects installed software on each node. If a node doesn't have the required software, it won't receive tasks from that job.
+
+## Version matching
+
+You can control how strictly versions are matched:
+
+| Level | Description |
+|-------|-------------|
+| **No check** | Any version is accepted |
+| **Major** | Major version must match (e.g., V-Ray 7.x) |
+| **Major + Minor** | Major and minor must match (e.g., V-Ray 7.2.x) |
+| **Exact** | Version must match exactly |
+
+This is useful when a scene requires a specific version, or when version matching is not required.
+
+## Asset requirements
+
+Jobs can require access to specific drives or network paths. RenderFlow checks that nodes have the required drives mounted before assigning tasks.
+
+## Requirement errors
+
+When a node can't work on a job due to missing requirements, RenderFlow creates an error on that node with details about what's missing. You can see these errors in the job details panel under the Nodes section.
+
+## Why tasks stay pending
+
+If your job stays in "Pending" status, no available nodes meet the requirements. Check:
+
+- Do any nodes have the required software and version?
+- Are nodes online and in Idle status?
+- Can nodes access the required drives?
+
+<Tip>
+Use **Software Analytics** (under Nodes) to compare installed software across all your computers. Select a base computer and instantly see which nodes have matching, missing, or different versions of your applications and plugins.
+</Tip>
+
+<Frame caption="Software Analytics comparison view">
+  <img src="https://placehold.co/900x500?text=Software+Analytics" alt="Software Analytics" />
+</Frame>

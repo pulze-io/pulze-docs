@@ -1,0 +1,63 @@
+---
+title: "Pools"
+description: "Organize render nodes into groups with pools."
+---
+
+Pools let you organize nodes into groups. This is useful for larger farms where you want to dedicate certain machines to specific projects or teams.
+
+<Frame caption="Pools settings page">
+  <img src="https://placehold.co/900x400?text=Pools+Settings" alt="Pools settings" />
+</Frame>
+
+## How pools work
+
+- Each node belongs to exactly one pool
+- Jobs are submitted to a specific pool
+- Only nodes in that pool will work on the job
+- A default pool is created automatically and cannot be deleted
+
+## Pool settings
+
+| Setting | Description |
+|---------|-------------|
+| **Name** | Display name for the pool |
+| **Distribution** | Task distribution method: Default or Balanced |
+
+## Distribution methods
+
+- **Default** — Prioritizes jobs by priority, then by submission date
+- **Balanced** — Distributes nodes more evenly across jobs of similar priority
+
+## Managing pools
+
+### Creating a pool
+
+1. Go to **Settings → Pools**
+2. Click **Add Pool**
+3. Configure the pool name and settings
+
+### Assigning nodes to pools
+
+1. Go to the **Nodes** page
+2. Right-click a node (or select multiple)
+3. Choose **Pool** and select the target pool
+
+<Frame caption="Node context menu showing pool selection">
+  <img src="https://placehold.co/400x350?text=Pool+Selection" alt="Pool selection context menu" />
+</Frame>
+
+### Deleting a pool
+
+1. Click the delete icon next to the pool
+2. Confirm deletion
+
+When a pool is deleted, all nodes and jobs assigned to it are moved to the default pool.
+
+## When to use pools
+
+**Single pool (default):** Small teams or farms where all nodes should be available for all jobs.
+
+**Multiple pools:** Useful when you need to:
+- Dedicate powerful machines to specific projects
+- Separate workstations from dedicated render nodes
+- Give different teams their own resources

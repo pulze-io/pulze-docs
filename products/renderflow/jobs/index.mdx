@@ -1,0 +1,73 @@
+---
+title: "Jobs"
+description: "Understanding how render jobs work in RenderFlow — jobs and tasks."
+---
+
+When you submit a scene to RenderFlow, it becomes a **job**. The job is then divided into **tasks** that get distributed across your render nodes.
+
+<Frame caption="Jobs page showing job list with various statuses">
+  <img src="https://placehold.co/900x500?text=Jobs+Page" alt="Jobs page" />
+</Frame>
+
+## Job structure
+
+```
+Job
+├── Task 1 (frame 1)
+├── Task 2 (frame 2)
+├── Task 3 (frame 3)
+└── ...
+```
+
+Tasks are assigned to available nodes. When a node finishes a task, it receives another until the job is complete.
+
+## Job statuses
+
+| Status | Description |
+|--------|-------------|
+| **Scheduled** | Waiting for the scheduled start time |
+| **Pending** | Waiting for available nodes |
+| **Working** | Tasks are being processed |
+| **Completed** | All tasks finished successfully |
+| **Suspended** | Paused by user |
+
+## Task statuses
+
+| Status | Description |
+|--------|-------------|
+| **Pending** | Waiting to be assigned |
+| **Queued** | Assigned to a node, waiting to start |
+| **Preparing** | Node is setting up the render |
+| **Working** | Currently rendering |
+| **Completed** | Finished successfully |
+| **Failed** | Encountered an error |
+
+## Priority
+
+Priority ranges from **1 to 100**, where 100 is the most important. Higher priority jobs get more nodes assigned to them, which means they finish sooner.
+
+## Job actions
+
+| Action | Description |
+|--------|-------------|
+| **Start** | Begin processing a suspended job |
+| **Suspend** | Pause the job |
+| **Reset** | Reset all tasks, statistics, and job information |
+| **Archive** | Move completed job to archive |
+| **Delete** | Remove job entirely |
+
+## Viewing job details
+
+Click any job to see detailed information:
+
+<Frame caption="Job details panel showing tasks, statistics, and properties">
+  <img src="https://placehold.co/900x500?text=Job+Details+Panel" alt="Job details panel" />
+</Frame>
+
+- **Tasks** — List of all tasks with status, progress, timing, and the node processing each task
+- **Nodes** — All nodes that have worked on this job
+- **Statistics** — Total render time, remaining time, estimated finish, average frame time
+- **Properties** — Priority, user, pool, schedule, cleanup settings
+- **Requirements** — Software and version requirements
+- **Dependencies** — Other jobs this one depends on
+- **Notifications** — Who gets notified when the job completes

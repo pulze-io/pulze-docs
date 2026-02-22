@@ -3,32 +3,30 @@ title: "Authentication"
 description: "Learn how to authenticate with the RenderFlow API."
 ---
 
-## Authentication
-
 All RenderFlow API requests require authentication via an API key.
 
-### Obtaining an API key
+## Obtaining an API key
 
-1. Log in to your Pulze account.
-2. Navigate to **Settings > API Keys**.
-3. Click **Create API Key** and give it a descriptive name.
-4. Copy the key — it will only be shown once.
+1. Open RenderFlow on any connected machine
+2. Navigate to **Settings → API Keys**
+3. Click **Create API Key** and give it a descriptive name
+4. Copy the key — it will only be shown once
 
-### Using your API key
+## Using your API key
 
-Include the API key in the `Authorization` header of every request:
+Include the key in the `x-renderflow-api-key` header of every request:
 
 ```bash
-curl -X GET https://api.pulze.com/renderflow/v1/jobs \
-  -H "Authorization: Bearer YOUR_API_KEY"
+curl -X GET "http://localhost:44442/api/v1/jobs" \
+  -H "x-renderflow-api-key: your-api-key-here"
 ```
 
-### Key management
+## Key management
 
-- **Rotate keys regularly** to maintain security.
-- **Use separate keys** for different environments (development, staging, production).
-- **Revoke compromised keys** immediately from the API Keys settings page.
+- **Rotate keys regularly** to maintain security
+- **Use separate keys** for different integrations
+- **Revoke compromised keys** immediately from the API Keys settings page
 
 <Warning>
-  Never expose your API keys in client-side code or public repositories.
+Never expose your API keys in client-side code or public repositories.
 </Warning>

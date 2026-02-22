@@ -5,6 +5,3 @@
 # Draft content
 drafts/
 *.draft.mdx
-
-# OpenAPI placeholder (uncomment when ready to use)
-# products/renderflow/openapi.json

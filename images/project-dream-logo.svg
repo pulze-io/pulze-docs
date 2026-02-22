@@ -1,4 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="8" fill="#16A34A" opacity="0.1"/>
-  <text x="32" y="40" font-family="Arial" font-size="24" fill="#16A34A" text-anchor="middle">PD</text>
+<svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_422_15)">
+<path d="M140 280C201.35 280 235.45 280 257.72 257.72C280 235.44 280 201.34 280 140C280 78.66 280 44.55 257.72 22.28C235.45 0 201.35 0 140 0C78.65 0 44.55 0 22.28 22.28C0 44.55 0 78.65 0 140C0 201.35 0 235.45 22.28 257.72C44.56 280 78.66 280 140 280Z" fill="url(#paint0_linear_422_15)"/>
+<path d="M93.5494 162.53C81.2494 162.21 71.6094 151.79 71.6094 139.49V70.54C71.6094 58.24 81.2494 47.82 93.5494 47.5C106.269 47.17 116.689 57.39 116.689 70.03V139.99C116.689 152.64 106.279 162.85 93.5494 162.52V162.53Z" fill="url(#paint1_linear_422_15)"/>
+<path d="M127.189 47.5H94.6493C82.3493 47.5 71.9293 57.14 71.6093 69.44C71.2793 82.16 81.4993 92.58 94.1393 92.58H126.429C152.469 92.58 174.229 113.26 174.599 139.3C174.979 165.77 153.559 187.42 127.179 187.42H117.179C104.879 187.42 94.4593 197.06 94.1393 209.36C93.8093 222.08 104.029 232.5 116.669 232.5H126.119C177.179 232.5 219.399 191.57 219.669 140.5C219.939 89.27 178.339 47.5 127.169 47.5H127.189Z" fill="#F9F9F9"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_422_15" x1="257.72" y1="257.72" x2="27.32" y2="27.32" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F97316"/>
+<stop offset="1" stop-color="#F99958"/>
+</linearGradient>
+<linearGradient id="paint1_linear_422_15" x1="105.229" y1="47.31" x2="81.5194" y2="171.17" gradientUnits="userSpaceOnUse">
+<stop offset="0.08" stop-color="#989898"/>
+<stop offset="0.49" stop-color="#F9F9F9"/>
+</linearGradient>
+<clipPath id="clip0_422_15">
+<rect width="280" height="280" fill="white"/>
+</clipPath>
+</defs>
 </svg>

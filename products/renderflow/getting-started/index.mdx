@@ -1,0 +1,84 @@
+---
+title: "Getting Started"
+description: "Learn how to install, configure, and start using RenderFlow."
+---
+
+RenderFlow is an artist-friendly network rendering solution built for studios of all sizes. From small teams with a handful of machines to large production facilities with hundreds of render nodes, RenderFlow makes it easy to manage your render farm without the technical complexity.
+
+<Frame caption="RenderFlow main dashboard showing jobs and nodes">
+  <img src="https://placehold.co/900x500?text=RenderFlow+Dashboard" alt="RenderFlow main dashboard" />
+</Frame>
+
+## What is RenderFlow?
+
+RenderFlow automates the entire network rendering workflow by automatically distributing render tasks across your available machines so artists can focus on creating instead of managing infrastructure.
+
+## Architecture overview
+
+RenderFlow uses a server-node architecture where one machine acts as the central **Server** that coordinates all rendering activity, while other machines connect as **Nodes** or **Workstations**.
+
+<Frame caption="Architecture diagram showing server, nodes, and workstations">
+  <img src="https://placehold.co/900x400?text=Architecture+Diagram" alt="RenderFlow architecture diagram" />
+</Frame>
+
+- **Server** — The central hub that manages the job queue, coordinates task distribution and stores the database. One server can manage hundreds of connected machines.
+- **Node** — A dedicated render machine that connects to the server and processes assigned tasks. Nodes automatically report their available software, hardware capabilities, and current status.
+- **Workstation** — An artist's machine that can submit jobs and optionally participate in rendering. Workstations start in a suspended state by default, so they only render when the artist chooses to contribute their machine.
+
+## Quick navigation
+
+<Tabs>
+  <Tab title="New to RenderFlow?">
+    <Steps>
+      <Step title="System Requirements">
+        Check hardware and software prerequisites. [View requirements](/products/renderflow/getting-started/requirements)
+      </Step>
+      <Step title="Installation">
+        Install RenderFlow on your machines. [Installation guide](/products/renderflow/getting-started/installation)
+      </Step>
+      <Step title="Quick Start">
+        Navigate the interface and submit your first render job. [Quick start](/products/renderflow/getting-started/quick-start)
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Already installed?">
+    <CardGroup cols={2}>
+      <Card title="Submitting Jobs" icon="upload" href="/products/renderflow/jobs/submit">
+        Learn to submit jobs
+      </Card>
+      <Card title="Managing Jobs" icon="list-check" href="/products/renderflow/jobs/manage">
+        Monitor and control your render jobs
+      </Card>
+      <Card title="Managing Nodes" icon="server" href="/products/renderflow/nodes">
+        Monitor and manage your render farm
+      </Card>
+      <Card title="Statistics" icon="chart-bar" href="/products/renderflow/statistics">
+        View farm performance and usage metrics
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="Developers">
+    <CardGroup cols={2}>
+      <Card title="REST API" icon="code" href="/products/renderflow/developers/rest-api">
+        Programmatic access for building integrations
+      </Card>
+      <Card title="CLI" icon="terminal" href="/products/renderflow/developers/cli">
+        Command-line interface for scripting and automation
+      </Card>
+      <Card title="MCP Server" icon="robot" href="/products/renderflow/developers/mcp">
+        AI assistant integration with Claude
+      </Card>
+    </CardGroup>
+  </Tab>
+</Tabs>
+
+## Supported software
+
+RenderFlow supports rendering with:
+
+| Category | Software |
+|----------|----------|
+| **3D Applications** | 3ds Max, Blender, Cinema 4D, V-Ray Standalone |
+| **Compositing** | Fusion |
+
+See [Supported Software](/products/renderflow/reference/supported-software) for complete version compatibility.

@@ -1,0 +1,970 @@
+---
+title: "REST API"
+description: "Complete RenderFlow REST API reference with endpoints, schemas, and examples."
+---
+
+RenderFlow provides a REST API for managing jobs, nodes, tasks, pools, and more. Interactive API documentation is also available at `http://localhost:44442/docs` on any machine running RenderFlow.
+
+<Frame caption="Interactive API documentation (Swagger UI)">
+  <img src="https://placehold.co/900x500?text=API+Documentation+Interface" alt="API documentation" />
+</Frame>
+
+## Base URL
+
+```
+http://<ip>:44442/api/v1
+```
+
+Replace `<ip>` with the IP address of any machine running RenderFlow. Use `localhost` for your local machine.
+
+## Authentication
+
+All requests require an API key in the `x-renderflow-api-key` header:
+
+```
+x-renderflow-api-key: your-api-key-here
+```
+
+Generate keys from **Settings → API Keys**. See the [Authentication](/products/renderflow/developers/authentication) page for details.
+
+## Response format
+
+All endpoints return JSON. Timestamps are Unix milliseconds. IDs are MongoDB ObjectId strings.
+
+---
+
+## Info
+
+### Get service info
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/info</code>
+</div>
+
+Returns information about the running RenderFlow instance.
+
+**Response**
+
+```json
+{
+  "node_id": "string",
+  "version": "string",
+  "build_type": "string",
+  "node_type": "monitor | node | workstation | server",
+  "platform": "string",
+  "hostname": "string",
+  "account": {
+    "id": "string",
+    "name": "string",
+    "nickname": "string",
+    "picture": "string",
+    "updated_at": "string"
+  }
+}
+```
+
+---
+
+## Jobs
+
+### List all jobs
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/jobs</code>
+</div>
+
+Returns an array of all jobs.
+
+**Response:** `IJob[]`
+
+<CodeGroup>
+```bash curl
+curl -X GET "http://localhost:44442/api/v1/jobs" \
+  -H "x-renderflow-api-key: your-api-key-here"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "http://localhost:44442/api/v1/jobs",
+    headers={"x-renderflow-api-key": "your-api-key-here"}
+)
+
+for job in response.json():
+    print(f"{job['name']} - {job['status']}")
+```
+</CodeGroup>
+
+---
+
+### Get a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/jobs/{'{id}'}</code>
+</div>
+
+Returns a specific job by ID.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Job ID |
+
+**Response:** `IJob`
+
+---
+
+### Create a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#eab308', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>POST</span>
+  <code>/jobs/create</code>
+</div>
+
+Creates a new render job.
+
+**Request body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | string | Yes | Job name |
+| `file` | string | Yes | Path to the scene file |
+| `type` | TaskType | Yes | Job type (e.g., `3dsmax.render`, `blender.render`, `cinema4d.render`) |
+| `status` | string | Yes | Initial status: `pending` or `suspended` |
+| `host` | object | Yes | Host application — `{ id, name, version }` |
+| `engine` | object | No | Render engine — `{ id, name, version }` |
+| `plugins` | array | No | Required plugins — `[{ id, name, version }]` |
+| `resolution` | string | No | Output resolution (e.g., `1920x1080`) |
+| `output` | array | No | Output paths — `[{ type, enabled, path }]` |
+| `frame` | string | No | Frame range (e.g., `1-100`) |
+| `pool_id` | string | No | Target pool ID |
+| `priority` | number | No | Priority (0-100, default: 25) |
+| `dependencies` | string[] | No | Job IDs this job depends on |
+| `nodes` | string[] | No | Whitelisted node IDs |
+
+<CodeGroup>
+```bash curl
+curl -X POST "http://localhost:44442/api/v1/jobs/create" \
+  -H "x-renderflow-api-key: your-api-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Render Job",
+    "file": "S:\\projects\\scene.max",
+    "type": "3dsmax.render",
+    "status": "pending",
+    "host": { "id": "3dsmax", "name": "3ds Max", "version": "2025" },
+    "engine": { "id": "vray", "name": "V-Ray", "version": "6.0" },
+    "frame": "1-100",
+    "priority": 50
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "http://localhost:44442/api/v1/jobs/create",
+    headers={
+        "x-renderflow-api-key": "your-api-key-here",
+        "Content-Type": "application/json"
+    },
+    json={
+        "name": "My Render Job",
+        "file": "S:\\projects\\scene.max",
+        "type": "3dsmax.render",
+        "status": "pending",
+        "host": {"id": "3dsmax", "name": "3ds Max", "version": "2025"},
+        "engine": {"id": "vray", "name": "V-Ray", "version": "6.0"},
+        "frame": "1-100",
+        "priority": 50
+    }
+)
+
+job = response.json()
+print(f"Created: {job['name']} ({job['_id']})")
+```
+</CodeGroup>
+
+**Response:** `IJob` (201 Created)
+
+---
+
+### Update a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#a855f7', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>PATCH</span>
+  <code>/jobs/{'{id}'}</code>
+</div>
+
+Updates job settings. All fields are optional.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `priority` | number | Job priority (0-100) |
+| `limit` | number | Node limit |
+| `max_batch_size` | number | Maximum batch size |
+| `whitelisted_nodes` | string[] | Whitelisted node IDs |
+
+---
+
+### Delete a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#ef4444', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>DELETE</span>
+  <code>/jobs/{'{id}'}</code>
+</div>
+
+Permanently deletes a job.
+
+---
+
+### Start a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#eab308', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>POST</span>
+  <code>/jobs/{'{id}'}/start</code>
+</div>
+
+Starts a suspended or pending job.
+
+<CodeGroup>
+```bash curl
+curl -X POST "http://localhost:44442/api/v1/jobs/60f7b1a2c3d4e5f6a7b8c9d0/start" \
+  -H "x-renderflow-api-key: your-api-key-here"
+```
+
+```python Python
+import requests
+
+job_id = "60f7b1a2c3d4e5f6a7b8c9d0"
+
+requests.post(
+    f"http://localhost:44442/api/v1/jobs/{job_id}/start",
+    headers={"x-renderflow-api-key": "your-api-key-here"}
+)
+```
+</CodeGroup>
+
+---
+
+### Stop a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#eab308', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>POST</span>
+  <code>/jobs/{'{id}'}/stop</code>
+</div>
+
+Stops a running job.
+
+---
+
+### Reset a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#eab308', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>POST</span>
+  <code>/jobs/{'{id}'}/reset</code>
+</div>
+
+Resets a job, clearing all task progress.
+
+---
+
+### Archive a job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#eab308', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>POST</span>
+  <code>/jobs/{'{id}'}/archive</code>
+</div>
+
+Archives a completed or failed job.
+
+---
+
+### Update job pool
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#a855f7', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>PATCH</span>
+  <code>/jobs/{'{id}'}/pool</code>
+</div>
+
+Moves a job to a different pool.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `poolId` | string | Yes | Target pool ID |
+
+---
+
+### Job events (SSE)
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/jobs/events</code>
+</div>
+
+Server-Sent Events stream for real-time job updates.
+
+<CodeGroup>
+```bash curl
+curl -N "http://localhost:44442/api/v1/jobs/events" \
+  -H "x-renderflow-api-key: your-api-key-here"
+```
+
+```python Python
+import sseclient
+import requests
+
+response = requests.get(
+    "http://localhost:44442/api/v1/jobs/events",
+    headers={"x-renderflow-api-key": "your-api-key-here"},
+    stream=True
+)
+
+for event in sseclient.SSEClient(response).events():
+    print(event.data)
+```
+</CodeGroup>
+
+---
+
+## Tasks
+
+### List tasks
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/tasks</code>
+</div>
+
+Returns tasks for a specific job (paginated).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `jobId` | string | Yes | Job ID (query) |
+| `pageInput` | number | Yes | Page number (query) |
+| `limit` | number | No | Items per page (query) |
+
+---
+
+### Get a task
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/tasks/{'{id}'}</code>
+</div>
+
+Returns a specific task by ID.
+
+**Response:** `IJobTask`
+
+---
+
+### Get task logs
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/tasks/{'{id}'}/logs</code>
+</div>
+
+Returns render logs for a task.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `offset` | number | No | Line offset (query) |
+| `limit` | number | No | Max lines to return (query) |
+
+---
+
+### Stream task logs (SSE)
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/tasks/{'{id}'}/logs/stream</code>
+</div>
+
+Server-Sent Events stream for real-time task log output.
+
+---
+
+### Get task thumbnail
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/tasks/{'{id}'}/thumbnail</code>
+</div>
+
+Returns the rendered thumbnail image for a task.
+
+---
+
+### Task events (SSE)
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/tasks/events/{'{job_id}'}</code>
+</div>
+
+Server-Sent Events stream for real-time task updates for a specific job.
+
+---
+
+## Nodes
+
+### List all nodes
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/nodes</code>
+</div>
+
+Returns an array of all nodes.
+
+**Response:** `INode[]`
+
+---
+
+### Get a node
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/nodes/{'{id}'}</code>
+</div>
+
+Returns a specific node by ID, including hardware specs, installed software, and benchmark results.
+
+**Response:** `INode`
+
+---
+
+### Delete a node
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#ef4444', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>DELETE</span>
+  <code>/nodes/{'{id}'}</code>
+</div>
+
+Deletes a node by ID.
+
+---
+
+### Update node status
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#a855f7', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>PATCH</span>
+  <code>/nodes/{'{id}'}/status</code>
+</div>
+
+Updates the status of a node.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `status` | string | Yes | Target status: `idle`, `suspended`, `finishing`, `reserved` |
+
+<CodeGroup>
+```bash curl
+curl -X PATCH "http://localhost:44442/api/v1/nodes/60f7b1a2c3d4e5f6a7b8c9d0/status" \
+  -H "x-renderflow-api-key: your-api-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "suspended"}'
+```
+
+```python Python
+import requests
+
+node_id = "60f7b1a2c3d4e5f6a7b8c9d0"
+
+requests.patch(
+    f"http://localhost:44442/api/v1/nodes/{node_id}/status",
+    headers={"x-renderflow-api-key": "your-api-key-here"},
+    json={"status": "suspended"}
+)
+```
+</CodeGroup>
+
+---
+
+### Get node utilization
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/nodes/{'{id}'}/utilization</code>
+</div>
+
+Returns current hardware utilization (CPU, GPU, RAM) for a node.
+
+---
+
+### Update node pool
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#a855f7', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>PATCH</span>
+  <code>/nodes/{'{id}'}/pool</code>
+</div>
+
+Moves a node to a different pool.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `poolId` | string | Yes | Target pool ID |
+
+---
+
+### Get benchmark rankings
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/nodes/benchmarks/ranking</code>
+</div>
+
+Returns nodes ranked by benchmark score.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `type` | string | No | Benchmark type (default: `vray`). Options: `vray`, `vray-gpu-cuda`, `vray-gpu-rtx`, `cinebench`, `corona`, `blender` |
+| `limit` | number | No | Max nodes to return (default: 50) |
+
+<CodeGroup>
+```bash curl
+curl -X GET "http://localhost:44442/api/v1/nodes/benchmarks/ranking?type=vray&limit=10" \
+  -H "x-renderflow-api-key: your-api-key-here"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "http://localhost:44442/api/v1/nodes/benchmarks/ranking",
+    headers={"x-renderflow-api-key": "your-api-key-here"},
+    params={"type": "vray", "limit": 10}
+)
+
+ranking = response.json()
+for node in ranking["nodes"]:
+    print(f"{node['rank']}. {node['node_name']} - {node['score']} {ranking['unit']}")
+```
+</CodeGroup>
+
+---
+
+### Node events (SSE)
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/nodes/events</code>
+</div>
+
+Server-Sent Events stream for real-time node updates.
+
+---
+
+## Pools
+
+### List all pools
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/pools</code>
+</div>
+
+Returns an array of all pools. **Response:** `IPool[]`
+
+---
+
+### Get a pool
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/pools/{'{id}'}</code>
+</div>
+
+Returns a specific pool by ID. **Response:** `IPool`
+
+---
+
+## Users
+
+### List all users
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/users</code>
+</div>
+
+Returns an array of all users. **Response:** `IUser[]`
+
+---
+
+### Get a user
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/users/{'{id}'}</code>
+</div>
+
+Returns a specific user by ID. **Response:** `IUser`
+
+---
+
+## Errors
+
+### List all errors
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/errors</code>
+</div>
+
+Returns an array of all errors. **Response:** `IError[]`
+
+---
+
+### Get errors by job
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/errors/job/{'{id}'}</code>
+</div>
+
+Returns errors for a specific job.
+
+---
+
+### Get errors by node
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/errors/node/{'{id}'}</code>
+</div>
+
+Returns errors for a specific node.
+
+---
+
+## Icons
+
+### Get job icon
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/icons/jobs/{'{type}'}</code>
+</div>
+
+Returns the icon for a job type.
+
+---
+
+### Get software icon
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+  <span style={{ background: '#16a34a', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '13px', fontWeight: 600 }}>GET</span>
+  <code>/icons/software/{'{id}'}</code>
+</div>
+
+Returns the icon for a software application.
+
+---
+
+## Error codes
+
+| Code | Description |
+|------|-------------|
+| 200 | Success |
+| 201 | Created |
+| 400 | Bad request — invalid parameters |
+| 401 | Unauthorized — missing or invalid API key |
+| 404 | Not found |
+| 500 | Internal server error |
+
+---
+
+## Schemas
+
+### IJob
+
+<Accordion title="IJob — Full job object">
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Job ID |
+| `_id` | ObjectId | MongoDB ObjectId |
+| `name` | string | Job name |
+| `env` | `local` \| `cloud` | Job environment |
+| `status` | Status | Current status |
+| `priority` | number | Priority (0, 25, 50, 75, 100) |
+| `icon` | string | Job type icon |
+| `description` | string | Job description |
+| `tags` | string[] | Job tags |
+| `pool_id` | ObjectId | Pool assignment |
+| `group_id` | ObjectId | Group assignment |
+| `user_id` | ObjectId | Owner user ID |
+| `account_id` | ObjectId | Owner account ID |
+| `steps` | IJobStep[] | Job steps with tasks |
+| `dependencies` | IDependency[] | Job dependencies |
+| `metadata` | IMetadata[] | Display metadata |
+| `progress` | IProgress | Overall progress |
+| `cleanup` | ICleanup | Auto-cleanup settings |
+| `notifications` | INotification[] | Notification rules |
+| `assets` | IAsset[] | Scene assets |
+| `schedule_date` | number \| null | Scheduled start (Unix ms) |
+| `created_at` | number | Created timestamp (Unix ms) |
+| `started_at` | number \| null | Started timestamp (Unix ms) |
+| `finished_at` | number \| null | Finished timestamp (Unix ms) |
+| `archived_at` | number \| null | Archived timestamp (Unix ms) |
+
+</Accordion>
+
+### INode
+
+<Accordion title="INode — Full node object">
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Node ID |
+| `_id` | ObjectId | MongoDB ObjectId |
+| `system_id` | string | Unique system identifier |
+| `name` | string | Computer name |
+| `alias` | string \| null | Display alias |
+| `color` | string | Node color |
+| `type` | `monitor` \| `node` \| `workstation` \| `server` | Node type |
+| `status` | NodeStatus | Current status |
+| `info` | string | Status info text |
+| `pool_id` | ObjectId \| null | Pool assignment |
+| `group_id` | ObjectId \| null | Group assignment |
+| `tags` | string[] | Node tags |
+| `version` | string \| null | RenderFlow version |
+| `alive` | number | Last heartbeat (Unix ms) |
+| `last_seen` | number \| null | Last seen timestamp |
+| `job` | INodeJob \| null | Currently assigned job |
+| `spawner` | INodeSpawner \| null | DR spawner state |
+| `hardware` | IHardware | Hardware specifications |
+| `software` | ISoftware[] | Installed software |
+| `benchmarks` | IBenchmarkResult[] | Benchmark results |
+| `errors` | IError[] | Recent errors |
+
+</Accordion>
+
+### IJobTask
+
+<Accordion title="IJobTask — Task object">
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Task ID |
+| `_id` | ObjectId | MongoDB ObjectId |
+| `index` | number | Task index (frame number) |
+| `job_id` | ObjectId | Parent job ID |
+| `step_id` | ObjectId | Parent step ID |
+| `node_id` | ObjectId \| null | Assigned node ID |
+| `type` | TaskType | Task type |
+| `status` | Status | Current status |
+| `progress` | IProgress | Render progress |
+| `thumbnail` | IJobTaskThumbnail | Rendered thumbnail |
+| `result` | IResult \| null | Task result |
+| `started_at` | number \| null | Started timestamp (Unix ms) |
+| `finished_at` | number \| null | Finished timestamp (Unix ms) |
+
+</Accordion>
+
+### IPool
+
+<Accordion title="IPool — Pool object">
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | ObjectId | Pool ID |
+| `name` | string | Pool name |
+| `color` | string | Display color |
+| `icon` | string | Display icon |
+| `description` | string | Pool description |
+| `priority` | number | Pool priority |
+| `node_limit` | number | Max nodes in pool |
+| `order` | `pool_priority_date` \| `pool_priority_balanced` | Distribution method |
+| `readonly` | boolean | Whether pool is system-managed |
+| `created_at` | number | Created timestamp (Unix ms) |
+
+</Accordion>
+
+### IError
+
+<Accordion title="IError — Error object">
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Error ID |
+| `_id` | ObjectId | MongoDB ObjectId |
+| `tag` | string | Error tag/code |
+| `level` | `info` \| `warning` \| `critical` \| `fatal` | Severity |
+| `title` | string | Error title |
+| `detail` | string | Error details |
+| `node_id` | ObjectId | Related node |
+| `job_id` | ObjectId | Related job |
+| `task_id` | ObjectId | Related task |
+| `count` | number | Occurrence count |
+| `created_at` | number | First seen (Unix ms) |
+| `updated_at` | number | Last seen (Unix ms) |
+
+</Accordion>
+
+### Enums
+
+<Accordion title="Status values and types">
+
+**Job/Task status:** `working`, `finishing`, `pending`, `preparing`, `failed`, `archived`, `suspended`, `scheduled`, `queued`, `completed`, `disabled`, `unknown`
+
+**Node status:** `offline`, `loading`, `reserved`, `suspended`, `idle`, `busy`, `finishing`, `error`
+
+**Task types:** `3dsmax.render`, `blender.render`, `cinema4d.render`, `vray_standalone`, `fusion.render`, `maya.render`, `nuke.render`, `houdini.render`, `after.render`, `keyshot.render`, `unreal`, `vantage.render`, `3dsmax.export`, `3dsmax.phoenix.simulate`, `3dsmax.tyflow.simulate`, `3dsmax.script`, `3dsmax.bake`, `ffmpeg`, `python`, `powershell`, and more.
+
+**Benchmark types:** `vray`, `vray-gpu-cuda`, `vray-gpu-rtx`, `cinebench`, `corona`, `blender`, `cpuz`, `fstorm`, `octane`, `phoenix`, `redshift`, `y-cruncher`
+
+</Accordion>
+
+---
+
+## Use cases
+
+<AccordionGroup>
+  <Accordion title="Slack notifications">
+    Send a Slack message when jobs complete or fail:
+
+    ```python
+    import requests
+    import time
+
+    API_URL = "http://localhost:44442/api/v1"
+    API_KEY = "your-api-key-here"
+    SLACK_WEBHOOK = "https://hooks.slack.com/services/..."
+
+    def check_jobs():
+        headers = {"x-renderflow-api-key": API_KEY}
+        jobs = requests.get(f"{API_URL}/jobs", headers=headers).json()
+
+        for job in jobs:
+            if job["status"] in ["completed", "failed"]:
+                notify_slack(job)
+
+    def notify_slack(job):
+        emoji = ":white_check_mark:" if job["status"] == "completed" else ":x:"
+        requests.post(SLACK_WEBHOOK, json={
+            "text": f"{emoji} Job *{job['name']}* {job['status']}"
+        })
+
+    while True:
+        check_jobs()
+        time.sleep(300)
+    ```
+  </Accordion>
+  <Accordion title="Daily farm report">
+    Generate a daily summary of farm activity:
+
+    ```python
+    import requests
+    from datetime import datetime
+
+    API_URL = "http://localhost:44442/api/v1"
+    HEADERS = {"x-renderflow-api-key": "your-api-key-here"}
+
+    def generate_report():
+        jobs = requests.get(f"{API_URL}/jobs", headers=HEADERS).json()
+        nodes = requests.get(f"{API_URL}/nodes", headers=HEADERS).json()
+
+        completed = len([j for j in jobs if j["status"] == "completed"])
+        failed = len([j for j in jobs if j["status"] == "failed"])
+        working = len([j for j in jobs if j["status"] == "working"])
+
+        idle_nodes = len([n for n in nodes if n["status"] == "idle"])
+        busy_nodes = len([n for n in nodes if n["status"] == "busy"])
+        offline_nodes = len([n for n in nodes if n["status"] == "offline"])
+
+        return f"""
+        RenderFlow Daily Report - {datetime.now().strftime("%Y-%m-%d")}
+        Jobs: {completed} completed, {failed} failed, {working} in progress
+        Nodes: {idle_nodes} idle, {busy_nodes} busy, {offline_nodes} offline
+        """
+    ```
+  </Accordion>
+  <Accordion title="Auto-priority for urgent projects">
+    Boost priority for jobs with specific tags:
+
+    ```python
+    import requests
+
+    API_URL = "http://localhost:44442/api/v1"
+    HEADERS = {"x-renderflow-api-key": "your-api-key-here"}
+    URGENT_TAGS = ["urgent", "deadline", "client_review"]
+
+    def check_and_boost_priority():
+        jobs = requests.get(f"{API_URL}/jobs", headers=HEADERS).json()
+
+        for job in jobs:
+            if job["status"] == "pending" and job["priority"] < 80:
+                job_tags = job.get("tags", [])
+                if any(tag in URGENT_TAGS for tag in job_tags):
+                    requests.patch(
+                        f"{API_URL}/jobs/{job['_id']}",
+                        headers=HEADERS,
+                        json={"priority": 90}
+                    )
+                    print(f"Boosted priority for: {job['name']}")
+    ```
+  </Accordion>
+  <Accordion title="Node health monitor">
+    Alert when nodes go offline unexpectedly:
+
+    ```python
+    import requests
+    import time
+
+    API_URL = "http://localhost:44442/api/v1"
+    HEADERS = {"x-renderflow-api-key": "your-api-key-here"}
+    known_offline = set()
+
+    def monitor_nodes():
+        nodes = requests.get(f"{API_URL}/nodes", headers=HEADERS).json()
+        for node in nodes:
+            if node["status"] == "offline":
+                if node["_id"] not in known_offline:
+                    known_offline.add(node["_id"])
+                    print(f"ALERT: Node went offline: {node['name']}")
+            else:
+                known_offline.discard(node["_id"])
+
+    while True:
+        monitor_nodes()
+        time.sleep(60)
+    ```
+  </Accordion>
+  <Accordion title="Automatic job cleanup">
+    Archive completed jobs older than 7 days:
+
+    ```python
+    import requests
+    from datetime import datetime, timedelta
+
+    API_URL = "http://localhost:44442/api/v1"
+    HEADERS = {"x-renderflow-api-key": "your-api-key-here"}
+
+    def cleanup_old_jobs(days=7):
+        jobs = requests.get(f"{API_URL}/jobs", headers=HEADERS).json()
+        cutoff = datetime.now() - timedelta(days=days)
+
+        for job in jobs:
+            if job["status"] == "completed":
+                completed_at = datetime.fromtimestamp(job.get("updated_at", 0) / 1000)
+                if completed_at < cutoff:
+                    requests.post(f"{API_URL}/jobs/{job['_id']}/archive", headers=HEADERS)
+                    print(f"Archived: {job['name']}")
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## OpenAPI specification
+
+Generate typed API clients from the specification file bundled with RenderFlow:
+
+```
+C:\Program Files\Pulze\RenderFlow\resources\docs\swagger.json
+```

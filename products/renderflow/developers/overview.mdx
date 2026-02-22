@@ -1,32 +1,68 @@
 ---
-title: "Developer Overview"
-description: "Overview of RenderFlow's developer tools and integrations."
+title: "Overview"
+description: "Integrate with RenderFlow using the REST API, CLI, MCP, and other developer tools."
 ---
 
-## Developer Docs
+Build integrations and automate workflows with RenderFlow's developer tools.
 
-RenderFlow provides a comprehensive set of tools for developers to integrate rendering into their applications and pipelines.
-
-<Columns cols={2}>
-  <Card
-    title="Authentication"
-    icon="key"
-    href="/products/renderflow/developers/authentication"
-  >
-    Learn how to authenticate with the RenderFlow API.
+<CardGroup cols={2}>
+  <Card title="REST API" icon="code" href="/products/renderflow/developers/rest-api">
+    Full endpoint reference with schemas and examples
   </Card>
-  <Card
-    title="Webhooks"
-    icon="bell"
-    href="/products/renderflow/developers/webhooks"
-  >
-    Set up webhook notifications for render events.
+  <Card title="JavaScript SDK" icon="js" href="/products/renderflow/developers/javascript-sdk">
+    TypeScript/JavaScript client via npm
   </Card>
-</Columns>
+  <Card title="Python SDK" icon="python" href="/products/renderflow/developers/python-sdk">
+    Python client with Pydantic models via pip
+  </Card>
+  <Card title="CLI" icon="terminal" href="/products/renderflow/developers/cli">
+    Command-line tool for scripting and automation
+  </Card>
+  <Card title="MCP Server" icon="robot" href="/products/renderflow/developers/mcp">
+    AI assistant integration via Model Context Protocol
+  </Card>
+</CardGroup>
 
-### Key concepts
+## Quick start
 
-- **API keys** — Used to authenticate all API requests.
-- **Render jobs** — The core unit of work in RenderFlow. Submit, monitor, and manage jobs via the API.
-- **Webhooks** — Receive real-time notifications when render jobs change status.
-- **Rate limits** — API requests are rate-limited to ensure fair usage across all users.
+<Steps>
+  <Step title="Generate an API key">
+    Go to **Settings → API Keys** in the RenderFlow UI.
+  </Step>
+  <Step title="Install an SDK or use the REST API directly">
+    <CodeGroup>
+    ```bash npm
+    npm install @pulze-io/renderflow
+    ```
+    ```bash pip
+    pip install pulze-renderflow
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Connect and use">
+    <CodeGroup>
+    ```typescript JavaScript SDK
+    import { RenderFlow } from "@pulze-io/renderflow";
+
+    const rf = new RenderFlow({ apiKey: "your-api-key" });
+    const jobs = await rf.jobs.list();
+    ```
+    ```python Python SDK
+    from renderflow import RenderFlow
+
+    rf = RenderFlow(api_key="your-api-key")
+    jobs = rf.jobs.list()
+    ```
+    </CodeGroup>
+  </Step>
+</Steps>
+
+Or use the [REST API](/products/renderflow/developers/rest-api) directly, the [CLI](/products/renderflow/developers/cli) for scripting, or the [MCP server](/products/renderflow/developers/mcp) for AI-powered control.
+
+## OpenAPI specification
+
+Generate typed API clients from the specification file:
+
+```
+C:\Program Files\Pulze\RenderFlow\resources\docs\swagger.json
+```

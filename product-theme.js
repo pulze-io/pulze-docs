@@ -53,6 +53,20 @@
 
   window.addEventListener('popstate', applyProductTheme);
 
+  // Product card hover & dark mode fixes via injected CSS
+  var style = document.createElement('style');
+  style.textContent =
+    '.pcard-sm:hover { border-color: #14C9E1 !important; }' +
+    '.pcard-rf:hover { border-color: #9E3CEC !important; }' +
+    '.pcard-pd:hover { border-color: #F97316 !important; }' +
+    '.dark .pcard-sm:hover { border-color: #14C9E1 !important; }' +
+    '.dark .pcard-rf:hover { border-color: #9E3CEC !important; }' +
+    '.dark .pcard-pd:hover { border-color: #F97316 !important; }' +
+    '.dark .pcard { border-color: rgba(255, 255, 255, 0.1) !important; }' +
+    '.dark .pcard-title { color: #ffffff !important; }' +
+    '.dark .pcard-desc { color: #9f9f9f !important; }';
+  document.head.appendChild(style);
+
   // Initial apply
   applyProductTheme();
 })();

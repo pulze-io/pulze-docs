@@ -7,6 +7,16 @@
     "light": "#FFFFFF",
     "dark": "#232323"
   },
+  "font": {
+    "headings": {
+      "family": "Poppins",
+      "weight": 600
+    },
+    "body": {
+      "family": "Poppins",
+      "weight": 400
+    }
+  },
   "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
@@ -36,34 +46,105 @@
             "pages": [
               "products/scene-manager/index",
               "products/scene-manager/getting-started",
-              "products/scene-manager/features"
+              "products/scene-manager/settings"
+            ]
+          },
+          {
+            "group": "Modules",
+            "pages": [
+              "products/scene-manager/modules/index",
+              "products/scene-manager/modules/scene-setup",
+              "products/scene-manager/modules/lighting",
+              "products/scene-manager/modules/scene-control",
+              "products/scene-manager/modules/rendering",
+              "products/scene-manager/modules/utilities",
+              "products/scene-manager/modules/scripting"
+            ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "products/scene-manager/bake-setups",
+              "products/scene-manager/renderflow"
             ]
           }
         ]
       },
       {
-        "tab": "RenderFlow",
+        "tab": "Render Flow",
         "groups": [
           {
             "group": "RenderFlow",
             "pages": [
-              "products/renderflow/index",
-              "products/renderflow/getting-started",
-              "products/renderflow/features"
+              "products/renderflow/index"
             ]
           },
           {
-            "group": "Developer Docs",
+            "group": "Getting Started",
+            "pages": [
+              "products/renderflow/getting-started/index",
+              "products/renderflow/getting-started/requirements",
+              "products/renderflow/getting-started/installation",
+              "products/renderflow/getting-started/quick-start",
+              "products/renderflow/getting-started/silent-installation"
+            ]
+          },
+          {
+            "group": "Jobs",
+            "pages": [
+              "products/renderflow/jobs/index",
+              "products/renderflow/jobs/submit",
+              "products/renderflow/jobs/manage",
+              "products/renderflow/jobs/requirements",
+              "products/renderflow/jobs/sanity-checks"
+            ]
+          },
+          {
+            "group": "Nodes",
+            "pages": [
+              "products/renderflow/nodes/index",
+              "products/renderflow/settings/tags"
+            ]
+          },
+          {
+            "group": "Settings",
+            "pages": [
+              "products/renderflow/settings/index",
+              "products/renderflow/settings/pools",
+              "products/renderflow/settings/system",
+              "products/renderflow/settings/users",
+              "products/renderflow/settings/permissions"
+            ]
+          },
+          {
+            "group": "Statistics",
+            "pages": [
+              "products/renderflow/statistics/index"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "products/renderflow/reference/supported-software",
+              "products/renderflow/reference/collecting-logs"
+            ]
+          },
+          {
+            "group": "Developers",
             "pages": [
               "products/renderflow/developers/overview",
               "products/renderflow/developers/authentication",
-              "products/renderflow/developers/webhooks"
+              "products/renderflow/developers/rest-api",
+              "products/renderflow/developers/javascript-sdk",
+              "products/renderflow/developers/python-sdk",
+              "products/renderflow/developers/cli",
+              "products/renderflow/developers/mcp"
             ]
           },
           {
-            "group": "API Reference",
+            "group": "Changelog",
             "pages": [
-              "products/renderflow/api-reference/introduction"
+              "products/renderflow/changelog"
             ]
           }
         ]
@@ -104,6 +185,13 @@
       "claude"
     ]
   },
+  "errors": {
+    "404": {
+      "redirect": false,
+      "title": "Page not found",
+      "description": "Looks like this page got lost somewhere in the pipeline... **[Take me home](/)**"
+    }
+  },
   "footer": {
     "socials": {
       "instagram": "https://instagram.com/pulzeio",
@@ -111,6 +199,63 @@
       "github": "https://github.com/pulze-io",
       "linkedin": "https://linkedin.com/company/pulze-io",
       "website": "https://pulze.io"
-    }
+    },
+    "links": [
+      {
+        "header": "Products",
+        "items": [
+          {
+            "label": "Scene Manager",
+            "href": "https://pulze.io/scene-manager"
+          },
+          {
+            "label": "RenderFlow",
+            "href": "https://pulze.io/renderflow"
+          },
+          {
+            "label": "Project Dream",
+            "href": "https://pulze.io/project-dream"
+          }
+        ]
+      },
+      {
+        "header": "Company",
+        "items": [
+          {
+            "label": "Pricing",
+            "href": "https://pulze.io/pricing"
+          },
+          {
+            "label": "Blog",
+            "href": "https://pulze.io/blog"
+          },
+          {
+            "label": "About",
+            "href": "/about"
+          }
+        ]
+      },
+      {
+        "header": "Resources",
+        "items": [
+          {
+            "label": "Documentation",
+            "href": "/"
+          },
+          {
+            "label": "FAQ",
+            "href": "/faq"
+          },
+          {
+            "label": "Contact",
+            "href": "/contact"
+          },
+          {
+            "label": "llms.txt",
+            "href": "/llms.txt"
+          }
+        ]
+      }
+    ]
   }
 }

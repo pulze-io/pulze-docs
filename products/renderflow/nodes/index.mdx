@@ -1,0 +1,114 @@
+---
+title: "Nodes"
+description: "Understanding the different types of machines in your RenderFlow network and how they work together."
+---
+
+A **node** is any machine running RenderFlow. Your render farm is made up of nodes working together — one coordinating the work, the others executing it.
+
+## Node types
+
+When you install RenderFlow, you choose one of three modes:
+
+### Server
+
+The **Server** is the brain of your render farm. There's only one server, and it:
+
+- Manages the job queue and distributes tasks
+- Stores the database with all job and node information
+- Provides the web interface for monitoring
+- Coordinates communication between all other nodes
+
+The server should run on a reliable machine that stays online. For small setups, this can be the same machine you work on. For larger farms, a dedicated server is recommended.
+
+### Node
+
+A **Node** is a dedicated render machine. It connects to the server and waits for work. When a job comes in, the server assigns tasks to available nodes based on their capabilities.
+
+Nodes:
+- Automatically report installed software and hardware specs
+- Start in **Idle** status, ready to accept tasks immediately
+- Process tasks one at a time (or in batches, depending on settings)
+- Return results to the configured output location
+
+### Workstation
+
+A **Workstation** is an artist's primary machine. It can submit jobs and optionally participate in rendering.
+
+Workstations:
+- Start in **Suspended** status by default (won't render until enabled)
+- Can toggle rendering on/off with a single click
+- Support automatic idle detection — render only when you're away
+- Are perfect for utilizing spare capacity without interrupting work
+
+## Node statuses
+
+Every node has a status that indicates what it's doing:
+
+| Status | Description |
+|--------|-------------|
+| **Idle** | Ready and waiting for tasks |
+| **Busy** | Currently processing a render task |
+| **Suspended** | Paused — won't accept new tasks |
+| **Finishing** | Completing current task, then will pause |
+| **Offline** | Not connected to the server |
+| **Error** | Encountered a problem |
+
+<Frame caption="Node list showing various statuses">
+  <img src="https://placehold.co/900x500?text=Node+List" alt="Node list" />
+</Frame>
+
+## Changing node status
+
+You can control whether your machine renders:
+
+**From the top bar:**
+- Click **Activate** to start accepting tasks
+- Click **Disable** to suspend and stop accepting tasks
+
+**From the Nodes page:**
+- Right-click a node and select the desired status
+- Select multiple nodes to change them together
+
+## Node information
+
+Each node reports detailed information to the server:
+
+### Hardware
+- CPU model, cores, and current utilization
+- RAM total and available
+- GPU model and VRAM (if applicable)
+- Storage capacity
+
+### Software
+- Installed 3D applications and versions (3ds Max, Blender, Cinema 4D, etc.)
+- Render engines and versions (V-Ray, Corona, Arnold, etc.)
+- Plugins and extensions
+
+### Current activity
+- Active job and task (if rendering)
+- Progress percentage
+- Time spent on current task
+
+<Frame caption="Node details panel showing hardware and software info">
+  <img src="https://placehold.co/900x500?text=Node+Details+Panel" alt="Node details panel" />
+</Frame>
+
+## Best practices
+
+<AccordionGroup>
+  <Accordion title="For dedicated render nodes">
+    - Set to **Node** type so they start ready to work
+    - Keep software versions consistent across nodes when possible
+    - Monitor for nodes going offline unexpectedly
+  </Accordion>
+  <Accordion title="For workstations">
+    - Set to **Workstation** type to start suspended
+    - Enable automatic idle detection for hands-free contribution
+    - Use the process blacklist to prevent rendering during important work
+  </Accordion>
+  <Accordion title="For the server">
+    - Choose a stable machine with good network connectivity
+    - Ensure adequate storage for the database and logs
+    - Consider a UPS for power protection
+  </Accordion>
+</AccordionGroup>

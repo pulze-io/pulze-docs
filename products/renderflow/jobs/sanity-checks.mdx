@@ -1,0 +1,104 @@
+---
+title: "Sanity Checks"
+description: "Complete list of automated scene validation checks in RenderFlow."
+---
+
+Sanity checks validate your scene before submission to catch common issues that would cause render failures. Currently available for **3ds Max** only, with more applications coming soon.
+
+## Managing checks
+
+Access the **Sanity Check** page from the sidebar to:
+
+- Enable or disable individual checks
+- Edit check parameters
+- Create custom checks
+- Test checks against your current scene
+
+<Frame caption="Sanity Check management page">
+  <img src="https://placehold.co/900x500?text=Sanity+Check+Management" alt="Sanity Check management" />
+</Frame>
+
+## Creating custom checks
+
+For advanced users, you can create your own sanity checks using MaxScript. Your script must return `true` (check passed) or `false` (check failed).
+
+<Frame caption="Script editor for custom sanity check">
+  <img src="https://placehold.co/700x400?text=Custom+Check+Editor" alt="Custom check editor" />
+</Frame>
+
+## Open source
+
+The sanity check catalog is open source. Feel free to contribute new checks or improvements at [github.com/pulze-io/renderflow-sanity-check](https://github.com/pulze-io/renderflow-sanity-check).
+
+---
+
+## General checks
+
+| Check | Level | Default | Description |
+|-------|-------|---------|-------------|
+| Untitled filename | Critical | Enabled | Scene must be saved (not untitled) |
+| Autoback filename | Warning | Disabled | Filename should not contain "autoback" |
+| Recover filename | Warning | Disabled | Filename should not contain "recover" |
+| Empty scene | Critical | Enabled | Scene must contain objects |
+| Render type | Warning | Enabled | Render type should be set to "View" |
+| Production rendering | Critical | Enabled | Render mode must be set to production |
+| Pixel aspect | Warning | Disabled | Pixel aspect ratio should be 1.0 |
+| Active camera | Warning | Enabled | Scene should have an active camera |
+| Single frame | Warning | Disabled | Time output should be single frame |
+| Frame range | Warning | Disabled | Time output should be range |
+| Frame step | Warning | Enabled | Nth frame should be set to 1 |
+| Frame rate | Warning | Disabled | Frame rate should match expected value |
+| Output path | Warning | Enabled | Output path must be configured |
+| Output movie format | Critical | Enabled | Output cannot be AVI or MOV |
+| Network path | Warning | Disabled | Output should be a network path |
+| Display unit type | Critical | Disabled | Scene display units should match expected |
+| System unit type | Critical | Disabled | System units should match expected |
+| Render elements count | Warning | Enabled | Scene should have render elements |
+| Render elements active | Warning | Enabled | Render elements should be enabled |
+| Objects without materials | Warning | Enabled | All objects should have materials |
+
+## V-Ray checks
+
+| Check | Level | Default | Description |
+|-------|-------|---------|-------------|
+| V-Ray DR | Warning | Enabled | Distributed rendering should be disabled |
+| V-Ray framestamp | Warning | Enabled | Frame stamp should be disabled |
+| V-Ray render mask | Warning | Enabled | Render mask should be disabled |
+| V-Ray min shading rate | Warning | Disabled | Shading rate should match expected value |
+| V-Ray min subdivs | Warning | Disabled | Min subdivs should match expected value |
+| V-Ray max subdivs | Warning | Disabled | Max subdivs should match expected value |
+| V-Ray noise threshold | Warning | Disabled | Noise threshold should match expected value |
+| V-Ray material override | Warning | Enabled | Material override should be disabled |
+| V-Ray hidden lights | Warning | Enabled | Render hidden lights should be disabled |
+| V-Ray save raw file | Warning | Disabled | Raw file output should be enabled |
+| V-Ray raw filename | Warning | Disabled | Raw filename should be set |
+| V-Ray separate channels | Warning | Disabled | Channels should be separated |
+| V-Ray separate folders | Warning | Disabled | Elements should go to separate folders |
+| V-Ray render channels filename | Warning | Enabled | Render channels filename must be set |
+| V-Ray render channels RGB | Warning | Enabled | RGB channel output should be enabled |
+| V-Ray render channels Alpha | Warning | Disabled | Alpha channel output should be enabled |
+| V-Ray save VFB corrections | Warning | Disabled | VFB corrections should be saved |
+| V-Ray clear previous render | Warning | Enabled | Clear previous render should be enabled |
+| V-Ray VFB region | Warning | Enabled | VFB region render should be disabled |
+| V-Ray VFB mousetrack | Warning | Enabled | VFB mousetrack should be disabled |
+| V-Ray resumable rendering | Warning | Disabled | Resumable rendering should be disabled |
+
+## Corona checks
+
+| Check | Level | Default | Description |
+|-------|-------|---------|-------------|
+| Corona DR | Warning | Disabled | Distributed rendering should be disabled |
+| Corona search LAN | Warning | Disabled | Search on LAN should be disabled |
+| Corona render selected | Critical | Enabled | Render selected mode must be disabled |
+| Corona material override | Warning | Enabled | Material override should be disabled |
+| Corona material override empty | Warning | Disabled | Override should have no material assigned |
+| Corona infinite render | Critical | Enabled | Render limits must be set (not infinite) |
+| Corona render stamp | Warning | Enabled | Render stamp should be disabled |
+| Corona VFB region | Warning | Enabled | VFB region render should be disabled |
+
+## FStorm checks
+
+| Check | Level | Default | Description |
+|-------|-------|---------|-------------|
+| FStorm render mask | Warning | Enabled | Render mask should be disabled |
+| FStorm override | Warning | Enabled | Material override should be disabled |

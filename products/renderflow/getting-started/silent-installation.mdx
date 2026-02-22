@@ -1,0 +1,83 @@
+---
+title: "Silent Installation"
+description: "Silent installation and Windows Service deployment for RenderFlow."
+---
+
+Automated deployment options for IT administrators. For standard installation, see [Installation](/products/renderflow/getting-started/installation).
+
+## Command-line parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `--silent` | Run installation without UI |
+| `--type=<type>` | Node type: `server`, `node`, or `workstation` |
+| `--ip=<address>` | Server IP (required for node/workstation) |
+| `--service` | Install as Windows Service |
+| `--username=<user>` | Service account (required with `--service`) |
+| `--password=<pass>` | Service account password (required with `--service`) |
+| `--help` | Display help |
+
+## Examples
+
+**Install as render node:**
+```batch
+setup.exe --silent --type=node --ip=192.168.1.100
+```
+
+**Install as server:**
+```batch
+setup.exe --silent --type=server
+```
+
+**Install as Windows Service:**
+```batch
+setup.exe --silent --service --type=node --ip=192.168.1.100 --username=DOMAIN\User --password=Pass123
+```
+
+## Windows Service
+
+Installing as a Windows Service ensures RenderFlow starts before any user logs in. Recommended for dedicated render nodes.
+
+### Requirements
+
+The service account needs:
+- "Log on as a service" permission
+- Read/write access to `C:\ProgramData\RenderFlow`
+- Network access to the RenderFlow server
+
+### Managing the service
+
+```batch
+sc query RenderFlow       :: Check status
+sc stop RenderFlow        :: Stop
+sc start RenderFlow       :: Start
+```
+
+## Environment variables
+
+The installer sets these system variables for service mode:
+
+| Variable | Description |
+|----------|-------------|
+| `RENDERFLOW_TYPE` | Node type |
+| `RENDERFLOW_IP` | Server IP address |
+
+## Uninstallation
+
+```batch
+"C:\Program Files\Pulze\RenderFlow\uninst.exe" /S
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Service won't start">
+    - Check service account has "Log on as a service" permission
+    - Review logs at `C:\ProgramData\RenderFlow\logs\`
+  </Accordion>
+  <Accordion title="Node not appearing">
+    - Verify `--ip` points to correct server
+    - Check firewall ports 44442-44444 are open
+    - Run `sc query RenderFlow` to verify service is running
+  </Accordion>
+</AccordionGroup>

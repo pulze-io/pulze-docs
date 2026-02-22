@@ -1,0 +1,41 @@
+---
+title: "Tags"
+description: "Categorize nodes using tags."
+---
+
+Tags let you create categories for more granular control over which nodes render your jobs.
+
+## How tags work
+
+- Nodes can have one or more tags assigned to them
+- When submitting a job, you can whitelist specific tags in the submitter
+- Only nodes with matching tags will be eligible to render the job
+
+Tags are useful for grouping nodes by capability (e.g., "GPU", "high-memory") or purpose (e.g., "hero-shots", "previews").
+
+## Assigning tags to nodes
+
+1. Go to the **Nodes** page
+2. Right-click a node (or select multiple)
+3. Choose **Tags** and add or remove tags
+
+<Frame caption="Node context menu showing tag selection">
+  <img src="https://placehold.co/400x300?text=Tag+Selection" alt="Tag selection" />
+</Frame>
+
+## Using tags in the submitter
+
+When submitting a job, use the **Whitelist** option in the node selection to filter by tags. Only nodes that have at least one of the selected tags will pick up the job.
+
+<Frame caption="Submitter whitelist with tag selection">
+  <img src="https://placehold.co/700x300?text=Tag+Whitelist" alt="Tag whitelist in submitter" />
+</Frame>
+
+## When to use tags
+
+**No tags needed:** Small farms where all nodes have similar capabilities.
+
+**Use tags when:**
+- You have nodes with different hardware (GPU vs CPU rendering)
+- Certain machines should handle specific types of work
+- You want finer control than pools alone provide

@@ -1,0 +1,109 @@
+---
+title: "Submitting Jobs"
+description: "Learn how to submit render jobs to RenderFlow."
+---
+
+You can submit jobs directly from RenderFlow, or use the toolbar buttons in your 3D application to open RenderFlow with your current scene settings pre-filled.
+
+## Starting a submission
+
+### From RenderFlow
+
+1. Click **Create** on the Jobs page
+2. Select a job template for your software
+3. Browse or drag and drop your scene file
+
+### From your 3D application
+
+RenderFlow provides toolbar buttons for 3ds Max, Blender, and Cinema 4D. Clicking the button opens the submission wizard pre-filled with your current scene settings — cameras, frame range, output paths, and render settings are automatically detected.
+
+<Frame caption="Toolbar button in 3ds Max">
+  <img src="https://placehold.co/700x100?text=3ds+Max+Toolbar+Button" alt="3ds Max toolbar button" />
+</Frame>
+
+## The submission wizard
+
+The wizard has two configuration areas:
+
+<Frame caption="Submission wizard showing both panels">
+  <img src="https://placehold.co/900x550?text=Submission+Wizard" alt="Submission wizard" />
+</Frame>
+
+### Scene settings (left side)
+
+These control what gets rendered:
+
+**File** — The scene file to render. When submitting from your 3D application, this is automatically set to your current scene.
+
+**Camera** — Select which camera to render from. All cameras in your scene are listed. Not available in Cinema 4D.
+
+**Resolution** — The output image dimensions. You can use your scene's resolution or override it with custom values.
+
+**Frame Range** — Which frames to render. Choose between:
+- **Single** — One specific frame
+- **Range** — A sequence (e.g., 1-100)
+- **List** — Specific frames (e.g., 1, 5, 10-20)
+
+You can also set a **step** value to render every Nth frame.
+
+**Output** — Where to save rendered images. Set the path and filename pattern. For renderers like V-Ray, you can configure multiple outputs (main image, render elements, raw image).
+
+**Render Settings** — Engine-specific settings like sampling, quality thresholds, and subdivisions. Available for 3ds Max only. These are the same settings you'd find in your renderer's settings panel.
+
+### Job settings (right side)
+
+These control how the job runs on the farm:
+
+**Pool** — Which group of nodes should process this job. Only shown if you have multiple pools configured.
+
+**Priority** — Job importance from 1 to 100. Higher priority jobs get more nodes and finish faster. Default is 25 (Normal).
+
+**Node Limit** — Maximum number of nodes that can work on this job simultaneously. Set to 0 for unlimited.
+
+**Batch Size** — How many tasks each node processes before checking for higher priority work. For single-frame renders, this is always 1.
+
+**Schedule** — When to start the job:
+- **Now** — Start immediately
+- **Later** — Submit but keep suspended until you manually start it
+- **Schedule** — Start at a specific date and time
+
+**Interruptible** — Whether the job can be paused mid-task. When disabled, nodes must complete their current task before stopping.
+
+**Dependencies** — Select other jobs that must complete before this one starts. Useful for workflows where one job depends on another's output.
+
+**Notifications** — Get alerted when your job completes or fails. Configure email addresses or webhook URLs.
+
+**Cleanup** — What happens after the job completes:
+- **Do Nothing** — Job stays in the list
+- **Archive** — Move to archive after a delay
+- **Delete** — Remove after a delay
+
+## Sanity checks
+
+Before submitting, RenderFlow runs automated checks on your scene to catch common issues that would cause render failures. Currently available for **3ds Max** (more applications coming soon).
+
+You can manage and customize sanity checks from the **Sanity Check** page in the sidebar.
+
+These checks validate things like:
+
+- Scene is saved and not empty
+- Output path is set and accessible
+- Camera is assigned
+- Render elements are active
+- V-Ray/Corona/FStorm specific settings (DR disabled, no render mask, etc.)
+
+Issues are marked as **Critical** (must fix before submitting) or **Warning** (review recommended).
+
+<Frame caption="Sanity check results">
+  <img src="https://placehold.co/900x400?text=Sanity+Check+Results" alt="Sanity check results" />
+</Frame>
+
+For a complete list of checks, see the [Sanity Checks Reference](/products/renderflow/jobs/sanity-checks).
+
+## Assets
+
+The Assets tab lists all files your scene depends on — textures, references, caches. RenderFlow verifies each asset is accessible from render nodes. Missing assets are flagged so you can fix paths before submitting.
+
+<Frame caption="Assets tab showing file dependencies">
+  <img src="https://placehold.co/900x400?text=Assets+Tab" alt="Assets tab" />
+</Frame>
