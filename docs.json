@@ -209,7 +209,7 @@
             "href": "https://pulze.io/scene-manager"
           },
           {
-            "label": "RenderFlow",
+            "label": "Render Flow",
             "href": "https://pulze.io/renderflow"
           },
           {
@@ -231,7 +231,7 @@
           },
           {
             "label": "About",
-            "href": "/about"
+            "href": "https://pulze.io/about"
           }
         ]
       },
@@ -239,7 +239,7 @@
         "header": "Resources",
         "items": [
           {
-            "label": "Documentation",
+            "label": "Docs",
             "href": "/"
           },
           {
@@ -249,10 +249,6 @@
           {
             "label": "Contact",
             "href": "/contact"
-          },
-          {
-            "label": "llms.txt",
-            "href": "/llms.txt"
           }
         ]
       }
