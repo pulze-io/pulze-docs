@@ -1,0 +1,38 @@
+---
+title: "Authentication"
+description: "Authenticate with the RenderFlow REST API using API keys. Generate, manage, and rotate keys for secure programmatic access to your render farm."
+"og:title": "RenderFlow API Authentication"
+"og:description": "Authenticate with the RenderFlow API using API keys. Generate, manage, and rotate keys for secure access."
+"twitter:title": "RenderFlow API Authentication"
+keywords: ['render farm API authentication', 'render farm API key', 'RenderFlow API authentication']
+---
+
+All RenderFlow API requests require authentication via an API key.
+
+## Obtaining an API key
+
+1. Open RenderFlow on any connected machine
+2. Navigate to **Settings → API Keys**
+3. Click **Create API Key** and give it a descriptive name
+4. Copy the key - it will only be shown once
+
+## Using your API key
+
+Include the key in the `x-renderflow-api-key` header of every request:
+
+```bash
+curl -X GET "http://localhost:44442/api/v1/jobs" \
+  -H "x-renderflow-api-key: your-api-key-here"
+```
+
+## Key management
+
+- **Rotate keys regularly** to maintain security
+- **Use separate keys** for different integrations
+- **Revoke compromised keys** immediately from the API Keys settings page
+
+<Warning>
+Never expose your API keys in client-side code or public repositories.
+</Warning>
+
+---

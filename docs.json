@@ -26,6 +26,10 @@
     "tabs": [
       {
         "tab": "Home",
+        "cta": {
+          "label": "Get Started",
+          "href": "https://pulze.io"
+        },
         "groups": [
           {
             "group": "Pulze",
@@ -40,6 +44,10 @@
       },
       {
         "tab": "Scene Manager",
+        "cta": {
+          "label": "Get Started",
+          "href": "/products/scene-manager/getting-started"
+        },
         "groups": [
           {
             "group": "Scene Manager",
@@ -126,85 +134,142 @@
       },
       {
         "tab": "Render Flow",
+        "cta": {
+          "label": "Get Started",
+          "href": "/products/renderflow/getting-started/quick-start"
+        },
         "groups": [
-          {
-            "group": "RenderFlow",
-            "pages": [
-              "products/renderflow/index"
-            ]
-          },
           {
             "group": "Getting Started",
             "pages": [
-              "products/renderflow/getting-started/index",
-              "products/renderflow/getting-started/requirements",
-              "products/renderflow/getting-started/installation",
               "products/renderflow/getting-started/quick-start",
-              "products/renderflow/getting-started/silent-installation"
+              "products/renderflow/getting-started/render-farm-basics",
+              "products/renderflow/getting-started/requirements",
+              "products/renderflow/getting-started/supported-apps",
+              "products/renderflow/getting-started/installation",
+              "products/renderflow/getting-started/licensing",
+              "products/renderflow/getting-started/silent-deploy",
+              "products/renderflow/getting-started/run-as-a-service",
+              "products/renderflow/getting-started/windows-network-setup",
+              "products/renderflow/getting-started/vpn-remote-access",
+              "products/renderflow/getting-started/migrating-from-render-manager"
             ]
           },
           {
             "group": "Jobs",
             "pages": [
-              "products/renderflow/jobs/index",
-              "products/renderflow/jobs/submit",
-              "products/renderflow/jobs/manage",
+              "products/renderflow/jobs/overview",
+              "products/renderflow/jobs/submitter",
+              "products/renderflow/jobs/templates",
               "products/renderflow/jobs/requirements",
-              "products/renderflow/jobs/sanity-checks"
+              "products/renderflow/jobs/sanity-checks",
+              "products/renderflow/jobs/assets",
+              "products/renderflow/jobs/monitoring",
+              "products/renderflow/jobs/tasks-and-details",
+              "products/renderflow/jobs/notifications",
+              "products/renderflow/jobs/errors"
+            ]
+          },
+          {
+            "group": "Job Types",
+            "pages": [
+              "products/renderflow/job-types/3ds-max",
+              "products/renderflow/job-types/scene-manager",
+              "products/renderflow/job-types/blender",
+              "products/renderflow/job-types/cinema-4d",
+              "products/renderflow/job-types/fusion",
+              "products/renderflow/job-types/corona-dr",
+              "products/renderflow/job-types/vray-dr",
+              "products/renderflow/job-types/vray-standalone"
+            ]
+          },
+          {
+            "group": "Cloud Rendering",
+            "pages": [
+              "products/renderflow/cloud-rendering/overview",
+              "products/renderflow/cloud-rendering/credits-and-pricing",
+              "products/renderflow/cloud-rendering/request-access"
             ]
           },
           {
             "group": "Nodes",
             "pages": [
-              "products/renderflow/nodes/index",
-              "products/renderflow/settings/tags"
+              "products/renderflow/nodes/overview",
+              "products/renderflow/nodes/commands",
+              "products/renderflow/nodes/tags",
+              "products/renderflow/nodes/cpu-affinity",
+              "products/renderflow/nodes/spawner-mode",
+              "products/renderflow/nodes/hardware-and-network",
+              "products/renderflow/nodes/software",
+              "products/renderflow/nodes/benchmark"
             ]
           },
           {
-            "group": "Settings",
+            "group": "Software Analytics",
             "pages": [
-              "products/renderflow/settings/index",
-              "products/renderflow/settings/pools",
-              "products/renderflow/settings/system",
-              "products/renderflow/settings/users",
-              "products/renderflow/settings/permissions"
+              "products/renderflow/software-analytics/overview"
             ]
           },
           {
             "group": "Statistics",
             "pages": [
-              "products/renderflow/statistics/index"
+              "products/renderflow/statistics/overview"
             ]
           },
           {
-            "group": "Reference",
+            "group": "Scheduler",
             "pages": [
-              "products/renderflow/reference/supported-software",
-              "products/renderflow/reference/collecting-logs"
+              "products/renderflow/scheduler/overview"
+            ]
+          },
+          {
+            "group": "Sanity Check",
+            "pages": [
+              "products/renderflow/sanity-check/overview",
+              "products/renderflow/sanity-check/defaults",
+              "products/renderflow/sanity-check/custom-checks"
+            ]
+          },
+          {
+            "group": "Settings",
+            "pages": [
+              "products/renderflow/settings/overview"
             ]
           },
           {
             "group": "Developers",
             "pages": [
-              "products/renderflow/developers/overview",
               "products/renderflow/developers/authentication",
               "products/renderflow/developers/rest-api",
               "products/renderflow/developers/javascript-sdk",
               "products/renderflow/developers/python-sdk",
               "products/renderflow/developers/cli",
-              "products/renderflow/developers/mcp"
+              "products/renderflow/developers/mcp-server"
             ]
           },
           {
-            "group": "Changelog",
+            "group": "Support",
             "pages": [
-              "products/renderflow/changelog"
+              "products/renderflow/support/report-an-issue",
+              "products/renderflow/support/collecting-logs",
+              "products/renderflow/support/contact-us"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "products/renderflow/faq",
+              "products/renderflow/glossary"
             ]
           }
         ]
       },
       {
         "tab": "Project Dream",
+        "cta": {
+          "label": "Get Started",
+          "href": "/products/project-dream/getting-started"
+        },
         "groups": [
           {
             "group": "Project Dream",
