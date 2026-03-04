@@ -13,7 +13,7 @@ RenderFlow Cloud is currently in closed beta. The beta is open to studios and fr
 
 There are two ways to join the beta.
 
-**Waitlist form.** Submit a request through the waitlist form available inside RenderFlow.
+**Waitlist form.** Submit a request through the [waitlist form](https://forms.pulze.io/renderflow-cloud-beta).
 
 <Frame caption="Waitlist form in RenderFlow — Jobs view, Cloud tab">
   <img src="https://placehold.co/900x500?text=Waitlist+form+in+RenderFlow" alt="RenderFlow Cloud waitlist form inside the application" />
@@ -29,6 +29,3 @@ Beta testers receive a free credit package ranging from 2,000 to 10,000 credits 
 
 Submit real-world scenes. Push the system with complex projects and varied plugin combinations. Report bugs and share feedback. Once you are comfortable with the service, we may invite you to participate in a case study or provide a testimonial.
 
-## Public release
-
-RenderFlow Cloud is planned for public release at the end of Q2 2026.

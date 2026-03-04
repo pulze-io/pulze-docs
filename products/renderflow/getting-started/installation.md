@@ -56,8 +56,6 @@ RenderFlow checks your Pulze account for available licenses. If you haven't purc
 
 - **Automatic** (recommended). All RenderFlow licenses on your account are automatically reserved and used by this server.
 - **Manual**: you choose how many of your available licenses this server should use. Useful when splitting licenses across multiple servers.
-- **Start Trial**: if you're eligible, activate a 30-day free trial with up to 10 nodes.
-- **Skip**: if you only want to use RenderFlow for node monitoring, software analytics, or cloud rendering, you don't need a license.
 
 <Frame caption="License selection: Automatic / Manual / Trial / Skip">
   <img src="https://placehold.co/900x500?text=License+Selection+Screen" alt="License selection: Automatic / Manual / Trial / Skip" />

@@ -8,34 +8,27 @@ description: "Manage render nodes, workstations, and servers in RenderFlow. Unde
 keywords: ['render farm node management', 'render node states', 'render farm pools', 'manage render nodes', 'render farm computer management']
 ---
 
-A **node** is any computer connected to RenderFlow. The term covers all machine types: the server, workstations where artists work, and dedicated render nodes. Each node appears in the Nodes view with a type icon next to its name to help you identify it at a glance.
-
-| Icon | Type | Description |
-|------|------|-------------|
-| Home | Your computer | The machine you are currently using |
-| Database | Server | The RenderFlow server coordinating all jobs |
-| Monitor | Workstation | An artist's machine that can also render |
-| Server | Render node | A dedicated machine for rendering |
+A **node** is any computer connected to RenderFlow. The term covers all machine types: the server, workstations where artists work, and dedicated render nodes.
 
 ## Node states
 
 Every node has a state that reflects what it is currently doing.
 
-**Offline** means the node is not connected to the server.
+**Offline** - the node is not connected to the server.
 
-**Loading** means the node is starting up or preparing for work.
+**Loading** - the node is starting up or preparing for work.
 
-**Idle** means the node is connected and ready to pick up tasks.
+**Idle** - the node is connected and ready to pick up tasks.
 
-**Busy** means the node is actively working on a task.
+**Busy** - the node is actively working on a task.
 
-**Finishing** means the node is completing its current task before changing state (for example, after a Finish Task and Suspend command).
+**Finishing** - the node is completing its current task before changing state (for example, after a Finish Task and Suspend command).
 
-**Suspended** means the node has been manually paused. It will not pick up new tasks.
+**Suspended** - the node has been manually paused. It will not pick up new tasks.
 
-**Reserved** means the node is set aside for a special purpose, such as [Spawner Mode](/products/renderflow/nodes/spawner-mode).
+**Reserved** - the node is set aside for a special purpose, such as [Spawner Mode](/products/renderflow/nodes/spawner-mode).
 
-**Error** means the node encountered a problem with its last task.
+**Error** - the node encountered a problem with its last task.
 
 ## Connecting nodes
 

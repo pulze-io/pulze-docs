@@ -15,7 +15,7 @@ Currently, only job completion triggers notifications. Support for additional ev
 
 ## Available channels
 
-RenderFlow supports five notification channels: Email, Desktop, Slack, Teams, and Webhook.
+RenderFlow supports the following notification channels:
 
 ## Email
 

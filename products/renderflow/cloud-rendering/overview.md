@@ -10,7 +10,7 @@ keywords: ['cloud render farm', 'cloud rendering service', '3ds Max cloud render
 RenderFlow Cloud is a cloud rendering service built directly into RenderFlow. It gives studios instant access to powerful cloud render nodes without leaving their existing workflow. There are no separate portals, no unfamiliar tools, and no disruption. Artists submit, monitor, and receive cloud renders through the same RenderFlow interface they already use for their local farm.
 
 <Info>
-RenderFlow Cloud is currently in closed beta with a public release planned for end of Q2 2026. See [Request Access](/products/renderflow/cloud-rendering/request-access) for details on joining the beta.
+RenderFlow Cloud is currently in closed beta. See [Request Access](/products/renderflow/cloud-rendering/request-access) for details on joining the beta.
 </Info>
 
 ## Supported software

@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "almond",
   "name": "Pulze",
   "colors": {
     "primary": "#232323",
@@ -35,8 +35,6 @@
             "group": "Pulze",
             "pages": [
               "index",
-              "about",
-              "faq",
               "contact"
             ]
           }
@@ -318,59 +316,6 @@
       "github": "https://github.com/pulze-io",
       "linkedin": "https://linkedin.com/company/pulze-io",
       "website": "https://pulze.io"
-    },
-    "links": [
-      {
-        "header": "Products",
-        "items": [
-          {
-            "label": "Scene Manager",
-            "href": "https://pulze.io/scene-manager"
-          },
-          {
-            "label": "Render Flow",
-            "href": "https://pulze.io/renderflow"
-          },
-          {
-            "label": "Project Dream",
-            "href": "https://pulze.io/project-dream"
-          }
-        ]
-      },
-      {
-        "header": "Company",
-        "items": [
-          {
-            "label": "Pricing",
-            "href": "https://pulze.io/pricing"
-          },
-          {
-            "label": "Blog",
-            "href": "https://pulze.io/blog"
-          },
-          {
-            "label": "About",
-            "href": "https://pulze.io/about"
-          }
-        ]
-      },
-      {
-        "header": "Resources",
-        "items": [
-          {
-            "label": "Docs",
-            "href": "/"
-          },
-          {
-            "label": "FAQ",
-            "href": "/faq"
-          },
-          {
-            "label": "Contact",
-            "href": "/contact"
-          }
-        ]
-      }
-    ]
+    }
   }
 }
