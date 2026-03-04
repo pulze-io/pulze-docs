@@ -53,12 +53,66 @@
             "group": "Modules",
             "pages": [
               "products/scene-manager/modules/index",
-              "products/scene-manager/modules/scene-setup",
-              "products/scene-manager/modules/lighting",
-              "products/scene-manager/modules/scene-control",
-              "products/scene-manager/modules/rendering",
-              "products/scene-manager/modules/utilities",
-              "products/scene-manager/modules/scripting"
+              {
+                "group": "Core",
+                "expanded": true,
+                "pages": [
+                  "products/scene-manager/modules/core/setup-list",
+                  "products/scene-manager/modules/core/camera",
+                  "products/scene-manager/modules/core/resolution",
+                  "products/scene-manager/modules/core/time-output",
+                  "products/scene-manager/modules/core/scene-name"
+                ]
+              },
+              {
+                "group": "Environment",
+                "expanded": true,
+                "pages": [
+                  "products/scene-manager/modules/environment/sun",
+                  "products/scene-manager/modules/environment/dome",
+                  "products/scene-manager/modules/environment/hdri-browser",
+                  "products/scene-manager/modules/environment/environment",
+                  "products/scene-manager/modules/environment/background",
+                  "products/scene-manager/modules/environment/atmosphere"
+                ]
+              },
+              {
+                "group": "Elements",
+                "expanded": true,
+                "pages": [
+                  "products/scene-manager/modules/elements/layers",
+                  "products/scene-manager/modules/elements/objects",
+                  "products/scene-manager/modules/elements/xref-scene",
+                  "products/scene-manager/modules/elements/variants"
+                ]
+              },
+              {
+                "group": "Rendering",
+                "expanded": true,
+                "pages": [
+                  "products/scene-manager/modules/rendering/render-output",
+                  "products/scene-manager/modules/rendering/render-settings",
+                  "products/scene-manager/modules/rendering/render-elements",
+                  "products/scene-manager/modules/rendering/post-production"
+                ]
+              },
+              {
+                "group": "Utilities",
+                "expanded": true,
+                "pages": [
+                  "products/scene-manager/modules/utilities/thumbnail",
+                  "products/scene-manager/modules/utilities/todo",
+                  "products/scene-manager/modules/utilities/notes"
+                ]
+              },
+              {
+                "group": "Scripting",
+                "expanded": true,
+                "pages": [
+                  "products/scene-manager/modules/scripting/script-file",
+                  "products/scene-manager/modules/scripting/script-editor"
+                ]
+              }
             ]
           },
           {
