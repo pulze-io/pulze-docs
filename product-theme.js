@@ -24,11 +24,11 @@
 
     var root = document.documentElement;
 
-    if (path.startsWith('/products/scene-manager')) {
+    if (path.startsWith('/scene-manager')) {
       applyColor(root, '#14C9E1');
-    } else if (path.startsWith('/products/renderflow')) {
+    } else if (path.startsWith('/renderflow')) {
       applyColor(root, '#9E3CEC');
-    } else if (path.startsWith('/products/project-dream')) {
+    } else if (path.startsWith('/project-dream')) {
       applyColor(root, '#F97316');
     } else {
       root.style.removeProperty('--primary');

@@ -44,79 +44,79 @@
         "tab": "Scene Manager",
         "cta": {
           "label": "Get Started",
-          "href": "/products/scene-manager/getting-started"
+          "href": "/scene-manager/getting-started"
         },
         "groups": [
           {
             "group": "Scene Manager",
             "pages": [
-              "products/scene-manager/index",
-              "products/scene-manager/getting-started",
-              "products/scene-manager/settings"
+              "scene-manager/index",
+              "scene-manager/getting-started",
+              "scene-manager/settings"
             ]
           },
           {
             "group": "Modules",
             "pages": [
-              "products/scene-manager/modules/index",
+              "scene-manager/modules/index",
               {
                 "group": "Core",
                 "expanded": true,
                 "pages": [
-                  "products/scene-manager/modules/core/setup-list",
-                  "products/scene-manager/modules/core/camera",
-                  "products/scene-manager/modules/core/resolution",
-                  "products/scene-manager/modules/core/time-output",
-                  "products/scene-manager/modules/core/scene-name"
+                  "scene-manager/modules/core/setup-list",
+                  "scene-manager/modules/core/camera",
+                  "scene-manager/modules/core/resolution",
+                  "scene-manager/modules/core/time-output",
+                  "scene-manager/modules/core/scene-name"
                 ]
               },
               {
                 "group": "Environment",
                 "expanded": true,
                 "pages": [
-                  "products/scene-manager/modules/environment/sun",
-                  "products/scene-manager/modules/environment/dome",
-                  "products/scene-manager/modules/environment/hdri-browser",
-                  "products/scene-manager/modules/environment/environment",
-                  "products/scene-manager/modules/environment/background",
-                  "products/scene-manager/modules/environment/atmosphere"
+                  "scene-manager/modules/environment/sun",
+                  "scene-manager/modules/environment/dome",
+                  "scene-manager/modules/environment/hdri-browser",
+                  "scene-manager/modules/environment/environment",
+                  "scene-manager/modules/environment/background",
+                  "scene-manager/modules/environment/atmosphere"
                 ]
               },
               {
                 "group": "Elements",
                 "expanded": true,
                 "pages": [
-                  "products/scene-manager/modules/elements/layers",
-                  "products/scene-manager/modules/elements/objects",
-                  "products/scene-manager/modules/elements/xref-scene",
-                  "products/scene-manager/modules/elements/variants"
+                  "scene-manager/modules/elements/layers",
+                  "scene-manager/modules/elements/objects",
+                  "scene-manager/modules/elements/xref-scene",
+                  "scene-manager/modules/elements/variants"
                 ]
               },
               {
                 "group": "Rendering",
                 "expanded": true,
                 "pages": [
-                  "products/scene-manager/modules/rendering/render-output",
-                  "products/scene-manager/modules/rendering/render-settings",
-                  "products/scene-manager/modules/rendering/render-elements",
-                  "products/scene-manager/modules/rendering/post-production"
+                  "scene-manager/modules/rendering/render-output",
+                  "scene-manager/modules/rendering/render-settings",
+                  "scene-manager/modules/rendering/render-elements",
+                  "scene-manager/modules/rendering/post-production"
                 ]
               },
               {
                 "group": "Utilities",
                 "expanded": true,
                 "pages": [
-                  "products/scene-manager/modules/utilities/thumbnail",
-                  "products/scene-manager/modules/utilities/todo",
-                  "products/scene-manager/modules/utilities/notes"
+                  "scene-manager/modules/utilities/thumbnail",
+                  "scene-manager/modules/utilities/todo",
+                  "scene-manager/modules/utilities/notes"
                 ]
               },
               {
                 "group": "Scripting",
                 "expanded": true,
                 "pages": [
-                  "products/scene-manager/modules/scripting/script-file",
-                  "products/scene-manager/modules/scripting/script-editor"
+                  "scene-manager/modules/scripting/script-file",
+                  "scene-manager/modules/scripting/script-editor"
                 ]
               }
             ]
@@ -124,8 +124,8 @@
           {
             "group": "Workflows",
             "pages": [
-              "products/scene-manager/bake-setups",
-              "products/scene-manager/renderflow"
+              "scene-manager/bake-setups",
+              "scene-manager/renderflow"
             ]
           }
         ]
@@ -134,130 +134,130 @@
         "tab": "Render Flow",
         "cta": {
           "label": "Get Started",
-          "href": "/products/renderflow/getting-started/quick-start"
+          "href": "/renderflow/getting-started/quick-start"
         },
         "groups": [
           {
             "group": "Getting Started",
             "pages": [
-              "products/renderflow/getting-started/quick-start",
-              "products/renderflow/getting-started/render-farm-basics",
-              "products/renderflow/getting-started/requirements",
-              "products/renderflow/getting-started/supported-apps",
-              "products/renderflow/getting-started/installation",
-              "products/renderflow/getting-started/licensing",
-              "products/renderflow/getting-started/silent-deploy",
-              "products/renderflow/getting-started/run-as-a-service",
-              "products/renderflow/getting-started/windows-network-setup",
-              "products/renderflow/getting-started/vpn-remote-access",
-              "products/renderflow/getting-started/migrating-from-render-manager"
+              "renderflow/getting-started/quick-start",
+              "renderflow/getting-started/render-farm-basics",
+              "renderflow/getting-started/requirements",
+              "renderflow/getting-started/supported-apps",
+              "renderflow/getting-started/installation",
+              "renderflow/getting-started/licensing",
+              "renderflow/getting-started/silent-deploy",
+              "renderflow/getting-started/run-as-a-service",
+              "renderflow/getting-started/windows-network-setup",
+              "renderflow/getting-started/vpn-remote-access",
+              "renderflow/getting-started/migrating-from-render-manager"
             ]
           },
           {
             "group": "Jobs",
             "pages": [
-              "products/renderflow/jobs/overview",
-              "products/renderflow/jobs/submitter",
-              "products/renderflow/jobs/templates",
-              "products/renderflow/jobs/requirements",
-              "products/renderflow/jobs/sanity-checks",
-              "products/renderflow/jobs/assets",
-              "products/renderflow/jobs/monitoring",
-              "products/renderflow/jobs/tasks-and-details",
-              "products/renderflow/jobs/notifications",
-              "products/renderflow/jobs/errors"
+              "renderflow/jobs/overview",
+              "renderflow/jobs/submitter",
+              "renderflow/jobs/templates",
+              "renderflow/jobs/requirements",
+              "renderflow/jobs/sanity-checks",
+              "renderflow/jobs/assets",
+              "renderflow/jobs/monitoring",
+              "renderflow/jobs/tasks-and-details",
+              "renderflow/jobs/notifications",
+              "renderflow/jobs/errors"
             ]
           },
           {
             "group": "Job Types",
             "pages": [
-              "products/renderflow/job-types/3ds-max",
-              "products/renderflow/job-types/scene-manager",
-              "products/renderflow/job-types/blender",
-              "products/renderflow/job-types/cinema-4d",
-              "products/renderflow/job-types/fusion",
-              "products/renderflow/job-types/corona-dr",
-              "products/renderflow/job-types/vray-dr",
-              "products/renderflow/job-types/vray-standalone"
+              "renderflow/job-types/3ds-max",
+              "renderflow/job-types/scene-manager",
+              "renderflow/job-types/blender",
+              "renderflow/job-types/cinema-4d",
+              "renderflow/job-types/fusion",
+              "renderflow/job-types/corona-dr",
+              "renderflow/job-types/vray-dr",
+              "renderflow/job-types/vray-standalone"
             ]
           },
           {
             "group": "Cloud Rendering",
             "pages": [
-              "products/renderflow/cloud-rendering/overview",
-              "products/renderflow/cloud-rendering/credits-and-pricing",
-              "products/renderflow/cloud-rendering/request-access"
+              "renderflow/cloud-rendering/overview",
+              "renderflow/cloud-rendering/credits-and-pricing",
+              "renderflow/cloud-rendering/request-access"
             ]
           },
           {
             "group": "Nodes",
             "pages": [
-              "products/renderflow/nodes/overview",
-              "products/renderflow/nodes/commands",
-              "products/renderflow/nodes/tags",
-              "products/renderflow/nodes/cpu-affinity",
-              "products/renderflow/nodes/spawner-mode",
-              "products/renderflow/nodes/hardware-and-network",
-              "products/renderflow/nodes/software",
-              "products/renderflow/nodes/benchmark"
+              "renderflow/nodes/overview",
+              "renderflow/nodes/commands",
+              "renderflow/nodes/tags",
+              "renderflow/nodes/cpu-affinity",
+              "renderflow/nodes/spawner-mode",
+              "renderflow/nodes/hardware-and-network",
+              "renderflow/nodes/software",
+              "renderflow/nodes/benchmark"
             ]
           },
           {
             "group": "Software Analytics",
             "pages": [
-              "products/renderflow/software-analytics/overview"
+              "renderflow/software-analytics/overview"
             ]
           },
           {
             "group": "Statistics",
             "pages": [
-              "products/renderflow/statistics/overview"
+              "renderflow/statistics/overview"
             ]
           },
           {
             "group": "Scheduler",
             "pages": [
-              "products/renderflow/scheduler/overview"
+              "renderflow/scheduler/overview"
             ]
           },
           {
             "group": "Sanity Check",
             "pages": [
-              "products/renderflow/sanity-check/overview",
-              "products/renderflow/sanity-check/defaults",
-              "products/renderflow/sanity-check/custom-checks"
+              "renderflow/sanity-check/overview",
+              "renderflow/sanity-check/defaults",
+              "renderflow/sanity-check/custom-checks"
             ]
           },
           {
             "group": "Settings",
             "pages": [
-              "products/renderflow/settings/overview"
+              "renderflow/settings/overview"
             ]
           },
           {
             "group": "Developers",
             "pages": [
-              "products/renderflow/developers/authentication",
-              "products/renderflow/developers/rest-api",
-              "products/renderflow/developers/javascript-sdk",
-              "products/renderflow/developers/python-sdk",
-              "products/renderflow/developers/cli",
-              "products/renderflow/developers/mcp-server"
+              "renderflow/developers/authentication",
+              "renderflow/developers/rest-api",
+              "renderflow/developers/javascript-sdk",
+              "renderflow/developers/python-sdk",
+              "renderflow/developers/cli",
+              "renderflow/developers/mcp-server"
             ]
           },
           {
             "group": "Support",
             "pages": [
-              "products/renderflow/support/report-an-issue",
-              "products/renderflow/support/collecting-logs",
-              "products/renderflow/support/contact-us"
+              "renderflow/support/report-an-issue",
+              "renderflow/support/collecting-logs",
+              "renderflow/support/contact-us"
             ]
           },
           {
             "group": "Reference",
             "pages": [
-              "products/renderflow/faq",
-              "products/renderflow/glossary"
+              "renderflow/faq",
+              "renderflow/glossary"
             ]
           }
         ]
@@ -266,15 +266,15 @@
         "tab": "Project Dream",
         "cta": {
           "label": "Get Started",
-          "href": "/products/project-dream/getting-started"
+          "href": "/project-dream/getting-started"
         },
         "groups": [
           {
             "group": "Project Dream",
             "pages": [
-              "products/project-dream/index",
-              "products/project-dream/getting-started",
-              "products/project-dream/features"
+              "project-dream/index",
+              "project-dream/getting-started",
+              "project-dream/features"
             ]
           }
         ]
