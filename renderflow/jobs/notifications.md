@@ -58,5 +58,5 @@ Configure the webhook URL in **Settings > Integrations**, and it will be availab
 <br/>
 
 <Frame caption="Integration settings page for Slack, Teams, and Webhook">
-  <img src="https://placehold.co/900x500?text=Settings+Integrations+page" alt="Settings > Integrations showing configured Slack and webhook integrations" />
+  <img src="/images/renderflow/rf_settings_integrations.png" alt="Settings > Integrations showing configured Slack and webhook integrations" />
 </Frame>

@@ -16,15 +16,15 @@ Open Software Analytics from the main toolbar. The interface presents a comparis
 
 Start by selecting a **base node**. This is the machine you consider the reference. Every other node is compared against it. Each cell in the table shows one of the following states.
 
-**Match** means the software exists on the node. If the version also matches the base node, it is shown in green.
+**Match** - software exists on the node, ff the version also matches the base node it is shown in green.
 
-**Extra** means the node has a plugin or application that does not exist on the base node.
+**Extra** - node has a plugin or application that does not exist on the base node.
 
-**Higher** means the version is newer than the base node.
+**Higher** - newer than the base node.
 
-**Lower** means the version is older than the base node.
+**Lower** - older than the base node.
 
-**Missing** means the software is not installed on that node.
+**Missing** - not installed on that node.
 
 <Frame caption="Software Analytics comparison table with base node selected">
   <img src="/images/renderflow/rf_software_analytics_table.png" alt="Comparison table showing Match, Missing, Higher, and Lower states across nodes" />

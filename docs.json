@@ -41,97 +41,7 @@
         ]
       },
       {
-        "tab": "Scene Manager",
-        "cta": {
-          "label": "Get Started",
-          "href": "/scene-manager/getting-started"
-        },
-        "groups": [
-          {
-            "group": "Scene Manager",
-            "pages": [
-              "scene-manager/index",
-              "scene-manager/getting-started",
-              "scene-manager/settings"
-            ]
-          },
-          {
-            "group": "Modules",
-            "pages": [
-              "scene-manager/modules/index",
-              {
-                "group": "Core",
-                "expanded": true,
-                "pages": [
-                  "scene-manager/modules/core/setup-list",
-                  "scene-manager/modules/core/camera",
-                  "scene-manager/modules/core/resolution",
-                  "scene-manager/modules/core/time-output",
-                  "scene-manager/modules/core/scene-name"
-                ]
-              },
-              {
-                "group": "Environment",
-                "expanded": true,
-                "pages": [
-                  "scene-manager/modules/environment/sun",
-                  "scene-manager/modules/environment/dome",
-                  "scene-manager/modules/environment/hdri-browser",
-                  "scene-manager/modules/environment/environment",
-                  "scene-manager/modules/environment/background",
-                  "scene-manager/modules/environment/atmosphere"
-                ]
-              },
-              {
-                "group": "Elements",
-                "expanded": true,
-                "pages": [
-                  "scene-manager/modules/elements/layers",
-                  "scene-manager/modules/elements/objects",
-                  "scene-manager/modules/elements/xref-scene",
-                  "scene-manager/modules/elements/variants"
-                ]
-              },
-              {
-                "group": "Rendering",
-                "expanded": true,
-                "pages": [
-                  "scene-manager/modules/rendering/render-output",
-                  "scene-manager/modules/rendering/render-settings",
-                  "scene-manager/modules/rendering/render-elements",
-                  "scene-manager/modules/rendering/post-production"
-                ]
-              },
-              {
-                "group": "Utilities",
-                "expanded": true,
-                "pages": [
-                  "scene-manager/modules/utilities/thumbnail",
-                  "scene-manager/modules/utilities/todo",
-                  "scene-manager/modules/utilities/notes"
-                ]
-              },
-              {
-                "group": "Scripting",
-                "expanded": true,
-                "pages": [
-                  "scene-manager/modules/scripting/script-file",
-                  "scene-manager/modules/scripting/script-editor"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Workflows",
-            "pages": [
-              "scene-manager/bake-setups",
-              "scene-manager/renderflow"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Render Flow",
+        "tab": "RenderFlow",
         "cta": {
           "label": "Get Started",
           "href": "/renderflow/getting-started/quick-start"
@@ -249,8 +159,7 @@
             "group": "Support",
             "pages": [
               "renderflow/support/report-an-issue",
-              "renderflow/support/collecting-logs",
-              "renderflow/support/contact-us"
+              "renderflow/support/collecting-logs"
             ]
           },
           {
@@ -263,18 +172,70 @@
         ]
       },
       {
+        "tab": "Scene Manager",
+        "cta": {
+          "label": "Get Started",
+          "href": "/scene-manager/getting-started"
+        },
+        "groups": [
+          {
+            "group": "Scene Manager",
+            "pages": [
+              "scene-manager/index",
+              "scene-manager/getting-started",
+              "scene-manager/settings"
+            ]
+          },
+          {
+            "group": "Modules",
+            "pages": [
+              "scene-manager/modules/index",
+              "scene-manager/modules/setup-list",
+              "scene-manager/modules/camera",
+              "scene-manager/modules/resolution",
+              "scene-manager/modules/time-output",
+              "scene-manager/modules/scene-name",
+              "scene-manager/modules/sun",
+              "scene-manager/modules/dome",
+              "scene-manager/modules/hdri-browser",
+              "scene-manager/modules/environment",
+              "scene-manager/modules/background",
+              "scene-manager/modules/atmosphere",
+              "scene-manager/modules/layers",
+              "scene-manager/modules/objects",
+              "scene-manager/modules/xref-scene",
+              "scene-manager/modules/variants",
+              "scene-manager/modules/render-output",
+              "scene-manager/modules/render-settings",
+              "scene-manager/modules/render-elements",
+              "scene-manager/modules/post-production",
+              "scene-manager/modules/thumbnail",
+              "scene-manager/modules/todo",
+              "scene-manager/modules/notes",
+              "scene-manager/modules/script-file",
+              "scene-manager/modules/script-editor"
+            ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "scene-manager/bake-setups",
+              "scene-manager/renderflow"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Project Dream",
         "cta": {
           "label": "Get Started",
-          "href": "/project-dream/getting-started"
+          "href": "/project-dream/index"
         },
         "groups": [
           {
             "group": "Project Dream",
             "pages": [
-              "project-dream/index",
-              "project-dream/getting-started",
-              "project-dream/features"
+              "project-dream/index"
             ]
           }
         ]

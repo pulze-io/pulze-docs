@@ -41,8 +41,8 @@ You can view your computer's logs directly inside RenderFlow. Go to **Menu > Sup
 
 For job-specific logs, open the job details and click **Open Logs** in the Nodes section. The log viewer supports filtering, text selection, copying, and saving to a separate file.
 
-<Frame caption="Job log viewer with filtering and copy options">
-  <img src="/images/renderflow/rf_support_job_log_viewer.png" alt="Log viewer showing job render logs with filter and copy controls" />
+<Frame caption="Job log viewer with filtering and save options">
+  <img src="/images/renderflow/rf_support_job_log_viewer.png" alt="Log viewer showing job render logs with filter and save options" />
 </Frame>
 
 <Info>

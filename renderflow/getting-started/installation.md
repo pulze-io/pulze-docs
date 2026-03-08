@@ -16,7 +16,7 @@ keywords: ['how to install render farm manager', 'render farm manager setup', 'r
 
 ## Running the installer
 
-RenderFlow uses a single installer for all machine types: server, node, and workstation. You choose the role after installation.
+[Download](https://www.pulze.io/account/downloads?sku=pulze_renderflow) the latest version of RenderFlow from your Pulze account. RenderFlow uses a single installer for all machine types: server, node, and workstation. You choose the role after installation.
 
 The installer:
 

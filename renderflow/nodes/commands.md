@@ -37,10 +37,10 @@ RenderFlow lets you control nodes remotely from the Nodes table. Select one or m
 
 **Delete** removes the node from RenderFlow. The node will reappear if it reconnects.
 
-## Additional commands in node details
-
-The node detail panel offers a few extra options not available in the context menu. **Errors** shows any errors the node has encountered. **Remote Desktop** opens a remote desktop connection to the node.
-
 <Frame caption="Node context menu with batch commands">
   <img src="/images/renderflow/rf_nodes_context_menu.png" alt="Right-click context menu showing status, pool, restart, shutdown, and other commands" />
 </Frame>
+
+## Additional commands in node details
+
+The node detail panel offers a few extra options not available in the context menu. **Errors** shows any errors the node has encountered. **Remote Desktop** opens a remote desktop connection to the node.

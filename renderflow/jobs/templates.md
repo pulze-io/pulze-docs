@@ -29,7 +29,7 @@ To create a custom template:
 Your custom template will appear at the top of the Submitter the next time you create a job. You can edit any parameter of an existing template or delete it entirely.
 
 <Frame caption="Custom templates appear at the top of the Submitter for quick access">
-  <img src="https://placehold.co/900x500?text=Template+selector+in+Submitter" alt="Template selector showing system and custom templates" />
+  <img src="/images/renderflow/rf_jobs_template_selector.png" alt="Template selector showing system and custom templates" />
 </Frame>
 
 ## Private and public templates

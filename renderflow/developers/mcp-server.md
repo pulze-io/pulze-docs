@@ -22,7 +22,7 @@ With RenderFlow's MCP server, you can:
 
 ## Compatible clients
 
-RenderFlow's MCP server works with [ChatGPT Desktop](https://openai.com/chatgpt/desktop/), [Claude Code](https://claude.ai/code), and many other MCP-compatible clients.
+RenderFlow's MCP server works with [Claude Code](https://claude.ai/code), [ChatGPT Desktop](https://openai.com/chatgpt/desktop/), [Claude Desktop](https://claude.ai/download), and many other MCP-compatible clients.
 
 For a full list of compatible clients, see [modelcontextprotocol.io/clients](https://modelcontextprotocol.io/clients).
 
@@ -34,39 +34,23 @@ For a full list of compatible clients, see [modelcontextprotocol.io/clients](htt
 - An API key (generate in **Settings → API Keys**)
 - An MCP-compatible client
 
-<Tabs>
-  <Tab title="ChatGPT Desktop">
-    Edit the configuration file:
-    - **Windows:** `%APPDATA%\ChatGPT\config.json`
-    - **macOS:** `~/Library/Application Support/ChatGPT/config.json`
+### Claude Code
 
-    ```json
-    {
-      "mcpServers": {
-        "renderflow": {
-          "url": "http://<ip>:44442/api/v1/mcp/",
-          "headers": {
-            "x-renderflow-api-key": "your-api-key-here"
-          }
-        }
-      }
-    }
-    ```
-  </Tab>
-  <Tab title="Claude Code">
-    Run this command to add the RenderFlow MCP server:
+Run this command to add the RenderFlow MCP server:
 
-    ```bash
-    claude mcp add --transport http renderflow http://<ip>:44442/api/v1/mcp/ --header "x-renderflow-api-key: your-api-key-here"
-    ```
-  </Tab>
-</Tabs>
+```bash
+claude mcp add --transport http renderflow http://<ip>:44442/api/v1/mcp/ --header "x-renderflow-api-key: your-api-key-here"
+```
 
 Replace `<ip>` with the IP address of any computer running RenderFlow (use `localhost` for your local machine).
 
 <Frame caption="Controlling RenderFlow through Claude Code using MCP">
   <img src="/images/renderflow/rf_dev_mcp_claude_code.png" alt="Claude Code conversation controlling a RenderFlow render farm via MCP" />
 </Frame>
+
+### HTTPS-only clients
+
+Some clients, including ChatGPT Desktop and Claude Desktop, only support MCP servers over HTTPS. Since RenderFlow's MCP server runs over HTTP on your local network, you need a tunneling tool like [ngrok](https://ngrok.com) to proxy the connection and expose it as an HTTPS endpoint. Point the tunnel at `http://<ip>:44442/api/v1/mcp/` and use the resulting HTTPS URL in your client configuration.
 
 ## Available tools
 

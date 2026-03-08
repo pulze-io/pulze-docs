@@ -199,20 +199,3 @@ RenderFlow adds "Submit to RenderFlow" to the Windows Explorer context menu for 
 ```bash
 rfcli.exe jobs submit -i --type=3dsmax.render --host=3dsmax --file="C:\path\to\scene.max"
 ```
-
-## Output format
-
-CLI commands output JSON by default, making it easy to parse results programmatically:
-
-```json
-[
-  {
-    "_id": "60f7b1a2c3d4e5f6a7b8c9d0",
-    "name": "Project_v01",
-    "status": "working",
-    "progress": 45
-  }
-]
-```
-
----

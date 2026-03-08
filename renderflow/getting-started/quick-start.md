@@ -18,7 +18,7 @@ RenderFlow manages your render farm, from a single workstation to hundreds of no
 
 ## Step 1: Install RenderFlow
 
-Run the installer on the computer that will act as your server. The same installer is used for every machine type. You choose the role during setup.
+[Download](https://www.pulze.io/account/downloads?sku=pulze_renderflow) the latest version of RenderFlow from your Pulze account. Run the installer on the computer that will act as your server. The same installer is used for every machine type. You choose the role during setup.
 
 <Info>
 For a single workstation setup, the server and render node run on the same machine. You don't need a second computer to get started.

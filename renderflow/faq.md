@@ -17,7 +17,7 @@ keywords: ['render farm FAQ', 'render farm common questions', 'render farm troub
     Yes. The server and render node can run on the same machine. This is a good way to evaluate RenderFlow before expanding to more machines.
   </Accordion>
   <Accordion title="Does RenderFlow support Mac or Linux?">
-    RenderFlow runs on Windows only (Windows 10 or later, 64-bit). Both server and render nodes must be Windows machines.
+    Not yet, but we are actively working on it. RenderFlow currently runs on Windows only (Windows 10 or later, 64-bit). If you are interested in Mac or Linux support, reach out to [support@pulze.io](mailto:support@pulze.io) and let us know about your setup.
   </Accordion>
   <Accordion title="How do render nodes find the server?">
     During setup, you can enter the server address manually, pass it as a command-line argument, set it as an environment variable, or let the node discover the server via network broadcast. See [Installation](/renderflow/getting-started/installation) for details.

@@ -58,6 +58,10 @@ The default columns are: #, Name, User, Status, Info, Job, Task, CPU activity, a
 
 Double-click a node row or press the **Open** button to view its details. The detail panel shows hardware information, installed software, benchmark scores, and current activity.
 
+<Frame caption="Node details panel showing hardware, software, and benchmark information">
+  <img src="/images/renderflow/rf_nodes_details.png" alt="RenderFlow node details panel with all detail sections" />
+</Frame>
+
 ## Editing a node
 
 Press the **edit button** (pen icon) in the node details to open the edit modal. You can change the **display name** (this renames the node inside RenderFlow without changing the actual computer name), assign a different **pool**, and add or remove **[tags](/renderflow/nodes/tags)**. A reset button restores the display name to the original computer name.

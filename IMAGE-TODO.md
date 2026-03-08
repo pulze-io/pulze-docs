@@ -8,7 +8,7 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_install_license_selection.png` — License Selection Screen — Automatic / Manual / Trial / Skip (`getting-started/installation.md`)
 - [x] `rf_install_repository_folder.png` — Repository folder selection — Server setup (`getting-started/installation.md`)
 - [x] `rf_install_server_connection.png` — Server Connection Screen — IP entry and Discover button (`getting-started/installation.md`)
-- [ ] `rf_install_workstation_node_mode.png` — Enabling node mode on a single workstation (`getting-started/installation.md`)
+- [x] `rf_install_workstation_node_mode.png` — Enabling node mode on a single workstation (`getting-started/installation.md`)
 - [x] `rf_quickstart_mode_selection.png` — Server mode selection screen (`getting-started/quick-start.md`)
 - [x] `rf_quickstart_repository_folder.png` — Repository folder selection — Quick start version (`getting-started/quick-start.md`)
 - [x] `rf_quickstart_node_discover.png` — Node connection via Discover (`getting-started/quick-start.md`)
@@ -26,7 +26,7 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_submitter_context_menu_explorer.png` — Submit to RenderFlow context menu — Windows Explorer right-click (`jobs/submitter.md`)
 - [x] `rf_submitter_drag_drop.png` — Drag and drop file onto Jobs view (`jobs/submitter.md`)
 - [ ] `rf_submitter_scene_properties.png` — Submitter scene properties and assets (`jobs/submitter.md`)
-- [ ] `rf_submitter_job_settings.png` — Submitter job settings panel — pool, priority, schedule (`jobs/submitter.md`)
+- [x] `rf_submitter_job_settings.png` — Submitter job settings panel — pool, priority, schedule (`jobs/submitter.md`)
 - [ ] `rf_jobs_monitoring_table.png` — Job monitoring table — multiple jobs with status/progress/timing (`jobs/monitoring.md`)
 - [ ] `rf_jobs_column_customization.png` — Column customization panel — drag handles for reordering (`jobs/monitoring.md`)
 - [ ] `rf_jobs_context_menu.png` — Job context menu — Start, Stop, Reset, Edit, Quick Edit, Archive, Delete (`jobs/monitoring.md`)
@@ -41,7 +41,7 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [ ] `rf_jobs_validation_dropdown.png` — Validation level dropdown — Low, Normal, Medium, High (`jobs/requirements.md`)
 - [ ] `rf_jobs_error_indicator.png` — Error indicator in job details — error badge and per-node error list (`jobs/errors.md`)
 - [ ] `rf_jobs_sanity_check_results.png` — Sanity check results in Submitter — mixed severity levels (`jobs/sanity-checks.md`)
-- [ ] `rf_jobs_template_selector.png` — Template selector in Submitter — system and custom templates (`jobs/templates.md`)
+- [x] `rf_jobs_template_selector.png` — Template selector in Submitter — system and custom templates (`jobs/templates.md`)
 - [ ] `rf_jobs_notification_submitter.png` — Notification section in Submitter — email, Slack, webhook (`jobs/notifications.md`)
 
 ### Job Types
@@ -50,23 +50,25 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_jobtypes_blender_submitter.png` — Blender Submitter — scene properties (`job-types/blender.md`)
 - [x] `rf_jobtypes_cinema4d_submitter.png` — Cinema 4D Submitter — scene properties (`job-types/cinema-4d.md`)
 - [x] `rf_jobtypes_fusion_submitter.png` — Fusion Submitter — frame and command-line settings (`job-types/fusion.md`)
+- [x] `rf_jobtypes_vray_standalone_submitter.png` — V-Ray Standalone Submitter — resolution, frame, and output settings (`job-types/vray-standalone.md`)
 - [ ] `rf_jobtypes_corona_dr_diagram.png` — Corona DR diagram — master and multiple spawner nodes on one frame (`job-types/corona-dr.md`)
 - [ ] `rf_jobtypes_vray_dr_diagram.png` — V-Ray DR diagram — master node and auto-managed spawner nodes (`job-types/vray-dr.md`)
-- [x] `rf_jobtypes_vray_standalone_submitter.png` — V-Ray Standalone Submitter — resolution, frame, and output settings (`job-types/vray-standalone.md`)
 
 ### Cloud Rendering
 - [x] `rf_cloud_waitlist_form.png` — Waitlist form in RenderFlow — Cloud waitlist form inside the app (`cloud-rendering/request-access.md`)
+- [x] `rf_cloud_request_access.png` — Request Access page — Cloud beta request access screen (`cloud-rendering/request-access.md`)
 - [ ] `rf_cloud_jobs_table.png` — Cloud and local jobs in same table — job monitoring with cloud + local jobs (`cloud-rendering/overview.md`)
 
 ### Nodes
+- [x] `rf_nodes_details.png` — Node details panel — full detail view with hardware, software, and benchmark tabs (`nodes/overview.md`)
 - [x] `rf_nodes_monitoring_table.png` — Nodes monitoring table — status, CPU, RAM, current job (`nodes/overview.md`)
 - [x] `rf_nodes_context_menu.png` — Node context menu — right-click menu with status, pool, restart, shutdown (`nodes/commands.md`)
 - [x] `rf_nodes_tag_editor.png` — Batch tag editing — tag editor applied to multiple selected nodes (`nodes/tags.md`)
 - [x] `rf_nodes_cpu_affinity.png` — CPU affinity control — core allocation for rendering (`nodes/cpu-affinity.md`)
 - [x] `rf_nodes_spawner_mode.png` — Spawner mode configuration popup (`nodes/spawner-mode.md`)
-- [x] `rf_nodes_hardware_details.png` — Node hardware details — CPU, GPU, RAM, IP, disk usage (`nodes/hardware-and-network.md`)
-- [x] `rf_nodes_software_details.png` — Node software details — expandable app list with versions (`nodes/software.md`)
-- [x] `rf_nodes_benchmark_scores.png` — Node benchmark scores — V-Ray, Blender, Corona, Cinebench (`nodes/benchmark.md`)
+- [ ] `rf_nodes_hardware_details.png` — Node hardware details — CPU, GPU, RAM, IP, disk usage (`nodes/hardware-and-network.md`)
+- [ ] `rf_nodes_software_details.png` — Node software details — expandable app list with versions (`nodes/software.md`)
+- [ ] `rf_nodes_benchmark_scores.png` — Node benchmark scores — V-Ray, Blender, Corona, Cinebench (`nodes/benchmark.md`)
 
 ### Software Analytics
 - [x] `rf_software_analytics_table.png` — Software Analytics comparison table — Match, Missing, Higher, Lower states (`software-analytics/overview.md`)

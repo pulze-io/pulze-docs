@@ -84,7 +84,7 @@ The right side of the Submitter contains the job settings that control how the j
 **Cleanup** defines what happens to the job after it completes. You can choose to archive or delete it after a specified number of hours or days.
 
 <Frame caption="Submitter job settings panel">
-  <img src="https://placehold.co/900x500?text=Submitter+job+settings+panel" alt="Job settings panel showing pool, priority, schedule, and other options" />
+  <img src="/images/renderflow/rf_submitter_job_settings.png" alt="Job settings panel showing pool, priority, schedule, and other options" />
 </Frame>
 
 ## Submitting via API
