@@ -15,9 +15,6 @@ When you submit a Corona DR job, the first node assigned becomes the **master**.
 
 RenderFlow handles the setup automatically. When a Corona DR job is submitted, it enables distributed rendering in the Corona render settings and turns on the "Search on LAN" feature, which discovers available Corona spawners. All nodes that are in [Spawner Mode](/renderflow/nodes/spawner-mode) are automatically added to the DR list.
 
-<Frame caption="Corona DR flow: master node renders while spawner nodes contribute processing power">
-  <img src="https://placehold.co/900x500?text=Corona+DR+diagram" alt="Diagram showing master node and multiple spawner nodes collaborating on one frame" />
-</Frame>
 
 ## Spawner Mode requirement
 

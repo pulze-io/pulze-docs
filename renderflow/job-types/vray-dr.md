@@ -15,9 +15,6 @@ When you submit a V-Ray DR job, the first node assigned becomes the **master**. 
 
 This is simpler than the Corona DR workflow because RenderFlow handles the entire spawner lifecycle for you.
 
-<Frame caption="V-Ray DR flow: RenderFlow manages the master and spawner nodes automatically">
-  <img src="https://placehold.co/900x500?text=V-Ray+DR+diagram" alt="Diagram showing master node and auto-managed spawner nodes" />
-</Frame>
 
 ## Submission
 

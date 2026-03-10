@@ -34,9 +34,6 @@ Every job moves through a set of states from creation to completion.
 
 **Scheduled** means the job has a future start time. It will automatically move to Pending when that time arrives.
 
-<Frame caption="Job lifecycle: Pending to Working to Completed, with Suspended and Scheduled branches">
-  <img src="https://placehold.co/900x400?text=Job+lifecycle+state+diagram" alt="Job lifecycle state diagram" />
-</Frame>
 
 ## Priority
 

@@ -29,9 +29,6 @@ A render farm has three core components:
 
 A render farm manager like RenderFlow ties everything together: it distributes work across nodes, monitors progress, catches errors, and gives you a single dashboard to manage it all.
 
-<Frame caption="Render farm architecture, storage, render nodes, RenderFlow server">
-  <img src="https://placehold.co/900x500?text=Render+Farm+Architecture" alt="Render farm architecture, storage, render nodes, RenderFlow server" />
-</Frame>
 
 ## What you need to get right
 

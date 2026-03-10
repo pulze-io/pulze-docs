@@ -39,9 +39,6 @@ The submission flow is designed to feel identical to submitting a local render j
 
 **Automatic output delivery.** When a frame completes, the rendered output is automatically saved to the local path you specified in the Submitter. No manual downloads. No cloud storage portals. The frames appear where you expect them.
 
-<Frame caption="Cloud jobs appear alongside local jobs in the same monitoring table">
-  <img src="https://placehold.co/900x500?text=Cloud+and+local+jobs+in+same+table" alt="Job monitoring table showing cloud and local jobs side by side" />
-</Frame>
 
 ## Scene Manager integration
 

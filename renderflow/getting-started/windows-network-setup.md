@@ -67,17 +67,11 @@ Many studios use mapped drives for convenience. It's easier to type `S:\` than `
 
 **If you can't switch to UNC paths** (legacy projects, established workflows), RenderFlow's Mapped Drives feature can help. Go to **Settings > Mapped Drives** and define the mapping between drive letters and UNC paths. RenderFlow will automatically map these drives during startup and before each render job, and will verify they're accessible before a node begins rendering.
 
-<Frame caption="Settings > Mapped Drives">
-  <img src="https://placehold.co/900x500?text=Settings+>+Mapped+Drives" alt="Settings > Mapped Drives" />
-</Frame>
 
 ## Folder structure
 
 Start simple and expand as your studio grows. A typical structure includes separate areas for scene files, project-specific assets, render output (organized by date), and incoming/outgoing client materials. Keep your project files and your shared asset library (downloaded textures, models, HDRIs, plugin libraries) on separate shares.
 
-<Frame caption="Example folder structure for a render farm">
-  <img src="https://placehold.co/900x500?text=Folder+Structure+Diagram" alt="Example folder structure for a render farm" />
-</Frame>
 
 The key rule: **every file path referenced in a scene must be accessible at the same path on every machine.** If an artist saves a scene that references `\\fileserver\library\textures\wood.jpg`, every render node must be able to reach that file at that exact path.
 

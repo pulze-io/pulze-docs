@@ -45,6 +45,10 @@ In the **Job details** panel, errors appear at the top of the detail view. You c
   <img src="https://placehold.co/900x500?text=Error+indicator+in+job+details" alt="Job detail panel showing error badge and per-node error list" />
 </Frame>
 
+<Frame caption="Error details popup with error message and catalogue link">
+  <img src="https://placehold.co/900x500?text=Error+popup" alt="Error popup showing error message and link to error catalogue" />
+</Frame>
+
 ## Render logs
 
 Detailed logs for each render session are stored on the render node at `C:\ProgramData\RenderFlow\logs`. These logs are not transferred automatically. When you open a node's log in the job detail panel, RenderFlow fetches it on demand from the node.

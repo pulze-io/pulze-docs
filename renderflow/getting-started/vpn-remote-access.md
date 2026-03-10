@@ -33,9 +33,6 @@ This is the most common setup. An artist working from home connects to the studi
 
 The artist monitors progress from the RenderFlow interface on their machine, just like they would in the office.
 
-<Frame caption="Remote artist → VPN → Office network → Render farm">
-  <img src="https://placehold.co/900x500?text=Remote+artist+→+VPN+→+Office+network+→+Render+farm" alt="Remote artist → VPN → Office network → Render farm" />
-</Frame>
 
 **Important:** the scene file and all its assets must be on the studio's shared storage, not on the artist's local drive. Save to the network path (e.g., `\\fileserver\projects\`) before submitting. The render nodes at the office need to access these files on their local network. They won't reach the artist's home machine.
 

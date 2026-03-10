@@ -90,10 +90,6 @@ RenderFlow does not modify file paths or output paths in your jobs. If your scen
 
 **Option 2:** Configure drive mappings in RenderFlow. Go to **Settings > Mapped Drives** and add entries that map drive letters to their UNC equivalents. RenderFlow will automatically map these drives during startup and before each render job, and will verify they're accessible before a node begins rendering.
 
-<Frame caption="Settings: Mapped Drives configuration">
-  <img src="https://placehold.co/900x500?text=Mapped+Drives+Settings" alt="Mapped Drives configuration" />
-</Frame>
-
 <Tip>
 Even if you're not running as a service today, using UNC paths is a good practice. It makes your scenes portable across any machine in the studio, regardless of drive letter assignments.
 </Tip>
