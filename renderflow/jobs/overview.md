@@ -24,15 +24,15 @@ This mental model matters when you think about scaling. Adding more nodes to you
 
 Every job moves through a set of states from creation to completion.
 
-**Pending** is the default state when a job is first submitted. It means the job is in the queue and ready for nodes to pick up its tasks.
+**Pending** - the default state when a job is first submitted. The job is in the queue and ready for nodes to pick up its tasks.
 
-**Working** means at least one node has been assigned and is actively processing tasks.
+**Working** - at least one node has been assigned and is actively processing tasks.
 
-**Completed** means all tasks have finished successfully (100% progress).
+**Completed** - all tasks have finished successfully (100% progress).
 
-**Suspended** means the job has been manually stopped. When you suspend a job, any currently working nodes are removed and unfinished frames are lost. The job stays in the list and can be restarted at any time.
+**Suspended** - the job has been manually stopped. Any currently working nodes are removed and unfinished frames are lost. The job stays in the list and can be restarted at any time.
 
-**Scheduled** means the job has a future start time. It will automatically move to Pending when that time arrives.
+**Scheduled** - the job has a future start time. It will automatically move to Pending when that time arrives.
 
 
 ## Priority
@@ -45,17 +45,21 @@ You can change a job's priority after submission through the [Quick Edit](/rende
 
 You can control jobs at any point in their lifecycle.
 
-**Start** moves a suspended or scheduled job into the active queue.
+**Start** - moves a suspended or scheduled job into the active queue.
 
-**Stop** suspends a running job. Currently working nodes are removed and any unfinished frames are lost.
+**Stop** - suspends a running job. Currently working nodes are removed and any unfinished frames are lost.
 
-**Finish and Stop** lets nodes complete their current frames, then suspends the job. No new tasks are assigned. This is useful when you need your farm capacity for something else but do not want to waste the frames already in progress and do not want to babysit the process.
+**Finish and Stop** - lets nodes complete their current frames, then suspends the job. No new tasks are assigned. Useful when you need your farm capacity for something else but do not want to waste the frames already in progress.
 
-**Reset** clears all progress and puts every task back to Pending. The job re-enters the queue as if it were freshly submitted.
+**Reset** - clears all progress and puts every task back to Pending. The job re-enters the queue as if it were freshly submitted.
 
-**Archive** moves the job to the repository's archive directory, removing it from the active job list while preserving all data. Archived jobs can be fully restored at any time.
+**Archive** - moves the job to the repository's archive directory, removing it from the active job list while preserving all data. Archived jobs can be fully restored at any time.
 
-**Delete** permanently removes the job and all of its data.
+**Delete** - permanently removes the job and all of its data.
+
+<Frame caption="Job actions available from the context menu">
+  <img src="/images/renderflow/rf_jobs_actions.png" alt="Job actions context menu" />
+</Frame>
 
 ## Task-level control
 
@@ -64,5 +68,5 @@ You do not have to manage entire jobs at once. Individual tasks can be reset, en
 For details on working with tasks, see [Tasks and Details](/renderflow/jobs/tasks-and-details).
 
 <Frame caption="Job list showing jobs in various states">
-  <img src="https://placehold.co/900x500?text=Job+list+with+multiple+states" alt="Job list showing Pending, Working, Completed, and Suspended jobs" />
+  <img src="/images/renderflow/rf_jobs_list_states.png" alt="Job list showing Pending, Working, Completed, and Suspended jobs" />
 </Frame>

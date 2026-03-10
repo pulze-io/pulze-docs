@@ -13,6 +13,10 @@ RenderFlow checks each node's CPU and GPU against publicly available benchmark d
 
 Estimated scores are provided for V-Ray CPU, Blender, Corona, and Cinebench. These are best-guess estimates based on the detected hardware, not actual benchmark runs on the machine.
 
+<Frame caption="Benchmark scores for a node showing estimated V-Ray, Corona, and Cinebench performance">
+  <img src="/images/renderflow/rf_nodes_benchmark_scores.png" alt="Benchmark panel with estimated scores for V-Ray, Blender, Corona, and Cinebench" />
+</Frame>
+
 ## How scores are used
 
 Benchmark scores feed into the statistics section where you can review the performance ranking of all nodes in your farm. This helps you identify your fastest and slowest machines, which is useful when planning hardware upgrades or deciding which nodes to assign to time-critical jobs.
@@ -20,7 +24,3 @@ Benchmark scores feed into the statistics section where you can review the perfo
 <Info>
 On-demand benchmarking (running actual render tests on each node) is planned for a future release.
 </Info>
-
-<Frame caption="Benchmark scores for a node showing estimated V-Ray, Corona, and Cinebench performance">
-  <img src="/images/renderflow/rf_nodes_benchmark_scores.png" alt="Benchmark panel with estimated scores for V-Ray, Blender, Corona, and Cinebench" />
-</Frame>

@@ -29,14 +29,14 @@ RenderFlow ships with 52 pre-built checks covering 3ds Max native features and r
 
 Each check has one of three severity levels.
 
-**Info** flags something worth noting but does not affect submission. These are informational only.
+**Info** - something worth noting but does not affect submission. Informational only.
 
-**Warning** indicates a potential problem. You can still submit, but it is worth reviewing.
+**Warning** - a potential problem. You can still submit, but it is worth reviewing.
 
-**Critical** blocks submission entirely. The Submit button is disabled until all critical issues are resolved. This prevents jobs from entering the queue when they are guaranteed to fail.
+**Critical** - blocks submission entirely. The Submit button is disabled until all critical issues are resolved. This prevents jobs from entering the queue when they are guaranteed to fail.
 
 <Frame caption="Sanity check results in the Submitter showing Info, Warning, and Critical items">
-  <img src="https://placehold.co/900x500?text=Sanity+check+results+in+Submitter" alt="Sanity check results with mixed severity levels" />
+  <img src="/images/renderflow/rf_jobs_sanity_check_results.png" alt="Sanity check results with mixed severity levels" />
 </Frame>
 
 ## Customization

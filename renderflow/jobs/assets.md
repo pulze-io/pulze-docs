@@ -24,7 +24,7 @@ The Assets tab flags any file that cannot be found at its referenced path. It al
 If an asset is missing or only exists on your local workstation, the render node will not be able to access it. Depending on the asset type, the result might be a black texture, a missing object, or a failed frame.
 
 <Frame caption="Asset list in the Submitter showing detected files, missing indicators, and total project size">
-  <img src="https://placehold.co/900x500?text=Asset+list+in+Submitter" alt="Asset tab with file list, missing file markers, and total size" />
+  <img src="/images/renderflow/rf_jobs_asset_list.png" alt="Asset tab with file list, missing file markers, and total size" />
 </Frame>
 
 ## What RenderFlow does not do

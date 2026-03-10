@@ -88,10 +88,3 @@ Only the server requires internet access. It connects to Pulze servers once dail
 | `*.renderflow.com` | Notifications, Cloud rendering service (optional) |
 
 Render nodes and workstations do not need internet access. However, fully offline operation (no internet on the server) is not supported.
-
-## Database
-
-RenderFlow bundles MongoDB. No separate database installation is required. The database runs automatically as part of the RenderFlow server process.
-
-The Visual C++ Redistributable is also bundled and installed automatically if needed.
-

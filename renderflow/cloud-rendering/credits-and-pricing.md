@@ -20,7 +20,3 @@ Every customer gets the same treatment. There is no system where paying more giv
 ## Team credits
 
 Studios can maintain a shared credit pool that anyone on the team can use. You can also create separate teams with allocated credits for different projects or departments. When submitting a cloud job, the artist selects which team's credits to use.
-
-## Shared with Project Dream
-
-Credits are shared across RenderFlow Cloud and Project Dream. A single purchased credit package works for both products.

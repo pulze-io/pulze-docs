@@ -17,11 +17,11 @@ When a render node processes a task, RenderFlow traces the application log in re
 
 Each error is classified into one of three levels.
 
-**Warning** means something unexpected happened but the render may still complete. The task continues running.
+**Warning** - something unexpected happened but the render may still complete. The task continues running.
 
-**Error** means a significant problem occurred. The node will attempt to retry the task (see below).
+**Error** - a significant problem occurred. The node will attempt to retry the task (see below).
 
-**Fatal** means a critical failure, typically an application crash. A fatal error ejects the node from the job immediately with no retry. This prevents the node from repeatedly crashing on the same problematic task.
+**Fatal** - a critical failure, typically an application crash. The node is ejected from the job immediately with no retry. This prevents the node from repeatedly crashing on the same problematic task.
 
 ## Automatic retries
 
@@ -29,7 +29,7 @@ For non-fatal errors, a node can retry the same task up to 3 times. This retry c
 
 ## Error catalogue
 
-RenderFlow maintains an error catalogue that maps detected errors to explanations, common causes, and suggested solutions. When an error is registered on a job, it includes a link to the relevant catalogue entry. This saves you from having to search through raw logs to understand what went wrong.
+RenderFlow maintains an [error catalogue](https://notion.pulze.io/renderflow-error-catalog?v=3429908449f744a2a77c5dae0c52c8ae) that maps detected errors to explanations, common causes, and suggested solutions. When an error is registered on a job, it includes a link to the relevant catalogue entry. This saves you from having to search through raw logs to understand what went wrong.
 
 The most common causes of render errors include third-party plugin or script crashes, missing or corrupted assets, running out of memory (the scene uses more RAM than the node has), slow or interrupted network connections to shared storage, and incompatible plugin or engine versions between the artist's workstation and the render node.
 
@@ -42,11 +42,11 @@ In the **Nodes table**, a node that has encountered an error shows an error indi
 In the **Job details** panel, errors appear at the top of the detail view. You can also see per-node errors in the Nodes section of the detail panel, along with the option to view the full render log for that node.
 
 <Frame caption="Error indicator in the job detail panel with a link to the error catalogue">
-  <img src="https://placehold.co/900x500?text=Error+indicator+in+job+details" alt="Job detail panel showing error badge and per-node error list" />
+  <img src="/images/renderflow/rf_jobs_error_indicator.png" alt="Job detail panel showing error badge and per-node error list" />
 </Frame>
 
 <Frame caption="Error details popup with error message and catalogue link">
-  <img src="https://placehold.co/900x500?text=Error+popup" alt="Error popup showing error message and link to error catalogue" />
+  <img src="/images/renderflow/rf_jobs_error_popup.png" alt="Error popup showing error message and link to error catalogue" />
 </Frame>
 
 ## Render logs

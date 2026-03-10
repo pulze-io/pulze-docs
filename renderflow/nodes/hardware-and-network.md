@@ -13,10 +13,10 @@ The Hardware section in the node detail panel gives you a quick reference for ea
 
 The following information is displayed: CPU model and core count, GPU type, MAC address, IP address, operating system, system uptime, current logged-in user, and the node's assigned pool.
 
+<Frame caption="Node hardware details">
+  <img src="/images/renderflow/rf_nodes_hardware_details.png" alt="Hardware panel showing CPU, GPU, RAM, and IP" />
+</Frame>
+
 ## Storage
 
 A separate Storage section shows disk usage and capacity for the system drive as well as any other local and network drives detected on the machine. This is useful for spotting nodes that are running low on disk space before they cause render failures.
-
-<Frame caption="Node hardware details and storage overview">
-  <img src="/images/renderflow/rf_nodes_hardware_details.png" alt="Hardware panel showing CPU, GPU, RAM, IP, and disk usage" />
-</Frame>

@@ -19,6 +19,10 @@ A node can have any number of tags. Tags are free-form text labels that you defi
 
 **Job whitelisting.** In the Submitter, when you enable Whitelist Nodes, you can select nodes by tag. For example, tagging all GPU-equipped machines as "GPU" lets you whitelist them with one click when submitting a GPU render job.
 
+<Frame caption="Tags used for filtering and whitelisting">
+  <img src="/images/renderflow/rf_nodes_tags_usage.png" alt="Tags in the node table filter and submitter whitelist" />
+</Frame>
+
 ## Adding tags
 
 There are two ways to add tags.

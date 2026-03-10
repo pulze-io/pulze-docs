@@ -81,8 +81,8 @@ The job table updates in real-time. You'll see progress, active nodes, elapsed t
 
 That's it. You're rendering.
 
-<Frame caption="Full quick start walkthrough">
-  <img src="/images/renderflow/rf_quickstart_first_job_running.png" alt="Full quick start walkthrough" />
+<Frame caption="Job running with real-time progress, active nodes, and time estimate">
+  <img src="/images/renderflow/rf_quickstart_first_job_running.png" alt="Job table showing a running job with progress, active nodes, and estimated time remaining" />
 </Frame>
 
 ## Single workstation setup

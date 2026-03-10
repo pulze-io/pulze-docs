@@ -16,7 +16,7 @@ When you select a file in the [Submitter](/renderflow/jobs/submitter), RenderFlo
 For example, if your 3ds Max scene uses V-Ray 7.20 and Forest Pack, RenderFlow will add requirements for 3ds Max (host application), V-Ray (render engine), and Forest Pack (plugin). It also detects which network drives the scene references.
 
 <Frame caption="Requirements list generated automatically from a 3ds Max scene">
-  <img src="https://placehold.co/900x500?text=Requirements+list+in+Submitter" alt="Auto-generated requirements list showing host app, engine, and plugins" />
+  <img src="/images/renderflow/rf_jobs_requirements_list.png" alt="Auto-generated requirements list showing host app, engine, and plugins" />
 </Frame>
 
 ## How matching works
@@ -38,8 +38,8 @@ Not every version mismatch is a problem. Sometimes one node has V-Ray 7.20.04 an
 
 The default level depends on the requirement type, but you can adjust it per requirement in the Submitter. Lowering the validation level expands the pool of available nodes, which is useful when your farm has slight version differences across machines.
 
-<Frame caption="Validation level dropdown on a requirement">
-  <img src="https://placehold.co/900x500?text=Validation+level+dropdown" alt="Dropdown showing Low, Normal, Medium, and High validation levels" />
+<Frame caption="Validation level control on a requirement">
+  <img src="/images/renderflow/rf_jobs_validation_dropdown.png" alt="Dropdown showing Low, Normal, Medium, and High validation levels" />
 </Frame>
 
 <Warning>
@@ -57,4 +57,8 @@ You can configure network drive mappings for all nodes in [Settings > Mapped Dri
 You can deactivate any requirement in the Submitter by toggling it off. The only exception is the host application: at minimum, the correct DCC application must be detected and available on the node.
 
 Deactivating a requirement is useful in situations where you know a plugin is listed as a dependency but is not actually needed for the specific render you are submitting.
+
+<Frame caption="Editing requirements in the Submitter">
+  <img src="/images/renderflow/rf_jobs_requirements_edit.png" alt="Requirement toggle controls in the Submitter" />
+</Frame>
 

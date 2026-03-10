@@ -65,3 +65,7 @@ Double-click a node row or press the **Open** button to view its details. The de
 ## Editing a node
 
 Press the **edit button** (pen icon) in the node details to open the edit modal. You can change the **display name** (this renames the node inside RenderFlow without changing the actual computer name), assign a different **pool**, and add or remove **[tags](/renderflow/nodes/tags)**. A reset button restores the display name to the original computer name.
+
+<Frame caption="Node edit modal">
+  <img src="/images/renderflow/rf_nodes_edit_modal.png" alt="Edit node modal with display name, pool, and tags" />
+</Frame>

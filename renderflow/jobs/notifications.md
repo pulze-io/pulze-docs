@@ -15,7 +15,11 @@ Currently, only job completion triggers notifications. Support for additional ev
 
 ## Available channels
 
-RenderFlow supports the following notification channels:
+RenderFlow supports the following notification channels.
+
+<Frame caption="Notification section in the Submitter with multiple channels configured">
+  <img src="/images/renderflow/rf_jobs_notification_submitter.png" alt="Submitter notification options showing email, Slack, and webhook selections" />
+</Frame>
 
 ## Email
 
@@ -50,12 +54,6 @@ Microsoft Teams integration also uses incoming webhooks. To set it up:
 For custom integrations, you can set up a raw webhook that sends a JSON payload with all job details when a job completes. This works with any service that accepts HTTP webhooks: Zapier, n8n, Make, or your own internal tools.
 
 Configure the webhook URL in **Settings > Integrations**, and it will be available for selection in the Submitter.
-
-<Frame caption="Notification section in the Submitter with multiple channels configured">
-  <img src="https://placehold.co/900x500?text=Notification+section+in+Submitter" alt="Submitter notification options showing email, Slack, and webhook selections" />
-</Frame>
-
-<br/>
 
 <Frame caption="Integration settings page for Slack, Teams, and Webhook">
   <img src="/images/renderflow/rf_settings_integrations.png" alt="Settings > Integrations showing configured Slack and webhook integrations" />

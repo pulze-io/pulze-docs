@@ -17,10 +17,10 @@ During the day, an artist might be doing lightweight tasks like reviewing refere
 
 Select one or more nodes in the Nodes table, right-click, and choose **CPU Affinity**. A slider lets you set the number of cores dedicated to rendering, from 1 up to the node's total core count.
 
-<Warning>
-Changes to CPU affinity take effect on the next job or task. Currently running tasks are not affected. If a node is mid-render, the new affinity setting will apply when it picks up its next task.
-</Warning>
-
 <Frame caption="CPU affinity setting for a workstation node">
   <img src="/images/renderflow/rf_nodes_cpu_affinity.png" alt="CPU affinity control showing core allocation for rendering" />
 </Frame>
+
+<Warning>
+Changes to CPU affinity take effect on the next job or task. Currently running tasks are not affected. If a node is mid-render, the new affinity setting will apply when it picks up its next task.
+</Warning>
