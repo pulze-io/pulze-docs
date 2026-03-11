@@ -28,6 +28,7 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_submitter_job_settings.png` — Submitter job settings panel — pool, priority, schedule (`jobs/submitter.md`)
 - [ ] `rf_submitter_pick_instance.png` — Instance picker in Submitter — selecting application instance (`jobs/submitter.md`)
 - [ ] `rf_submitter_browse_file.png` — Browse file dialog in Submitter — selecting scene file (`jobs/submitter.md`)
+- [ ] `rf_submitter_prop_camera.png` — Camera selection property in Submitter — camera picker (`jobs/submitter.md`)
 - [ ] `rf_submitter_prop_resolution.png` — Resolution property in Submitter — width, height, aspect ratio (`jobs/submitter.md`)
 - [ ] `rf_submitter_prop_frames.png` — Frame settings property in Submitter — frame range and step (`jobs/submitter.md`)
 - [ ] `rf_submitter_prop_render_settings.png` — Render settings property in Submitter — engine and quality settings (`jobs/submitter.md`)
@@ -69,8 +70,6 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_jobtypes_cinema4d_submitter.png` — Cinema 4D Submitter — scene properties (`job-types/cinema-4d.md`)
 - [x] `rf_jobtypes_fusion_submitter.png` — Fusion Submitter — frame and command-line settings (`job-types/fusion.md`)
 - [x] `rf_jobtypes_vray_standalone_submitter.png` — V-Ray Standalone Submitter — resolution, frame, and output settings (`job-types/vray-standalone.md`)
-- [ ] `rf_jobtypes_corona_dr_diagram.png` — Corona DR diagram — master and multiple spawner nodes on one frame (`job-types/corona-dr.md`)
-- [ ] `rf_jobtypes_vray_dr_diagram.png` — V-Ray DR diagram — master node and auto-managed spawner nodes (`job-types/vray-dr.md`)
 
 ### Cloud Rendering
 - [x] `rf_cloud_waitlist_form.png` — Waitlist form in RenderFlow — Cloud waitlist form inside the app (`cloud-rendering/request-access.md`)

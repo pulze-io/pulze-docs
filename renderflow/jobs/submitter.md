@@ -61,9 +61,13 @@ If you browse a Blender or Cinema 4D file without overriding any properties, the
 
 Once a file is selected, RenderFlow reads and displays the scene properties. The screenshots below show each property section individually for clarity.
 
-The following properties are displayed (where available): filename, resolution, frame settings, render settings, and render output. It also detects the application version, render engine, compatible plugins, and any network drives used by the scene.
+The following properties are displayed (where available): filename, camera, resolution, frame settings, render settings, and render output. It also detects the application version, render engine, compatible plugins, and any network drives used by the scene.
 
 For 3ds Max, the Submitter goes further. It scans all scene assets and presents a full list with missing-file indicators and a total project size calculation. It also runs [Sanity Checks](/renderflow/jobs/sanity-checks) to catch common mistakes before you submit.
+
+<Frame caption="Camera selection">
+  <img src="/images/renderflow/rf_submitter_prop_camera.png" alt="Submitter camera property" />
+</Frame>
 
 <Frame caption="Resolution settings">
   <img src="/images/renderflow/rf_submitter_prop_resolution.png" alt="Submitter resolution property" />
