@@ -67,6 +67,9 @@ Many studios use mapped drives for convenience. It's easier to type `S:\` than `
 
 **If you can't switch to UNC paths** (legacy projects, established workflows), RenderFlow's Mapped Drives feature can help. Go to **Settings > Mapped Drives** and define the mapping between drive letters and UNC paths. RenderFlow will automatically map these drives during startup and before each render job, and will verify they're accessible before a node begins rendering.
 
+<Frame caption="Mapped Drives settings in RenderFlow">
+  <img src="/images/renderflow/rf_network_mapped_drives.png" alt="Settings > Mapped Drives showing drive letter to UNC path mappings" />
+</Frame>
 
 ## Folder structure
 

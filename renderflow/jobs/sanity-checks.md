@@ -35,7 +35,7 @@ Each check has one of three severity levels.
 
 **Critical** - blocks submission entirely. The Submit button is disabled until all critical issues are resolved. This prevents jobs from entering the queue when they are guaranteed to fail.
 
-<Frame caption="Sanity check results in the Submitter showing Info, Warning, and Critical items">
+<Frame caption="Sanity check results in the Submitter showing potencial issues">
   <img src="/images/renderflow/rf_jobs_sanity_check_results.png" alt="Sanity check results with mixed severity levels" />
 </Frame>
 

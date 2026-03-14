@@ -29,6 +29,10 @@ There are two ways to add tags.
 
 **Per node.** Open the node details, click the edit button, and add tags in the Tags field.
 
+<Frame caption="Editing tags on a single node">
+  <img src="/images/renderflow/rf_nodes_edit_modal.png" alt="Node edit modal showing tags field" />
+</Frame>
+
 **In batch.** Select multiple nodes in the table, right-click, and choose **Edit Tags**. This applies the same tag changes to all selected nodes at once.
 
 <Frame caption="Batch tag editing for multiple selected nodes">

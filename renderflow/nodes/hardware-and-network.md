@@ -20,3 +20,7 @@ The following information is displayed: CPU model and core count, GPU type, MAC 
 ## Storage
 
 A separate Storage section shows disk usage and capacity for the system drive as well as any other local and network drives detected on the machine. This is useful for spotting nodes that are running low on disk space before they cause render failures.
+
+<Frame caption="Node storage details">
+  <img src="/images/renderflow/rf_nodes_storage_details.png" alt="Storage section showing disk usage and capacity for local and network drives" />
+</Frame>

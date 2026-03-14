@@ -69,3 +69,13 @@ Press the **edit button** (pen icon) in the node details to open the edit modal.
 <Frame caption="Node edit modal">
   <img src="/images/renderflow/rf_nodes_edit_modal.png" alt="Edit node modal with display name, pool, and tags" />
 </Frame>
+
+## Dedicated node UI
+
+Machines running in node mode have a simplified UI designed for quick identification and monitoring. This UI launches automatically on system start and stays open, making it ideal for headless render nodes or farm rooms where you need a glance at each machine's status.
+
+The dedicated node UI shows the machine's current status, active job and task, CPU affinity settings, render logs, and hardware details. It gives admins a quick overview without needing to run the full RenderFlow application.
+
+<Frame caption="Dedicated node UI for machines running in node mode">
+  <img src="/images/renderflow/rf_nodes_dedicated_ui.png" alt="Dedicated node UI showing status, current job, logs, affinity, and hardware details" />
+</Frame>

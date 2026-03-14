@@ -24,6 +24,10 @@ Settings are accessible from the bottom-left menu. This page covers every settin
 
 Shows the Pulze account currently logged into the server. If you need to change the account, you will need to reset the server and go through the configuration and authentication process again.
 
+<Frame caption="Account settings showing the logged-in Pulze account">
+  <img src="/images/renderflow/rf_settings_account.png" alt="Account settings showing the currently logged-in Pulze account" />
+</Frame>
+
 ## Users
 
 Each unique user is listed in a table. Users are not created manually. They are automatically added when a workstation connects and a user logs in. This keeps setup simple: Windows usernames carry over naturally, especially in domain environments.

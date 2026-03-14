@@ -48,9 +48,3 @@ Many studios have in-house MaxScript libraries with helper functions for their s
 ```
 
 This file is executed before any sanity checks run, so any functions defined in it are available for your custom checks to call. This is useful when multiple checks share common logic or when you want to reuse existing studio scripts.
-
-## Sharing and portability
-
-Custom checks are stored on the RenderFlow server and available to all users on the same installation. They cannot be exported or transferred to a different RenderFlow setup.
-
-For sharing checks with the community, see the open-source repository at [github.com/pulze-io/renderflow-sanity-check](https://github.com/pulze-io/renderflow-sanity-check).

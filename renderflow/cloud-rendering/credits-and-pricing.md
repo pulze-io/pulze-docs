@@ -11,7 +11,7 @@ RenderFlow Cloud uses a credit-based system. You buy credits, submit jobs, and c
 
 ## How credits work
 
-Credits are consumed per node-hour. The credit cost covers everything: render engine licenses, plugin licenses, asset uploads, rendered frame downloads, and cloud storage. There are no additional charges on top of credits.
+Credits are consumed per node-hour. One node-hour costs **300 credits**. The credit cost covers everything: render engine licenses, plugin licenses, asset uploads, rendered frame downloads, and cloud storage. There are no additional charges on top of credits.
 
 ## No queues, no priority tiers
 

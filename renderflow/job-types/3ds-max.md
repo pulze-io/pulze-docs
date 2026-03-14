@@ -29,8 +29,6 @@ There are two ways to submit a 3ds Max job.
 
 The following properties are read from the scene and can be reviewed or overridden in the Submitter: Scene File, Camera, Resolution, Frame range, Render Output, and Render Settings.
 
-For still images, the Tiled option is available. This splits a single frame into multiple tiles that are rendered in parallel across nodes, then stitched together.
-
 All other settings are carried over from the file and rendered as they are. Render elements, gamma settings, color management, and plugin configurations are all preserved exactly as saved in the scene.
 
 ## Supported versions and engines

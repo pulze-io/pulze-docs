@@ -20,12 +20,3 @@ There are two ways to join the beta.
 </Frame>
 
 **Direct contact.** Email [support@pulze.io](mailto:support@pulze.io) with your studio name, typical project types, and the render engines and plugins you use.
-
-## What beta testers receive
-
-Beta testers receive a free credit package ranging from 2,000 to 10,000 credits depending on the scope of testing. This is enough to run real-world scenes and evaluate the service with your actual production files.
-
-## What we ask from testers
-
-Submit real-world scenes. Push the system with complex projects and varied plugin combinations. Report bugs and share feedback. Once you are comfortable with the service, we may invite you to participate in a case study or provide a testimonial.
-

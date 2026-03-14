@@ -53,6 +53,10 @@ In the **Job details** panel, errors appear at the top of the detail view. You c
 
 Detailed logs for each render session are stored on the render node at `C:\ProgramData\RenderFlow\logs`. These logs are not transferred automatically. When you open a node's log in the job detail panel, RenderFlow fetches it on demand from the node.
 
+<Frame caption="Render log viewer with filter and copy controls">
+  <img src="/images/renderflow/rf_support_job_log_viewer.png" alt="Job render log viewer showing render output with filter and copy controls" />
+</Frame>
+
 For collecting and sending logs to Pulze support, see [Collecting Logs](/renderflow/support/collecting-logs).
 
 ## Troubleshooting workflow

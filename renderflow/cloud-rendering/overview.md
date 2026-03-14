@@ -15,15 +15,52 @@ RenderFlow Cloud is currently in closed beta. See [Request Access](/renderflow/c
 
 ## Supported software
 
-During the beta, RenderFlow Cloud supports 3ds Max (2026) with V-Ray and Corona render engines. Scene Manager integration is fully supported. Included plugins cover ForestPack, RailClone, Anima, Phoenix, tyFlow, and all common smaller plugins. Additional plugins can be added on request.
+During the beta, RenderFlow Cloud supports **3ds Max 2026** with V-Ray and Corona render engines. Scene Manager integration is fully supported. All render engine and plugin licenses are included. You do not need to provide your own licenses for cloud rendering.
 
-All render engine and plugin licenses are included. You do not need to provide your own licenses for cloud rendering.
+### Render engines
+
+| Engine | Version |
+|--------|---------|
+| Corona | 14.0 |
+| V-Ray | 7.20 |
+
+### Plugins
+
+| Plugin | Version |
+|--------|---------|
+| BerconMaps | - |
+| Clone | - |
+| ColorEdge | - |
+| ComplexFresnel | - |
+| FloorGenerator | - |
+| ForestPack Pro | 9.3.3 |
+| Glue | - |
+| MultiTexture | - |
+| Ornatrix | 9.1.1 |
+| Phoenix | 5.24 |
+| RailClone Pro | 6.3.9 |
+| SigerNoise | - |
+| SigerScratches | - |
+| SmartRefs | - |
+| SplineOffset | - |
+| ThinFilm | - |
+| TyFlow | 1.1240 |
+
+Additional plugins can be added on request.
+
+<Info>
+Currently, 3ds Max and Scene Manager job types are available for cloud rendering. We are actively working on adding support for other applications.
+</Info>
 
 ## How it works
 
 The submission flow is designed to feel identical to submitting a local render job.
 
 **Select a Cloud job template.** Open the Submitter from the Jobs view and switch to the **Cloud** tab. Choose the 3ds Max or Scene Manager template.
+
+<Frame caption="Cloud job templates in the Submitter">
+  <img src="/images/renderflow/rf_cloud_templates.png" alt="Cloud tab showing available cloud job templates" />
+</Frame>
 
 **Select your open scene.** RenderFlow requires the file to be open in 3ds Max so it can perform a thorough scan of all plugins, assets, and settings. Browsing for files is not supported for cloud jobs.
 
@@ -33,9 +70,21 @@ The submission flow is designed to feel identical to submitting a local render j
 
 **Review credits and submit.** The Submitter shows your current credit balance. If you belong to one or more teams, choose which team's credits to use. Press Submit when everything looks good.
 
+<Frame caption="Cloud job submission with credit balance and settings">
+  <img src="/images/renderflow/rf_cloud_submit.png" alt="Cloud submitter showing scene properties, credits, and submit button" />
+</Frame>
+
 **Automatic upload and rendering.** RenderFlow saves the scene file to the local repository and uploads it together with all required assets. Once the upload completes, a cloud render node is assigned to the job automatically.
 
+<Frame caption="Asset upload modal during cloud job submission">
+  <img src="/images/renderflow/rf_cloud_job_assets.png" alt="Asset upload modal showing file list and upload progress" />
+</Frame>
+
 **Monitor like a local job.** The cloud job appears in the same job table as your local jobs. During rendering, you have access to full 3ds Max logs, real-time progress, remaining time estimates, and a live VFB preview of each frame.
+
+<Frame caption="Cloud job details during rendering">
+  <img src="/images/renderflow/rf_cloud_job_details.png" alt="Cloud job detail panel showing progress, logs, and VFB preview" />
+</Frame>
 
 **Automatic output delivery.** When a frame completes, the rendered output is automatically saved to the local path you specified in the Submitter. No manual downloads. No cloud storage portals. The frames appear where you expect them.
 

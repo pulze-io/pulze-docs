@@ -166,7 +166,8 @@
             "group": "Reference",
             "pages": [
               "renderflow/faq",
-              "renderflow/glossary"
+              "renderflow/glossary",
+              "renderflow/changelog"
             ]
           }
         ]

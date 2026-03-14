@@ -8,6 +8,10 @@ description: "Understand the job and task model in RenderFlow. How jobs move thr
 keywords: ['render farm job management', 'render job lifecycle', 'render farm job queue', 'render farm task distribution', 'render job priority', 'how render farm jobs work']
 ---
 
+<Frame caption="Job list showing jobs in various states">
+  <img src="/images/renderflow/rf_jobs_list_states.png" alt="Job list showing Pending, Working, Completed, and Suspended jobs" />
+</Frame>
+
 A **job** in RenderFlow is a collection of tasks. Each task represents a single unit of work, typically one frame of an animation or one tile of a still image. When you submit a scene with frames 1 through 100, RenderFlow creates one job containing 100 tasks.
 
 Each task carries everything a node needs to do its work: which application to open, which scene file to load, the resolution, the frame number, the output path, render settings, and more. The specifics vary by application. See the Job Types section for per-app details.
@@ -53,7 +57,7 @@ You can control jobs at any point in their lifecycle.
 
 **Reset** - clears all progress and puts every task back to Pending. The job re-enters the queue as if it were freshly submitted.
 
-**Archive** - moves the job to the repository's archive directory, removing it from the active job list while preserving all data. Archived jobs can be fully restored at any time.
+**Archive** moves the job out of the active job list and into the repository's archive directory. The job's state is preserved exactly as it was - a completed job stays completed, a partially rendered job keeps its progress. Archiving is non-destructive: it simply moves the job files from the active folder to the archived folder in the repository.
 
 **Delete** - permanently removes the job and all of its data.
 
@@ -61,12 +65,22 @@ You can control jobs at any point in their lifecycle.
   <img src="/images/renderflow/rf_jobs_actions.png" alt="Job actions context menu" />
 </Frame>
 
+To access archived jobs, click the **Archive** button in the job table toolbar (next to the filter and column controls). This opens a panel where you can search through archived jobs by name, browse the list, and restore any job back to the active list. Once restored, the job returns to the job table in its original state. If the job was partially completed, you can start it again and rendering will continue from where it left off.
+
+Archiving is useful for keeping your active job list clean without losing data. Studios often archive jobs after delivery and restore them weeks later if a client requests revisions.
+
+<Tip>
+
+You can automate this. In the [Submitter](/renderflow/jobs/submitter), the **Cleanup** setting lets you auto-archive (or auto-delete) jobs after a specified number of hours or days. Set it once in a [template](/renderflow/jobs/templates) and every job your team submits will clean itself up automatically.
+
+</Tip>
+
 ## Task-level control
 
 You do not have to manage entire jobs at once. Individual tasks can be reset, enabled, disabled, or marked as completed. This is useful when a specific frame renders incorrectly and you want to re-render just that one frame without touching the rest of the job.
 
 For details on working with tasks, see [Tasks and Details](/renderflow/jobs/tasks-and-details).
 
-<Frame caption="Job list showing jobs in various states">
-  <img src="/images/renderflow/rf_jobs_list_states.png" alt="Job list showing Pending, Working, Completed, and Suspended jobs" />
+<Frame caption="Jobs view with the detail panel open">
+  <img src="/images/renderflow/rf_jobs_detail_panel.png" alt="Job list with the detail side panel showing task progress and job properties" />
 </Frame>

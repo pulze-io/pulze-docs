@@ -1,0 +1,265 @@
+---
+title: "Product Updates"
+description: "Release notes and version history for RenderFlow."
+mode: "wide"
+rss: true
+---
+
+<Update label="1.2.6" description="February 27, 2026">
+RenderFlow 1.2.6 introduces Cloud Rendering (beta), support Blender 5.0, FStorm 2, and Octane 2026, a new developer toolkit, plus a long list of stability fixes.
+
+**New Features & Improvements:**
+- New Cloud Rendering job for 3ds Max & Scene Manager
+- Added support for Blender 5.0
+- Added support for FStorm 2 and Octane 2026
+- New Slack, Teams and Discord notifications (beta)
+- New Desktop notifications
+- New Integrations settings page
+- Added "Total Render Time" field that sums completed task render durations
+- Improved asset checker for 3ds Max when the file is opened
+- Added OCIO sanity check for 3ds Max 2024 & 2025
+- Added reconnection mechanic when the server is not available during startup
+- Added system drive stats and list of network drives
+- New API key requirement - REST API can only be accessed with an API key created in Settings
+- Improved REST API and CLI
+- Published TypeScript/JavaScript and Python SDKs
+- New MCP server - query and control your farm from ChatGPT, Claude, or any MCP-compatible client
+
+**Bug Fixes:**
+- Fixed Node UI stuck in loading or "no connection" state while functioning otherwise
+- Fixed last frame of each batch task always failing
+- Fixed task distribution race condition after server restart causing double frame assignment
+- Fixed render stats UI - jumping/disappearing stats section, remaining time, estimated end time progress dropping to 0
+- Fixed node stuck in Idle status after server restart
+- Fixed "Error writing to file" message in 3ds Max not triggering a critical task error
+- Fixed empty requirement in submitter
+- Fixed automatic user creation
+- Fixed rfcli.exe not creating jobs
+- Fixed broken pool when node is edited
+- Fixed wrong default date in date filters and scheduler
+- Fixed table column defaults not updating in some cases
+- Fixed "open completed frame" not always working
+- Fixed pool selector not working in the submitter
+- Fixed Scene Manager Render Preset module overriding all other render settings
+- Fixed migration issue with jobs created in version 0.7.0 or earlier
+</Update>
+
+<Update label="1.1.0" description="November 25, 2025">
+RenderFlow 1.1 is here with an updated look, granular access control and software analytics.
+
+**Updates:**
+- New granular permission settings per user group
+- Software analytics to review and compare apps and plugins across all computers
+- User interface improvements, updated table, state colors, and quick menus
+- New UI for dedicated render nodes
+- Added option to disable automatic window close when the user is idle for 15 minutes
+- Dark mode is now the default
+- Added tiled rendering option to Scene Manager jobs
+- Spawner mode can now be scheduled
+- Added filter by tag and filter by pool
+
+**Fixes:**
+- [3ds Max] Fixed submit issue when using Corona multimap in the environment
+- [3ds Max] Fixed Corona render crash during file load ("An exception occurred while rendering with 3ds Max") that caused tasks to be incorrectly marked as completed
+- [3ds Max] Fixed issue with asset check falsely reporting missing textures
+</Update>
+
+<Update label="1.0.9" description="October 30, 2025">
+This release introduces a new pool system, tiled rendering, task filtering, and numerous improvements and bug fixes.
+
+**Updates:**
+- New pool system
+- Tiled rendering
+- Updated benchmark database with the latest CPU/GPU values
+- Added average frame time to the job details
+- DR nodes are now released when there is no more work
+- Changed "Elapsed Time" to "Total Render Time" for better clarity
+- Node names are now sorted alphanumerically
+- New default node assignment priority (node, workstation, server, and V-Ray CPU benchmark)
+- Added access to render settings when 3ds Max file is browsed
+- Added option to bulk tag computers
+- Option to refresh the software list for multiple computers at once
+- Option to save render elements to separate folders for 3ds Max
+- Added support for Cinema 4D 2026
+- Added support for Cinema 4D take system
+- Added support for V-Ray for Blender
+- Added task filtering and multi page selection
+- Added an input to select a list or range of tasks
+- Added option to open the completed frames
+- Added support for Finish & Suspend through the API and CLI
+
+**Fixes:**
+- Corrected the missing Scene Manager setups dialog, "…you may need to open and save your scene again…"
+- Users from the node are now removed, and the workstation username will always refresh based on the currently signed-in user
+- During discovery the server alias will be shown if available
+- If host version isn't specified, the latest available will be used instead of the oldest
+- Fixed an issue where EXR and other format settings weren't applied during rendering
+- Fixed an issue when Scene Manager settings are not available in the submitter
+- Fixed issue with Cinema 4D and Blender submitter plugin not working in some cases
+- Fixed issue with Blender output path not being read correctly
+- Fixed issue with incorrect usernames on jobs
+- Fixed issue where the scheduled date wasn't refreshing on job templates
+- Fixed issue with 3ds Max/Corona saving black frames and completing the task
+- Fixed duplicate job submissions from clicking the submit button multiple times
+- Fixed issue where tasks in "Finishing" state couldn't be reactivated
+- Fixed output save dialog always resetting to JPG
+- Fixed issue with 3ds Max output format settings when browsing a file
+- Fixed issues with scheduler time editing not working
+- Fixed issue where some blacklist processes weren't considered in auto node mode
+- Fixed automatic log service and job cleanup
+- Fixed Fusion version detection, we now recognize major and patch numbers as well
+- Fixed interruptible option not working in multi-selection
+- Fixed issue where different versions could still connect during initial connection
+- Fixed issue that prevented log collection when there's a space in the repository folder
+</Update>
+
+<Update label="1.0.4" description="July 28, 2025">
+Hotfix 4 brings several important fixes for Scene Manager jobs and more.
+
+**Fixes:**
+- Fixed issue with Scene Manager environment not updating
+- Fixed Scene Manager render elements on/off property not working
+- Fixed user interface issue with repeating asset requirements
+- Fixed an issue with infinitely loading "Starting Server" instead of displaying error messages
+- Added renderflow.lock file to detect permission errors
+</Update>
+
+<Update label="1.0.3" description="July 17, 2025">
+Hotfix 3 with important updates and fixes.
+
+**Updates:**
+- New predictions tab to visualize and calculate the total job time
+- Added automatic cleanup of unwanted CXR elements
+- New public REST API and documentation (localhost:44442/docs)
+- Added last modified time for browsed files
+- Various statistics improvements
+- Show node name on single frame and distributed jobs
+- Added repository and output drive to job requirements
+
+**Fixes:**
+- Fixed issue with error report collector
+- Fixed issue with incorrect output name on UI in some cases
+- Fixed issue during 3ds Max submit when output contains foreign characters
+- Implemented higher timeout values and retry mechanism during server start when checking external services
+- Fixed issue with update indicator remaining stuck even after using the latest version
+- Fixed rare cases where completed jobs are still shown in working state
+- Fixed Substance for 3ds Max plugin detection
+- Fixed issue with negative repeat interval in scheduler
+</Update>
+
+<Update label="1.0.2" description="June 30, 2025">
+Hotfix 2 with 33 updates and fixes.
+
+**Updates:**
+- New Scheduler: weekly calendar to maintain and control your nodes
+- Updated V-Ray DR job with automatic node allocation and spawner preparation
+- Added the option to have personal job templates and descriptions
+- Added support for Fusion 20
+- Added host and engine-specific icons to sanity checks for better clarity
+- Sanity check results will now only show errors for easier readability
+- Node, Job, and Task progress bars are now colored
+- Added the ability to scale down the interface with Ctrl + mouse wheel
+- Added the option to change node status through the Public API
+- Added filename + camera option to the job name preset options
+- Added resolution double/half buttons
+
+**Fixes:**
+- Image output browser will now open the currently available folder instead of the previous one
+- Fixed issue with Corona single-frame jobs falsely reporting "Working" state when they should be "Completed"
+- Fixed issue with Ctrl + Click opening a new empty window
+- Fixed issue where the 3ds Max submitter wasn't checking for unsaved changes, resulting in submission of incorrect file states
+- Fixed issues with sorting in the nodes and jobs tables
+- Fixed a problem where restore job wasn't moving job files to the active repository folder
+- Archived jobs option is now always available, even when no jobs are submitted
+- Changed the default output delimiter between filename and render element from "." to "_"
+- Fixed an internal issue that caused progress tracking problems after resetting a job
+- Archived job search now includes results based on username
+- Added option to delete archived jobs
+- Fixed issue where Estimated Finish Date and other properties were being truncated
+- Fixed issues with Fusion job timeout and crashes
+- Fixed several issues with job start time and render time calculations
+- Fixed issue with plugin discovery when 3ds Max had never been started
+- Fixed issue with CPU affinity not working with V-Ray
+- Fixed issue during job submission when frame values are negative
+- Asset list will now be sorted by status by default
+- IP list for V-Ray DR jobs is updated more frequently
+- Added more button tooltips throughout the interface
+- Disabled startup scripts during 3ds Max load to prevent unnecessary scripts from initializing before rendering
+- Fixed issue with status not properly restoring after computer restart
+- Network drives will be mapped during startup as well
+</Update>
+
+<Update label="1.0.1" description="June 2, 2025">
+Hotfix 1 with improvements, bug fixes and a few new features.
+
+**Updates:**
+- New Cinema 4D job type
+- New CPU Affinity slider to control thread count during rendering
+- Added Finished and Suspend option to node quick menu (top right corner)
+- Camera list is now sorted in alphabetical order
+- [Blender] New "Submit to RenderFlow" toolbar button
+- [3ds Max] Cameras and output format settings are now saved to metadata and will be available when browsing files in the submitter
+- Added "Submit to RenderFlow" to Windows context menu for .max, .blend, .c4d, and .vrscene files
+- New drag-and-drop feature: Drop files onto Jobs UI to open submitter with pre-filled properties
+- New CLI tool (rfcli.exe) to submit jobs and retrieve node, job, and task-related data
+
+**Fixes:**
+- [3ds Max] Added support for plugin discovery in ADSK_3DSMAX_PLUGINS_ADDON_DIR environment variable
+- [3ds Max] Fixed "Submit to RenderFlow" toolbar button in 3ds Max 2023 and earlier
+- [3ds Max] Increased 3ds Max startup limit to 3 minutes and added optional environment variable (RF_JOB_PROCESS_TIMEOUT) to override it
+- [Blender] Fixed job preparation and output issues
+- Added VC_redist.x64.exe to the installer
+- Fixed false positive Offline status caused by Clock Skew
+- Fixed dark mode background for some components
+</Update>
+
+<Update label="1.0.0" description="May 21, 2025">
+Initial release of RenderFlow.
+
+**Updates:**
+- Added Mapped drives option to settings
+- Added V-Ray Lightcache property to render settings
+
+**Fixes:**
+- Fixed delimiter for output properties coming from Scene Manager
+- Fixed overflow issue on error modal
+</Update>
+
+<Update label="0.9.0-beta" description="May 16, 2025">
+**Updates:**
+- Added support for Corona 12 Update 2
+- Added engine selector for V-Ray Standalone job
+- Added Interruptible property
+- Disabled restart & shutdown options for the server
+- Added new documentation link
+- Added new EULA to the installer
+
+**Fixes:**
+- Fixed aspect ratio issue in multi-job submitter view
+- Fixed issue with Render Manager
+- Added server startup checks for internet connection and pulze services
+</Update>
+
+<Update label="0.8.1-beta" description="April 23, 2025">
+**Updates:**
+- Added Corona & V-Ray distributed rendering jobs and Start/Stop Spawner option for nodes
+- Added aspect ratio lock button to submitter
+- Added option to switch servers or create new ones
+
+**Fixes:**
+- Resolved error when selecting open Blender files for submission
+- Fixed search detection for 3ds Max 2019, 2020, and 2021
+- Fixed empty node whitelist issue when opening submitter from 3ds Max
+</Update>
+
+<Update label="0.8.0-beta" description="April 16, 2025">
+**Updates:**
+- New Blender and V-Ray Standalone job types
+- New job notification system, receive emails or send webhooks to third-party services
+- Added support for Anima 6 (3ds Max)
+
+**Fixes:**
+- [3ds Max] Fixed Sanity Check execution issue
+- [3ds Max] Fixed missing RenderFlow toolbar icon
+- Fixed Chaos Player sequence loading issues
+</Update>

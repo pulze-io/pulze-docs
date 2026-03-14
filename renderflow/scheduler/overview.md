@@ -12,9 +12,17 @@ The Scheduler lets you automate node and system actions on a weekly calendar. It
 
 Access the Scheduler from the main toolbar.
 
+<Frame caption="Scheduler calendar with events for overnight rendering and weekend restarts">
+  <img src="/images/renderflow/rf_scheduler_weekly_calendar.png" alt="Weekly calendar showing color-coded events for node activation, suspension, and restarts" />
+</Frame>
+
 ## Creating an event
 
 Click on any time slot in the calendar to open the event creation popup.
+
+<Frame caption="New event creation popup">
+  <img src="/images/renderflow/rf_scheduler_new_event.png" alt="Scheduler event creation popup with name, color, command type, time, and node selection" />
+</Frame>
 
 **Name** gives the event a label for easy identification.
 
@@ -42,10 +50,6 @@ Click on any time slot in the calendar to open the event creation popup.
 **Start/End time** defines when the event runs.
 
 **Select nodes** lets you choose which nodes are affected (for node commands).
-
-<Frame caption="Scheduler calendar with events for overnight rendering and weekend restarts">
-  <img src="/images/renderflow/rf_scheduler_weekly_calendar.png" alt="Weekly calendar showing color-coded events for node activation, suspension, and restarts" />
-</Frame>
 
 ## How events behave
 

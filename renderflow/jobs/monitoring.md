@@ -71,6 +71,26 @@ At the bottom of the Jobs page, a horizontal bar shows the aggregate state of al
   <img src="/images/renderflow/rf_jobs_progress_bar.png" alt="Horizontal bar showing colored segments for completed, working, suspended, and pending tasks" />
 </Frame>
 
+## Archived jobs
+
+To browse archived jobs, click the **Archive** button in the toolbar next to the filter and column controls. A panel opens with a searchable list of all archived jobs. From here you can restore any job back to the active table or permanently delete it.
+
+<Frame caption="Archive button location in the job table toolbar">
+  <img src="/images/renderflow/rf_jobs_archive_action.png" alt="Job table toolbar highlighting the Archive button" />
+</Frame>
+
+Restored jobs return in their original state. If a job was partially rendered, starting it again will pick up where it left off.
+
+<Frame caption="Archive panel with search and restore">
+  <img src="/images/renderflow/rf_jobs_archive_view.png" alt="Archive panel showing searchable list of archived jobs with restore button" />
+</Frame>
+
+<Tip>
+
+To keep your job list clean automatically, use the **Cleanup** setting in the [Submitter](/renderflow/jobs/submitter). It can auto-archive or auto-delete jobs after a specified number of hours or days - no manual housekeeping needed.
+
+</Tip>
+
 ## Going deeper
 
 The job table is designed for a quick overview of the farm's state. For detailed information about a specific job, including per-task progress, frame previews, render logs, and error details, open the job's detail panel. See [Tasks and Details](/renderflow/jobs/tasks-and-details).

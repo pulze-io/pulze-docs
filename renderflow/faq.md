@@ -62,6 +62,9 @@ keywords: ['render farm FAQ', 'render farm common questions', 'render farm troub
   <Accordion title="How does priority work?">
     Jobs have a priority from 0 to 100. Higher numbers get nodes first. If two jobs have the same priority, the older one takes precedence (first in, first out).
   </Accordion>
+  <Accordion title="Where do archived jobs go? Can I get them back?">
+    Archived jobs are moved from the active folder to the archived folder in your repository. The job's state and all data are preserved. Click the **Archive** button in the job table toolbar to browse and search archived jobs. Restoring a job returns it to the active list in its original state - if it was partially rendered, you can start it and rendering continues from where it left off. You can also automate this with the **Cleanup** setting in the Submitter, which auto-archives jobs after a specified number of hours or days.
+  </Accordion>
 </AccordionGroup>
 
 ## Nodes and Farm Management

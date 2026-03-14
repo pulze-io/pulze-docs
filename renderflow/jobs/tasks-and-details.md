@@ -23,7 +23,7 @@ You can also **detach** the detail panel into a floating toolbar. This is useful
 
 <br/>
 
-<Frame caption="Detached floating toolbar">
+<Frame caption="Detached job detail toolbar">
   <img src="/images/renderflow/rf_jobs_detached_windows.png" alt="Floating job detail toolbar" />
 </Frame>
 
@@ -51,20 +51,14 @@ For animation jobs, there is also a grid view. Each task appears as a small colo
   <img src="/images/renderflow/rf_jobs_task_grid.png" alt="Grid view with color-coded rectangles for each task" />
 </Frame>
 
-### Task actions
+### Task actions and selection tools
 
 You can select one or more tasks and take actions on them. **Reset** puts selected tasks back to Pending so they re-enter the queue. **Enable/Disable** controls whether a task is available for rendering. **Mark as Completed** manually marks tasks as done.
 
-<Frame caption="Task actions for selected tasks">
-  <img src="/images/renderflow/rf_jobs_task_actions.png" alt="Task action controls: Reset, Enable, Disable, Mark as Completed" />
-</Frame>
-
-### Selection tools
-
 RenderFlow provides several ways to select tasks efficiently. You can select **by status** (for example, all failed tasks), **by computer** (all tasks rendered by a specific node, useful if one machine produced bad output), or **by frame list or frame range** (specify exact frame numbers or a range).
 
-<Frame caption="Task selection tools for filtering by status, computer, or frame range">
-  <img src="/images/renderflow/rf_jobs_task_selection.png" alt="Task selection tools with status, computer, and frame range options" />
+<Frame caption="Task actions and selection tools">
+  <img src="/images/renderflow/rf_jobs_task_actions.png" alt="Task action controls and selection tools: Reset, Enable, Disable, Mark as Completed, filter by status, computer, or frame range" />
 </Frame>
 
 ### Opening rendered frames
@@ -84,10 +78,6 @@ During rendering, an eye icon appears next to active tasks for supported job typ
 <Frame caption="Live VFB preview on hover during rendering">
   <img src="/images/renderflow/rf_jobs_vfb_preview.png" alt="Eye icon with live frame buffer preview tooltip" />
 </Frame>
-
-### Pagination
-
-Tasks are paginated at 100 per page. For jobs with hundreds or thousands of frames, use the page controls at the bottom of the task list to navigate.
 
 ## Nodes
 
@@ -123,6 +113,18 @@ The job's operational settings are listed: priority, user who submitted the job,
   <img src="/images/renderflow/rf_jobs_detail_job_properties.png" alt="Job properties showing priority, user, and pool" />
 </Frame>
 
-## Requirements and Notifications
+## Requirements
 
-The detail panel also shows the full list of enabled [requirements](/renderflow/jobs/requirements) and any [notifications](/renderflow/jobs/notifications) configured for the job.
+The detail panel shows the full list of [requirements](/renderflow/jobs/requirements) for the job: the host application, render engine, and any plugins that were detected or manually added during submission. Each requirement displays whether it was matched on the rendering nodes.
+
+<Frame caption="Requirements section in job details">
+  <img src="/images/renderflow/rf_jobs_detail_requirements.png" alt="Job detail requirements showing host application, render engine, and plugin requirements" />
+</Frame>
+
+## Notifications
+
+Any [notifications](/renderflow/jobs/notifications) configured for the job are listed here, showing the channel type and recipient for each.
+
+<Frame caption="Notifications configured for the job">
+  <img src="/images/renderflow/rf_jobs_detail_notifications.png" alt="Notification settings showing email, Slack, and webhook channels" />
+</Frame>

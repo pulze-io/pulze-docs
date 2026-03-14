@@ -9,7 +9,7 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 
 **API Key.** A secret token required to authenticate with the RenderFlow REST API, SDKs, and CLI. Generated in Settings > API Keys.
 
-**Archive.** Moving a completed job out of the active job list into the repository's archive directory. Archived jobs can be restored at any time.
+**Archive.** Moving a job out of the active job list into the repository's archive directory. The job's state and data are fully preserved. Archived jobs can be searched, browsed, and restored to the active list at any time. Restored jobs continue from where they left off.
 
 **Batch Size.** The number of consecutive frames a node renders without unloading the scene from memory. Higher values reduce scene load overhead for heavy scenes and GPU rendering.
 
