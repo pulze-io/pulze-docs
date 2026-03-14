@@ -1,0 +1,118 @@
+---
+title: "Product Updates"
+description: "Release notes and version history for Scene Manager."
+mode: "wide"
+rss: true
+---
+
+<Update label="2.6.1" description="August 7, 2025">
+**Fixes:**
+- Fixed issue with Helio Cloud submission not working in 3ds Max 2026
+</Update>
+
+<Update label="2.6.0" description="May 29, 2025">
+**New Features:**
+- Support for 3ds Max 2026
+
+**Fixes:**
+- Fixed issue with Corona LightMix
+- Fixed an issue where the Variants module wasn't correctly updating the output path
+- Plugin now uses the Autodesk Application Package format
+</Update>
+
+<Update label="2.5.12" description="January 19, 2025">
+**Fixes:**
+- Activating a scene or creating a new one will now set the dirty flag
+- Fixed issue with Scene Manager dialog popping up during network rendering
+- Fixed an issue that prevented Render Setting - Override module to fetch the correct properties
+- Fixed issue with Save as Default not working properly in the Settings
+- Show map will now open the material editor as well
+- Added confirmation dialog before clearing the object list
+</Update>
+
+<Update label="2.5.11" description="November 17, 2024">
+**New Features:**
+- Support for V-Ray 7
+- Support for Corona 12
+- Support for 3ds Max 2025
+
+**Fixes:**
+- Added back support for 3ds Max 2019-2021
+- Fixed crash caused by circular xref dependency
+- Resolved an issue where the camera didn't display in the dropdown if a modifier was applied
+- Assets and Plugins will be only checked if the module is open
+- Fixed an issue with the scene import option
+- Fixed an issue where assets were not appearing in the assets module
+- Added support for Ornatrix (plugins module)
+- Fixed unauthorized error during login
+- Fixed issue with missing resolution presets
+- Fixed crash when 2 or more Scene Managers were open
+- Resolved an issue where asset collection would hang on certain scenes during a Helio submission
+- Fixed false positive missing plugin warning message when submitting to Helio
+- Fixed issue with single frame rendering on Helio
+- Added Package for Render Farms option
+- Fixed unhandled exception that occurred when fire and effects were used in the scene
+</Update>
+
+<Update label="2.5.5" description="March 24, 2024">
+Scene Manager 2.5.5 brings a completely rewritten core for significantly faster performance, a new free tier, and several quality-of-life improvements.
+
+**New Features:**
+- Added new Assets module that will allow you to easily track and collect your assets
+- New Plugins module to overview which plugins/versions are used in the scene
+- The new version allows you to create up to 5 states and use a selection of modules at no cost
+- The core of the Scene Manager has been completely replaced. By eliminating some bottlenecks, command execution and the overall experience are now much faster.
+- Added a new "Login with Browser" method for a more convenient sign in experience
+- Refreshed user interface with commands like Render, Bake, Preview moved to the top bar
+- Added a new notification option that opens a message box during file load if the scene contains Scene Manager settings
+- New logo for the 3ds Max toolbar
+- More accessible preview setup option. While active, you can make changes in the user interface without affecting your 3ds Max scene.
+- Updated camera sync mode. When enabled, Scene Manager will listen for viewport changes and activate the setup based on the active camera.
+- Updated the Cloud Render / Submit to Helio feature
+- Added a confirmation dialog before deleting a setup
+- The "create output directory tree" will now work if multiple setups are selected
+- Pressing cancel during batch rendering now cancels the entire process
+
+**Fixes:**
+- Fixed several issues with groups. Scene Manager will now only pick the topmost object (if the group is closed). Also all children will inherit the properties.
+- Fixed an issue with linked helpers appearing in the objects module
+- Fixed missing .vrimg output and the Post-production import/export option when V-Ray GPU is used
+- Fixed an issue with the Lights module where instanced V-Ray Lights were not behaving correctly during batch rendering
+- Nth, range, and single frame values are now updated separately
+- Removed Corona out of core and other non-relevant settings from the Render Settings - Override module
+</Update>
+
+<Update label="2.3.6" description="July 24, 2023">
+Scene Manager 2.3.6 adds new modules, V-Ray GPU support, Live Mode, and a long list of fixes.
+
+**New Features:**
+- New Lights module
+- New Thumbnail module
+- Updated Post-production / VFB module
+- Improved asset collection for Helio
+- Added V-Ray and Corona Clouds properties
+- Added support for 3ds Max 2024
+- New Live Mode that will automatically add new cameras and apply Scene Manager settings when changing the active camera in 3ds Max
+- Added more Corona Sky and Cloud properties to the environment module
+- Added support for V-Ray GPU
+- Added .hdr file type to the output extension list
+
+**Fixes:**
+- Fixed issue when resetting 3ds Max 2023 won't clear the settings in Scene Manager
+- Added a warning before batch render if output path is duplicated
+- Added bakeSetups function to the Scene Manager maxscript api
+- Moved all Corona LightMix, Bloom and Glare, Sharpening / Blurring properties from Render Settings to the Post-production module
+- Removed legacy Tone Mapping properties from the Camera and Render Settings modules for Corona 7 or older
+- Fixed issue with post-production module not controlling the enable/disable property of tone mapping
+- Fixed issue when 3ds Max was not giving a warning before file reset/close if changes were made only inside Scene Manager
+- Fixed issue with batch rendering range or list of frames
+- Fixed issue with Render Settings Override module not listing V-Ray 6 properties
+- Fixed cancel issue during Batch Rendering
+- Fixed an issue with the duplicated output error before rendering
+- Fixed missing default property rows in Lights module
+- Fixed an update issue in the Variants module
+- Fixed packaging issue with Anima 5
+- Fixed a bug in the Time Output module that caused 3ds Max to crash
+- [Helio] Fixed issue with missing MCG files after asset collection
+- [Helio] Added project path folder check before the asset collection process
+</Update>

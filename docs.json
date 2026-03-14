@@ -223,6 +223,12 @@
               "scene-manager/bake-setups",
               "scene-manager/renderflow"
             ]
+          },
+          {
+            "group": "Updates",
+            "pages": [
+              "scene-manager/changelog"
+            ]
           }
         ]
       },
