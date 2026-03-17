@@ -1,0 +1,62 @@
+---
+title: "Lighting & Environment"
+description: "Control sun lights, dome lights, HDRIs, environment maps, atmosphere effects, and viewport backgrounds per setup."
+---
+
+Scene Manager gives you per-setup control over every aspect of your scene's lighting and environment. You can switch between completely different lighting conditions - a sunny exterior and a studio HDRI setup, for example - just by activating a different [setup](/scene-manager/setups).
+
+## Sun
+
+If you select a Sun from the dropdown it will be turned on automatically and the rest of the main light sources in the scene will be turned off. In most cases you will also want to have a sky in the environment linked to the sun. To do this you only need to press the cloud button and it will create a sky material according to the type of the sun (VRay or Corona), link them together if needed and add it to the environment slot.
+
+<Frame caption="Sun module with sun selection and linked sky material controls">
+  <img src="/images/scene-manager/sm_module_sun.png" alt="Sun module with sun selection and linked sky material controls" />
+</Frame>
+
+## Dome
+
+There are a couple of ways that you can think about using Domes and HDRIs with the Scene Manager. You can create a Dome for each setup, or you can reuse one Dome across multiple setups. It is up to you which workflow suits you more. By opening the dropdown you can select a Dome light from your scene. You can select it, show the chosen HDRI in your preferred Material Editor, or you have the option to fetch the HDRI if the dome already has one.
+
+<Frame caption="Dome module with dome light selection and HDRI assignment">
+  <img src="/images/scene-manager/sm_module_dome.png" alt="Dome module with dome light selection and HDRI assignment" />
+</Frame>
+
+## HDRI Browser
+
+The HDRI Browser will let you access your favorite folders and quickly test out various lighting conditions.
+
+<Frame caption="HDRI Browser with folder navigation and thumbnail previews">
+  <img src="/images/scene-manager/sm_module_hdri_browser.png" alt="HDRI Browser with folder navigation and thumbnail previews" />
+</Frame>
+
+## Environment
+
+The Environment card will control 3ds Max Environment Settings. By default it is set to None. If you have a valid Sun object you can choose to have a Sky map, if you have an HDRI loaded you can load it into the environment from here, or if you need more specific control you can choose Custom.
+
+<Frame caption="Environment module with None, Sky, HDRI, and Custom options">
+  <img src="/images/scene-manager/sm_module_environment.png" alt="Environment module with None, Sky, HDRI, and Custom options" />
+</Frame>
+
+## Atmosphere
+
+With the Atmosphere module you can take control over 3ds Max Atmosphere Effects, like `VRayAerialPerspective` or `VRayEnvironmentFog`. After choosing the required ones from the dropdown you can take control over them and enable/disable these effects per setup.
+
+<Frame caption="Atmosphere module toggling VRayAerialPerspective and VRayEnvironmentFog per setup">
+  <img src="/images/scene-manager/sm_module_atmosphere.png" alt="Atmosphere module toggling aerial perspective and environment fog per setup" />
+</Frame>
+
+## Background
+
+This module controls your active viewport's background. You can choose between Gradient, Solid, Environment and Custom. The custom option will let you browse a background image, which can be handy in case you want to do photo matching for multiple cameras.
+
+<Frame caption="Background module with Gradient, Solid, Environment, and Custom options">
+  <img src="/images/scene-manager/sm_module_background.png" alt="Background module with Gradient, Solid, Environment, and Custom options" />
+</Frame>
+
+<Info>
+Viewport background behavior is also affected by the viewport switch mode in [Settings](/scene-manager/settings).
+</Info>
+
+## Next steps
+
+With your lighting configured, control what's visible in each setup with [Scene Control](/scene-manager/scene-control), or define your [Render Settings](/scene-manager/rendering) with output paths and quality settings.

@@ -1,0 +1,31 @@
+---
+title: "Scripting"
+description: "Extend Scene Manager with custom MaxScript using the Script Editor and Script File modules."
+---
+
+For workflows that go beyond what the built-in modules offer, Scene Manager provides two scripting modules. Both let you run custom MaxScript at specific points in the setup and render process - useful for studio-specific automation, custom property overrides, or integration with other tools.
+
+## Script File
+
+With the Script - File module you can set a Pre-Render and a Post-Render script for each of the setups. This can come handy if you would like to do extra things before and after the render process.
+
+<Frame caption="Script File module with pre-render and post-render script paths">
+  <img src="/images/scene-manager/sm_module_script_file.png" alt="Script File module with pre-render and post-render script paths" />
+</Frame>
+
+## Script Editor
+
+As an alternative to the Script - File module, the Editor provides an option for TDs and Developers to extend the core functionality of the Scene Manager. You can paste in your code or write it directly in the module. It has all the functionalities a Code Editor should have, including basic MaxScript syntax and autocompletion with V-Ray, Corona and FStorm render settings.
+
+There are 4 tabs where you can place code:
+
+- **Pre-Setup** - Runs before setting the properties ([Camera](/scene-manager/camera-and-framing#camera), [Resolution](/scene-manager/camera-and-framing#resolution), [Lighting](/scene-manager/lighting), [Render Output](/scene-manager/rendering#render-output), etc.)
+- **Post-Setup** - Runs after all other properties have been set but before Pre-Render
+- **Pre-Render** - Executed before the render starts
+- **Post-Render** - Executed after the render finishes
+
+By pressing the Test button you can evaluate your code and get back errors if there are any.
+
+<Frame caption="Script Editor with MaxScript code, syntax highlighting, and Pre/Post tabs">
+  <img src="/images/scene-manager/sm_module_script_editor.png" alt="Script Editor with MaxScript code, syntax highlighting, and Pre/Post tabs" />
+</Frame>

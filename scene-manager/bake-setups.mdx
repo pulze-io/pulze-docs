@@ -1,12 +1,16 @@
 ---
 title: "Bake Setups"
-description: "Convert Scene Manager setups to native scene states and batch render."
+description: "Convert Scene Manager setups to native 3ds Max scene states, render presets, and batch render entries."
 ---
 
 This feature will let you bake and convert your Scene Manager settings to 3ds Max's native scene states and render presets. After that it will also add it to the Batch Render List.
 
-<Frame caption="Bake Setups dialog">
-  <img src="/images/scene-manager/sm_bake_setups.png" alt="Bake Setups" />
+<Frame caption="Bake Setups dialog converting setups to native scene states and batch render entries">
+  <img src="/images/scene-manager/sm_bake_setups.png" alt="Bake Setups dialog converting setups to native scene states and batch render entries" />
 </Frame>
 
 You also have the option to batch save each Scene Manager state to 3ds Max, V-Ray Scene or Corona Scene files.
+
+This is useful when you need to render without Scene Manager running, or when you want to hand off the scene to someone who doesn't have Scene Manager installed. All the settings from your [setups](/scene-manager/setups) - [cameras](/scene-manager/camera-and-framing), [resolution](/scene-manager/camera-and-framing#resolution), [render output](/scene-manager/rendering#render-output), [lighting](/scene-manager/lighting), and [render settings](/scene-manager/rendering#render-settings) - are baked into native 3ds Max formats.
+
+For render farm submission without baking, see the [Scene Manager job type](/renderflow/job-types/scene-manager) in the RenderFlow documentation.

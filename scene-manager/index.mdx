@@ -1,26 +1,12 @@
 ---
-title: "Home"
-description: "Organize, manage, and streamline your scenes with Scene Manager."
+title: "Scene Manager"
+description: "Organize, manage, and streamline your 3ds Max scenes with modular, per-setup control over cameras, lighting, rendering, and more."
 ---
 
-## Overview
+Scene Manager is a tool for organizing and managing complex scenes in 3ds Max. It helps you keep your projects structured and your workflow efficient.
 
-Scene Manager is Pulze's tool for organizing and managing complex scenes in 3ds Max. It helps you keep your projects structured and your workflow efficient by grouping all possible settings into modular, customizable panels.
+Every setting in Scene Manager is tied to a **setup**. A setup is a snapshot of your scene configuration - which camera to use, what resolution, which lights are on, what render settings to apply. You create as many setups as you need and switch between them instantly. See [Managing Setups](/scene-manager/setups) for details.
 
-<CardGroup cols={2}>
-  <Card title="Getting Started" icon="rocket" href="/scene-manager/getting-started" horizontal>
-    Prerequisites, supported software, and installation.
-  </Card>
-  <Card title="Modules" icon="puzzle-piece" href="/scene-manager/modules" horizontal>
-    All modules — cameras, lighting, rendering, output, and more.
-  </Card>
-  <Card title="Bake Setups" icon="box-archive" href="/scene-manager/bake-setups" horizontal>
-    Convert setups to native scene states and batch render.
-  </Card>
-  <Card title="RenderFlow" icon="network-wired" href="/scene-manager/renderflow" horizontal>
-    Submit render jobs directly to RenderFlow.
-  </Card>
-  <Card title="Settings" icon="gear" href="/scene-manager/settings" horizontal>
-    Configure notifications, theme, viewport, and more.
-  </Card>
-</CardGroup>
+The modules are organized around natural workflow stages. Start with [Camera & Framing](/scene-manager/camera-and-framing) to define your shots, set up your [Lighting & Environment](/scene-manager/lighting), control what's visible in the scene with [Scene Control](/scene-manager/scene-control), and configure your [Render Settings](/scene-manager/rendering). For advanced automation, the [Scripting](/scene-manager/scripting) modules let you run custom MaxScript at various points in the process.
+
+When you're ready to render, press the **Batch Render** button in the top toolbar to render all your setups with one click. You can also [Bake Setups](/scene-manager/bake-setups) to native scene states, or submit everything directly to [RenderFlow](/renderflow/job-types/scene-manager).

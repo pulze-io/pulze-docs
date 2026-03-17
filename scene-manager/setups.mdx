@@ -1,0 +1,30 @@
+---
+title: "Managing Setups"
+description: "Create, organize, and manage scene setups in Scene Manager - the foundation for all per-setup settings."
+---
+
+Setups are the foundation of Scene Manager. Every module - [cameras](/scene-manager/camera-and-framing), [lighting](/scene-manager/lighting), [render settings](/scene-manager/rendering), [scene visibility](/scene-manager/scene-control) - stores its values per setup. Before configuring anything else, you need at least one setup.
+
+## Creating and activating setups
+
+To create an empty setup, press the **+** button at the top right corner. Once you click on a setup it becomes activated, and Scene Manager applies all of its stored settings to your scene.
+
+<Frame caption="Setup List with multiple setups showing camera, resolution, and environment columns">
+  <img src="/images/scene-manager/sm_module_setup_list.png" alt="Setup List with multiple setups showing camera, resolution, and environment columns" />
+</Frame>
+
+Scene Manager stores all its settings in the current .max file. Whenever you modify or create a setup it will be stored in the scene. This way if you open the max file on another workstation all the setups will be accessible through the Scene Manager.
+
+You can show or hide columns in the setup list from the [Settings](/scene-manager/settings) page.
+
+## Scene Name
+
+After a certain complexity PhysCamera001, PhysCamera002 doesn't mean a lot - with the Scene Name module you can add a more defined name for your scene setup.
+
+<Frame caption="Scene Name module with a descriptive label assigned to a setup">
+  <img src="/images/scene-manager/sm_module_scene_name.png" alt="Scene Name module with a descriptive label assigned to a setup" />
+</Frame>
+
+## Next steps
+
+With your setups created, define the shots using [Camera & Framing](/scene-manager/camera-and-framing), or jump ahead to configure your [Render Settings](/scene-manager/rendering) with output paths and render settings.

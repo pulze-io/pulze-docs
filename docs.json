@@ -176,56 +176,42 @@
         "tab": "Scene Manager",
         "cta": {
           "label": "Get Started",
-          "href": "/scene-manager/getting-started"
+          "href": "/scene-manager/overview"
         },
         "groups": [
           {
-            "group": "Scene Manager",
+            "group": "Getting Started",
             "pages": [
-              "scene-manager/index",
-              "scene-manager/getting-started",
-              "scene-manager/settings"
+              "scene-manager/overview",
+              "scene-manager/installation"
             ]
           },
           {
             "group": "Modules",
             "pages": [
-              "scene-manager/modules/index",
-              "scene-manager/modules/setup-list",
-              "scene-manager/modules/camera",
-              "scene-manager/modules/resolution",
-              "scene-manager/modules/time-output",
-              "scene-manager/modules/scene-name",
-              "scene-manager/modules/sun",
-              "scene-manager/modules/dome",
-              "scene-manager/modules/hdri-browser",
-              "scene-manager/modules/environment",
-              "scene-manager/modules/background",
-              "scene-manager/modules/atmosphere",
-              "scene-manager/modules/layers",
-              "scene-manager/modules/objects",
-              "scene-manager/modules/xref-scene",
-              "scene-manager/modules/variants",
-              "scene-manager/modules/render-output",
-              "scene-manager/modules/render-settings",
-              "scene-manager/modules/render-elements",
-              "scene-manager/modules/post-production",
-              "scene-manager/modules/thumbnail",
-              "scene-manager/modules/todo",
-              "scene-manager/modules/notes",
-              "scene-manager/modules/script-file",
-              "scene-manager/modules/script-editor"
+              "scene-manager/setups",
+              "scene-manager/camera-and-framing",
+              "scene-manager/lighting",
+              "scene-manager/scene-control",
+              "scene-manager/rendering",
+              "scene-manager/scripting",
+              "scene-manager/misc"
             ]
           },
           {
             "group": "Workflows",
             "pages": [
-              "scene-manager/bake-setups",
-              "scene-manager/renderflow"
+              "scene-manager/bake-setups"
             ]
           },
           {
-            "group": "Updates",
+            "group": "Settings",
+            "pages": [
+              "scene-manager/settings"
+            ]
+          },
+          {
+            "group": "Reference",
             "pages": [
               "scene-manager/changelog"
             ]
