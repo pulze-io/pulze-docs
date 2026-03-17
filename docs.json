@@ -186,9 +186,14 @@
         },
         "groups": [
           {
+            "group": "Overview",
+            "pages": [
+              "scene-manager/index"
+            ]
+          },
+          {
             "group": "Getting Started",
             "pages": [
-              "scene-manager/overview",
               "scene-manager/installation"
             ]
           },
