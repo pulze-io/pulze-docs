@@ -3,7 +3,7 @@ name: pulze
 description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
 metadata:
   author: pulze
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Pulze Documentation
@@ -13,36 +13,29 @@ Pulze builds tools for 3D artists and studios. This skill covers three products:
 ## Products
 
 ### Scene Manager
-A 3ds Max plugin for organizing and managing scenes. Modules include Scene Setup, Lighting, Scene Control, Rendering, Utilities, and Scripting. Supports bake setups and RenderFlow integration.
+A 3ds Max plugin for organizing and managing scenes with per-setup control over cameras, lighting, rendering, and more. Supports batch rendering, bake setups, and RenderFlow integration.
 
-- Getting started: /scene-manager/getting-started
-- Settings: /scene-manager/settings
-- Modules overview: /scene-manager/modules/index
-- Camera: /scene-manager/modules/camera
-- Resolution: /scene-manager/modules/resolution
-- Time & Output: /scene-manager/modules/time-output
-- Scene Name: /scene-manager/modules/scene-name
-- Sun: /scene-manager/modules/sun
-- Dome: /scene-manager/modules/dome
-- HDRI Browser: /scene-manager/modules/hdri-browser
-- Environment: /scene-manager/modules/environment
-- Background: /scene-manager/modules/background
-- Atmosphere: /scene-manager/modules/atmosphere
-- Layers: /scene-manager/modules/layers
-- Objects: /scene-manager/modules/objects
-- XRef Scene: /scene-manager/modules/xref-scene
-- Variants: /scene-manager/modules/variants
-- Render Output: /scene-manager/modules/render-output
-- Render Settings: /scene-manager/modules/render-settings
-- Render Elements: /scene-manager/modules/render-elements
-- Post Production: /scene-manager/modules/post-production
-- Thumbnail: /scene-manager/modules/thumbnail
-- Todo: /scene-manager/modules/todo
-- Notes: /scene-manager/modules/notes
-- Script File: /scene-manager/modules/script-file
-- Script Editor: /scene-manager/modules/script-editor
-- Bake setups: /scene-manager/bake-setups
-- RenderFlow integration: /scene-manager/renderflow
+#### Getting Started
+- Overview: /scene-manager/overview
+- Installation: /scene-manager/installation
+
+#### Modules
+- Managing Setups: /scene-manager/setups
+- Camera & Framing: /scene-manager/camera-and-framing
+- Lighting & Environment: /scene-manager/lighting
+- Scene Control: /scene-manager/scene-control
+- Render Settings: /scene-manager/rendering
+- Scripting: /scene-manager/scripting
+- Misc (Thumbnail, Notes, Todo): /scene-manager/misc
+
+#### Workflows
+- Bake Setups: /scene-manager/bake-setups
+
+#### Settings
+- Preferences: /scene-manager/settings
+
+#### Reference
+- Changelog: /scene-manager/changelog
 
 ### RenderFlow
 Render farm management software. Submit jobs, manage nodes, monitor progress, and automate rendering workflows across machines.
@@ -132,17 +125,20 @@ AI-powered creative project generation tool.
 
 ## Common Tasks
 
-- **Submit a render job**: See the quick start guide and job submission docs.
-- **Install RenderFlow**: Follow the installation guide; silent deploy available for automated deployments.
-- **Manage render nodes**: Add, configure, suspend, or reserve nodes from the Nodes page.
-- **Use the REST API**: Authenticate with an API key, then call endpoints for jobs, tasks, nodes, pools, and users.
-- **Connect via MCP**: Configure Claude Desktop, ChatGPT Desktop, or Claude Code with the RenderFlow MCP server.
-- **Set up pools**: Group nodes into pools and assign jobs to specific pools.
-- **Configure permissions**: Create user groups with policies controlling job, node, and system access.
-- **Troubleshoot failures**: Check task logs, sanity checks, and the collecting logs guide.
-- **Archive and restore jobs**: Archive completed jobs to keep the list clean; restore them anytime from the archive panel.
-- **Schedule overnight rendering**: Use the Scheduler to activate workstations after hours and suspend them before the workday.
-- **Submit cloud jobs**: Switch to the Cloud tab in the Submitter to render on cloud nodes with included licenses.
+- **Submit a render job**: Open the Submitter, select a scene file, review settings, and click Submit. See /renderflow/jobs/submitter and /renderflow/getting-started/quick-start.
+- **Install RenderFlow**: Run the installer on each machine and choose Server, Node, or Workstation. Silent deploy available via PowerShell. See /renderflow/getting-started/installation and /renderflow/getting-started/silent-deploy.
+- **Install Scene Manager**: Run the installer, then add the toolbar button in 3ds Max via Customize > Customize User Interface > Toolbars > Pulze. See /scene-manager/installation.
+- **Manage render nodes**: View node status, hardware, and current jobs from the Nodes table. Suspend, restart, shutdown, or wake nodes remotely. See /renderflow/nodes/overview and /renderflow/nodes/commands.
+- **Use the REST API**: Generate an API key in Settings, then call endpoints for jobs, tasks, nodes, pools, and users. See /renderflow/developers/authentication and /renderflow/developers/rest-api.
+- **Connect via MCP**: Configure Claude Desktop, ChatGPT Desktop, or Claude Code with the RenderFlow MCP server. See /renderflow/developers/mcp-server.
+- **Set up pools**: Create pools in Settings, assign nodes to pools, and submit jobs to specific pools. See /renderflow/nodes/overview and /renderflow/settings/overview.
+- **Configure permissions**: Create user groups with policies controlling job, node, and system access. See /renderflow/settings/overview.
+- **Troubleshoot failures**: Check task render logs, review sanity check results, and collect diagnostic logs. See /renderflow/jobs/errors, /renderflow/sanity-check/overview, and /renderflow/support/collecting-logs.
+- **Archive and restore jobs**: Archive completed jobs from the context menu to keep the list clean. Restore them anytime from the archive panel. See /renderflow/jobs/overview.
+- **Schedule overnight rendering**: Use the Scheduler to automatically activate workstations after hours and suspend them before the workday. See /renderflow/scheduler/overview.
+- **Submit cloud jobs**: Switch to the Cloud tab in the Submitter to render on cloud nodes with included V-Ray and Corona licenses. See /renderflow/cloud-rendering/overview.
+- **Batch render in Scene Manager**: Press the Batch Render button in the top toolbar to render all setups with one click. Or bake setups to native scene states. See /scene-manager/bake-setups.
+- **Organize 3ds Max scenes**: Create setups in Scene Manager to manage cameras, lighting, scene visibility, and render settings per shot. See /scene-manager/setups.
 
 ## Support
 
