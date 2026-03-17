@@ -7,8 +7,6 @@ description: "Go from zero to your first render job in under 10 minutes. Install
 keywords: ['render farm quick start', 'how to set up a render farm', 'render farm setup guide', 'first render job', 'render farm beginner guide', 'RenderFlow quick start']
 ---
 
-RenderFlow manages your render farm, from a single workstation to hundreds of nodes. This guide walks you through the fastest path to getting your first job running.
-
 ## What you'll need
 
 - At least one Windows computer (you can start with just your workstation)

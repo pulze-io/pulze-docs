@@ -1,5 +1,5 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "$schema": "https://mintlify.com/docsa.json",
   "theme": "almond",
   "name": "Pulze",
   "colors": {
@@ -47,6 +47,12 @@
           "href": "/renderflow/getting-started/quick-start"
         },
         "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "renderflow/introduction"
+            ]
+          },
           {
             "group": "Getting Started",
             "pages": [
