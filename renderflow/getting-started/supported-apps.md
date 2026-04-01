@@ -27,7 +27,7 @@ To refresh the software list after installing new applications, right-click any 
 
 | | |
 |---|---|
-| **Versions** | 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 |
+| **Versions** | 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027 |
 | **Job types** | Standard render, Scene Manager, Tiled render, Corona DR, V-Ray DR |
 | **License** | Not required on render nodes (uses the `-server` flag for network rendering) |
 
@@ -43,7 +43,7 @@ To refresh the software list after installing new applications, right-click any 
 
 | | |
 |---|---|
-| **Versions** | 3.0 through 5.0 (all point releases) |
+| **Versions** | 3.0 through 5.1 |
 | **Job types** | Standard render, Tiled render |
 | **License** | Free and open source, no license needed |
 

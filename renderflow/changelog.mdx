@@ -5,6 +5,30 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="1.2.7" description="March 25, 2026">
+RenderFlow 1.2.7 adds 3ds Max 2027 support, Blender 5.1 support, Cloud Projects for shared storage, a MongoDB 8 upgrade, and an updated job archive alongside important stability fixes.
+
+**Updates:**
+- Added support for 3ds Max 2027 and Blender 5.1
+- Upgraded to MongoDB 8 with automatic migration from previous versions
+- New Cloud Projects - jobs in the same project share storage, assets are uploaded only once
+- Updated job archive with storage size and filtering
+- New system-level default job cleanup settings for admins
+- SceneManager pre-setup and post-setup snippets now run at the correct stage
+- Maintenance mode overlay now visible on node layout with dark theme
+- New CLI exit codes for missing or invalid API keys
+- Migrated documentation links to docs.pulze.io
+
+**Fixes:**
+- Fixed tiled render preview image aspect ratio
+- Fixed critical issue where the last frame of batch renders was not saved
+- Fixed database connection drops causing jobs to get stuck
+- Fixed 3ds Max progress showing incorrect values when time limit is reached
+- Fixed cloud upload progress not showing
+- Fixed false-positive asset warnings during job submission
+- Fixed license error messages missing details and help links
+</Update>
+
 <Update label="1.2.6" description="February 27, 2026">
 RenderFlow 1.2.6 introduces Cloud Rendering (beta), support Blender 5.0, FStorm 2, and Octane 2026, a new developer toolkit, plus a long list of stability fixes.
 
@@ -12,7 +36,7 @@ RenderFlow 1.2.6 introduces Cloud Rendering (beta), support Blender 5.0, FStorm 
 - New Cloud Rendering job for 3ds Max & Scene Manager
 - Added support for Blender 5.0
 - Added support for FStorm 2 and Octane 2026
-- New Slack, Teams and Discord notifications (beta)
+- New Slack and Teams notifications
 - New Desktop notifications
 - New Integrations settings page
 - Added "Total Render Time" field that sums completed task render durations
@@ -25,7 +49,7 @@ RenderFlow 1.2.6 introduces Cloud Rendering (beta), support Blender 5.0, FStorm 
 - Published TypeScript/JavaScript and Python SDKs
 - New MCP server - query and control your farm from ChatGPT, Claude, or any MCP-compatible client
 
-**Bug Fixes:**
+**Fixes:**
 - Fixed Node UI stuck in loading or "no connection" state while functioning otherwise
 - Fixed last frame of each batch task always failing
 - Fixed task distribution race condition after server restart causing double frame assignment

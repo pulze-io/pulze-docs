@@ -177,8 +177,10 @@ Self-serve database restore is not yet available. If you need to restore from a 
 
 **Automatic Node Mode** defines when a workstation should automatically become available for rendering. Configure the idle time threshold (how long without mouse or keyboard input), CPU usage threshold, minimum available RAM, and a list of blacklisted processes that prevent the machine from switching to idle.
 
-<Frame caption="System settings showing maintenance mode and automatic node mode configuration">
-  <img src="/images/renderflow/rf_settings_system.png" alt="System settings with maintenance mode toggle and automatic node mode thresholds" />
+**Default Job Cleanup** lets admins configure the default cleanup behavior applied to all new jobs. When set, every newly submitted job inherits this cleanup setting automatically. Individual jobs can still override the default in the [Submitter](/renderflow/jobs/submitter).
+
+<Frame caption="System settings showing maintenance mode, automatic node mode, and default cleanup configuration">
+  <img src="/images/renderflow/rf_settings_system.png" alt="System settings with maintenance mode toggle, automatic node mode thresholds, and default job cleanup" />
 </Frame>
 
 ## Reset

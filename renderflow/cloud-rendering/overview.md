@@ -28,7 +28,7 @@ During the beta, RenderFlow Cloud supports **3ds Max 2026** with V-Ray and Coron
 
 | Plugin | Version |
 |--------|---------|
-| Anima | - |
+| Anima | 6.2.1 |
 | BerconMaps | - |
 | Clone | - |
 | ColorEdge | - |

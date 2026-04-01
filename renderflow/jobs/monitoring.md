@@ -73,7 +73,7 @@ At the bottom of the Jobs page, a horizontal bar shows the aggregate state of al
 
 ## Archived jobs
 
-To browse archived jobs, click the **Archive** button in the toolbar next to the filter and column controls. A panel opens with a searchable list of all archived jobs. From here you can restore any job back to the active table or permanently delete it.
+To browse archived jobs, click the **Archive** button in the toolbar next to the filter and column controls. A panel opens with a searchable, filterable list of all archived jobs. You can select multiple jobs at once for bulk delete, or restore any job back to the active table.
 
 <Frame caption="Archive button location in the job table toolbar">
   <img src="/images/renderflow/rf_jobs_archive_action.png" alt="Job table toolbar highlighting the Archive button" />
