@@ -239,7 +239,14 @@
           {
             "group": "Project Dream",
             "pages": [
-              "project-dream/index"
+              "project-dream/index",
+              "project-dream/models"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "project-dream/changelog"
             ]
           }
         ]
