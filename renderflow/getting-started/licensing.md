@@ -61,7 +61,7 @@ In both modes, the actual distribution of licenses to nodes is automatic. You ca
 
 ### Moving licenses between servers
 
-To move licenses from one server to another (e.g., when migrating to new hardware), go to your [Pulze account](https://www.pulze.io/account/licenses?sku=pulze_renderflow) and unlock the licenses, then activate them on the new server.
+To move licenses from one server to another (e.g., when migrating to new hardware), go to your [Pulze account](https://account.pulze.io/products/renderflow/licenses) and unlock the licenses, then activate them on the new server.
 
 ## License checking
 

@@ -7,16 +7,32 @@ description: "Automate render farm operations from the command line. Submit jobs
 keywords: ['render farm CLI', 'render farm command line', 'render farm scripting', 'automate render jobs CLI', 'RenderFlow CLI']
 ---
 
-RenderFlow includes an easy-to-use command line tool (`rfcli.exe`), located in the root installation folder. Use it to automate job submission, control nodes, and integrate with scripts.
+RenderFlow includes an easy-to-use command line tool, located in the root installation folder. Use it to automate job submission, control nodes, and integrate with scripts.
+
+The binary is `rfcli.exe` on Windows and `rfcli` on macOS and Linux.
 
 ## Getting started
 
-Open a terminal, navigate to RenderFlow's installation directory, and run:
+Open a terminal, navigate to RenderFlow's installation directory, and run the CLI with `--help`:
 
-```bash
+<CodeGroup>
+```powershell Windows
 cd "C:\Program Files\Pulze\RenderFlow"
-rfcli.exe --help
+.\rfcli --help
 ```
+
+```bash macOS
+cd /Applications/Pulze/RenderFlow
+./rfcli --help
+```
+
+```bash Linux
+cd /opt/Pulze/RenderFlow
+./rfcli --help
+```
+</CodeGroup>
+
+The rest of this page uses `rfcli` for brevity. On Windows that's `.\rfcli` (or `rfcli.exe`); on macOS and Linux it's `./rfcli`.
 
 This displays all available commands.
 
@@ -34,23 +50,21 @@ For commands that require authentication, set the `RENDERFLOW_API_KEY` environme
 
 <CodeGroup>
 ```powershell PowerShell
-# Set temporarily for current session
 $env:RENDERFLOW_API_KEY = "your-api-key-here"
-rfcli.exe jobs list
+rfcli jobs list
 ```
 
-```batch Command Prompt
-:: Set temporarily for current session
-set RENDERFLOW_API_KEY=your-api-key-here
-rfcli.exe jobs list
+```bash macOS / Linux
+export RENDERFLOW_API_KEY="your-api-key-here"
+rfcli jobs list
 ```
 </CodeGroup>
 
-For permanent access, add `RENDERFLOW_API_KEY` to your System Environment Variables.
+For permanent access, set `RENDERFLOW_API_KEY` as a system-wide environment variable (System Properties on Windows, `~/.zshrc` or `~/.bashrc` on macOS and Linux).
 
 ## Commands reference
 
-Run `rfcli.exe <command> --help` for detailed options on any command.
+Run `rfcli <command> --help` for detailed options on any command.
 
 ### General
 
@@ -110,92 +124,135 @@ Run `rfcli.exe <command> --help` for detailed options on any command.
 
 Submit a fully configured job without opening the UI:
 
-```powershell
-rfcli.exe jobs submit --type=3dsmax.render --host=3dsmax --file=S:\project\myscene.max --resolution=3840x2160 --output=S:\project\output.exr --frame=1-100 --priority=50
+```bash
+rfcli jobs submit --type=3dsmax.render --host=3dsmax --file=scene.max --resolution=3840x2160 --output=output.exr --frame=1-100 --priority=50
 ```
 
 ### Job submission options
 
 | Option | Required | Description |
 |--------|----------|-------------|
-| `--type` | Yes | Job type (e.g., `3dsmax.render`, `blender.render`, `cinema4d.render`) |
-| `--host` | Yes | Host application (`3dsmax`, `blender`, `cinema4d`, `vray_standalone`) |
-| `--file` | Yes | Path to the scene file |
+| `--type` | Yes | Job type (e.g. `3dsmax.render`, `blender.render`, `cinema4d.render`, `maya.render`, `nuke.render`, `houdini.render`, `aftereffects.render`, `unreal.render`, `python.run`, `shell.run`, `redshift_standalone.render`) |
+| `--host` | Yes | Host application (matches the DCC: `3dsmax`, `blender`, `cinema4d`, `maya`, `nuke`, `houdini`, `aftereffects`, `unreal`, `vray_standalone`, `redshift_standalone`) |
+| `--file` | Yes | Path to the scene file (unless `--json-file` is used) |
 | `--name` | No | Custom job name |
-| `--resolution` | No | Output resolution (e.g., `1920x1080`, `3840x2160`) |
+| `--version` | No | Host application version (e.g. `2026` for 3ds Max, `15.1` for Nuke) |
+| `--resolution` | No | Output resolution (e.g. `1920x1080`, `3840x2160`) |
 | `--output` | No | Output file path |
-| `--frame` | No | Frame range (e.g., `1`, `1-100`, `1,3-5,15`) |
+| `--frame` | No | Frame range (e.g. `1`, `1-100`, `1,3-5,15`) |
+| `--render-layer` | No | Maya render layer name |
 | `--priority` | No | Job priority (0-100, default: 25) |
 | `--status` | No | Initial job status |
 | `--dependencies` | No | List of job IDs this job depends on |
 | `--nodes` | No | List of node IDs to whitelist |
 | `-i`, `--interactive` | No | Open submission wizard GUI |
-| `--pid` | No | Process ID of running DCC application |
+| `--pid` | No | Process ID of a running DCC application — used to read live scene properties |
+| `--json-file` | No | Path to a JSON file containing a full job payload (alternative to flat flags) |
+| `--json` | No | Inline JSON job payload |
+
+<Info>
+The `--json-file` and `--json` flags accept a full `IPublicJobCreate` payload. Plugins for Houdini, After Effects, and Unreal use this to pass rich, plugin-specific metadata that does not map to flat flags.
+</Info>
 
 ### Interactive submission
 
 The `-i` (interactive) flag opens the submission wizard GUI, pre-filled with your parameters:
 
 ```bash
-rfcli.exe jobs submit -i --file="C:\Projects\scene.max" --type=3dsmax.render --host=3dsmax
+rfcli jobs submit -i --file=scene.max --type=3dsmax.render --host=3dsmax
 ```
 
 ## Examples
 
 ### Batch job submission
 
-Submit multiple scenes from a folder:
+Submit every scene in the current folder:
 
-```batch
-@echo off
-cd "C:\Program Files\Pulze\RenderFlow"
-
-for %%f in (C:\RenderQueue\*.max) do (
-    rfcli.exe jobs submit --type=3dsmax.render --host=3dsmax --file="%%f" --priority=25
-    echo Submitted: %%f
-)
-
-echo All jobs submitted.
+<CodeGroup>
+```bash macOS / Linux
+for f in *.max; do
+    rfcli jobs submit --type=3dsmax.render --host=3dsmax --file="$f" --priority=25
+    echo "Submitted: $f"
+done
 ```
+
+```powershell Windows
+Get-ChildItem *.max | ForEach-Object {
+    rfcli jobs submit --type=3dsmax.render --host=3dsmax --file=$_.FullName --priority=25
+    Write-Host "Submitted: $($_.Name)"
+}
+```
+</CodeGroup>
 
 ### Common operations
 
 ```bash
 # List all jobs
-rfcli.exe jobs list
+rfcli jobs list
 
 # Get job details
-rfcli.exe jobs get 60f7b1a2c3d4e5f6a7b8c9d0
+rfcli jobs get 60f7b1a2c3d4e5f6a7b8c9d0
 
 # Start a suspended job
-rfcli.exe jobs start 60f7b1a2c3d4e5f6a7b8c9d0
+rfcli jobs start 60f7b1a2c3d4e5f6a7b8c9d0
 
 # Update job priority
-rfcli.exe jobs update 60f7b1a2c3d4e5f6a7b8c9d0 --priority=75
+rfcli jobs update 60f7b1a2c3d4e5f6a7b8c9d0 --priority=75
 
 # Suspend a node
-rfcli.exe nodes status 60f7b1a2c3d4e5f6a7b8c9d0 suspended
+rfcli nodes status 60f7b1a2c3d4e5f6a7b8c9d0 suspended
 
 # Watch real-time job updates
-rfcli.exe jobs events
+rfcli jobs events
 ```
 
 ## Integration examples
 
 ### Integration with 3D applications
 
-The RenderFlow toolbar buttons in 3ds Max, Blender, and Cinema 4D use the CLI internally. For example, the 3ds Max toolbar button runs:
+Every supported DCC plugin ships with a **Submit to RenderFlow** toolbar button (or menu entry) that shells out to the CLI. The plugins fall into two groups:
+
+**Flat-flag plugins** pass scene info via individual flags. Used by 3ds Max, Blender, Cinema 4D, Maya, and Nuke:
 
 ```bash
-rfcli.exe jobs submit -i --type=3dsmax.render --host=3dsmax --file="scene.max" --pid=12345
+# 3ds Max toolbar
+rfcli jobs submit -i --type=3dsmax.render --host=3dsmax --file=scene.max --version=2026 --pid=12345
+
+# Maya toolbar (with optional render layer)
+rfcli jobs submit -i --type=maya.render --host=maya --file=scene.ma --pid=12345 --render-layer=beauty
+
+# Nuke toolbar
+rfcli jobs submit -i --type=nuke.render --host=nuke --file=comp.nk --version=15.1 --pid=12345
 ```
 
-The `--pid` parameter connects to a running 3ds Max instance to read current scene properties.
+**JSON-payload plugins** write a temporary JSON file with richer metadata (selected ROPs, render queue items, MRQ jobs) and pass it with `--json-file`. Used by Houdini, After Effects, and Unreal Engine:
+
+```bash
+# Houdini ROP, After Effects render queue, or Unreal MRQ
+rfcli jobs submit -i --json-file=/tmp/rf-payload.json --pid=12345
+```
+
+The `--pid` parameter lets RenderFlow attach to the running DCC instance to read live scene properties such as cameras, output paths, and renderer settings.
 
 ### Right-click context menu
 
-RenderFlow adds "Submit to RenderFlow" to the Windows Explorer context menu for supported file types (`.max`, `.blend`, `.c4d`, `.vrscene`). This uses the CLI to open the submission wizard:
+The Windows installer registers **Submit to RenderFlow** in Explorer's right-click menu for the following extensions:
+
+- 3ds Max: `.max`
+- Nuke: `.nk`
+- After Effects: `.aep`
+- Houdini: `.hip`, `.hipnc`, `.hiplc`, `.ifd`
+- USD: `.usd`, `.usda`, `.usdc`, `.usdz`
+- V-Ray Standalone: `.vrscene`
+- Redshift Standalone: `.rs`
+- Fusion: `.comp`
+
+The menu entry launches the submission wizard pre-filled for that file type:
 
 ```bash
-rfcli.exe jobs submit -i --type=3dsmax.render --host=3dsmax --file="C:\path\to\scene.max"
+rfcli jobs submit -i --type=3dsmax.render --host=3dsmax --file=scene.max
 ```
+
+<Info>
+Blender (`.blend`), Cinema 4D (`.c4d`), and Maya (`.ma`) do not have an Explorer entry — submit from inside the application using the toolbar button instead.
+</Info>

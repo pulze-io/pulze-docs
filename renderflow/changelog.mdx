@@ -5,6 +5,44 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="1.3.0" description="Unreleased">
+RenderFlow 1.3.0 brings native macOS and Linux support alongside a major expansion into VFX, motion graphics, and game engine workflows — Maya, Nuke, After Effects, Houdini, Unreal Engine, Python, and Shell jobs all landing in this release.
+
+**New:**
+- macOS and Linux support
+- Maya job type with Arnold, V-Ray, and Redshift renderers
+- Nuke job type
+- After Effects job type with full Render Queue support
+- Houdini job type (Beta) — HBatch, Husk and Mantra rendering
+- Unreal Engine job type (Beta) — Movie Render Queue rendering with distributed frame chunking
+- Python job type — submit `.py` and execute scripts on one or more nodes
+- Shell job type for `.cmd`, `.bat`, `.ps1`, and `.sh` scripts
+- Redshift Standalone job type — submit `.rs` scene files directly, no host DCC required
+- New Mapped Paths setting — translate file paths between Windows, macOS, and Linux so the same job can render across a mixed-OS farm
+</Update>
+
+<Update label="1.2.8" description="April 27, 2026">
+RenderFlow 1.2.8 is a stability-focused release with a wide range of fixes across the app.
+
+**Updates:**
+- Job progress bar now shows blue during the preparing phase (e.g. cloud asset upload) to distinguish it from active rendering
+
+**Fixes:**
+- Fixed jobs being marked completed before the render actually finished
+- Fixed slow job stops when one of the active nodes was unresponsive
+- Fixed unnecessary database migrations running on every restart for fresh installs
+- Fixed scheduler not firing events with 23:59 end times, leaving nodes activated indefinitely
+- Fixed scheduler silently ignoring node and spawner events with no target selected
+- Fixed dead nodes not being cleaned up in some cases
+- Fixed multiple frontend crashes caused by job, node, pool, and schedule list updates
+- Fixed crash on cloud job views when task charges were updated
+- Fixed rare crashes during node reconnect
+- Fixed thumbnail preview and other open-file, open-folder, and external link actions silently failing
+- Fixed sporadic forced sign-outs from the cloud
+- Fixed render-element files being re-uploaded as inputs
+- Fixed cloud-rendering compatibility check
+</Update>
+
 <Update label="1.2.7" description="March 25, 2026">
 RenderFlow 1.2.7 adds 3ds Max 2027 support, Blender 5.1 support, Cloud Projects for shared storage, a MongoDB 8 upgrade, and an updated job archive alongside important stability fixes.
 

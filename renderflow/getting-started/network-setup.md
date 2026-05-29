@@ -21,6 +21,12 @@ If your budget allows, **10 Gigabit Ethernet** connections between render nodes 
 
 10 GbE is not a requirement for RenderFlow, but it does help. When 10 or more nodes simultaneously open a scene and load textures, a 1 GbE connection can become a bottleneck. Scene opening times increase, and rendering takes longer because nodes are waiting for data.
 
+### Firewall
+
+RenderFlow automatically adds Windows Defender Firewall exceptions for all its executables during installation. The macOS and Linux installers do the same on their platforms (Application Firewall on macOS, `firewalld` or `ufw` on Linux). For most studios, no additional firewall configuration is needed.
+
+If you use a third-party firewall or corporate security appliance, add exceptions for the [RenderFlow ports](/renderflow/getting-started/requirements#ports) (TCP 44442, 44444 and UDP 44443) and the RenderFlow executables.
+
 ## Shared storage
 
 ### NAS vs. file server
@@ -71,18 +77,48 @@ Many studios use mapped drives for convenience. It's easier to type `S:\` than `
   <img src="/images/renderflow/rf_network_mapped_drives.png" alt="Settings > Mapped Drives showing drive letter to UNC path mappings" />
 </Frame>
 
+## Mixed-OS farms: path mapping
+
+If your farm only uses one operating system, you can skip this section. But the moment a Windows artist submits a job that has to render on a Linux or macOS node — or vice versa — the same share is reached through different paths on each OS:
+
+| Same share, three views | |
+|---|---|
+| Windows | `Z:\projects\shot01` or `\\fileserver\projects\shot01` |
+| macOS | `/Volumes/projects/shot01` |
+| Linux | `/mnt/projects/shot01` |
+
+Scene files baked on Windows contain `Z:\...` paths that a Linux node has no way to resolve on its own. **Mapped Paths** in RenderFlow Settings is how you bridge that gap.
+
+### How it works
+
+Go to **Settings > Mapped Paths** and click **Add new**. For each shared location, give the mapping a name (e.g. *Projects share*) and fill in the path each OS uses to reach it. You only need to fill in the platforms your farm actually uses — a mapping with a single OS path is still useful as a one-way rewrite.
+
+When a job is dispatched to a node, RenderFlow rewrites scene file paths, output paths, and other path properties using the entry whose prefix matches. A Windows artist submitting `Z:\projects\shot01\scene.ma` becomes `/mnt/projects/shot01/scene.ma` on a Linux node automatically.
+
+<Frame caption="Mapped Paths in Settings — name plus Windows, macOS, and Linux columns">
+  <img src="/images/renderflow/rf_settings_mapped_paths.png" alt="Mapped Paths list showing name, Windows, macOS, and Linux path entries" />
+</Frame>
+
+### Matching rules
+
+A few details that matter when designing your mappings:
+
+- **Longest matching prefix wins.** You can have a broad mapping for `\\fileserver\projects` and a more specific one for `\\fileserver\projects\hero-shot` — the specific one takes priority when paths fall under it.
+- **Windows prefixes match case-insensitively** and treat `\` and `/` as equivalent. `Z:\Projects` and `z:/projects` are the same.
+- **macOS and Linux prefixes are case-sensitive**, matching the underlying filesystems.
+
+### Tips for clean cross-OS rendering
+
+- Decide on a canonical mount layout (e.g. `/mnt/projects` on Linux, `/Volumes/projects` on macOS, `Z:\projects` on Windows) and apply it consistently across every node. Mapping translates paths — it can't paper over inconsistent mounts.
+- Prefer UNC paths over drive letters in Windows submissions even when you have Mapped Paths configured. UNC paths are stable across user sessions and survive in service mode without extra setup.
+- Test the pipeline end-to-end with one job before rolling out farm-wide. Submit from a Windows workstation, force the job onto a Linux node, and check that the output lands where you expect.
+
 ## Folder structure
 
 Start simple and expand as your studio grows. A typical structure includes separate areas for scene files, project-specific assets, render output (organized by date), and incoming/outgoing client materials. Keep your project files and your shared asset library (downloaded textures, models, HDRIs, plugin libraries) on separate shares.
 
 
 The key rule: **every file path referenced in a scene must be accessible at the same path on every machine.** If an artist saves a scene that references `\\fileserver\library\textures\wood.jpg`, every render node must be able to reach that file at that exact path.
-
-## Windows Firewall
-
-RenderFlow automatically adds Windows Defender Firewall exceptions for all its executables during installation. For most studios, no additional firewall configuration is needed.
-
-If you use a third-party firewall or corporate security appliance, add exceptions for the [RenderFlow ports](/renderflow/getting-started/requirements#ports) (TCP 44442, 44444 and UDP 44443) and the RenderFlow executables.
 
 ## Workgroup vs. Domain
 

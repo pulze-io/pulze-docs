@@ -15,8 +15,8 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_quickstart_first_job_create.png` — First job submitted and running (`getting-started/quick-start.md`)
 - [x] `rf_quickstart_first_job_running.png` — Full quick start walkthrough — overview/summary image (`getting-started/quick-start.md`)
 - [ ] `rf_render_farm_architecture.png` — Render Farm Architecture — storage, render nodes, RenderFlow server diagram (`getting-started/render-farm-basics.md`)
-- [x] `rf_network_mapped_drives.png` — Mapped Drives settings — drive letter to UNC path mappings (`getting-started/windows-network-setup.md`)
-- [ ] `rf_network_folder_structure.png` — Folder Structure Diagram — example folder structure for a render farm (`getting-started/windows-network-setup.md`)
+- [x] `rf_network_mapped_drives.png` — Mapped Drives settings — drive letter to UNC path mappings (`getting-started/network-setup.md`)
+- [ ] `rf_network_folder_structure.png` — Folder Structure Diagram — example folder structure for a render farm (`getting-started/network-setup.md`)
 - [ ] `rf_vpn_remote_access_diagram.png` — Remote artist → VPN → Office network → Render farm diagram (`getting-started/vpn-remote-access.md`)
 
 ### Jobs
@@ -146,3 +146,43 @@ All images currently using `placehold.co` placeholders that need to be created.
 ### Support
 - [x] `rf_support_error_report_collector.png` — Error Report Collector popup — node and job selection (`support/collecting-logs.md`)
 - [x] `rf_support_job_log_viewer.png` — Job log viewer — render logs with filter and copy controls (`support/collecting-logs.md`)
+
+## 1.3.0 release — new images
+
+### Job Types — new pages
+- [ ] `rf_jobtypes_houdini_shelf.png` — RenderFlow shelf/menu inside Houdini (`job-types/houdini.md`)
+- [ ] `rf_jobtypes_houdini_hda.png` — RenderFlow HDA placed in a network with the Job Settings folder expanded (`job-types/houdini.md`)
+- [ ] `rf_jobtypes_houdini_submitter.png` — Houdini job submitter with a scene loaded and ROP dropdown visible (`job-types/houdini.md`)
+- [ ] `rf_jobtypes_houdini_completed.png` — Completed Houdini job in the Jobs view with thumbnail (`job-types/houdini.md`)
+- [ ] `rf_jobtypes_maya_shelf.png` — RenderFlow shelf button inside Maya (`job-types/maya.md`)
+- [ ] `rf_jobtypes_maya_submitter.png` — Maya job submitter with render layer / engine selection (`job-types/maya.md`)
+- [ ] `rf_jobtypes_maya_completed.png` — Completed Maya job thumbnail (`job-types/maya.md`)
+- [ ] `rf_jobtypes_nuke_menu.png` — Nuke Render menu showing the RenderFlow entry (`job-types/nuke.md`)
+- [ ] `rf_jobtypes_nuke_submitter.png` — Nuke job submitter with `.nk` selected (`job-types/nuke.md`)
+- [ ] `rf_jobtypes_nuke_completed.png` — Completed Nuke comp render thumbnail (`job-types/nuke.md`)
+- [ ] `rf_jobtypes_after_cep.png` — RenderFlow ScriptUI / submit dialog inside After Effects (`job-types/after-effects.md`)
+- [ ] `rf_jobtypes_after_submitter.png` — AE submitter showing the full Render Queue list (`job-types/after-effects.md`)
+- [ ] `rf_jobtypes_after_completed.png` — Completed AE job in the Jobs view (`job-types/after-effects.md`)
+- [ ] `rf_jobtypes_unreal_picker.png` — In-Editor Render Item picker (`job-types/unreal.md`)
+- [ ] `rf_jobtypes_unreal_submitter.png` — Submitter pre-filled from Unreal (`job-types/unreal.md`)
+- [ ] `rf_jobtypes_unreal_completed.png` — Completed Unreal frame range in the Jobs view (`job-types/unreal.md`)
+- [ ] `rf_jobtypes_python_submitter.png` — Python submitter with `.py` selected and the always-visible version picker (`job-types/python.md`)
+- [ ] `rf_jobtypes_shell_submitter.png` — Shell submitter with `.ps1` / `.sh` / `.cmd` selected (`job-types/shell.md`)
+- [ ] `rf_jobtypes_redshift_submitter.png` — Redshift Standalone submitter with a `.rs` file selected (`job-types/redshift-standalone.md`)
+
+### Settings — new
+- [ ] `rf_settings_repository_cleanup.png` — Repository settings showing the Cleanup job folders tool (Scan / Clean buttons and result counts) (`settings/overview.md`)
+
+### Getting Started — new platform install screenshots
+- [ ] `rf_install_macos_finder.png` — Finder showing `/Applications/Pulze/RenderFlow` after install (`getting-started/installation.md`)
+- [ ] `rf_install_macos_terminal.png` — Terminal running `install-macos.sh` successfully (`getting-started/installation.md`)
+- [ ] `rf_install_macos_app.png` — RenderFlow running on macOS (server mode) (`getting-started/installation.md`)
+- [ ] `rf_install_macos_headless.png` — Terminal showing `start.sh --headless` for a node-only install (`getting-started/installation.md`, `getting-started/run-as-a-service.md`)
+- [ ] `rf_install_linux_terminal.png` — Terminal running `install-linux.sh` on Rocky or Ubuntu (`getting-started/installation.md`)
+- [ ] `rf_install_linux_app.png` — RenderFlow node UI running on Linux (`getting-started/installation.md`)
+- [ ] `rf_install_linux_systemd.png` — `systemctl status` showing RenderFlow running headless under systemd (`getting-started/run-as-a-service.md`)
+- [ ] `rf_requirements_os_table.png` — Refreshed OS-support table image (replaces the "Linux/macOS coming soon" row) (`getting-started/requirements.md`)
+
+### Updated existing screenshots
+- [ ] `rf_submitter_context_menu_explorer.png` — Refresh: Windows Explorer right-click context menu now lists the new file types (`.hip`, `.ma`/`.mb`, `.nk`, `.aep`, `.uproject`, `.py`, `.sh`/`.ps1`) (`jobs/submitter.md`)
+- [ ] `rf_submitter_toolbar_3dsmax.png` — Optional refresh if the toolbar layout changed in 1.3.0 (`jobs/submitter.md`)

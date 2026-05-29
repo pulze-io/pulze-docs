@@ -17,7 +17,7 @@ keywords: ['render farm FAQ', 'render farm common questions', 'render farm troub
     Yes. The server and render node can run on the same machine. This is a good way to evaluate RenderFlow before expanding to more machines.
   </Accordion>
   <Accordion title="Does RenderFlow support Mac or Linux?">
-    Not yet, but we are actively working on it. RenderFlow currently runs on Windows only (Windows 10 or later, 64-bit). If you are interested in Mac or Linux support, reach out to [support@pulze.io](mailto:support@pulze.io) and let us know about your setup.
+    Yes. RenderFlow runs on Windows (10, 11, Server 2019+), macOS, and Linux (tested on Rocky Linux 8/9 and Ubuntu; other RHEL- and Debian-based distributions work too). Render nodes can use the optional `--headless` mode on macOS and Linux for service-only installs. See [Installation](/renderflow/getting-started/installation) for the per-platform steps.
   </Accordion>
   <Accordion title="How do render nodes find the server?">
     During setup, you can enter the server address manually, pass it as a command-line argument, set it as an environment variable, or let the node discover the server via network broadcast. See [Installation](/renderflow/getting-started/installation) for details.
@@ -27,15 +27,6 @@ keywords: ['render farm FAQ', 'render farm common questions', 'render farm troub
 ## Licensing
 
 <AccordionGroup>
-  <Accordion title="Do I need a 3ds Max license on render nodes?">
-    No. RenderFlow uses 3ds Max in network rendering mode (the `-server` flag), which does not require an Autodesk license. Just install 3ds Max on the node.
-  </Accordion>
-  <Accordion title="Do I need a Cinema 4D license on render nodes?">
-    Yes. Cinema 4D does not have a free network rendering mode. Each render node needs a valid Cinema 4D license.
-  </Accordion>
-  <Accordion title="What about render engine licenses (V-Ray, Corona)?">
-    For local rendering, you need your own render engine licenses as usual. For [RenderFlow Cloud](/renderflow/cloud-rendering/overview), all render engine and plugin licenses are included.
-  </Accordion>
   <Accordion title="How does RenderFlow licensing work?">
     RenderFlow uses per-node licenses managed through your Pulze account. There is a free tier for monitoring and basic features, and paid tiers for rendering. See [Licensing](/renderflow/getting-started/licensing) for details.
   </Accordion>

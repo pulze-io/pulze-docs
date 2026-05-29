@@ -26,7 +26,7 @@ RenderFlow manages your render farm, from a single workstation to hundreds of no
 </Card>
 
 <Card title="Job Types" icon="cube" href="/renderflow/job-types/3ds-max">
-  Per-application guides for 3ds Max, Blender, Cinema 4D, and more.
+  Per-application guides.
 </Card>
 
 <Card title="Nodes" icon="server" href="/renderflow/nodes/overview">

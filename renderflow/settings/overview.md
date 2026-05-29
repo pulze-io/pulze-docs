@@ -131,12 +131,28 @@ You can view the current path, reset it, or browse for a new location. Every con
   <img src="/images/renderflow/rf_settings_repository.png" alt="Repository settings showing current path with reset and browse buttons" />
 </Frame>
 
+### Cleanup job folders
+
+The Repository section also includes a **Cleanup job folders** tool for finding and removing orphaned job folders on disk — folders that no longer have a matching job in the database (for example, after manually deleting jobs from the database or restoring from a partial backup).
+
+Click **Scan** to count active and archived orphans. RenderFlow shows the totals; click **Clean** and confirm to remove them. Only orphaned folders are touched — anything still referenced by a live or archived job is left alone.
+
 ## Mapped Drives
 
 Network drive mappings ensure that render nodes can access project files stored on network shares. Click **Add New**, select a drive letter, enter the UNC network path, and save. RenderFlow maps these drives automatically on each startup and before each job starts.
 
 <Frame caption="Mapped Drives list with drive letter and UNC path columns">
   <img src="/images/renderflow/rf_settings_mapped_drives.png" alt="Mapped Drives list showing drive letter and UNC path entries" />
+</Frame>
+
+## Mapped Paths
+
+Mapped Paths translate file paths between Windows, macOS, and Linux so the same job can render on any node, regardless of operating system. When a job is sent to a node, RenderFlow rewrites scene files, output paths, and other path properties using the entry whose prefix matches — so a Windows artist submitting `Z:\projects\shot01` can render on a Linux node that sees the same share at `/mnt/projects/shot01`.
+
+Click **Add new**, give the mapping a name (for example, *Projects share*), and fill in the path each OS uses to reach the same location. You only need to fill in the platforms your farm uses — entries with a single OS path are still useful as a one-way rewrite. The longest matching prefix wins, so more specific shares can sit alongside broader ones. Windows prefixes match case-insensitively and treat `\` and `/` as equivalent; macOS and Linux prefixes are case-sensitive.
+
+<Frame caption="Mapped Paths list with name, Windows, macOS, and Linux columns">
+  <img src="/images/renderflow/rf_settings_mapped_paths.png" alt="Mapped Paths list showing name, Windows, macOS, and Linux path entries" />
 </Frame>
 
 ## API Keys

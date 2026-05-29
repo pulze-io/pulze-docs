@@ -9,10 +9,6 @@ keywords: ['3ds Max network rendering', '3ds Max render farm without license', '
 
 3ds Max is the most mature integration in RenderFlow. It supports still image, tiled, and animation rendering, with full scene property detection, asset scanning, [sanity checks](/renderflow/jobs/sanity-checks), and [automatic requirements](/renderflow/jobs/requirements).
 
-<Info>
-**No 3ds Max license required on render nodes.** RenderFlow uses 3ds Max in network rendering mode (the `-server` flag). Render nodes only need 3ds Max installed. You do not need to activate a license or have a paid subscription on those machines.
-</Info>
-
 ## How to submit
 
 There are two ways to submit a 3ds Max job.
@@ -37,4 +33,4 @@ For the full list of supported 3ds Max versions, render engines, and plugins, se
 
 ## Common workflow
 
-The typical 3ds Max workflow is straightforward: set up your scene, make sure all assets are on [shared storage](/renderflow/getting-started/windows-network-setup) using UNC paths, open the Submitter, review the properties and sanity check results, adjust job settings if needed, and submit. Available nodes with the correct software will pick up the job automatically.
+The typical 3ds Max workflow is straightforward: set up your scene, make sure all assets are on [shared storage](/renderflow/getting-started/network-setup) using UNC paths, open the Submitter, review the properties and sanity check results, adjust job settings if needed, and submit. Available nodes with the correct software will pick up the job automatically.

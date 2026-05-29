@@ -64,7 +64,7 @@
               "renderflow/getting-started/licensing",
               "renderflow/getting-started/silent-deploy",
               "renderflow/getting-started/run-as-a-service",
-              "renderflow/getting-started/windows-network-setup",
+              "renderflow/getting-started/network-setup",
               "renderflow/getting-started/vpn-remote-access",
               "renderflow/getting-started/migrating-from-render-manager"
             ]
@@ -88,11 +88,19 @@
             "group": "Job Types",
             "pages": [
               "renderflow/job-types/3ds-max",
-              "renderflow/job-types/scene-manager",
+              "renderflow/job-types/after-effects",
               "renderflow/job-types/blender",
               "renderflow/job-types/cinema-4d",
-              "renderflow/job-types/fusion",
               "renderflow/job-types/corona-dr",
+              "renderflow/job-types/fusion",
+              "renderflow/job-types/houdini",
+              "renderflow/job-types/maya",
+              "renderflow/job-types/nuke",
+              "renderflow/job-types/python",
+              "renderflow/job-types/redshift-standalone",
+              "renderflow/job-types/scene-manager",
+              "renderflow/job-types/shell",
+              "renderflow/job-types/unreal",
               "renderflow/job-types/vray-dr",
               "renderflow/job-types/vray-standalone"
             ]

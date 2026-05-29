@@ -23,4 +23,4 @@ On your own computer, some applications have quick-action buttons next to them. 
 
 ## Refreshing the scan
 
-If you install a new application or plugin on a node after RenderFlow is already running, the software list will not update automatically. Click the **Refresh** button to re-run the scan and update the detected software. You can also trigger this from the [Commands](/renderflow/nodes/commands) context menu using **Refresh Software**.
+If you install a new application or plugin on a node after RenderFlow is already running, the software list will not update automatically. Right-click the node and select **Software > Refresh** to re-run the scan and update the detected software.
