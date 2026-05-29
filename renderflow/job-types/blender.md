@@ -11,9 +11,13 @@ RenderFlow supports Blender rendering with Cycles, EEVEE, and V-Ray for Blender.
 
 ## How to submit
 
-There are two ways to submit a Blender job.
+The Blender [Submitter](/renderflow/jobs/submitter) opens from two places.
 
-**From Blender**, use the RenderFlow addon to open the [Submitter](/renderflow/jobs/submitter) with your current scene selected and properties pre-filled.
+**From Blender**, use the RenderFlow addon panel.
+
+<Frame caption="RenderFlow addon panel in Blender">
+  <img src="/images/renderflow/rf_jobtypes_blender_menu.png" alt="RenderFlow addon panel button in Blender" />
+</Frame>
 
 **From the RenderFlow app**, select the **Blender** template and either browse for a .blend file or pick from a currently open Blender instance. Opening the file and selecting it from the dropdown is strongly recommended, as it gives RenderFlow access to all scene properties.
 
@@ -21,13 +25,15 @@ There are two ways to submit a Blender job.
 Browsing a .blend file on disk will detect the Blender version but will not populate scene properties like frame range, resolution, or output path. If you browse without overriding any properties, the file will render with whatever settings are saved in the scene.
 </Info>
 
-<Frame caption="Blender job submitter">
+However you open it, the Submitter shows your scene with its properties pre-filled.
+
+<Frame caption="The Blender Submitter">
   <img src="/images/renderflow/rf_jobtypes_blender_submitter.png" alt="Blender job submitter showing scene properties" />
 </Frame>
 
 ## Scene properties
 
-When the file is open and selected, the following properties are available: Scene File, Camera, Resolution, Frame range, and Render Output. For still images, the **Tiled** option is available to split a single frame across multiple nodes.
+When the file is open and selected, the following properties are available: Scene File, Camera, Resolution, Frame range, and Render Output.
 
 ## Supported engines
 

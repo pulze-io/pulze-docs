@@ -68,7 +68,7 @@ Once connected, the AI assistant can use these tools to interact with RenderFlow
 |------|-------------|------------|
 | `list_jobs` | List all jobs, optionally filter by status | `status` (optional) |
 | `get_job` | Get job details by name or ID (fuzzy matching) | `query` |
-| `create_job` | Submit a new render job | `name`, `file`, `type`, `host` (required); `frame`, `status`, `priority` (optional) |
+| `create_job` | Submit a new render job | `name`, `file`, `type` (required); `host` (required for all types except `shell`); `frame`, `status`, `priority` (optional) |
 | `control_job` | Start, stop, reset, archive, or delete a job | `query`, `action` (`start`, `stop`, `reset`, `archive`, `delete`) |
 | `update_job` | Update priority, node limit, or pool assignment | `query` (required); `priority`, `limit`, `pool` (optional) |
 

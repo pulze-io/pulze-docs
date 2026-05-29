@@ -131,12 +131,6 @@ You can view the current path, reset it, or browse for a new location. Every con
   <img src="/images/renderflow/rf_settings_repository.png" alt="Repository settings showing current path with reset and browse buttons" />
 </Frame>
 
-### Cleanup job folders
-
-The Repository section also includes a **Cleanup job folders** tool for finding and removing orphaned job folders on disk — folders that no longer have a matching job in the database (for example, after manually deleting jobs from the database or restoring from a partial backup).
-
-Click **Scan** to count active and archived orphans. RenderFlow shows the totals; click **Clean** and confirm to remove them. Only orphaned folders are touched — anything still referenced by a live or archived job is left alone.
-
 ## Mapped Drives
 
 Network drive mappings ensure that render nodes can access project files stored on network shares. Click **Add New**, select a drive letter, enter the UNC network path, and save. RenderFlow maps these drives automatically on each startup and before each job starts.

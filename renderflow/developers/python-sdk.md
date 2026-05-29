@@ -61,6 +61,27 @@ job = rf.jobs.create(IPublicJobCreate(
 rf.jobs.start(job.id)
 ```
 
+The `create` payload is type-specific — the fields accepted depend on the job `type`. Supported types: `3dsmax.render`, `vray.dr`, `corona.dr`, `arnold.render`, `after.render`, `blender.render`, `cinema4d.render`, `keyshot.render`, `maya.render`, `nuke.render`, `houdini.batch`, `houdini.mantra`, `houdini.husk`, `vray_standalone`, `redshift.render`, `unreal`, `fusion.render`, `shell`, and `python`.
+
+```python
+# A Maya job with a render layer, and a Python job run on every node
+rf.jobs.create(IPublicJobCreate(
+    file="C:/projects/shot_010.ma",
+    type="maya.render",
+    host=ISoftwareValue(id=SoftwareId.maya, name="Maya", version="2025"),
+    engine=IEngineValue(id=EngineId.arnold, name="Arnold", version="5.4"),
+    render_layer="beauty",
+    frame="1-240"
+))
+
+rf.jobs.create(IPublicJobCreate(
+    file="C:/scripts/warm_cache.py",
+    type="python",
+    host=ISoftwareValue(id=SoftwareId.python, name="Python", version="3.11"),
+    args="--verbose"
+))
+```
+
 ### Manage jobs
 
 ```python

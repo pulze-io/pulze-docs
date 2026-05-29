@@ -34,7 +34,7 @@ Upgrading from a previous version? Just run the new installer. Your jobs, settin
 
 ### macOS
 
-Download the macOS archive from your Pulze account and unzip it. There is no drag-to-Applications installer yet — you set up RenderFlow by running the bundled `install.sh` script (recommended) or by copying the unzipped folder into place manually.
+Download the macOS archive from your Pulze account and extract it. There is no drag-to-Applications installer yet — you set up RenderFlow by running the bundled `install.sh` script (recommended) or by copying the unzipped folder into place manually.
 
 The recommended path:
 
@@ -59,7 +59,7 @@ Run `install.sh` and `uninstall.sh` as your normal admin user — **do not prefi
 
 ### Linux
 
-Tested on Rocky Linux 8/9 and Ubuntu. Other RHEL- and Debian-based distributions also work. Download the Linux archive, unzip it, and run the bundled `install.sh`:
+Tested on Rocky Linux 8/9 and Ubuntu. Other RHEL- and Debian-based distributions also work. Download the Linux archive, extract it, and run the bundled `install.sh`:
 
 ```bash
 cd ~/Downloads/RenderFlow

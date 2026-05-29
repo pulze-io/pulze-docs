@@ -13,21 +13,21 @@ Silent deployment lets IT administrators install and configure RenderFlow across
 
 ### Windows
 
-Run the installer with the `--silent` flag to install without any UI prompts:
+The Windows download, `renderflow-X.X.X-windows-x64.zip`, is a zip archive. Extract it, then run the installer it contains with the `--silent` flag:
 
 ```bash
-"./renderflow.X.X.X-win.exe" --silent
+renderflow-X.X.X-windows-x64.exe --silent
 ```
 
 RenderFlow installs to `C:\Program Files\Pulze\RenderFlow`. The installer automatically closes any previously running RenderFlow instance before installing.
 
 ### macOS
 
-Unzip the macOS archive and run the bundled install script — it runs end-to-end and prompts for `sudo` when it needs root:
+Extract the macOS archive and run the bundled install script — it runs end-to-end and prompts for `sudo` when it needs root:
 
 ```bash
-unzip renderflow-X.X.X-mac.zip
-./RenderFlow/install.sh
+tar -xzf renderflow-X.X.X-macos-arm64.tar.gz
+./install.sh
 ```
 
 The script copies the app to `/Applications/Pulze/RenderFlow`, adds Application Firewall exceptions, and registers the DCC plugins and scripts. **Do not prefix with `sudo`** — run as the normal admin user. `install.sh` and `uninstall.sh` elevate themselves when required; `start.sh` doesn't need root at all.
@@ -35,8 +35,8 @@ The script copies the app to `/Applications/Pulze/RenderFlow`, adds Application 
 ### Linux
 
 ```bash
-unzip renderflow-X.X.X-linux.zip
-./RenderFlow/install.sh
+tar -xzf renderflow-X.X.X-linux-x64.tar.gz
+./install.sh
 ```
 
 The script copies the app to `/opt/Pulze/RenderFlow`, fixes the `chrome-sandbox` SUID bit, opens the firewall ports (firewalld or ufw), creates `/var/lib/RenderFlow` and `/var/log/RenderFlow`, and registers the DCC plugins and scripts. **Do not prefix with `sudo`** — run as the normal admin user so the per-user `chown` on the data directories points at the right account. `install.sh` and `uninstall.sh` elevate themselves when required; `start.sh` doesn't need root at all.
@@ -137,7 +137,7 @@ For Active Directory environments, deploy with a Computer Startup Script via Gro
 ```batch
 @echo off
 REM Install RenderFlow silently
-"\\server\share\renderflow.X.X.X-win.exe" --silent
+"\\server\share\renderflow-X.X.X-windows-x64.exe" --silent
 
 REM Wait for installation to complete
 timeout /t 30
@@ -154,7 +154,7 @@ A PowerShell equivalent that can be fanned out with `Invoke-Command`:
 
 ```powershell
 param(
-    [string]$InstallerPath = "\\server\share\renderflow.X.X.X-win.exe",
+    [string]$InstallerPath = "\\server\share\renderflow-X.X.X-windows-x64.exe",
     [string]$ServerIP = "192.168.1.100",
     [ValidateSet("server","node","workstation")]
     [string]$Type = "node"
@@ -170,7 +170,7 @@ Start-Process -FilePath $rfsv -ArgumentList "--type=$Type", "--ip=$ServerIP"
 ```powershell
 $nodes = @("RENDER-01", "RENDER-02", "RENDER-03")
 $nodes | ForEach-Object {
-    Invoke-Command -ComputerName $_ -FilePath .\deploy-renderflow.ps1 -ArgumentList "\\server\share\renderflow.X.X.X-win.exe", "192.168.1.100", "node"
+    Invoke-Command -ComputerName $_ -FilePath .\deploy-renderflow.ps1 -ArgumentList "\\server\share\renderflow-X.X.X-windows-x64.exe", "192.168.1.100", "node"
 }
 ```
 
@@ -182,7 +182,7 @@ The same flow works on macOS and Linux through SSH, an MDM (Jamf, Munki, Intune 
 #!/bin/bash
 set -e
 
-ARCHIVE="$1"            # e.g. /mnt/share/renderflow-X.X.X-linux.zip
+ARCHIVE="$1"            # e.g. /mnt/share/renderflow-X.X.X-linux-x64.tar.gz
 SERVER_IP="${2:-192.168.1.100}"
 TYPE="${3:-node}"       # server | node | workstation
 
@@ -190,7 +190,7 @@ TYPE="${3:-node}"       # server | node | workstation
 # install.sh prompts for sudo when it needs root; running it under sudo
 # makes $USER resolve to root and breaks the per-user data-dir chown on Linux.
 WORK=$(mktemp -d)
-unzip -q "$ARCHIVE" -d "$WORK"
+tar -xzf "$ARCHIVE" -C "$WORK"
 "$WORK"/RenderFlow/install.sh
 
 # Persist environment variables (Linux example; on macOS use launchctl setenv or a launchd plist)
@@ -209,7 +209,7 @@ Fan it out with Ansible:
   become: true
   tasks:
     - copy: { src: deploy-renderflow.sh, dest: /tmp/deploy-renderflow.sh, mode: '0755' }
-    - command: /tmp/deploy-renderflow.sh /mnt/share/renderflow-X.X.X-linux.zip 192.168.1.100 node
+    - command: /tmp/deploy-renderflow.sh /mnt/share/renderflow-X.X.X-linux-x64.tar.gz 192.168.1.100 node
 ```
 
 ## Next steps

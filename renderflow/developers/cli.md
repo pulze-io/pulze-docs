@@ -132,17 +132,25 @@ rfcli jobs submit --type=3dsmax.render --host=3dsmax --file=scene.max --resoluti
 
 | Option | Required | Description |
 |--------|----------|-------------|
-| `--type` | Yes | Job type (e.g. `3dsmax.render`, `blender.render`, `cinema4d.render`, `maya.render`, `nuke.render`, `houdini.render`, `aftereffects.render`, `unreal.render`, `python.run`, `shell.run`, `redshift_standalone.render`) |
-| `--host` | Yes | Host application (matches the DCC: `3dsmax`, `blender`, `cinema4d`, `maya`, `nuke`, `houdini`, `aftereffects`, `unreal`, `vray_standalone`, `redshift_standalone`) |
+| `--type` | Yes | Job type. One of: `3dsmax.render`, `vray.dr`, `corona.dr`, `arnold.render`, `after.render`, `blender.render`, `cinema4d.render`, `keyshot.render`, `maya.render`, `nuke.render`, `houdini.batch`, `houdini.mantra`, `houdini.husk`, `vray_standalone`, `redshift.render`, `unreal`, `fusion.render`, `shell`, `python` |
+| `--host` | Yes | Host application ID (matches the DCC: `3dsmax`, `after`, `blender`, `cinema4d`, `fusion`, `houdini`, `keyshot`, `maya`, `nuke`, `unreal`, `vray_standalone`, `redshift_standalone`; for scripts: `cmd`, `bash`, `powershell`, `python`) |
 | `--file` | Yes | Path to the scene file (unless `--json-file` is used) |
-| `--name` | No | Custom job name |
+| `--name` | No | Custom job name (defaults to the file basename) |
 | `--version` | No | Host application version (e.g. `2026` for 3ds Max, `15.1` for Nuke) |
 | `--resolution` | No | Output resolution (e.g. `1920x1080`, `3840x2160`) |
 | `--output` | No | Output file path |
-| `--frame` | No | Frame range (e.g. `1`, `1-100`, `1,3-5,15`) |
+| `--frame` | No | Single frame (`1`), range (`1-100`), or list (`1,3-5,15`) |
+| `--camera` | No | Active camera name |
+| `--args` | No | Additional command-line arguments (Arnold, Nuke, Houdini, V-Ray Standalone, Redshift, Fusion, Shell, Python) |
 | `--render-layer` | No | Maya render layer name |
+| `--rop-node` | No | Houdini ROP node path (e.g. `/out/mantra1`) |
+| `--render-queue-item` | No | After Effects Render Queue item — composition name or 1-based index |
+| `--level-sequence` | No | Unreal Level Sequence asset path |
+| `--mrq-preset` | No | Unreal Movie Render Queue preset path |
+| `--tiled` | No | Enable tiled rendering (3ds Max, Windows only) |
+| `--distributed` | No | Enable distributed rendering (V-Ray/Corona DR) |
 | `--priority` | No | Job priority (0-100, default: 25) |
-| `--status` | No | Initial job status |
+| `--status` | No | Initial job status: `pending` (default) or `suspended` |
 | `--dependencies` | No | List of job IDs this job depends on |
 | `--nodes` | No | List of node IDs to whitelist |
 | `-i`, `--interactive` | No | Open submission wizard GUI |

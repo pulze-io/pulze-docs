@@ -11,8 +11,22 @@ keywords: ['Houdini render farm', 'Houdini network rendering', 'Mantra render fa
 The Houdini integration is in **Beta**.
 </Warning>
 
-<Note>
-Detailed documentation for the Houdini job types is coming soon.
-</Note>
+RenderFlow renders Houdini through three job templates: **Houdini** for a full `.hip` scene driven by a ROP, **Mantra** for pre-cached IFD sequences, and **Husk** for USD (Solaris) renders. Husk can delegate to Karma, or any USD-compatible engine.
 
-In the meantime, see [Supported Apps](/renderflow/getting-started/supported-apps) for supported Houdini versions.
+## How to submit
+
+You can open the Houdini [Submitter](/renderflow/jobs/submitter) two ways.
+
+**From Houdini**, place the **RenderFlow ROP** (shipped as an HDA) into your network and submit from it.
+
+<Frame caption="RenderFlow ROP in a Houdini network">
+  <img src="/images/renderflow/rf_jobtypes_houdini_hda.png" alt="RenderFlow ROP node placed in a Houdini network" />
+</Frame>
+
+**From the RenderFlow app**, go to Jobs > Create and pick the template for your workflow: **Houdini** for a .hip scene, **Mantra** for an IFD sequence, or **Husk** for a USD file.
+
+Both entry points open the same Submitter, where you confirm the workflow, set the frame range, and submit:
+
+<Frame caption="The Houdini Submitter">
+  <img src="/images/renderflow/rf_jobtypes_houdini_submitter.png" alt="Houdini job submitter with template and file selection" />
+</Frame>

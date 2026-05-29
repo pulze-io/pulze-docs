@@ -68,6 +68,7 @@ Render farm management software. Submit jobs, manage nodes, monitor progress, an
 #### Job Types
 - 3ds Max: /renderflow/job-types/3ds-max
 - After Effects: /renderflow/job-types/after-effects
+- Arnold: /renderflow/job-types/arnold
 - Blender: /renderflow/job-types/blender
 - Cinema 4D: /renderflow/job-types/cinema-4d
 - Corona DR: /renderflow/job-types/corona-dr
@@ -76,7 +77,7 @@ Render farm management software. Submit jobs, manage nodes, monitor progress, an
 - Maya: /renderflow/job-types/maya
 - Nuke: /renderflow/job-types/nuke
 - Python: /renderflow/job-types/python
-- Redshift Standalone: /renderflow/job-types/redshift-standalone
+- Redshift: /renderflow/job-types/redshift
 - Scene Manager: /renderflow/job-types/scene-manager
 - Shell: /renderflow/job-types/shell
 - Unreal Engine (Beta): /renderflow/job-types/unreal

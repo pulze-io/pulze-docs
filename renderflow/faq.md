@@ -19,6 +19,12 @@ keywords: ['render farm FAQ', 'render farm common questions', 'render farm troub
   <Accordion title="Does RenderFlow support Mac or Linux?">
     Yes. RenderFlow runs on Windows (10, 11, Server 2019+), macOS, and Linux (tested on Rocky Linux 8/9 and Ubuntu; other RHEL- and Debian-based distributions work too). Render nodes can use the optional `--headless` mode on macOS and Linux for service-only installs. See [Installation](/renderflow/getting-started/installation) for the per-platform steps.
   </Accordion>
+  <Accordion title="Can I mix Windows, macOS, and Linux machines in one farm?">
+    Yes. A server on any OS can manage nodes on any other OS. Use [Mapped Paths](/renderflow/settings/overview#mapped-paths) so the repository, scene, and output paths translate between platforms. Per-job asset path remapping is still in beta, so for production keep each individual job on a single OS.
+  </Accordion>
+  <Accordion title="Can one job render across nodes of different operating systems?">
+    Repository and output paths are translated through [Mapped Paths](/renderflow/settings/overview#mapped-paths), but asset paths baked inside a scene are not yet remapped per job. For now, keep a single job on one operating system and split mixed-OS work into separate jobs.
+  </Accordion>
   <Accordion title="How do render nodes find the server?">
     During setup, you can enter the server address manually, pass it as a command-line argument, set it as an environment variable, or let the node discover the server via network broadcast. See [Installation](/renderflow/getting-started/installation) for details.
   </Accordion>

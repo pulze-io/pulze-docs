@@ -43,6 +43,38 @@ The connection between render nodes and storage is the most performance-critical
 
 Invest in fast storage and fast networking before adding more render nodes. A farm with fewer nodes and fast storage will often outperform a farm with more nodes on slow storage.
 
+### Mounting the share on macOS and Linux
+
+Windows reaches a share over SMB using its UNC path with no extra setup. On macOS and Linux render nodes, NFS is the usual choice, and you mount the share to a local path first.
+
+Linux (NFS):
+
+```bash
+sudo mkdir -p /mnt/projects
+sudo mount -t nfs fileserver:/projects /mnt/projects
+```
+
+macOS (NFS):
+
+```bash
+sudo mkdir -p /Volumes/projects
+sudo mount_nfs -o resvport fileserver:/projects /Volumes/projects
+```
+
+The `resvport` option is required on macOS, which connects from a reserved source port. If your storage only serves SMB, Linux can mount it with CIFS instead:
+
+```bash
+sudo mount -t cifs //fileserver/projects /mnt/projects -o username=renderuser,password=secret
+```
+
+Add the mount to `/etc/fstab` on Linux (or a macOS automount entry) so it survives reboots, then confirm every node can reach the share before submitting:
+
+```bash
+ls /mnt/projects            # Linux
+ls /Volumes/projects        # macOS
+dir \\fileserver\projects   # Windows
+```
+
 ## UNC paths
 
 UNC (Universal Naming Convention) paths are the most reliable way to reference files on shared storage:

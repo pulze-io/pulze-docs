@@ -14,15 +14,15 @@ The Statistics section is a collection of dashboards and charts that give you in
 Statistics are calculated and updated once per hour. Recent activity may not appear immediately.
 </Info>
 
+<Frame caption="The Statistics dashboards overview">
+  <img src="/images/renderflow/rf_stats_overview.png" alt="RenderFlow Statistics overview showing the available dashboards and charts" />
+</Frame>
+
 ## Available dashboards
 
 ### Node Utilization Timeline
 
 A timeline showing render sessions per node. Each line represents a period when a node was working on a job. You can filter by individual node, sort by name or duration, and set a date range using presets (1 hour to 7 days) or a custom range. This is helpful for reviewing weekend render sessions or verifying which machines were active during a specific period.
-
-<Frame caption="Node Utilization Timeline showing render sessions across the farm">
-  <img src="/images/renderflow/rf_stats_node_utilization_timeline.png" alt="Timeline chart showing render sessions per node over a date range" />
-</Frame>
 
 ### Node Utilization %
 
@@ -39,10 +39,6 @@ The same breakdown, but grouped by user. See who is submitting the most jobs and
 ### Node Render Time
 
 A ranking of nodes by total render time within a time range, including the number of jobs and tasks each node processed. The top of the list shows your most utilized machines. The bottom is equally interesting: under-utilized nodes may have errors, hardware problems, or simply be misconfigured.
-
-<Frame caption="Node Render Time ranking showing most and least utilized machines">
-  <img src="/images/renderflow/rf_stats_node_render_time_ranking.png" alt="Bar chart ranking nodes by total render time" />
-</Frame>
 
 ### User Render Time
 

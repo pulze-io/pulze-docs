@@ -53,7 +53,7 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 
 **Render Node.** A computer dedicated to rendering. It does not need a monitor or active user session.
 
-**Render Queue Item.** An item in After Effects' Render Queue. RenderFlow submits AE jobs by picking the queue item's 1-based position, which maps onto `aerender -rqindex N`.
+**Render Queue Item.** An item in After Effects' Render Queue. RenderFlow submits an AE job by selecting a Render Queue item by name.
 
 **ROP.** Render Output Driver. A Houdini node that drives a render — for example a Mantra ROP, a USD Render ROP, or a Karma ROP.
 
