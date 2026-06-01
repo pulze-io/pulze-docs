@@ -1,10 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:mintlify.com)",
-      "WebSearch",
-      "WebFetch(domain:www.mintlify.com)",
-      "Read(//c/Dev/pulze-renderflow/packages/sdks/**)"
+
     ]
   }
 }
