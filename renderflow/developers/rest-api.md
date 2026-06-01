@@ -141,24 +141,47 @@ print(f"{job['name']} - {job['status']} ({job['progress']}%)")
 
 Creates a new render job.
 
-**Request body**
+The request body is a **discriminated union keyed on `type`** — the fields accepted depend on the job type you submit. All job types share a common set of base fields, then add their own type-specific fields (frame range, camera, output paths, render layer, etc.).
+
+**Supported `type` values**
+
+`3dsmax.render`, `vray.dr`, `corona.dr`, `arnold.render`, `after.render`, `blender.render`, `cinema4d.render`, `keyshot.render`, `maya.render`, `nuke.render`, `houdini.batch`, `houdini.mantra`, `houdini.husk`, `vray_standalone`, `redshift.render`, `unreal`, `fusion.render`, `shell`, `python`.
+
+**Base fields (all types)**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | Yes | Job name |
-| `file` | string | Yes | Path to the scene file |
-| `type` | TaskType | Yes | Job type (e.g., `3dsmax.render`, `blender.render`, `cinema4d.render`) |
-| `status` | string | Yes | Initial status: `pending` or `suspended` |
-| `host` | object | Yes | Host application - `{ id, name, version }` |
+| `type` | TaskType | Yes | Job type — one of the values above |
+| `file` | string | Yes | Path to the scene/project file. Required even for interactive submissions |
+| `host` | object | Yes\* | Host application - `{ id, name, version }`. Optional for `shell` jobs |
+| `name` | string | No | Display name. Defaults to the file basename when omitted |
 | `engine` | object | No | Render engine - `{ id, name, version }` |
 | `plugins` | array | No | Required plugins - `[{ id, name, version }]` |
-| `resolution` | string | No | Output resolution (e.g., `1920x1080`) |
-| `output` | array | No | Output paths - `[{ type, enabled, path }]` |
-| `frame` | string | No | Frame range (e.g., `1-100`) |
-| `pool_id` | string | No | Target pool ID |
+| `status` | string | No | Initial status: `pending` (default) or `suspended` |
 | `priority` | number | No | Priority (0-100, default: 25) |
 | `dependencies` | string[] | No | Job IDs this job depends on |
 | `nodes` | string[] | No | Whitelisted node IDs |
+| `pool_id` | string | No | Target pool ID |
+| `interactive` | object | No | Open the submitter pre-filled instead of creating headless - `{ env, port, pid }` |
+
+**Type-specific fields**
+
+| Job type(s) | Additional fields |
+|-------------|-------------------|
+| `3dsmax.render` | `camera`, `frame`, `resolution`, `tiled` (`boolean` or `{ tiles_x, tiles_y }`), `output` |
+| `vray.dr`, `corona.dr` | `camera`, `frame`, `resolution`, `output`, `distributed` |
+| `arnold.render`, `vray_standalone` | `camera`, `frame`, `resolution`, `output`, `args` |
+| `blender.render` | `camera`, `frame`, `resolution`, `output` |
+| `cinema4d.render` | `frame`, `resolution`, `output` |
+| `maya.render` | `render_layer`, `camera`, `frame`, `resolution`, `output` |
+| `keyshot.render` | `frame`, `output` |
+| `after.render` | `render_queue_item`, `frame` |
+| `nuke.render`, `redshift.render`, `fusion.render`, `houdini.mantra`, `houdini.husk` | `frame`, `args` |
+| `houdini.batch` | `rop_node`, `frame`, `args` |
+| `unreal` | `render_item` |
+| `shell`, `python` | `args` |
+
+Output paths use `[{ type, enabled, path }]`.
 
 <CodeGroup>
 ```bash curl

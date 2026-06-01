@@ -27,7 +27,7 @@ Avoid running the server on a machine that also renders heavy jobs. When a rende
 
 ### Render nodes and workstations
 
-There are no strict hardware requirements for render nodes. Any Windows machine that can run your 3D application can be a render node. More CPU cores, more RAM, and faster storage all translate to faster renders.
+There are no strict hardware requirements for render nodes. Any Windows, macOS, or Linux machine that can run your 3D application can be a render node. More CPU cores, more RAM, and faster storage all translate to faster renders.
 
 A few things to keep in mind:
 
@@ -39,11 +39,9 @@ A few things to keep in mind:
 
 | OS | Status |
 |----|--------|
-| Windows 10 | Supported |
-| Windows 11 | Supported |
-| Windows Server 2019+ | Supported |
-| Linux | Coming soon |
-| macOS | Coming soon |
+| Windows 10, 11, and Server 2019+ | Supported |
+| macOS 13 (Ventura) and later | Supported |
+| Linux (Rocky 8/9, Ubuntu, and other RHEL/Debian-based distributions) | Supported |
 
 ## Network
 
@@ -59,12 +57,11 @@ RenderFlow uses four TCP/UDP ports. All must be open between the server and ever
 
 ### Firewall
 
-RenderFlow automatically adds Windows Firewall exceptions for its executables during installation:
+RenderFlow's installer configures the system firewall for you:
 
-- `RenderFlow.exe` (user interface)
-- `rfsv.exe` (background service)
-- `rfpm.exe` (process manager)
-- `mongod.exe`, `mongosh.exe`, `mongodump.exe`, `mongorestore.exe` (database)
+- **Windows** — adds program rules for `RenderFlow.exe` (user interface), `rfsv.exe` (background service), `rfpm.exe` (process manager), and the bundled `mongod.exe`, `mongosh.exe`, `mongodump.exe`, and `mongorestore.exe` binaries.
+- **macOS** — adds Application Firewall exceptions for `rfsv` and the RenderFlow app. macOS's firewall is per-process and is off by default, so no per-port rules are needed.
+- **Linux** — opens ports `44442/tcp`, `44443/udp`, and `44444/tcp` through `firewalld` (on RHEL-based distributions like Rocky and Fedora) or `ufw` (on Debian-based distributions like Ubuntu). On other firewalls the ports must be opened manually.
 
 If you use a third-party firewall or corporate security policy, you'll need to add these exceptions manually along with the ports listed above.
 

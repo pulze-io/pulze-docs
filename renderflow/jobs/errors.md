@@ -51,7 +51,7 @@ In the **Job details** panel, errors appear at the top of the detail view. You c
 
 ## Render logs
 
-Detailed logs for each render session are stored on the render node at `C:\ProgramData\RenderFlow\logs`. These logs are not transferred automatically. When you open a node's log in the job detail panel, RenderFlow fetches it on demand from the node.
+Detailed logs for each render session are stored on the render node in RenderFlow's logs folder, which varies by operating system (see [Collecting Logs](/renderflow/support/collecting-logs#collecting-logs-manually)). These logs are not transferred automatically. When you open a node's log in the job detail panel, RenderFlow fetches it on demand from the node.
 
 <Frame caption="Render log viewer with filter and copy controls">
   <img src="/images/renderflow/rf_support_job_log_viewer.png" alt="Job render log viewer showing render output with filter and copy controls" />

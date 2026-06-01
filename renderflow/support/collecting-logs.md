@@ -23,15 +23,21 @@ Press **Collect** and RenderFlow will gather all relevant information and create
 
 ## Collecting logs manually
 
-If the Error Report Collector is not available or does not work in your situation, you can collect log files manually from the following locations on each render node and workstation.
+If the Error Report Collector is not available or does not work in your situation, you can collect log files manually from each render node and workstation. RenderFlow writes its logs to the data folder, which differs by operating system:
 
-| Description | Path | Filename |
-|-------------|------|----------|
-| General log | `C:\ProgramData\RenderFlow\logs\` | `service-YYYY-MM-DD.log` |
-| Database log | `C:\ProgramData\RenderFlow\logs\` | `database-YYYY-MM-DD.log` |
-| Job logs | `C:\ProgramData\RenderFlow\logs\` | `<jobid>.log` |
-| 3ds Max RenderFlow log | `%TEMP%\` | `RenderFlowMax.YYYYMMDD.log` |
-| 3ds Max native log | `%LOCALAPPDATA%\Autodesk\3dsMax\2025 - 64bit\ENU\Network\` | `Max.log` |
+| OS | Logs folder |
+|----|-------------|
+| Windows | `C:\ProgramData\RenderFlow\logs\` |
+| macOS | `~/Library/Logs/RenderFlow/` |
+| Linux | `/var/log/RenderFlow/` |
+
+The same log files are written on every platform:
+
+| Description | Filename |
+|-------------|----------|
+| General service log | `service-YYYY-MM-DD.log` |
+| Database log | `database-YYYY-MM-DD.log` |
+| Job logs | `<jobid>.log` |
 
 Copy the relevant files, review them, or send them directly to support.
 

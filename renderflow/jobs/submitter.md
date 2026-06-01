@@ -19,13 +19,13 @@ There are several ways to open the Submitter.
   <img src="/images/renderflow/rf_submitter_create_button.png" alt="Create button in the RenderFlow Jobs view" />
 </Frame>
 
-**From inside a supported application.** In 3ds Max, Blender, and Cinema 4D, click the RenderFlow button in the toolbar. The Submitter opens with the current scene already selected and all properties pre-filled from your live session.
+**From inside a supported application.** In 3ds Max, Blender, Cinema 4D, Maya, Houdini, Nuke, After Effects, and Unreal Engine, use the RenderFlow toolbar button, shelf entry, menu entry, or plugin panel. The Submitter opens with the current scene already selected and all properties pre-filled from your live session.
 
 <Frame caption="RenderFlow toolbar button in 3ds Max">
   <img src="/images/renderflow/rf_submitter_toolbar_3dsmax.png" alt="RenderFlow submit button in the 3ds Max toolbar" />
 </Frame>
 
-**Right-click a file in Windows Explorer.** Supported file types (`.max`, `.blend`, `.c4d`, `.vrscene`, `.comp`) show a **Submit to RenderFlow** option in the Windows context menu. Selecting it opens the Submitter with the file already loaded. This is the fastest way to submit a job without opening RenderFlow first.
+**Right-click a file in Windows Explorer.** The installer registers a **Submit to RenderFlow** entry for these file types: `.max`, `.vrscene`, `.comp`, `.nk`, `.rs`, `.aep`, `.hip`, `.hipnc`, `.hiplc`, `.ifd`, `.usd`, `.usda`, `.usdc`, `.usdz`. Selecting it opens the Submitter with the file already loaded — the fastest way to submit a job without opening RenderFlow first. Native files from Blender, Cinema 4D, Maya, and Unreal don't have an Explorer entry; submit those from inside the application or by drag-and-drop.
 
 <Frame caption="Submit to RenderFlow in the Windows right-click context menu">
   <img src="/images/renderflow/rf_submitter_context_menu_explorer.png" alt="Windows Explorer right-click context menu showing Submit to RenderFlow option" />

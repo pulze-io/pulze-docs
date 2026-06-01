@@ -25,7 +25,7 @@ RenderFlow lets you control nodes remotely from the Nodes table. Select one or m
 
 **Edit Tags** - opens the tag editor for the selected nodes. See [Tags](/renderflow/nodes/tags).
 
-**Refresh Software** - re-runs the software scan on the node. Use this after installing a new application or plugin so RenderFlow picks up the change.
+**Software > Refresh** - re-runs the software scan on the node. Use this after installing a new application or plugin so RenderFlow picks up the change.
 
 **Restart** - restarts the RenderFlow service on the node.
 

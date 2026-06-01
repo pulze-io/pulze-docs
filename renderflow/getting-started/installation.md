@@ -12,23 +12,74 @@ keywords: ['how to install render farm manager', 'render farm manager setup', 'r
 1. Review the [Requirements](/renderflow/getting-started/requirements) page to confirm your hardware, OS, and network are ready.
 2. Create a [Pulze account](https://www.pulze.io) if you don't have one. You'll need it to download the installer and log in during server setup.
 3. Close all 3D applications (3ds Max, Blender, Cinema 4D, etc.) on the machine you're installing on. The installer detects running apps and will ask you to close them.
-4. Download the installer from your [Pulze account](https://www.pulze.io/account/downloads?sku=pulze_renderflow).
+4. Download the installer from your [Pulze account](https://account.pulze.io/products/renderflow/downloads).
 
 ## Running the installer
 
-[Download](https://www.pulze.io/account/downloads?sku=pulze_renderflow) the latest version of RenderFlow from your Pulze account. RenderFlow uses a single installer for all machine types: server, node, and workstation. You choose the role after installation.
+[Download](https://account.pulze.io/products/renderflow/downloads) the latest version of RenderFlow from your Pulze account. RenderFlow uses a single installer for all machine types: server, node, and workstation. You choose the role after installation.
 
-The installer:
+### Windows
+
+The Windows installer:
 
 - Auto-detects and closes any previous RenderFlow version before installing
 - Installs to `C:\Program Files\Pulze\RenderFlow` (not configurable)
-- Stores data in `C:\PrograData\RenderFlow` (logs, config, database)
+- Stores data in `C:\ProgramData\RenderFlow` (logs, config, database)
 - Bundles MongoDB and Visual C++ Redistributable. No separate installation needed.
 - Installs application plugins (3ds Max, Blender, etc.) on first launch
 
 <Info>
-Upgrading from a previous version? Just run the new installer. Your jobs, settings, and database are preserved. They live in `C:\PrograData\RenderFlow`, which the installer never touches.
+Upgrading from a previous version? Just run the new installer. Your jobs, settings, and database are preserved. They live in `C:\ProgramData\RenderFlow`, which the installer never touches.
 </Info>
+
+### macOS
+
+Download the macOS archive from your Pulze account and extract it. There is no drag-to-Applications installer yet — you set up RenderFlow by running the bundled `install.sh` script (recommended) or by copying the unzipped folder into place manually.
+
+The recommended path:
+
+```bash
+cd ~/Downloads/RenderFlow
+./install.sh
+```
+
+The script:
+
+- Copies the app to `/Applications/Pulze/RenderFlow` (clearing any previous install in that location)
+- Marks `rfsv`, `rfcli`, and the bundled MongoDB / `rclone` / `rfpm` binaries executable
+- Clears the Gatekeeper quarantine flag on the install folder
+- Adds per-process Application Firewall exceptions for `rfsv` and the RenderFlow app (macOS firewall is per-process rather than per-port)
+- Runs `rfsv install` to register the DCC plugins and scripts
+
+To start RenderFlow afterwards, run `/Applications/Pulze/RenderFlow/start.sh`. For dedicated render nodes that don't need the UI, use `start.sh --headless` (see [Run as a service](/renderflow/getting-started/run-as-a-service)).
+
+<Note>
+Run `install.sh` and `uninstall.sh` as your normal admin user — **do not prefix them with `sudo`**. The scripts call `sudo` internally when they need root (writing to `/Applications`, Application Firewall rules). Running the whole script under `sudo` makes `$USER` resolve to `root`, which breaks per-user paths. `start.sh` doesn't need root at all.
+</Note>
+
+### Linux
+
+Tested on Rocky Linux 8/9 and Ubuntu. Other RHEL- and Debian-based distributions also work. Download the Linux archive, extract it, and run the bundled `install.sh`:
+
+```bash
+cd ~/Downloads/RenderFlow
+./install.sh
+```
+
+The script:
+
+- Copies the app to `/opt/Pulze/RenderFlow`
+- Sets the SUID bit on `chrome-sandbox` (required by Electron)
+- Marks `rfsv`, `rfcli`, the bundled MongoDB binaries, `rclone`, and `rfpm` executable
+- Creates `/var/lib/RenderFlow` (runtime state) and `/var/log/RenderFlow` (logs), both owned by your user
+- Opens ports `44442/tcp`, `44443/udp`, and `44444/tcp` through `firewalld` (RHEL-based) or `ufw` (Debian-based)
+- Runs `rfsv install` to register the DCC plugins and scripts
+
+To start RenderFlow, run `/opt/Pulze/RenderFlow/start.sh`. For dedicated render nodes, use `start.sh --headless`.
+
+<Note>
+Run `install.sh` and `uninstall.sh` as your normal admin user — **do not prefix them with `sudo`**. The scripts prompt for `sudo` themselves when they need root (`/opt`, `/var/lib`, `/var/log`, the system firewall, `chrome-sandbox` SUID). Running the whole script under `sudo` makes `$USER` resolve to `root`, which breaks the per-user `chown` on the data directories. `start.sh` doesn't need root at all — it's safe in user-level service managers (systemd user units, launchd LaunchAgents).
+</Note>
 
 ## Configuring the server
 
@@ -52,7 +103,7 @@ Click **Login with Browser**. Your default browser will open for authentication.
 
 ### 3. Configure licensing
 
-RenderFlow checks your Pulze account for available licenses. If you haven't purchased licenses yet or need to manage your subscription, do that at [pulze.io](https://www.pulze.io/account/licenses?sku=pulze_renderflow) before continuing. You have several options:
+RenderFlow checks your Pulze account for available licenses. If you haven't purchased licenses yet or need to manage your subscription, do that at [pulze.io](https://account.pulze.io/products/renderflow/licenses) before continuing. You have several options:
 
 - **Automatic** (recommended). All RenderFlow licenses on your account are automatically reserved and used by this server.
 - **Manual**: you choose how many of your available licenses this server should use. Useful when splitting licenses across multiple servers.
@@ -80,6 +131,10 @@ Browse to a folder on your NAS or file server. You can use a UNC path (e.g., `\\
 <Warning>
 The Repository folder must be accessible from every connected machine. If a node can't reach it, jobs will fail to start.
 </Warning>
+
+<Note>
+If your farm mixes operating systems (e.g. Windows artists submitting to macOS or Linux render nodes), the same share will be reached through different paths on each OS. Set up [Mapped Paths](/renderflow/settings/overview#mapped-paths) in Settings so RenderFlow can translate scene file, output, and asset paths between platforms automatically.
+</Note>
 
 ### 5. Done
 
@@ -128,9 +183,11 @@ This is useful for queuing up multiple render jobs (overnight renders, animation
 
 ## Uninstallation
 
-Use **Windows Settings > Apps > RenderFlow** or the Control Panel to uninstall. The installer removes the application files from `C:\ProgramData` but preserves the data folder at `C:\PrograData\RenderFlow`.
+**Windows.** Use **Windows Settings > Apps > RenderFlow** or the Control Panel to uninstall. The installer removes the application files from `C:\Program Files\Pulze\RenderFlow` but preserves the data folder at `C:\ProgramData\RenderFlow`. To perform a complete removal (including all jobs, logs, config, and database), manually delete `C:\ProgramData\RenderFlow` after uninstalling.
 
-To perform a complete removal (including all jobs, logs, config, and database), manually delete the `C:\PrograData\RenderFlow` folder after uninstalling.
+**macOS.** Run `/Applications/Pulze/RenderFlow/uninstall.sh` (as your admin user, not with `sudo` — the script elevates internally). It stops any running RenderFlow processes, runs `rfsv cleanup` to remove the DCC plugins and scripts, removes the Application Firewall exceptions, and deletes `/Applications/Pulze/RenderFlow`.
+
+**Linux.** Run `/opt/Pulze/RenderFlow/uninstall.sh` (as your admin user, not with `sudo`). It stops the processes, runs `rfsv cleanup`, removes the firewall rules, and deletes `/opt/Pulze/RenderFlow`, `/var/lib/RenderFlow`, and `/var/log/RenderFlow`.
 
 ## Troubleshooting
 

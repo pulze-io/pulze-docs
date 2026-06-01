@@ -14,10 +14,7 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_quickstart_node_discover.png` — Node connection via Discover (`getting-started/quick-start.md`)
 - [x] `rf_quickstart_first_job_create.png` — First job submitted and running (`getting-started/quick-start.md`)
 - [x] `rf_quickstart_first_job_running.png` — Full quick start walkthrough — overview/summary image (`getting-started/quick-start.md`)
-- [ ] `rf_render_farm_architecture.png` — Render Farm Architecture — storage, render nodes, RenderFlow server diagram (`getting-started/render-farm-basics.md`)
-- [x] `rf_network_mapped_drives.png` — Mapped Drives settings — drive letter to UNC path mappings (`getting-started/windows-network-setup.md`)
-- [ ] `rf_network_folder_structure.png` — Folder Structure Diagram — example folder structure for a render farm (`getting-started/windows-network-setup.md`)
-- [ ] `rf_vpn_remote_access_diagram.png` — Remote artist → VPN → Office network → Render farm diagram (`getting-started/vpn-remote-access.md`)
+- [x] `rf_network_mapped_drives.png` — Mapped Drives settings — drive letter to UNC path mappings (`getting-started/network-setup.md`)
 
 ### Jobs
 - [x] `rf_submitter_create_button.png` — Create button and Ctrl+N in Jobs view (`jobs/submitter.md`)
@@ -87,7 +84,6 @@ All images currently using `placehold.co` placeholders that need to be created.
 ### Cloud Rendering
 - [x] `rf_cloud_waitlist_form.png` — Waitlist form in RenderFlow — Cloud waitlist form inside the app (`cloud-rendering/request-access.md`)
 - [x] `rf_cloud_request_access.png` — Request Access page — Cloud beta request access screen (`cloud-rendering/request-access.md`)
-- [ ] `rf_cloud_jobs_table.png` — Cloud and local jobs in same table — job monitoring with cloud + local jobs (`cloud-rendering/overview.md`)
 - [x] `rf_cloud_templates.png` — Cloud job templates in the Submitter (`cloud-rendering/overview.md`)
 - [x] `rf_cloud_submit.png` — Cloud job submission with credits and settings (`cloud-rendering/overview.md`)
 - [x] `rf_cloud_job_assets.png` — Asset upload modal during cloud job submission (`cloud-rendering/overview.md`)
@@ -112,8 +108,7 @@ All images currently using `placehold.co` placeholders that need to be created.
 - [x] `rf_software_analytics_table.png` — Software Analytics comparison table — Match, Missing, Higher, Lower states (`software-analytics/overview.md`)
 
 ### Statistics
-- [x] `rf_stats_node_utilization_timeline.png` — Node Utilization Timeline — render sessions per node over a date range (`statistics/overview.md`)
-- [x] `rf_stats_node_render_time_ranking.png` — Node Render Time ranking — bar chart ranking nodes by total render time (`statistics/overview.md`)
+- [x] `rf_stats_overview.png` — Statistics overview (single combined view replacing the separate timeline and ranking charts) (`statistics/overview.md`)
 
 ### Scheduler
 - [x] `rf_scheduler_weekly_calendar.png` — Scheduler weekly calendar — color-coded events for node activation/suspension/restarts (`scheduler/overview.md`)
@@ -146,3 +141,40 @@ All images currently using `placehold.co` placeholders that need to be created.
 ### Support
 - [x] `rf_support_error_report_collector.png` — Error Report Collector popup — node and job selection (`support/collecting-logs.md`)
 - [x] `rf_support_job_log_viewer.png` — Job log viewer — render logs with filter and copy controls (`support/collecting-logs.md`)
+
+## 1.3.0 release — new images
+
+### Job Types — new pages
+
+Apps with an in-app submit entry point (3ds Max, Blender, Cinema 4D, Maya, Houdini, Nuke, After Effects, Unreal) get two shots: the in-app button/menu (so users know what to look for) plus the RenderFlow submitter. The script and standalone types (Python, Shell, Redshift, Arnold) only need the submitter. The 3ds Max, Blender, and Cinema 4D submitter shots already existed; their in-app shots and everything else here were delivered in `update_1.3` and copied into `images/renderflow/`.
+
+- [x] `rf_jobtypes_3dsmax_menu.png` — In 3ds Max: the RenderFlow button in the toolbar (`job-types/3ds-max.md`)
+- [x] `rf_jobtypes_blender_menu.png` — In Blender: the RenderFlow addon panel button (`job-types/blender.md`)
+- [x] `rf_jobtypes_cinema4d_menu.png` — In Cinema 4D: the RenderFlow submit menu (`job-types/cinema-4d.md`)
+- [x] `rf_jobtypes_maya_menu.png` — In Maya: the **Pulze** menu showing **Submit to RenderFlow** (`job-types/maya.md`)
+- [x] `rf_jobtypes_maya_submitter.png` — Maya job submitter with render engine / render layer selection (`job-types/maya.md`)
+- [x] `rf_jobtypes_houdini_hda.png` — In Houdini: the **RenderFlow ROP** (HDA) placed in a network (`job-types/houdini.md`)
+- [x] `rf_jobtypes_houdini_submitter.png` — Houdini job submitter with the template (Houdini / Mantra / Husk) and file selection (`job-types/houdini.md`)
+- [x] `rf_jobtypes_nuke_menu.png` — In Nuke: the **Render** menu showing the RenderFlow entry (`job-types/nuke.md`)
+- [x] `rf_jobtypes_nuke_submitter.png` — Nuke job submitter with a `.nk` script selected and frame range (`job-types/nuke.md`)
+- [x] `rf_jobtypes_after_menu.png` — In After Effects: **File > Scripts > Submit to RenderFlow.jsx** in the Scripts menu (`job-types/after-effects.md`)
+- [x] `rf_jobtypes_after_submitter.png` — After Effects submitter showing the Render Queue list (`job-types/after-effects.md`)
+- [x] `rf_jobtypes_unreal_menu.png` — In Unreal: **Tools > Submit to RenderFlow** (requires the RenderFlow plugin enabled) (`job-types/unreal.md`)
+- [x] `rf_jobtypes_unreal_submitter.png` — Unreal Submit to RenderFlow dialog with the MRQ item selected (`job-types/unreal.md`)
+- [x] `rf_jobtypes_python.png` — Python submitter with `.py` selected and the version picker (`job-types/python.md`)
+- [x] `rf_jobtypes_shell.png` — Shell submitter with a `.ps1` / `.sh` / `.cmd` script selected (`job-types/shell.md`)
+- [x] `rf_jobtypes_redshift.png` — Redshift submitter with a `.rs` file selected (`job-types/redshift.md`)
+- [x] `rf_jobtypes_arnold.png` — Arnold submitter with an `.ass` file selected (`job-types/arnold.md`)
+
+
+### Getting Started — new platform install screenshots (deferred — not captured during the 1.3 beta)
+- [ ] `rf_install_macos_finder.png` — Finder showing `/Applications/Pulze/RenderFlow` after install (`getting-started/installation.md`)
+- [ ] `rf_install_macos_terminal.png` — Terminal running `install-macos.sh` successfully (`getting-started/installation.md`)
+- [ ] `rf_install_macos_app.png` — RenderFlow running on macOS (server mode) (`getting-started/installation.md`)
+- [ ] `rf_install_macos_headless.png` — Terminal showing `start.sh --headless` for a node-only install (`getting-started/installation.md`, `getting-started/run-as-a-service.md`)
+- [ ] `rf_install_linux_terminal.png` — Terminal running `install-linux.sh` on Rocky or Ubuntu (`getting-started/installation.md`)
+- [ ] `rf_install_linux_app.png` — RenderFlow node UI running on Linux (`getting-started/installation.md`)
+- [ ] `rf_install_linux_systemd.png` — `systemctl status` showing RenderFlow running headless under systemd (`getting-started/run-as-a-service.md`)
+
+### Updated existing screenshots
+- [x] `rf_jobs_template_selector.png` — Refresh: the template selector now lists the new 1.3.0 job types (Maya, Houdini, Nuke, After Effects, Unreal, Python, Shell, Redshift, Arnold) (`jobs/templates.md`)

@@ -15,7 +15,7 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 
 **CPU Affinity.** A setting that limits how many CPU cores a node dedicates to rendering. Useful for workstations where an artist is also working.
 
-**DCC.** Digital Content Creation application. Refers to 3D software like 3ds Max, Blender, or Cinema 4D.
+**DCC.** Digital Content Creation application. Refers to 3D and post-production software like 3ds Max, Blender, Cinema 4D, Maya, Houdini, Nuke, After Effects, or Unreal Engine.
 
 **Dependency.** A relationship between jobs where one job waits for another to complete before starting.
 
@@ -23,7 +23,17 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 
 **Finish and Stop.** A job command that lets currently running frames complete, then suspends the job. Unlike Stop, no in-progress work is lost.
 
+**HDA.** Houdini Digital Asset. A reusable, parameterised node in Houdini. The RenderFlow submitter ships as an HDA that you can place into any network.
+
+**Headless.** A mode where RenderFlow runs as a service without the user interface, intended for dedicated render nodes. Available on macOS and Linux via `start.sh --headless`.
+
 **Host Application.** The main DCC application used to create and render a scene (for example, 3ds Max is the host, V-Ray is the engine).
+
+**Husk.** Houdini's USD-based renderer used for Solaris (`/stage`) workflows. RenderFlow uses Husk for USD ROP renders and live thumbnails.
+
+**Mantra.** Houdini's traditional ray-traced renderer, driven from a Mantra ROP.
+
+**MRQ.** Movie Render Queue. The high-quality offline rendering pipeline shipped with Unreal Engine. RenderFlow submits Unreal jobs as MRQ render items.
 
 **Integration.** A connection to a third-party service (Slack, Teams, or a webhook) configured in Settings > Integrations and used for job notifications.
 
@@ -31,7 +41,7 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 
 **Job.** A collection of tasks submitted to RenderFlow for processing. A job defines what to render and how.
 
-**Job Type.** The category of work a job performs, determined by the application and workflow. Examples: 3ds Max Render, Scene Manager, Blender, Corona DR, V-Ray Standalone.
+**Job Type.** The category of work a job performs, determined by the application and workflow. Examples: 3ds Max, Blender, Cinema 4D, Maya, Houdini, Nuke, After Effects, Unreal Engine, Python, Shell, Corona DR, V-Ray DR, V-Ray Standalone.
 
 **Node.** Any computer connected to RenderFlow. Nodes can be servers, workstations, or dedicated render nodes.
 
@@ -39,9 +49,13 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 
 **Priority.** A value from 0 to 100 assigned to each job. Higher values get nodes first. Jobs with equal priority follow first-in, first-out order.
 
-**Render Engine.** The software that produces the final image from a 3D scene. Examples: V-Ray, Corona, Arnold, Cycles, EEVEE, FStorm.
+**Render Engine.** The software that produces the final image from a 3D scene. Examples: V-Ray, Corona, Arnold, Redshift, Cycles, EEVEE, FStorm, Mantra, Husk.
 
 **Render Node.** A computer dedicated to rendering. It does not need a monitor or active user session.
+
+**Render Queue Item.** An item in After Effects' Render Queue. RenderFlow submits an AE job by selecting a Render Queue item by name.
+
+**ROP.** Render Output Driver. A Houdini node that drives a render — for example a Mantra ROP, a USD Render ROP, or a Karma ROP.
 
 **Repository.** A shared network folder configured during server setup. RenderFlow uses it to store job data, backups, archives, and temporary files. All connected machines must have access to this folder.
 
@@ -52,6 +66,8 @@ keywords: ['render farm glossary', 'render farm terminology', 'render farm defin
 **Scheduler.** A weekly calendar that automates node and system actions at specific times (activate, suspend, restart, shutdown, etc.).
 
 **Server.** The computer running the RenderFlow server process. It coordinates all jobs and nodes but does not render.
+
+**Shell Job.** A job type that runs a `.cmd`, `.bat`, `.ps1`, or `.sh` script on a node. The host is picked automatically from the file extension.
 
 **Spawner Mode.** A special node state used for Corona DR distributed rendering. Nodes in spawner mode act as DR helpers instead of picking up regular jobs.
 

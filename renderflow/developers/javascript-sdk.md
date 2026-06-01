@@ -56,6 +56,27 @@ const job = await rf.jobs.create({
 await rf.jobs.start(job.id);
 ```
 
+The `create` payload is a discriminated union keyed on `type` — TypeScript narrows the available fields to the job type, so passing `rop_node` to a Nuke job is a compile-time error. Supported types: `3dsmax.render`, `vray.dr`, `corona.dr`, `arnold.render`, `after.render`, `blender.render`, `cinema4d.render`, `keyshot.render`, `maya.render`, `nuke.render`, `houdini.batch`, `houdini.mantra`, `houdini.husk`, `vray_standalone`, `redshift.render`, `unreal`, `fusion.render`, `shell`, and `python`.
+
+```typescript
+// A Maya job with a render layer, and a Python job run on every node
+await rf.jobs.create({
+    file: "C:/projects/shot_010.ma",
+    type: "maya.render",
+    host: { id: "maya", name: "Maya", version: "2025" },
+    engine: { id: "arnold", name: "Arnold", version: "5.4" },
+    render_layer: "beauty",
+    frame: "1-240"
+});
+
+await rf.jobs.create({
+    file: "C:/scripts/warm_cache.py",
+    type: "python",
+    host: { id: "python", name: "Python", version: "3.11" },
+    args: "--verbose"
+});
+```
+
 ### Manage jobs
 
 ```typescript

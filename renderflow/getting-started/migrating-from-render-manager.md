@@ -19,7 +19,7 @@ Upgrading your subscription converts your Render Manager licenses to RenderFlow 
 
 ## How to upgrade
 
-1. Visit your [Pulze account page](https://www.pulze.io/account).
+1. Visit your [Pulze account page](https://account.pulze.io).
 2. Click **Upgrade to RenderFlow** (or **Upgrade to Workflow Bundle** if you have a Creators Bundle).
 3. Review the popup message for upgrade details and confirm.
 
@@ -35,7 +35,7 @@ Install RenderFlow on your server and render nodes following the [Quick Start](/
 
 <AccordionGroup>
   <Accordion title="What happens to my Render Manager subscription?">
-    You can upgrade it to RenderFlow at no additional cost from your [account page](https://www.pulze.io/account) when you are ready to switch.
+    You can upgrade it to RenderFlow at no additional cost from your [account page](https://account.pulze.io) when you are ready to switch.
   </Accordion>
   <Accordion title="I have a Creators Bundle. How do I upgrade?">
     The Creators Bundle becomes a Workflow Bundle (Scene Manager + RenderFlow). Click **Upgrade to Workflow Bundle** on your account page. The upgrade is free.
@@ -45,8 +45,5 @@ Install RenderFlow on your server and render nodes following the [Quick Start](/
   </Accordion>
   <Accordion title="How much does it cost?">
     The upgrade is free for active Render Manager subscribers. Your subscription price stays the same until you cancel.
-  </Accordion>
-  <Accordion title="Do I need help?">
-    If you need additional licenses or assistance with the migration, contact [support@pulze.io](mailto:support@pulze.io).
   </Accordion>
 </AccordionGroup>

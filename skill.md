@@ -3,7 +3,7 @@ name: pulze
 description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
 metadata:
   author: pulze
-  version: "1.2"
+  version: "1.3"
 ---
 
 # Pulze Documentation
@@ -49,7 +49,7 @@ Render farm management software. Submit jobs, manage nodes, monitor progress, an
 - Licensing: /renderflow/getting-started/licensing
 - Silent deploy: /renderflow/getting-started/silent-deploy
 - Run as a service: /renderflow/getting-started/run-as-a-service
-- Network setup: /renderflow/getting-started/windows-network-setup
+- Network setup: /renderflow/getting-started/network-setup
 - VPN remote access: /renderflow/getting-started/vpn-remote-access
 - Migrating from Render Manager: /renderflow/getting-started/migrating-from-render-manager
 
@@ -67,11 +67,20 @@ Render farm management software. Submit jobs, manage nodes, monitor progress, an
 
 #### Job Types
 - 3ds Max: /renderflow/job-types/3ds-max
-- Scene Manager: /renderflow/job-types/scene-manager
+- After Effects: /renderflow/job-types/after-effects
+- Arnold: /renderflow/job-types/arnold
 - Blender: /renderflow/job-types/blender
 - Cinema 4D: /renderflow/job-types/cinema-4d
-- Fusion: /renderflow/job-types/fusion
 - Corona DR: /renderflow/job-types/corona-dr
+- Fusion: /renderflow/job-types/fusion
+- Houdini (Beta): /renderflow/job-types/houdini
+- Maya: /renderflow/job-types/maya
+- Nuke: /renderflow/job-types/nuke
+- Python: /renderflow/job-types/python
+- Redshift: /renderflow/job-types/redshift
+- Scene Manager: /renderflow/job-types/scene-manager
+- Shell: /renderflow/job-types/shell
+- Unreal Engine (Beta): /renderflow/job-types/unreal
 - V-Ray DR: /renderflow/job-types/vray-dr
 - V-Ray Standalone: /renderflow/job-types/vray-standalone
 

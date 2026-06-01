@@ -9,14 +9,14 @@ keywords: ['render farm quick start', 'how to set up a render farm', 'render far
 
 ## What you'll need
 
-- At least one Windows computer (you can start with just your workstation)
+- At least one computer running Windows, macOS, or Linux (you can start with just your workstation)
 - A [Pulze account](https://www.pulze.io) (free to create)
 - A shared network folder accessible by all computers (if using more than one machine)
-- RenderFlow installer, available from your [Pulze account](https://www.pulze.io/account/downloads?sku=pulze_renderflow)
+- RenderFlow installer for your platform, available from your [Pulze account](https://account.pulze.io/products/renderflow/downloads)
 
 ## Step 1: Install RenderFlow
 
-[Download](https://www.pulze.io/account/downloads?sku=pulze_renderflow) the latest version of RenderFlow from your Pulze account. Run the installer on the computer that will act as your server. The same installer is used for every machine type. You choose the role during setup.
+[Download](https://account.pulze.io/products/renderflow/downloads) the latest version of RenderFlow from your Pulze account. Run the installer on the computer that will act as your server. The same installer is used for every machine type. You choose the role during setup.
 
 <Info>
 For a single workstation setup, the server and render node run on the same machine. You don't need a second computer to get started.

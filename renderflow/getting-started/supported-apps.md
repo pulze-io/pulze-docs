@@ -11,63 +11,48 @@ RenderFlow supports the most popular 3D rendering and post-production applicatio
 
 ## How detection works
 
-When RenderFlow starts on a machine, it automatically scans for installed applications by checking the Windows registry, known installation paths, and environment variables. The detected software list is saved per node and used for [job requirements matching](/renderflow/jobs/requirements) and [software analytics](/renderflow/software-analytics/overview).
+When RenderFlow starts on a machine, it automatically scans for installed applications using the conventions of the host OS — the Windows registry and known install paths, the `/Applications` folder and standard Mac App locations on macOS, and `$PATH`, `$HFS`-style env vars, and the usual `/opt`, `/usr/local`, and `/Applications` (vendor) locations on Linux. The detected software list is saved per node and used for [job requirements matching](/renderflow/jobs/requirements) and [software analytics](/renderflow/software-analytics/overview).
 
-RenderFlow plugins for each detected application are installed automatically during the first run. You can also find them manually at:
+RenderFlow plugins and scripts for each detected application are installed automatically during the first run. You can also find them manually in the platform's install folder:
 
-```
-C:\Program Files\Pulze\RenderFlow\plugins
-```
+| OS | Plugins folder |
+|----|----------------|
+| Windows | `C:\Program Files\Pulze\RenderFlow\plugins` |
+| macOS | `/Applications/Pulze/RenderFlow/plugins` |
+| Linux | `/opt/Pulze/RenderFlow/plugins` |
 
-To refresh the software list after installing new applications, right-click any node and select **Refresh Software**.
+To refresh the software list after installing new applications, right-click the node and select **Software > Refresh**.
 
 ## Applications
 
-### 3ds Max
+| Application | Versions | Render engines |
+|----------------|------------------------------|--------------------------------------------|
+| 3ds Max | 2019 – 2027 | Arnold, Corona, FStorm, Octane, Redshift, V-Ray |
+| After Effects | 22 – 26 | — |
+| Arnold | Detected on the node | — |
+| Blender | 3.0 – 5.1 | Cycles, EEVEE, V-Ray |
+| Cinema 4D | 2023 – 2026 | Corona, Octane, Redshift, V-Ray |
+| Fusion | 17 – 21 | — |
+| Houdini | 19.0 – 21.0 | Mantra, Husk (USD), plus any ROP-driven engines |
+| Maya | 2022 – 2027 | Arnold, V-Ray, Redshift |
+| Nuke | 14.0 – 17.1 | — |
+| Python | — | — |
+| Redshift | Detected on the node | — |
+| Shell | — | — |
+| Unreal Engine | 5.4 and newer (Windows only) | — |
 
-| | |
-|---|---|
-| **Versions** | 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027 |
-| **Job types** | Standard render, Scene Manager, Tiled render, Corona DR, V-Ray DR |
-| **License** | Not required on render nodes (uses the `-server` flag for network rendering) |
+### Format and plugin notes
 
-**Render engines:** Arnold, Corona, FStorm, Octane, Redshift, V-Ray
-
-**Supported plugins:** Anima, BerconMaps, CityTraffic, CloneModifier, ColorCorrect, ColorEdge, Complex Fresnel, FloorGenerator, ForestPack Pro, Glue, GrowFX, MadCar, MultiScatter, MultiTexture, Ornatrix, Phoenix, Psd Manager, RailClone, SigerNoise, SigerScratches, SiNi Software, SmartRefs, SplineOffset, Substance, ThinFilm, tyFlow, VRayPattern
-
-<Info>
-3ds Max does not require an Autodesk license on render nodes. RenderFlow launches 3ds Max with the `-server` flag, which is Autodesk's built-in network rendering mode. This means you can add unlimited render nodes without purchasing additional 3ds Max licenses.
-</Info>
-
-### Blender
-
-| | |
-|---|---|
-| **Versions** | 3.0 through 5.1 |
-| **Job types** | Standard render, Tiled render |
-| **License** | Free and open source, no license needed |
-
-**Render engines:** Cycles, EEVEE, V-Ray
-
-### Cinema 4D
-
-| | |
-|---|---|
-| **Versions** | 2023, 2024, 2025, 2026 |
-| **Job types** | Standard render |
-| **License** | Command Line Renderer requires a license configuration. See [Maxon's guide](https://support.maxon.net/hc/en-us/articles/10004994616732-How-do-I-license-the-Command-line-renderer) |
-
-**Render engines:** Corona, Octane, Redshift, V-Ray
-
-### Fusion
-
-| | |
-|---|---|
-| **Versions** | 17, 18, 19, 20, 21 |
-| **Job types** | Compositing render |
-| **License** | Fusion Render Node is free |
-
-Fusion is Blackmagic Design's node-based compositing application. RenderFlow renders `.comp` files using Fusion's command-line renderer. All Fuse scripts and custom tools must be identical across every machine. A missing effect will cause the render to fail.
+- **3ds Max** — supported plugins: Anima, BerconMaps, CityTraffic, CloneModifier, ColorCorrect, ColorEdge, Complex Fresnel, FloorGenerator, ForestPack Pro, Glue, GrowFX, MadCar, MultiScatter, MultiTexture, Ornatrix, Phoenix, Psd Manager, RailClone, SigerNoise, SigerScratches, SiNi Software, SmartRefs, SplineOffset, Substance, ThinFilm, tyFlow, VRayPattern.
+- **After Effects** — renders `.aep` projects through `aerender`. Each job submits one item from the project's Render Queue, selected by name.
+- **Arnold** — renders `.ass` scene files directly with the `kick` command-line renderer, without a host DCC installed on the node.
+- **Fusion** — renders `.comp` files using Fusion's command-line renderer. All Fuse scripts and custom tools must be identical across every machine. A missing effect will cause the render to fail.
+- **Houdini** — file types: `.hip`, `.hipnc`, `.hiplc` (Houdini), `.ifd` (Mantra), `.usd`, `.usda`, `.usdc`, `.usdz` (Husk).
+- **Nuke** — renders `.nk` comps.
+- **Python** — runs `.py` scripts; interpreters are enumerated from every Python on `PATH`.
+- **Redshift** — renders `.rs` scene files directly without needing a host DCC installed on the node.
+- **Shell** — hosts: Command Prompt (`.cmd` / `.bat`, Windows), PowerShell 5.1+ (`.ps1`, Windows), Bash (`.sh` / `.bash`, macOS / Linux / Windows via Git Bash or WSL).
+- **Unreal Engine** — renders through the Movie Render Queue.
 
 ## Compatibility notes
 

@@ -40,7 +40,7 @@ When you save a scene in 3ds Max, every texture, proxy, cache, and reference fil
 
 The solution is to store all project files and assets on shared storage (a NAS or file server) and access them using **UNC paths**: like `\\fileserver\projects\Kitchen\textures\wood.jpg`. UNC paths work from any machine on the network without depending on drive letter assignments.
 
-If your studio uses mapped drives (like `S:\`), RenderFlow can help bridge the gap with its [Mapped Drives](/renderflow/getting-started/windows-network-setup) feature, but using UNC paths directly is the better long-term practice.
+If your studio uses mapped drives (like `S:\`), RenderFlow can help bridge the gap with its [Mapped Drives](/renderflow/getting-started/network-setup) feature, but using UNC paths directly is the better long-term practice.
 
 ### Matching software across all machines
 
