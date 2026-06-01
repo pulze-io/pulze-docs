@@ -25,117 +25,34 @@ To refresh the software list after installing new applications, right-click the 
 
 ## Applications
 
-### 3ds Max
+| Application | Versions | Render engines |
+|----------------|------------------------------|--------------------------------------------|
+| 3ds Max | 2019 – 2027 | Arnold, Corona, FStorm, Octane, Redshift, V-Ray |
+| After Effects | 22 – 26 | — |
+| Arnold | Detected on the node | — |
+| Blender | 3.0 – 5.1 | Cycles, EEVEE, V-Ray |
+| Cinema 4D | 2023 – 2026 | Corona, Octane, Redshift, V-Ray |
+| Fusion | 17 – 21 | — |
+| Houdini | 19.0 – 21.0 | Mantra, Husk (USD), plus any ROP-driven engines |
+| Maya | 2022 – 2027 | Arnold, V-Ray, Redshift |
+| Nuke | 14.0 – 17.1 | — |
+| Python | — | — |
+| Redshift | Detected on the node | — |
+| Shell | — | — |
+| Unreal Engine | 5.4 and newer (Windows only) | — |
 
-| | |
-|---|---|
-| **Versions** | 2019 - 2027 |
-| **Job types** | Standard render, Scene Manager, Tiled render, Corona DR, V-Ray DR |
+### Format and plugin notes
 
-**Render engines:** Arnold, Corona, FStorm, Octane, Redshift, V-Ray
-
-**Supported plugins:** Anima, BerconMaps, CityTraffic, CloneModifier, ColorCorrect, ColorEdge, Complex Fresnel, FloorGenerator, ForestPack Pro, Glue, GrowFX, MadCar, MultiScatter, MultiTexture, Ornatrix, Phoenix, Psd Manager, RailClone, SigerNoise, SigerScratches, SiNi Software, SmartRefs, SplineOffset, Substance, ThinFilm, tyFlow, VRayPattern
-
-### After Effects
-
-| | |
-|---|---|
-| **Versions** | 22 - 26 |
-| **Job types** | Render Queue Item render |
-
-RenderFlow renders `.aep` projects through `aerender`. Each job submits one item from the project's Render Queue, selected by name.
-
-### Arnold
-
-| | |
-|---|---|
-| **Versions** | Detected from the Arnold installs on the node |
-| **Job types** | Standalone render (`.ass`) |
-
-Render Arnold `.ass` scene files directly with the `kick` command-line renderer, without a host DCC installed on the node.
-
-### Blender
-
-| | |
-|---|---|
-| **Versions** | 3.0 - 5.1 |
-| **Job types** | Standard render |
-
-**Render engines:** Cycles, EEVEE, V-Ray
-
-### Cinema 4D
-
-| | |
-|---|---|
-| **Versions** | 2023 - 2026 |
-
-**Render engines:** Corona, Octane, Redshift, V-Ray
-
-### Fusion
-
-| | |
-|---|---|
-| **Versions** | 17 - 21 |
-| **Job types** | Comp render (`.comp`) |
-
-RenderFlow renders `.comp` files using Fusion's command-line renderer. All Fuse scripts and custom tools must be identical across every machine. A missing effect will cause the render to fail.
-
-### Houdini
-
-| | |
-|---|---|
-| **Versions** | 19.0 - 21.0 |
-| **Job types** | Houdini (ROP), Mantra (IFD), Husk (USD) |
-
-**Render engines:** Mantra, Husk (USD / Solaris), plus any third-party engine driven through a ROP
-
-**File types:** `.hip`, `.hipnc`, `.hiplc` (Houdini), `.ifd` (Mantra), `.usd`, `.usda`, `.usdc`, `.usdz` (Husk)
-
-### Maya
-
-| | |
-|---|---|
-| **Versions** | 2022, 2023, 2024, 2025, 2026, 2027 |
-| **Job types** | Standard render |
-
-**Render engines:** Arnold, V-Ray, Redshift
-
-### Nuke
-
-| | |
-|---|---|
-| **Versions** | 14.0 - 17.1 |
-| **Job types** | Comp render (`.nk`) |
-
-### Python
-
-| | |
-|---|---|
-| **Versions** | Any Python installed on the node — enumerated from every interpreter on `PATH` |
-| **Job types** | Script execution (`.py`) |
-
-### Redshift
-
-| | |
-|---|---|
-| **Versions** | All Redshift versions detected on the node |
-| **Job types** | Standalone render (`.rs`) |
-
-Render Redshift `.rs` scene files directly without needing a host DCC installed on the node.
-
-### Shell
-
-| | |
-|---|---|
-| **Hosts** | Command Prompt (`.cmd` / `.bat`, Windows), PowerShell 5.1+ (`.ps1`, Windows), Bash (`.sh` / `.bash`, macOS / Linux / Windows via Git Bash or WSL) |
-| **Job types** | Script execution |
-
-### Unreal Engine
-
-| | |
-|---|---|
-| **Versions** | 5.4 and newer (Windows only) |
-| **Job types** | Movie Render Queue render |
+- **3ds Max** — supported plugins: Anima, BerconMaps, CityTraffic, CloneModifier, ColorCorrect, ColorEdge, Complex Fresnel, FloorGenerator, ForestPack Pro, Glue, GrowFX, MadCar, MultiScatter, MultiTexture, Ornatrix, Phoenix, Psd Manager, RailClone, SigerNoise, SigerScratches, SiNi Software, SmartRefs, SplineOffset, Substance, ThinFilm, tyFlow, VRayPattern.
+- **After Effects** — renders `.aep` projects through `aerender`. Each job submits one item from the project's Render Queue, selected by name.
+- **Arnold** — renders `.ass` scene files directly with the `kick` command-line renderer, without a host DCC installed on the node.
+- **Fusion** — renders `.comp` files using Fusion's command-line renderer. All Fuse scripts and custom tools must be identical across every machine. A missing effect will cause the render to fail.
+- **Houdini** — file types: `.hip`, `.hipnc`, `.hiplc` (Houdini), `.ifd` (Mantra), `.usd`, `.usda`, `.usdc`, `.usdz` (Husk).
+- **Nuke** — renders `.nk` comps.
+- **Python** — runs `.py` scripts; interpreters are enumerated from every Python on `PATH`.
+- **Redshift** — renders `.rs` scene files directly without needing a host DCC installed on the node.
+- **Shell** — hosts: Command Prompt (`.cmd` / `.bat`, Windows), PowerShell 5.1+ (`.ps1`, Windows), Bash (`.sh` / `.bash`, macOS / Linux / Windows via Git Bash or WSL).
+- **Unreal Engine** — renders through the Movie Render Queue.
 
 ## Compatibility notes
 

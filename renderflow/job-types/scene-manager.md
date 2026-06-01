@@ -11,7 +11,7 @@ Scene Manager by Pulze is deeply integrated with RenderFlow. It allows you to su
 
 ## How to submit
 
-Select the **Scene Manager** template in the [Submitter](/renderflow/jobs/submitter), then select or browse a .max file that contains Scene Manager setups. Once the scene information is read, the Submitter switches to the multi-job view.
+Select the **Scene Manager** template in the [Submitter](/renderflow/jobs/submitter), then browse for a .max file on disk or pick from a currently open 3ds Max instance. The file must contain Scene Manager setups. Once the scene information is read, the Submitter switches to the multi-job view.
 
 The left side shows the list of jobs (similar to the Scene Manager scene list). The right side shows all the details for the selected job. You can multi-select jobs on the left to apply settings to several at once.
 

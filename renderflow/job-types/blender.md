@@ -19,13 +19,9 @@ The Blender [Submitter](/renderflow/jobs/submitter) opens from two places.
   <img src="/images/renderflow/rf_jobtypes_blender_menu.png" alt="RenderFlow addon panel button in Blender" />
 </Frame>
 
-**From the RenderFlow app**, select the **Blender** template and either browse for a .blend file or pick from a currently open Blender instance. Opening the file and selecting it from the dropdown is strongly recommended, as it gives RenderFlow access to all scene properties.
+**From the RenderFlow app**, the scene has to be open in Blender. Select the **Blender** template and pick your scene from the open Blender instances. Browsing a .blend file on disk is not supported, as RenderFlow needs the open scene to read its properties.
 
-<Info>
-Browsing a .blend file on disk will detect the Blender version but will not populate scene properties like frame range, resolution, or output path. If you browse without overriding any properties, the file will render with whatever settings are saved in the scene.
-</Info>
-
-However you open it, the Submitter shows your scene with its properties pre-filled.
+Wherever you launch it from, the Submitter shows your scene with its properties pre-filled.
 
 <Frame caption="The Blender Submitter">
   <img src="/images/renderflow/rf_jobtypes_blender_submitter.png" alt="Blender job submitter showing scene properties" />
@@ -33,7 +29,7 @@ However you open it, the Submitter shows your scene with its properties pre-fill
 
 ## Scene properties
 
-When the file is open and selected, the following properties are available: Scene File, Camera, Resolution, Frame range, and Render Output.
+The following properties are read from the open scene: Scene File, Camera, Resolution, Frame range, and Render Output.
 
 ## Supported engines
 

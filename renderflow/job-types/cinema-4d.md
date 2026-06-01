@@ -19,13 +19,7 @@ There are two ways to open the Cinema 4D [Submitter](/renderflow/jobs/submitter)
   <img src="/images/renderflow/rf_jobtypes_cinema4d_menu.png" alt="Pulze menu in Cinema 4D showing Submit to RenderFlow" />
 </Frame>
 
-**From the RenderFlow app**, select the **Cinema 4D** template, then either browse for a file or pick from a currently open Cinema 4D instance.
-
-Opening the scene in Cinema 4D and selecting it from the dropdown is strongly recommended. Browsing a file on disk provides very limited data, as RenderFlow cannot read scene properties directly from Cinema 4D files.
-
-<Info>
-If you browse a Cinema 4D file without overriding any properties, the file will render with whatever settings are saved in the scene.
-</Info>
+**From the RenderFlow app**, the scene has to be open in Cinema 4D. Select the **Cinema 4D** template and pick your scene from the open Cinema 4D instances. Browsing a file on disk is not supported, as RenderFlow cannot read scene properties directly from Cinema 4D files.
 
 The Submitter opens the same from either route, pre-filled with the scene's properties:
 

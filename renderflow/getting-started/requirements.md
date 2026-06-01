@@ -40,7 +40,7 @@ A few things to keep in mind:
 | OS | Status |
 |----|--------|
 | Windows 10, 11, and Server 2019+ | Supported |
-| macOS | Supported |
+| macOS 13 (Ventura) and later | Supported |
 | Linux (Rocky 8/9, Ubuntu, and other RHEL/Debian-based distributions) | Supported |
 
 ## Network

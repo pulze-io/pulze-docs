@@ -7,10 +7,6 @@ description: "Render Houdini scenes on your farm with RenderFlow. Scene + ROP, M
 keywords: ['Houdini render farm', 'Houdini network rendering', 'Mantra render farm', 'Husk render farm', 'USD render farm']
 ---
 
-<Warning>
-The Houdini integration is in **Beta**.
-</Warning>
-
 RenderFlow renders Houdini through three job templates: **Houdini** for a full `.hip` scene driven by a ROP, **Mantra** for pre-cached IFD sequences, and **Husk** for USD (Solaris) renders. Husk can delegate to Karma, or any USD-compatible engine.
 
 ## How to submit
