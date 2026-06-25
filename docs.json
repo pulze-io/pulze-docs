@@ -253,6 +253,12 @@
             ]
           },
           {
+            "group": "Troubleshooting",
+            "pages": [
+              "project-dream/troubleshooting/plugin-not-installed"
+            ]
+          },
+          {
             "group": "Reference",
             "pages": [
               "project-dream/changelog"
