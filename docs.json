@@ -63,6 +63,7 @@
               "renderflow/getting-started/installation",
               "renderflow/getting-started/silent-deploy",
               "renderflow/getting-started/run-as-a-service",
+              "renderflow/getting-started/bring-your-own-mongodb",
               "renderflow/getting-started/network-setup",
               "renderflow/getting-started/vpn-remote-access",
               "renderflow/getting-started/licensing",
