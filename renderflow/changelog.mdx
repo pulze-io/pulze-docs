@@ -5,6 +5,26 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="1.3.2-beta" description="July 16, 2026">
+RenderFlow 1.3.2 Beta adds configurable app search paths, Blender 5.2 support, and an expanded Agentic Jobs toolset, along with reliability fixes for job stops, Cinema 4D takes, and the macOS/Linux installer scripts.
+
+**Updates:**
+- New per-app search paths and environment variables — point each DCC at custom install locations and inject env vars from Settings → Apps
+- Added USD for 3ds Max to the plugin search
+- Added Blender 5.2 support
+- Expanded the Agentic Jobs (preview) toolset — scene and geometry diagnosis, scene description, material conversion, and light creation for the RenderFlow AI Agent
+- macOS and Linux install/uninstall now elevate once via `sudo` (both `./install.sh` and `sudo ./install.sh` work), with data and log directories owned by the real user
+
+**Fixes:**
+- Fixed the Cinema 4D take system on render jobs
+- Fixed a race where stopping a job could relaunch the render once before the stop took effect
+- Fixed Chaos Vantage abort detection and collapsed missing-texture messages into a single warning
+- Fixed 3ds Max not honoring crop/region render types on batch renders
+- Fixed software deploy — deployment now runs in-process and the user is responsible for privileges
+- Fixed long computer names overflowing the analytics column table
+- Various stability improvements
+</Update>
+
 <Update label="1.3.1-beta" description="June 26, 2026">
 RenderFlow 1.3.1 Beta is out with a preview of AI-powered Agentic Jobs and ComfyUI, one-click deployment of apps and plugins across the farm, support for Premiere, DaVinci Resolve, and Chaos Vantage 3.3, V-Ray DR 2 for 3ds Max, and live GPU monitoring.
 
