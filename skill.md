@@ -127,6 +127,11 @@ Render farm management software. Submit jobs, manage nodes, monitor progress, an
 - Glossary: /renderflow/glossary
 - Changelog: /renderflow/changelog
 
+#### RenderFlow 2.x (Beta)
+RenderFlow 2.x is in beta. Paths without a version prefix (`/renderflow/...`) document the stable 1.x release; paths under `/renderflow/v2/...` document the 2.x beta. Pages are added as topics are written.
+- Introduction: /renderflow/v2/introduction
+- Changelog: /renderflow/v2/changelog
+
 ### Project Dream
 AI-powered creative project generation tool.
 
