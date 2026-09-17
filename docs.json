@@ -1,5 +1,5 @@
 {
-  "$schema": "https://mintlify.com/docsa.json",
+  "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
   "name": "Pulze",
   "colors": {
@@ -184,6 +184,40 @@
               "renderflow/faq",
               "renderflow/glossary",
               "renderflow/changelog"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "RenderFlow 2",
+        "tag": "Beta",
+        "cta": {
+          "label": "Get Started",
+          "href": "/renderflow/v2/getting-started/quick-start"
+        },
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "renderflow/v2/introduction"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "renderflow/v2/getting-started/quick-start",
+              "renderflow/v2/getting-started/requirements",
+              "renderflow/v2/getting-started/installation",
+              "renderflow/v2/getting-started/server-and-nodes",
+              "renderflow/v2/getting-started/silent-deploy",
+              "renderflow/v2/getting-started/run-as-a-service",
+              "renderflow/v2/getting-started/migrating"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "renderflow/v2/changelog"
             ]
           }
         ]
