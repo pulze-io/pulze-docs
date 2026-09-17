@@ -1,26 +1,46 @@
 ---
-title: "RenderFlow 2.x Documentation"
+title: "RenderFlow 2 Documentation"
 sidebarTitle: "Introduction"
-description: "Documentation for RenderFlow 2.x, the next major version of the render farm management software by Pulze. Currently in beta."
-"og:title": "RenderFlow 2.x Documentation (Beta) - Render Farm Management"
-"og:description": "Documentation for the RenderFlow 2.x beta."
-"twitter:title": "RenderFlow 2.x Documentation (Beta) - Render Farm Management"
-keywords: ['RenderFlow 2', 'RenderFlow 2.x', 'RenderFlow beta', 'render farm manager', 'Pulze RenderFlow']
+description: "Install RenderFlow 2, set up a render farm, and submit your first job."
+"og:title": "RenderFlow 2 Documentation (Beta)"
+"og:description": "Install RenderFlow 2, set up a render farm, and submit your first job."
+"twitter:title": "RenderFlow 2 Documentation (Beta)"
+keywords: ['RenderFlow 2', 'RenderFlow beta', 'render farm manager', 'Pulze RenderFlow', 'render farm management software']
 mode: "wide"
 ---
 
 <Note>
-RenderFlow 2.x is currently in **beta**. These pages are being written alongside the beta and will grow as features stabilize.
+RenderFlow 2 is in beta and this documentation is a work in progress.
 </Note>
 
-Welcome to the RenderFlow 2.x documentation. Use the version switcher in the sidebar to move between the 2.x beta docs and the stable [RenderFlow 1.x documentation](/renderflow/introduction).
+<CardGroup cols={3}>
 
-## What to expect
+<Card title="Quick Start" icon="rocket" href="/renderflow/v2/getting-started/quick-start">
+  Set up a server, connect a machine, submit a job.
+</Card>
 
-- Topics for 2.x are being prepared and will appear here section by section.
-- Until a 2.x page exists for a topic, the [1.x documentation](/renderflow/introduction) remains the reference.
-- Release notes for the beta are collected in the [2.x changelog](/renderflow/v2/changelog).
+<Card title="System Requirements" icon="list-check" href="/renderflow/v2/getting-started/requirements">
+  Hardware, operating systems, ports, and storage.
+</Card>
+
+<Card title="Installation" icon="download" href="/renderflow/v2/getting-started/installation">
+  The installer on Windows, Linux, and macOS.
+</Card>
+
+<Card title="Server and Nodes" icon="server" href="/renderflow/v2/getting-started/server-and-nodes">
+  A studio farm, set up through the app.
+</Card>
+
+<Card title="Silent Deployment" icon="terminal" href="/renderflow/v2/getting-started/silent-deploy">
+  Installer flags, rfsv config, and headless servers.
+</Card>
+
+<Card title="Run as a Service" icon="gear" href="/renderflow/v2/getting-started/run-as-a-service">
+  Unattended render nodes that start on boot.
+</Card>
+
+</CardGroup>
 
 ## Need help?
 
-Questions and feedback about the beta are welcome at [support@pulze.io](mailto:support@pulze.io) or on [Discord](https://discord.gg/BxtBs9aN4E).
+Questions and feedback about the beta: [support@pulze.io](mailto:support@pulze.io) or [Discord](https://discord.gg/BxtBs9aN4E).
