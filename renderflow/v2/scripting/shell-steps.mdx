@@ -1,0 +1,124 @@
+---
+title: "Shell steps"
+description: "Run a command, a batch file, a PowerShell or bash script as a step in a RenderFlow job, and read the job from its environment."
+"og:title": "RenderFlow Shell Steps"
+"og:description": "Run a command, batch file, PowerShell or bash script as a job step, and read the job from its environment."
+"twitter:title": "RenderFlow Shell Steps"
+keywords: ['render farm shell script', 'render farm batch job', 'render farm powershell', 'pre-render script', 'post-render script']
+---
+
+A Shell step runs one command on a render machine. It is the shortest way to put something you already have into a job, whether that is `robocopy`, an `ffmpeg` line, or a publish script that has been in the pipeline for years.
+
+## Adding one
+
+<Steps>
+<Step title="Add the step">
+Press the **+** button at the end of the chain and pick **Shell**.
+</Step>
+<Step title="Give it a script">
+Either press **Browse file** and pick one off disk, or press **Type** and write it in the editor.
+</Step>
+<Step title="Add arguments, if it takes any">
+The **Arguments** field is the whole of what the script receives.
+</Step>
+</Steps>
+
+A typed script is written to a temporary file on the machine that runs it, with the extension its language needs, and it runs as it was submitted.
+
+## How the command is assembled
+
+Worth knowing exactly, because it decides how you quote things:
+
+| Shell | What runs |
+|---|---|
+| Command Prompt | `cmd /c <script> <arguments>` |
+| PowerShell | `powershell -NoLogo -NoProfile -Command & "<script>" <arguments>` |
+| bash | `bash -lc "<script>" <arguments>` |
+
+Two consequences. **PowerShell and bash receive one command string**, so an argument containing a space needs quoting that survives the shell, and `&` is already spent as the call operator. **PowerShell runs with `-NoProfile`**, so nothing from a machine's user profile is loaded: modules your script relies on have to be imported by the script.
+
+## Reading the job
+
+The environment is the contract. RenderFlow sets these before the shell starts:
+
+| Variable | |
+|---|---|
+| `RF_JOB_ID` | The job, for an API call back into the farm |
+| `RF_JOB_NAME` | As the operator typed it |
+| `RF_STEP_ID` | This step |
+| `RF_STEP_NAME` | This step's name |
+| `RF_STEP_INDEX` | Its place in the chain, counting from 0 |
+| `RF_TASK_ID` | The task running right now |
+| `RF_TASK_INDEX` | Which task of this step, counting from 0 |
+| `RF_NODE_ID` | The machine |
+| `RF_NODE_NAME` | Its hostname |
+| `RF_OUTPUT_DIR` | The folder the previous steps wrote into |
+| `RF_PARAM_<NAME>` | One per row of the **Parameters** field |
+
+Each shell spells a variable its own way: `%RF_JOB_ID%` in the Command Prompt, `$env:RF_JOB_ID` in PowerShell, `"$RF_JOB_ID"` in bash.
+
+The **Tokens** button in the Script header inserts the right spelling for the language you are in, so you do not have to remember which of the three forms applies.
+
+<Frame caption="The token list over a PowerShell step, in PowerShell's own spelling">
+  <img src="/images/renderflow/v2/rf_submitter_shell_tokens.webp" alt="A Shell step in the submitter with the token list open, showing the ten RF variables written as $env:RF_JOB_ID and so on" />
+</Frame>
+
+### Parameters
+
+Each row of the **Parameters** field arrives as `RF_PARAM_<NAME>`, upper-cased, with anything that is not a letter or a digit replaced by an underscore. A parameter named `output dir` is `RF_PARAM_OUTPUT_DIR`.
+
+Values are always text. A switch arrives as `true` or `false`, a number as its digits, a list as JSON. A parameter left empty is not set at all, so test for it rather than comparing to an empty string.
+
+## Examples
+
+<CodeGroup>
+```bash Stage a project folder
+#!/usr/bin/env bash
+# Pre-render: make sure the render machines can reach what this job needs.
+set -euo pipefail
+
+source="$RF_PARAM_PROJECT"
+staged="$RF_OUTPUT_DIR/project"
+
+echo "Staging $source for job $RF_JOB_NAME"
+mkdir -p "$staged"
+rsync -a --delete "$source/" "$staged/"
+
+echo "Done"
+```
+
+```bash Encode an upstream sequence
+#!/usr/bin/env bash
+# Post-render: turn the frames the previous step wrote into a review movie.
+set -euo pipefail
+
+frames="$RF_OUTPUT_DIR"
+movie="$RF_OUTPUT_DIR/../review/${RF_JOB_NAME// /_}.mp4"
+
+mkdir -p "$(dirname "$movie")"
+echo "Encoding $frames"
+
+ffmpeg -y -framerate 25 -pattern_type glob -i "$frames/*.png" \
+    -c:v libx264 -pix_fmt yuv420p -crf 18 "$movie"
+
+echo "Wrote $movie"
+```
+
+```bash Publish approved frames
+#!/usr/bin/env bash
+# Copies this job's output to the delivery share, one task per chunk of the work list.
+set -euo pipefail
+
+dest="/mnt/delivery/${RF_JOB_NAME// /_}"
+echo "Task $RF_TASK_INDEX of job $RF_JOB_ID publishing to $dest"
+
+mkdir -p "$dest"
+cp -R "$RF_OUTPUT_DIR"/. "$dest"/
+```
+</CodeGroup>
+
+## How a shell step ends
+
+**The exit code is the whole answer.** Zero is success. Anything else fails the task, and the farm reports the code.
+
+There is no progress parsing. Everything the script writes to standard output and standard error goes to the task log as it appears, and the task finishes when the process exits cleanly.

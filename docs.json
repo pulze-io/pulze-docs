@@ -215,6 +215,41 @@
             ]
           },
           {
+            "group": "Scripting",
+            "pages": [
+              "renderflow/v2/scripting/overview",
+              "renderflow/v2/scripting/shell-steps",
+              "renderflow/v2/scripting/python-steps",
+              "renderflow/v2/scripting/rf-reference",
+              "renderflow/v2/scripting/plugins"
+            ]
+          },
+          {
+            "group": "Developers",
+            "pages": [
+              "renderflow/v2/developers/overview",
+              "renderflow/v2/developers/authentication",
+              "renderflow/v2/developers/rest-api",
+              "renderflow/v2/developers/typescript-sdk",
+              "renderflow/v2/developers/python-sdk",
+              "renderflow/v2/developers/cli",
+              "renderflow/v2/developers/websocket",
+              "renderflow/v2/developers/webhooks",
+              "renderflow/v2/developers/mcp-server",
+              "renderflow/v2/developers/cookbook"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "openapi": {
+              "source": "/renderflow/v2/api-reference/openapi.json",
+              "directory": "renderflow/v2/api-reference"
+            },
+            "pages": [
+              "renderflow/v2/api-reference/introduction"
+            ]
+          },
+          {
             "group": "Reference",
             "pages": [
               "renderflow/v2/changelog"

@@ -1,0 +1,159 @@
+---
+title: "Reference"
+description: "Every declaration, hook, context object and function in the renderflow Python module a RenderFlow step or plugin imports."
+"og:title": "RenderFlow rf module reference"
+"og:description": "Every declaration, hook, context object and function in the renderflow Python module."
+"twitter:title": "RenderFlow rf module reference"
+keywords: ['renderflow python module', 'rf.execute', 'render farm python api', 'renderflow plugin api']
+---
+
+```python
+import renderflow as rf
+```
+
+The module a [Python step](/renderflow/v2/scripting/python-steps) and a [plugin](/renderflow/v2/scripting/plugins) both import. Standard library only, and Python 3.8 syntax, because a render node runs it under whatever interpreter it resolved with nothing installed.
+
+## Declarations
+
+Each one is a field in the submitter, a command-line flag, and the value, from a single line. In a plugin, these are what generate the operator's UI automatically; run the same script from a terminal instead, and they are its `--flags`. Every declaration takes `label` (what the submitter shows), `required`, `default`, and `show_if`.
+
+| | |
+|---|---|
+| `rf.text(name)` | A line of text |
+| `rf.int(name)` | A whole number. Also `min`, `max`, `step` |
+| `rf.float(name)` | A number. Also `min`, `max`, `step` |
+| `rf.bool(name)` | A switch. `default=False` |
+| `rf.choice(name, choices)` | One of a list. A numeric choice comes back a number |
+| `rf.file(name)` | One file. `filter="*.exr"` sets what the browser offers |
+| `rf.folder(name)` | One folder |
+| `rf.pairs(name)` | Key-value rows, as a dict |
+| `rf.resolution(name)` | A width and a height, as a two-item list |
+| `rf.output(name)` | Where the job writes. See below |
+| `rf.frames(name)` | **A work source.** A frame range |
+| `rf.files(name, pattern="*")` | **A work source.** A folder, listed on the submitting machine |
+| `rf.args(name, type=...)` | The escape hatch every one of the above compiles to |
+
+Two rules the module enforces by raising at import: **one work source per script**, and **one output per script**. Declaring a second of either is a mistake worth finding immediately rather than at dispatch.
+
+`show_if` hides a field until another holds a value: `rf.text("codec", show_if={"encode": True})`.
+
+### output
+
+```python
+out = rf.output("output", extensions=["png", "exr"], required=True)
+```
+
+With `extensions`, the submitter's browse button becomes the operating system's save dialog offering those types, the value is a file path, and the extension you get reads back as `rf.paths.format`. Without `extensions` the output is a folder.
+
+`rf.paths.output` carries the value, which is how a handler downstream knows where the job wrote.
+
+## Hooks
+
+| | Runs |
+|---|---|
+| `@rf.execute` | Once per item, on the machine that got it. The only one a script needs |
+| `@rf.submit` | On the submitting machine, before the job exists. Raise to stop the submission |
+| `@rf.prepare` | Once per task, before its items |
+| `@rf.cleanup` | Once per task, whatever happened |
+
+### Distributing the work
+
+Called on the decorated `@rf.execute` function, to say how its calls should be spread over the farm instead of running once on a single machine:
+
+```python
+@rf.execute
+def one(item):
+    ...
+
+one.map(items, batch=False, on_error="stop")
+one.once()
+one.every_node()
+```
+
+| | |
+|---|---|
+| `map(source, batch, on_error)` | Run `one` once per item in `source`, chunked across as many machines as the farm gives the task. `batch=True` hands a machine its whole slice in one call instead of one item at a time; `on_error="continue"` finishes the rest of a slice before failing it |
+| `once()` | Run `one` a single time, on a single machine |
+| `every_node()` | Run `one` once on every machine currently in the farm |
+
+Call none of these, and `@rf.execute` still runs, just once, on whichever single machine the task lands on.
+
+## Context
+
+Attribute access over what the task was given.
+
+| | |
+|---|---|
+| `rf.job` | `.id` `.name` `.status` |
+| `rf.step` | `.id` `.name` `.index` for the running step |
+| `rf.step[0]`, `rf.step["Render"]` | Another step, by position or name |
+| `rf.step[i].input` | The file that step runs |
+| `rf.step[i].output` | The files it produced, as paths |
+| `rf.step[i].type` | Task type, such as `3dsmax.render` |
+| `len(rf.step)`, `for s in rf.step` | The job's steps, in order |
+| `rf.task` | `.id` `.index` `.attempt` |
+| `rf.node` | `.id` `.name` `.software` |
+| `rf.paths` | `.temp` this task's scratch folder, `.repo` the repository, `.output`, `.format` |
+| `rf.env` | What the step was given |
+
+`rf.step[...]` raises `KeyError` for a name the job does not have, which is the right answer when a script is wired to a step that has since been renamed.
+
+## Resolving
+
+| | |
+|---|---|
+| `rf.path(value)` | A path as **this** machine sees it, through the farm's mapping table |
+| `rf.app(name, version=None, path="exe")` | An installed application's executable. Raises `AppNotFound` |
+| `rf.tool(name)` | What RenderFlow ships: `ffmpeg`, `ffprobe`, `imager`, `python`. Falls back to `PATH` |
+
+`path` picks which of an application's binaries to resolve: `rf.app("cinema4d", path="cmd")` returns Cinema 4D's Commandline build rather than its `exe` interface build.
+
+## Reporting
+
+| | |
+|---|---|
+| `rf.progress(percent, info=None)` | 0 to 100, clamped. The driver already reports per-item progress |
+| `rf.log(message, level="info")` | One line into the task log. `print()` works too |
+| `rf.fatal(message)` | Ends the task with a reason. Raises `rf.Fatal` |
+| `rf.done(item)` | Marks one item finished. Only meaningful under `batch=True`, where the module cannot see your loop |
+
+## Failures
+
+| | |
+|---|---|
+| `rf.Fatal` | End this task, with a sentence the operator reads |
+| `rf.AppNotFound` | This machine cannot do it. **The task moves to another machine**, and the job carries on |
+
+The difference between the first two is the whole of the retry behaviour. `Fatal` is the script saying the work is wrong; `AppNotFound` is the script saying the machine is wrong.
+
+## Exit codes
+
+What the process leaves, and what the farm does with it:
+
+| | |
+|---|---|
+| 0 | Done |
+| 1 | Failed. The task fails here and is not retried elsewhere |
+| 2 | No `@rf.execute`, so a node had nothing to run |
+| 66 | `AppNotFound`. The task is requeued on a different machine |
+
+## Markers
+
+The module writes these to standard output, and the service reads them. You never write them yourself, and they are here because they show up in a task log:
+
+| | |
+|---|---|
+| `RF_PROGRESS <n>` | A percentage |
+| `RF_ITEM` | One item started, finished or failed |
+| `RF_ERROR` | A reason, and a traceback when there was one |
+| `RF_DONE` | The slice finished |
+| `RF_SCHEMA` | What the script declares, printed in inspect mode |
+
+## Running a script by hand
+
+```bash
+python stamp.py --plates ./shots/010
+python stamp.py --rf-inspect        # print RF_SCHEMA and exit
+```
+
+A bare run binds the flags from `argv`, materialises the whole work source, and runs it in that process, through the same code path a node uses. An unknown flag fails and names the ones the script declares.

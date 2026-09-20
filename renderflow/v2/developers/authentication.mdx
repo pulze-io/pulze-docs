@@ -1,0 +1,114 @@
+---
+title: "Authentication"
+description: "How a caller identifies itself to a RenderFlow farm: API keys, the Bearer header, and why a call from the machine itself needs no credential."
+"og:title": "RenderFlow API Authentication"
+"og:description": "API keys, the Bearer header, and why a call from the machine itself needs no credential."
+"twitter:title": "RenderFlow API Authentication"
+keywords: ['render farm API key', 'render farm API authentication', 'RenderFlow API key', 'render farm REST authentication']
+---
+
+## Creating a key
+
+<Steps>
+<Step title="Open Settings">
+Press the gear icon, then **API Keys** under **Access**.
+</Step>
+<Step title="Press New API key">
+Give it the name of the thing that will use it, not the person who made it. A key called `ftrack sync` is one you can revoke without wondering what breaks.
+</Step>
+<Step title="Copy the value">
+It is shown once. The list afterwards keeps the name and the first characters, which is enough to recognise a key and not enough to use one.
+</Step>
+</Steps>
+
+<Frame caption="Settings, API Keys, with a key per thing that uses one">
+  <img src="/images/renderflow/v2/rf_settings_apikeys.webp" alt="The API Keys settings panel listing two keys with their names, masked values, who created them and when" />
+</Frame>
+
+Revoking a row stops that key working everywhere, at once. A key carries no expiry.
+
+## Using it
+
+The key goes in an `Authorization` header:
+
+```
+Authorization: Bearer rf_a1b2c3...
+```
+
+Never in a query string. A URL ends up in server logs, proxy logs and browser history, and a credential in one of those is a credential you have to rotate.
+
+<CodeGroup>
+```bash curl
+curl -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  http://10.11.30.40:44442/api/v1/jobs?limit=5
+```
+
+```python Python
+import renderflow as rf
+
+farm = rf.connect("http://10.11.30.40:44442", api_key="rf_a1b2c3...")
+print(farm.jobs.get_jobs(limit=5).total)
+```
+
+```typescript TypeScript
+import { RenderFlow } from "@pulze-io/renderflow";
+
+const rf = new RenderFlow({
+    baseUrl: "http://10.11.30.40:44442/api/v1",
+    apiKey: process.env.RENDERFLOW_API_KEY
+});
+
+const { total } = await rf.jobs.getJobs({ limit: 5 });
+```
+</CodeGroup>
+
+Both SDKs read `RENDERFLOW_API_KEY` from the environment when you do not pass a key, and `rfcli` requires that variable.
+
+## From the machine itself
+
+A call to `127.0.0.1` needs no credential. Being on the machine is the proof, and it is the trust boundary the whole API is written around rather than a gap in it.
+
+This is how a DCC submitter works. The plugins inside 3ds Max, Maya, Houdini, Nuke and the rest build `http://127.0.0.1:44442/api/v1` with their host application's own standard library and post a job to it, with no key to configure and nothing for an artist to paste.
+
+```python
+import renderflow as rf
+
+# No address and no key: the service on this machine.
+farm = rf.connect()
+farm.jobs.create_job(body={
+    "type": "maya.render",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.mb",
+    "host": {"id": "maya", "version": "2026"},
+    "frame": "1-240"
+})
+```
+
+<Warning>
+Submit from the machine holding the scene, on loopback, rather than posting to the server from elsewhere. The service that receives a submission is the one that stages its files, and a server cannot read an artist's drive on their behalf. Submitting remotely works, but only where the farm's path mappings cover every path in the job.
+</Warning>
+
+## Ports
+
+| Port | Serves | TLS |
+|---|---|---|
+| 44442 | The service on this machine, for submitters, `rfcli` and the app | Never |
+| 44445 | The farm, for everything off the machine | When the server was set up with `https://` on its address |
+
+Loopback is plaintext on every role. A certificate for a public name does not validate against `127.0.0.1`, and a local caller cannot carry a private authority, so TLS there would break every submitter to encrypt traffic that never reaches a wire.
+
+Whether the farm listener uses TLS depends on how the server was set up: writing `https://` on its address is what turns it on. The scheme therefore rides on the address everywhere, and `https://10.11.30.40:44445` is a different farm from `http://10.11.30.40:44442` only in that respect.
+
+## What a key reaches
+
+An API key reaches the published API: the operations in the [reference](/renderflow/v2/api-reference/introduction), which is jobs, tasks, machines, pools, users, groups, the schedule, licenses, errors and webhooks.
+
+It does not reach the operations the app and the machines use among themselves, such as farm settings, the repository, plugin installation, the audit log or minting another key. Those answer a machine that belongs to the farm, or a caller on the machine itself.
+
+## When a call is refused
+
+| Status | Means |
+|---|---|
+| 401 | No credential, or one that does not verify. A revoked key gets this from everywhere, including loopback |
+| 403 | The credential is valid but this operation is not part of the published API, or the operation only answers the machine it runs on |
+
+`rfcli` separates the two cases by exit code, so a script can tell "ask for a key" from "this key is wrong": **8** means no key was set, **9** means the key was rejected.

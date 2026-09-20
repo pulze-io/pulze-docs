@@ -1,28 +1,28 @@
 ---
 title: "Installation"
-description: "Install RenderFlow 2 on Windows, Linux and macOS: what the installer does, where files land, and how a machine is configured once it has run."
-"og:title": "Install RenderFlow 2 on Windows, Linux and macOS"
-"og:description": "Install RenderFlow 2, choose a machine's role, and complete setup from the app or the terminal."
-"twitter:title": "Install RenderFlow 2"
+description: "Install RenderFlow on Windows, Linux and macOS: what the installer does, where files land, and how a machine is configured."
+"og:title": "Install RenderFlow on Windows, Linux and macOS"
+"og:description": "Install RenderFlow, choose a machine's role, and complete setup from the app or the terminal."
+"twitter:title": "Install RenderFlow"
 keywords: ['install render farm software', 'RenderFlow installation', 'render farm setup Windows', 'render farm Linux install', 'render farm macOS install', 'rfsv config', 'render node installation']
 ---
 
-One installer covers every machine in the farm. What a machine becomes — server, workstation or render node — is decided after the files have landed, either in the app's setup wizard or with `rfsv config` in a terminal.
+One installer covers every machine in the farm. What a machine becomes (server, workstation or render node) is decided after installation, either in the app's setup wizard or with `rfsv config` in a terminal.
 
 ## Before you start
 
-- A Pulze account with a RenderFlow subscription or an active trial. Only the server signs in to it; the machines that join it do not.
+- A [Pulze account](https://account.pulze.io/) with a RenderFlow subscription or an active trial. Only the server signs in to it; the machines that join it do not.
 - A shared network folder that every machine can reach, addressed as a UNC path.
 - The installer for each platform, from your [Pulze account](https://account.pulze.io/products/renderflow/downloads).
 - Close 3ds Max, Maya, Blender and any other supported application on the machine first, as the installer refuses to run while one of them is open.
 
 ## The three roles
 
-| Role | What it is | Starts as |
-|------|------------|-----------|
-| **Server** | Holds the database, coordinates the farm and signs in to Pulze. One per farm. | Does not render |
-| **Workstation** | An artist's machine, which submits jobs and can render while idle. | Suspended |
-| **Node** | A dedicated render machine. | Idle |
+| Role | What it is |
+|------|------------|
+| **Server** | Holds the database, coordinates the farm and signs in to Pulze. One per farm. |
+| **Workstation** | An artist's machine, which submits jobs and can render while idle. |
+| **Node** | A dedicated render machine. |
 
 A workstation starts suspended so that it never renders while an artist is working on it, whereas a node starts idle and takes work immediately. You can change either later on the Machines screen, and **Settings → Automation** can hand a workstation to the farm after a period of inactivity and give it back on the next keypress.
 
@@ -121,14 +121,14 @@ Run it as the user who installed RenderFlow; it refuses to run as root. Add `--h
 </Tabs>
 
 <Note>
-The desktop app starts the service at user login, so a workstation needs nothing further. An unattended machine needs the service registered instead — see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+RenderFlow starts at user login, so a workstation needs nothing further. An unattended machine needs the service registered instead, a separate step: see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## The licence agreement
 
 RenderFlow asks you to accept the licence agreement the first time it runs, either in the app's setup wizard or in the `rfsv config` wizard, and stores your acceptance on the machine. You can read the agreement any time at [pulze.io/eula/renderflow](https://www.pulze.io/eula/renderflow).
 
-For an unattended deployment, pass `--accept-eula` to the installer and nothing asks again:
+For an unattended deployment, pass `--accept-eula` to the installer:
 
 <Tabs>
 <Tab title="Windows">
@@ -166,7 +166,7 @@ rfsv eula --accept
 
 ## Finish setup
 
-An installed machine still has to be told what it is, and there are two places to do that. Both ask the same questions, because both read the same list of setup steps from the service.
+An installed machine still has to be configured, and there are two places to do that.
 
 **In the app.** The setup wizard opens by itself on first run and asks for the agreement, the role, sign-in on a server, the server's address on a workstation or node, and the repository on a server.
 
@@ -200,7 +200,7 @@ An installed machine still has to be told what it is, and there are two places t
 </Tab>
 </Tabs>
 
-Without flags it asks the questions one at a time; with flags it applies them and exits, which is what a provisioning script wants. See [Silent Deployment](/renderflow/v2/getting-started/silent-deploy) for the full list and for signing in over SSH. Note that `rfsv config` refuses to run while the service is running, so stop the service first.
+Without flags it asks the questions one at a time; with flags it applies them and exits, which is what a provisioning script wants. See [Silent Deployment](/renderflow/v2/getting-started/silent-deploy) for the full list and for signing in over SSH.
 
 ## Check a machine
 
@@ -208,7 +208,7 @@ Without flags it asks the questions one at a time; with flags it applies them an
 rfsv status
 ```
 
-This prints the machine's role, its server, the repository, the signed-in account, whether the machine has joined the farm and whether the service is running — which between them answer most of the questions a support call opens with.
+This prints the machine's role, its server, the repository, the signed-in account, whether the machine has joined the farm and whether the service is running.
 
 ## Uninstall
 
@@ -244,10 +244,10 @@ sudo /Applications/Pulze/RenderFlow/uninstall.sh --purge
 An ordinary uninstall keeps the database, the configuration, the logs and the licence record, so that reinstalling finds the farm exactly as it was. Adding `--purge` removes them as well.
 
 <Warning>
-On a server those files are the farm's entire history — every job, machine, user, statistic and audit entry — and there is no undo.
+On a server those files are the farm's entire history: every job, machine, user, statistic and audit entry. There is no undo.
 </Warning>
 
 ## Next steps
 
-- [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes) — a studio farm, set up through the app
-- [Silent Deployment](/renderflow/v2/getting-started/silent-deploy) — provisioning many machines from a script
+- [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes): a studio farm, set up through the app
+- [Silent Deployment](/renderflow/v2/getting-started/silent-deploy): provisioning many machines from a script

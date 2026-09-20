@@ -1,15 +1,15 @@
 ---
 title: "Run as a Service"
-description: "Run RenderFlow 2 on unattended render nodes: Windows services, systemd units and launchd agents, and the service account and path rules a node needs to render."
-"og:title": "Run RenderFlow 2 as a Service (Windows, Linux, macOS)"
-"og:description": "Register RenderFlow 2 to start on boot on every platform, with an account that can reach your storage."
-"twitter:title": "Run RenderFlow 2 as a Service"
+description: "Run RenderFlow on unattended render nodes: Windows services, systemd units and launchd agents, and the service account and path rules a node needs to render."
+"og:title": "Run RenderFlow as a Service (Windows, Linux, macOS)"
+"og:description": "Register RenderFlow to start on boot on every platform, with an account that can reach your storage."
+"twitter:title": "Run RenderFlow as a Service"
 keywords: ['render farm Windows service', 'render node without login', 'headless render node', 'render farm always on', 'render node auto start', 'RenderFlow service', 'launchd render node', 'systemd render node']
 ---
 
 A dedicated render node runs unattended. Registered as a service, RenderFlow starts after a reboot, joins the farm and renders without a user session.
 
-Registering the service is a step you do yourself, and it is where you choose the account RenderFlow runs under — an account that needs rights on your storage, so it is worth settling before you start.
+Registering the service is a step you do yourself, and it is where you choose the account RenderFlow runs under, an account that needs rights on your storage, so it is worth settling before you start.
 
 A workstation does not need a service. The desktop app starts the background service at user login.
 
@@ -26,13 +26,13 @@ RenderFlow ships `srvctrl.exe` next to `rfsv.exe` in the install folder. It regi
 
 ### Register
 
-```powershell
-& "C:\Program Files\Pulze\RenderFlow\srvctrl.exe" add --name RenderFlow -- "C:\Program Files\Pulze\RenderFlow\rfsv.exe"
+```cmd
+"C:\Program Files\Pulze\RenderFlow\srvctrl.exe" add --name RenderFlow -- "C:\Program Files\Pulze\RenderFlow\rfsv.exe"
 ```
 
 Set it to start on boot and give it an account:
 
-```powershell
+```cmd
 sc.exe config RenderFlow start= auto
 sc.exe config RenderFlow obj= "DOMAIN\renderfarm" password= "..."
 sc.exe description RenderFlow "RenderFlow Service"
@@ -40,8 +40,8 @@ sc.exe description RenderFlow "RenderFlow Service"
 
 Start it:
 
-```powershell
-Start-Service RenderFlow
+```cmd
+net start RenderFlow
 ```
 
 `srvctrl.exe` relaunches `rfsv.exe` when it exits, which covers a restart after a configuration change or an update.
@@ -56,11 +56,12 @@ A Windows service runs in Session 0, which has no mapped drive letters. A scene 
 
 - **Use UNC paths** in your scenes, in output paths and for the repository.
 - **Map the drives in RenderFlow** where UNC paths are not an option. **Settings → Mapped Drives** stores a drive letter and the UNC path behind it. RenderFlow connects them when the service starts and before it launches a job, as the service's account. A mapping that fails is logged, and the job then fails on the path. Check the service log when a letter does not resolve.
+- **Map the drive with Group Policy.** A domain can map the same letter for the service's account through Group Policy Preferences, so it is already there whenever the account logs on. This works alongside RenderFlow's own mapping, or instead of it.
 
 ### Remove
 
-```powershell
-Stop-Service RenderFlow
+```cmd
+net stop RenderFlow
 sc.exe delete RenderFlow
 ```
 

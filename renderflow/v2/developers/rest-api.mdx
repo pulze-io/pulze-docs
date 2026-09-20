@@ -1,0 +1,226 @@
+---
+title: "Using the REST API"
+sidebarTitle: "REST API"
+description: "The conventions every RenderFlow endpoint shares: base URLs, list envelopes, sorting, error bodies, bulk actions and how a job is submitted."
+"og:title": "Using the RenderFlow REST API"
+"og:description": "Base URLs, list envelopes, sorting, error bodies, bulk actions and how a job is submitted."
+"twitter:title": "Using the RenderFlow REST API"
+keywords: ['render farm REST API', 'render farm API documentation', 'programmatic render submission', 'render farm automation API', 'RenderFlow REST API']
+---
+
+Every endpoint is listed in the [API reference](/renderflow/v2/api-reference/introduction). This page is the part a reference cannot tell you: the conventions all of them share.
+
+## Base URL
+
+```
+http://127.0.0.1:44442/api/v1     the service on this machine
+http://10.11.30.40:44442/api/v1   a farm's server
+```
+
+Turn on TLS on the server and the same farm answers on `https://10.11.30.40:44445/api/v1` instead; nothing else about a call changes.
+
+There is one version, `v1`, and it is in the path. The published document is served at `/openapi.json` on any machine running RenderFlow, needs no credential, and is the same bytes the SDKs and the CLI are generated from:
+
+```bash
+curl http://10.11.30.40:44442/openapi.json > renderflow.json
+```
+
+Point Postman, Insomnia or your own generator at that file and you have a client. It declares its own authentication, so a playground will ask you for a key rather than leaving you to work it out.
+
+## Lists
+
+Every list answers with the same envelope:
+
+```json
+{
+  "data": [ ... ],
+  "total": 1284,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+`total` is how many rows match your filter, ignoring the window, so it is what a pager needs. `limit` defaults to 50 and caps at 500; asking for more is a 422 rather than a silently smaller page. `offset` defaults to 0.
+
+Small collections answer with a bare array instead, because a farm holds a handful of them and paging would be ceremony: pools, user groups, licenses and their presets, the schedule, webhooks and their recent deliveries, and an error summary.
+
+### Sorting
+
+```
+GET /jobs?sort=-priority,created_at
+```
+
+Comma separated, and a leading `-` means descending. The fields allowed are per endpoint and listed on the parameter, because sorting on an unindexed field is a slow query no caller intended.
+
+### Filtering
+
+Filters are named query parameters, never a raw database filter in a body. Each endpoint documents its own:
+
+```
+GET /tasks?job_id=68b1f0c2a4d3e5f6a7b8c9d0&status=failed&limit=200
+GET /nodes?status=busy
+```
+
+## Types on the wire
+
+| | |
+|---|---|
+| Ids | 24-character hex strings, always in a field called `id`. |
+| Timestamps | Integer milliseconds since the epoch, such as `1785846207000` |
+| Durations | Milliseconds, unless the field name says otherwise |
+| Paths | Forward slashes, including on Windows. `//NAS/projects/hero` is the form that travels |
+
+## When a call fails
+
+```json
+{
+  "error": "Validation failed: url — Invalid URL (+1 more)",
+  "issues": [
+    { "path": ["url"], "message": "Invalid URL" },
+    { "path": ["events"], "message": "Too small: expected array to have >=1 items" }
+  ]
+}
+```
+
+`error` is one sentence, it names the first field at fault, and it counts the rest. It is written to be shown to a person as it is, because a DCC submitter does exactly that. `issues` carries every problem, so a form can mark all of its fields in one round trip.
+
+One case answers without a field name:
+
+```json
+{ "error": "Validation failed: Invalid input", "issues": [{ "path": [], "message": "Invalid input" }] }
+```
+
+That is `POST /jobs` rejecting a body that matched none of its shapes. The request body there is a union of the step tree and every job type's recipe, so when nothing matches there is no single field to blame. Check `type` first, then the fields that type requires.
+
+| Status | Means |
+|---|---|
+| 400 | The request is malformed |
+| 401 | No credential, or one that does not verify |
+| 403 | Valid credential, but this operation is not part of the published API |
+| 404 | No such row |
+| 409 | The row is busy. Stopping a job before deleting it is the usual answer |
+| 422 | The body or the query failed validation. `issues` says where |
+| 500 | Something went wrong on the farm. The body still carries a sentence |
+
+There is no rate limiting. A farm is on your own network and the service is not metered.
+
+## Submitting a job
+
+`POST /jobs` takes either shape. A **recipe** is the short way in:
+
+<CodeGroup>
+```bash curl
+curl -X POST "http://10.11.30.40:44442/api/v1/jobs?wait=true" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "blender.render",
+    "name": "Hero 010 lighting",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": { "id": "blender", "version": "4.5" },
+    "frame": "1-240",
+    "resolution": "1920x1080",
+    "priority": 75
+  }'
+```
+
+```python Python
+job = farm.jobs.create_job(body={
+    "type": "blender.render",
+    "name": "Hero 010 lighting",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": {"id": "blender", "version": "4.5"},
+    "frame": "1-240",
+    "resolution": "1920x1080",
+    "priority": 75
+}, wait=True)
+```
+
+```typescript TypeScript
+const job = await rf.jobs.createJob({
+    type: "blender.render",
+    name: "Hero 010 lighting",
+    file: "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    host: { id: "blender", version: "4.5" },
+    frame: "1-240",
+    resolution: "1920x1080",
+    priority: 75
+}, { wait: true });
+```
+</CodeGroup>
+
+`type`, `file` and `host` are required on every recipe. `frame` is a single frame, a range, a range with a step (`1-240:4`) or a list (`1,7,22`). `resolution` is a `WIDTHxHEIGHT` string. `priority` runs 0 to 100, and a job you do not set one on is created at 50.
+
+**`wait` decides what you get back.** Without it the call answers **202** with a job that is still being built, which is right for a submitter that does not want to hold an artist's application open. With `?wait=true` it answers **201** and the job in the body is ready to start.
+
+A submitted job is `pending` and will be picked up. Pass `"status": "suspended"` to have it wait until an operator starts it.
+
+For a job that does several things in order, send `name` and your own `steps` array instead of a recipe. Both shapes are the one request body, so it is the same endpoint either way.
+
+## Acting on many rows
+
+Every action that makes sense in bulk takes a list of ids, and answers with what actually happened rather than a bare success:
+
+<CodeGroup>
+```bash curl
+curl -X POST "http://10.11.30.40:44442/api/v1/jobs/stop" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "ids": ["68b1f0c2a4d3e5f6a7b8c9d0", "68b1f0c2a4d3e5f6a7b8c9d1"] }'
+```
+
+```python Python
+result = farm.jobs.stop_jobs(body={"ids": [first, second]})
+print(result.message)   # "2 of 2 job(s) stopped"
+```
+
+```typescript TypeScript
+const result = await rf.jobs.stopJobs({ ids: [first, second] });
+console.log(result.message);   // "2 of 2 job(s) stopped"
+```
+</CodeGroup>
+
+A bulk edit carries the change separately from the rows it applies to:
+
+```json
+PATCH /jobs
+{ "ids": ["68b1f0c2a4d3e5f6a7b8c9d0"], "values": { "priority": 100, "limit": 5 } }
+```
+
+One call, not a loop. The farm applies them together and reports the count.
+
+## Status vocabularies
+
+A job, a step and a task all use the same set:
+
+| | |
+|---|---|
+| `pending` | Waiting to be matched to a machine |
+| `queued` | Matched and about to start |
+| `preparing` | A machine is staging files for it |
+| `submitting` | Being handed to the application |
+| `working` | Rendering |
+| `finishing` | Finished rendering, still writing results |
+| `completed` | Done |
+| `failed` | Done, badly |
+| `suspended` | Stopped, and resumable |
+| `scheduled` | Waiting for a date |
+| `archived` | Moved out of the active list |
+| `disabled` | Switched off, and not counted |
+
+Resetting a `completed` job puts it back to `suspended` and it can run again, in place, keeping its id. That matters if you are waiting on one: see [waiting for a job](/renderflow/v2/developers/typescript-sdk).
+
+Machines have their own:
+
+| | |
+|---|---|
+| `offline` | Not reachable |
+| `loading` | Starting up |
+| `idle` | Ready for work |
+| `busy` | Rendering |
+| `finishing` | Finishing the task it has |
+| `reserved` | Held for one job |
+| `suspended` | Taken out of the pool by an operator |
+| `error` | Needs attention |
+
+And a type, which never changes after setup: `server`, `node` or `workstation`.

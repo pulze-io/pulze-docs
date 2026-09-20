@@ -1,0 +1,463 @@
+---
+title: "Cookbook"
+description: "Whole tasks against a RenderFlow farm, in curl, Python, TypeScript and rfcli: submit and wait, requeue failures, pull frames, archive nightly, drive a remote farm."
+"og:title": "RenderFlow cookbook"
+"og:description": "Whole tasks in curl, Python, TypeScript and rfcli: submit and wait, requeue failures, pull frames, archive nightly."
+"twitter:title": "RenderFlow cookbook"
+keywords: ['render farm api examples', 'render farm automation scripts', 'render farm python example', 'submit render job api', 'render farm pipeline recipes']
+---
+
+Each of these is a whole task rather than one call, in every client that can do it. They assume a connected client:
+
+<CodeGroup>
+```bash curl
+export RENDERFLOW_API_KEY=rf_live_...
+export RF=http://10.11.30.40:44442/api/v1
+```
+
+```python Python
+import renderflow as rf
+farm = rf.connect("http://10.11.30.40:44442", api_key=os.environ["RENDERFLOW_API_KEY"])
+```
+
+```typescript TypeScript
+import { RenderFlow } from "@pulze-io/renderflow";
+const client = new RenderFlow({ baseUrl: "http://10.11.30.40:44442/api/v1", apiKey: process.env.RENDERFLOW_API_KEY });
+```
+
+```bash rfcli
+export RENDERFLOW_API_KEY=rf_live_...
+export RENDERFLOW_URL=http://10.11.30.40
+```
+</CodeGroup>
+
+On a machine that is running RenderFlow, drop the address and the key entirely. Everything below works against `http://localhost:44442/api/v1` with no credential, which is how a plugin on a workstation submits.
+
+## Submit a sequence and wait for it to be ready
+
+<CodeGroup>
+```bash curl
+curl -X POST "$RF/jobs?wait=true" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "blender.render",
+    "name": "Hero 010 lighting v014",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": { "id": "blender", "version": "4.5" },
+    "frame": "1-240",
+    "resolution": "3840x2160",
+    "priority": 80
+  }'
+```
+
+```python Python
+job = farm.jobs.create_job(body={
+    "type": "blender.render",
+    "name": "Hero 010 lighting v014",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": {"id": "blender", "version": "4.5"},
+    "frame": "1-240",
+    "resolution": "3840x2160",
+    "priority": 80
+}, wait=True)
+
+print(job.id, job.status)
+```
+
+```typescript TypeScript
+const job = await client.jobs.createJob({
+    type: "blender.render",
+    name: "Hero 010 lighting v014",
+    file: "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    host: { id: "blender", version: "4.5" },
+    frame: "1-240",
+    resolution: "3840x2160",
+    priority: 80
+}, { wait: true });
+```
+
+```bash rfcli
+rfcli jobs create --wait --data '{
+  "type": "blender.render",
+  "name": "Hero 010 lighting v014",
+  "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+  "host": { "id": "blender", "version": "4.5" },
+  "frame": "1-240",
+  "resolution": "3840x2160",
+  "priority": 80
+}'
+```
+</CodeGroup>
+
+`wait=true` is the difference between 201 with a job you can act on and 202 with one still being built. Use it in a script; leave it out in a submitter that should not hold an application open.
+
+The path is the one thing worth being careful about. **It has to be reachable from every render machine**, so a UNC path or a mapped share, never `C:/Users/...`. A local path submits fine and fails on every machine but yours.
+
+## Build a multi-step job by reading one back
+
+A step tree is the `steps` array, and each step's configuration is its `props`, the same tagged union the submitter fills in. Rather than assembling that from the schema, build the chain once in the submitter and read it back:
+
+<CodeGroup>
+```bash curl
+curl "$RF/jobs/68b1f0c2a4d3e5f6a7b8c9d0" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  | jq '{ name, steps }' > template.json
+```
+
+```python Python
+template = farm.jobs.get_job(reference_job_id).to_dict()
+
+# Read the shape once, see which prop carries the scene, then write your own value into it.
+for step in template["steps"]:
+    print(step["name"], step["type"], [(prop.get("type"), prop.get("key")) for prop in step.get("props", [])])
+
+farm.jobs.create_job(body={"name": "Hero 020 delivery", "steps": template["steps"]}, wait=True)
+```
+
+```typescript TypeScript
+const template = await client.jobs.getJob(referenceJobId);
+
+await client.jobs.createJob({
+    name: "Hero 020 delivery",
+    steps: template.steps   // with your own values written into each step's props
+}, { wait: true });
+```
+
+```bash rfcli
+rfcli --json jobs get 68b1f0c2a4d3e5f6a7b8c9d0 | jq '.data | { name, steps }' > template.json
+# edit template.json, then
+rfcli jobs create --wait --data "$(cat template.json)"
+```
+</CodeGroup>
+
+This is the honest recommendation rather than a shortcut: the submitter is the thing that knows how a Video Encoder step wires to the render before it, and a tree it produced is a tree that works. `JobCreate` and `JobStepCreate` in the [API reference](/renderflow/v2/api-reference/introduction) are the schema when you want to read it.
+
+## Follow a job to completion, without polling
+
+<CodeGroup>
+```typescript TypeScript
+const stop = client.jobs.on(event => {
+    const percent = event.patch?.["progress.percent"] as number | undefined;
+    if (percent !== undefined) process.stdout.write(`\r${Math.round(percent)}%   `);
+}, { id: job.id });
+
+const finished = await client.jobs.settled(job.id);
+stop();
+
+console.log(`\n${finished ? finished.status : "no longer on the farm"}`);
+```
+
+```python Python
+stop = farm.jobs.on(
+    lambda event: print(event.patch.get("progress.percent")),
+    {"id": job.id}
+)
+
+job = farm.jobs.settled(job.id, interval=15)   # the wait itself polls, and needs no thread
+stop()
+
+print(job.status if job else "no longer on the farm")
+```
+
+```bash curl
+# There is no wait in HTTP. Either read the job on a loop, or open the socket:
+# ws://10.11.30.40:44442/api/v1/socket
+until [ "$(curl -s "$RF/jobs/$ID" -H "Authorization: Bearer $RENDERFLOW_API_KEY" | jq -r .status)" \
+        = "completed" ]; do sleep 15; done
+```
+
+```bash rfcli
+rfcli jobs get "$ID" --watch 15
+```
+</CodeGroup>
+
+`settled` resolves on `completed` or `failed`, answers `null` when the job is no longer there, and does not treat a stop as an end. In TypeScript it subscribes before it reads, which is what stops a job finishing in the gap; in Python it polls, so it needs no thread and survives a proxy that refuses an upgrade. **Both SDKs have `on`**, and the [WebSocket page](/renderflow/v2/developers/websocket) shows the Python version of a wait that is pushed rather than polled.
+
+## Find out why a job failed
+
+The one a pipeline TD runs most: the failed tasks, and the tail of each log.
+
+<CodeGroup>
+```python Python
+failed = farm.tasks.get_tasks(job_id=job_id, status="failed", limit=50).data
+
+for task in failed:
+    log = farm.tasks.get_task_logs(task.id, offset=-20)
+    last = log.lines[-1].message if log.lines else "no log"
+    print("frame {0} on {1}: {2}".format(task.index, task.node_id, last))
+```
+
+```typescript TypeScript
+const { data: failed } = await client.tasks.getTasks({ job_id: jobId, status: "failed", limit: 50 });
+
+for (const task of failed) {
+    const { lines } = await client.tasks.getTaskLogs(task.id, { offset: -20 });
+    console.log(`frame ${task.index} on ${task.node_id}: ${lines.at(-1)?.message ?? "no log"}`);
+}
+```
+
+```bash curl
+for id in $(curl -s "$RF/tasks?job_id=$JOB&status=failed&limit=50" \
+    -H "Authorization: Bearer $RENDERFLOW_API_KEY" | jq -r '.data[].id'); do
+  echo "=== $id"
+  curl -s "$RF/tasks/$id/logs?offset=-20" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+    | jq -r '.lines[].message'
+done
+```
+
+```bash rfcli
+for id in $(rfcli --json tasks list --job_id "$JOB" --status failed --limit 50 | jq -r '.data[].id'); do
+  echo "=== $id"
+  rfcli --json tasks logs "$id" --offset -20 | jq -r '.data.lines[].message'
+done
+```
+</CodeGroup>
+
+**A negative `offset` counts back from the end**, so `-20` is the last twenty lines. A render log is long and the reason is at the bottom, so that is almost always the read you want.
+
+`GET /errors?job_id=...` is the other half of the picture: the farm's own recorded errors, as against one process's output.
+
+## Pull a frame
+
+<CodeGroup>
+```python Python
+# `thumb` for a tile, `preview` for one frame on screen, `full` for the source transcoded.
+image = farm.tasks.get_task_preview(task_id, size="preview")
+
+with open("frame_{0}.jpg".format(task.index), "wb") as handle:
+    handle.write(image)
+```
+
+```typescript TypeScript
+const blob = await client.tasks.getTaskPreview(taskId, { size: "preview" });
+await fs.promises.writeFile(`frame_${task.index}.jpg`, Buffer.from(await blob.arrayBuffer()));
+```
+
+```bash curl
+curl "$RF/tasks/$TASK/preview?size=preview" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" -o frame.jpg
+
+# A render element rather than the main image. The key is one the task's `outputs` carry,
+# so read it off the task first.
+curl "$RF/tasks/$TASK/preview?size=full&output=$ELEMENT" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" -o element.jpg
+```
+
+```bash rfcli
+# rfcli prints JSON, so for an image use curl or an SDK.
+rfcli --json tasks get "$TASK" | jq -r .data.thumbnail
+```
+</CodeGroup>
+
+**`full` is transcoded on demand**, so it costs the farm real work. A wall display asks for `thumb`; a person looking at one frame asks for `preview`.
+
+## Requeue everything one machine failed, then take it out
+
+The sequence after a machine has been misbehaving: give its work back to the farm, then stop it taking more.
+
+<CodeGroup>
+```python Python
+failed = farm.tasks.get_tasks(node_id=node_id, status="failed", limit=500).data
+
+if failed:
+    # release_nodes clears the machines these tasks were assigned to, which is the point here.
+    print(farm.tasks.reset_tasks(body={"ids": [task.id for task in failed], "release_nodes": True}).message)
+
+farm.nodes.update_node_status(node_id, body={"status": "suspended"})
+```
+
+```typescript TypeScript
+const { data: failed } = await client.tasks.getTasks({ node_id: nodeId, status: "failed", limit: 500 });
+
+if (failed.length > 0) {
+    await client.tasks.resetTasks({ ids: failed.map(task => task.id), release_nodes: true });
+}
+
+await client.nodes.updateNodeStatus(nodeId, { status: "suspended" });
+```
+
+```bash curl
+IDS=$(curl -s "$RF/tasks?node_id=$NODE&status=failed&limit=500" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" | jq -c '[.data[].id]')
+
+curl -X POST "$RF/tasks/reset" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" -d "{\"ids\": $IDS, \"release_nodes\": true}"
+
+curl -X PATCH "$RF/nodes/$NODE/status" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" -d '{"status":"suspended"}'
+```
+
+```bash rfcli
+IDS=$(rfcli --json tasks list --node_id "$NODE" --status failed --limit 500 | jq -r '[.data[].id] | join(",")')
+[ -n "$IDS" ] && rfcli tasks reset --ids "$IDS" --release_nodes true
+
+rfcli nodes status "$NODE" --status suspended
+```
+</CodeGroup>
+
+`suspended` kills the task the machine is on. `finishing` is the polite version: it stops taking new work and loses nothing, which is what you want if the machine is merely going to be rebooted.
+
+## Archive everything that finished a week ago
+
+A nightly job. The archive is a separate collection, so archiving is a move rather than a delete, and restoring puts the job back with the same id.
+
+<CodeGroup>
+```python Python
+import time
+
+cutoff = int((time.time() - 7 * 86400) * 1000)   # the wire is epoch milliseconds
+
+done = farm.jobs.get_jobs(status="completed", limit=500, sort="finished_at").data
+old = [job.id for job in done if (job.finished_at or 0) < cutoff]
+
+if old:
+    print(farm.archive.archive_jobs(body={"ids": old}).message)
+```
+
+```typescript TypeScript
+const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+const { data: done } = await client.jobs.getJobs({ status: "completed", limit: 500, sort: "finished_at" });
+const old = done.filter(job => (job.finished_at ?? 0) < cutoff).map(job => job.id);
+
+if (old.length > 0) await client.jobsArchived.archiveJobs({ ids: old });
+```
+
+```bash curl
+CUTOFF=$(( ($(date +%s) - 7 * 86400) * 1000 ))
+
+IDS=$(curl -s "$RF/jobs?status=completed&limit=500&sort=finished_at" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  | jq -c --argjson c "$CUTOFF" '[.data[] | select(.finished_at < $c) | .id]')
+
+curl -X POST "$RF/jobs-archived" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" -d "{\"ids\": $IDS}"
+```
+
+```bash rfcli
+CUTOFF=$(( ($(date +%s) - 7 * 86400) * 1000 ))
+
+IDS=$(rfcli --json jobs list --status completed --sort finished_at --limit 500 \
+  | jq -r --argjson c "$CUTOFF" '[.data[] | select(.finished_at < $c) | .id] | join(",")')
+
+[ -n "$IDS" ] && rfcli archive create --ids "$IDS"
+```
+</CodeGroup>
+
+The farm can also do this without you: **Settings**, **Job Cleanup** archives on an age rule, and `POST /schedule` puts anything else on a clock. Write the script when the rule has to be yours.
+
+## Submit from inside a DCC
+
+The case the Python client's no-dependency rule exists for. A shelf button in Maya, running in Maya's own interpreter, with nothing installed:
+
+```python
+import os
+
+import maya.cmds as cmds
+import renderflow as rf
+
+from renderflow.wire import ApiError
+
+
+def submit():
+    scene = cmds.file(query=True, sceneName=True)
+
+    if not scene:
+        cmds.warning("Save the scene before submitting it.")
+        return
+
+    if cmds.file(query=True, modified=True):
+        cmds.file(save=True)
+
+    farm = rf.connect()   # the service on this machine, no key
+
+    try:
+        job = farm.jobs.create_job(body={
+            "type": "maya.render",
+            "name": os.path.splitext(os.path.basename(scene))[0],
+            "file": scene.replace("\\", "/"),
+            "host": {"id": "maya", "version": str(cmds.about(majorVersion=True))},
+            "frame": "{0}-{1}".format(
+                int(cmds.getAttr("defaultRenderGlobals.startFrame")),
+                int(cmds.getAttr("defaultRenderGlobals.endFrame"))
+            )
+        }, wait=True)
+    except ApiError as refused:
+        cmds.confirmDialog(title="RenderFlow", message=str(refused), button=["Close"])
+        return
+
+    cmds.inViewMessage(assistMessage="Submitted <hl>{0}</hl>".format(job.name), fade=True)
+```
+
+The same shape works in Houdini, Nuke and VRED: `sys.path` gets the folder holding `renderflow`, and the rest is the same three calls. The [Python SDK page](/renderflow/v2/developers/python-sdk) has the reasoning.
+
+## The numbers a wall dashboard needs
+
+Two calls, both counted on the server. Do not total a list yourself: a farm has more tasks than you want to page through.
+
+<CodeGroup>
+```python Python
+jobs = farm.jobs.get_job_summary()
+nodes = farm.nodes.get_node_summary()
+
+print("{0} rendering, {1} queued, {2} failed".format(jobs.working, jobs.pending, jobs.failed))
+print("{0} of {1} machines busy, {2} offline".format(nodes.busy, nodes.all, nodes.offline))
+```
+
+```typescript TypeScript
+const [jobs, nodes] = await Promise.all([client.jobs.getJobSummary(), client.nodes.getNodeSummary()]);
+
+console.log(`${jobs.working} rendering, ${jobs.pending} queued, ${jobs.failed} failed`);
+console.log(`${nodes.busy} of ${nodes.all} machines busy, ${nodes.offline} offline`);
+```
+
+```bash curl
+curl -s "$RF/jobs/summary"  -H "Authorization: Bearer $RENDERFLOW_API_KEY"
+curl -s "$RF/nodes/summary" -H "Authorization: Bearer $RENDERFLOW_API_KEY"
+```
+
+```bash rfcli
+rfcli jobs summary
+rfcli nodes summary
+```
+</CodeGroup>
+
+```json
+{ "jobs": 184, "all": 22410, "pending": 1902, "suspended": 0, "working": 96, "completed": 20390, "failed": 22 }
+{ "all": 128, "offline": 3, "loading": 0, "reserved": 2, "suspended": 1, "idle": 26, "busy": 96, "finishing": 0, "error": 0 }
+```
+
+On a job summary, `jobs` is how many jobs there are and every other number is tasks. Then subscribe to `jobs` and `nodes` on [the socket](/renderflow/v2/developers/websocket) and the dashboard never has to ask again.
+
+## Tell a production tracker when a render finishes
+
+Which mechanism to use depends on whether anything of yours is running to receive it.
+
+**Nothing of yours running: use a webhook.** The farm calls you. One subscription covers every job, and [the webhooks page](/renderflow/v2/developers/webhooks) covers signature verification, which is the part that matters.
+
+```bash
+curl -X POST "$RF/webhooks" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Shot tracker",
+    "url": "https://tracker.studio.lan/hooks/renderflow",
+    "events": ["job.completed", "job.failed"]
+  }'
+```
+
+**One job, one message, one person: use a notification at submit time instead.** It is stored on the job and disappears with it, which is exactly right for "tell the lighting lead when this one is done".
+
+```python
+farm.jobs.create_job(body={
+    "type": "blender.render",
+    "name": "Hero 010 lighting v014",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": {"id": "blender", "version": "4.5"},
+    "frame": "1-240",
+    "notifications": [
+        {"channel": "slack", "type": "job-completed", "value": slack_channel_id, "label": "#lighting"}
+    ]
+}, wait=True)
+```
+
+**Neither works if something has to happen partway through a job.** A webhook only fires when a job, step or task changes state, so it cannot do work of its own. For anything that must happen between two renders, add it as a [step in the chain](/renderflow/v2/scripting/shell-steps) instead: it runs on the farm, it has a log, the next step waits for it, and it can be retried on its own.

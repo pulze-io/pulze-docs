@@ -1,15 +1,15 @@
 ---
 title: "System Requirements"
-description: "Hardware, operating system, licensing, network and port requirements for RenderFlow 2."
-"og:title": "RenderFlow 2 System Requirements"
-"og:description": "Hardware, operating systems, licensing, network ports and storage needed to run RenderFlow 2."
-"twitter:title": "RenderFlow 2 System Requirements"
-keywords: ['render farm hardware requirements', 'render farm system requirements', 'render node specs', 'render farm ports', 'render farm network requirements', 'MongoDB render farm', 'RenderFlow 2 requirements']
+description: "Hardware, operating systems, licensing, network and port requirements for RenderFlow."
+"og:title": "RenderFlow System Requirements"
+"og:description": "Hardware, operating systems, licensing, network ports and storage needed to run RenderFlow."
+"twitter:title": "RenderFlow System Requirements"
+keywords: ['render farm hardware requirements', 'render farm system requirements', 'render node specs', 'render farm ports', 'render farm network requirements', 'MongoDB render farm', 'RenderFlow requirements']
 ---
 
 ## Licensing
 
-RenderFlow needs a Pulze account with either a RenderFlow subscription or an active trial. Only the server signs in to that account, and it holds the licences for the whole farm, so the machines that join it need no account of their own.
+RenderFlow requires a Pulze account with either a RenderFlow subscription or an active trial. Only the server signs in to that account, and it holds the licences for the whole farm, so the machines that join it need no account of their own.
 
 ## Hardware
 
@@ -23,7 +23,7 @@ The server holds the database and coordinates every machine in the farm, which i
 | RAM | 8 GB | 16 GB |
 | Disk | 50 GB free | 100 GB+ free, SSD |
 
-Scale the server with the farm: the more machines that connect and the more jobs that sit in the queue, the more RAM and CPU cores the server wants. Machines hold a single connection to the server and never talk to the database directly, which is what keeps that growth gentle.
+Scale the server with the farm: the more machines that connect and the more jobs that sit in the queue, the more RAM and CPU cores the server wants.
 
 <Note>
 Rendering on the server is not recommended. A heavy render competing with the database for CPU and memory can cause problems across the farm, so it is better to leave the server to coordinate.
@@ -35,16 +35,17 @@ Any Windows, Linux or macOS machine that runs your application can be a render n
 
 - **RAM matters most.** Match or exceed your workstations, because a scene that needs 90 GB on a workstation will either page to disk or fail outright on a node with 64 GB.
 - **Disk.** Keep around 100 GB free on the system drive, since applications write temporary files there while rendering.
+- **Network.** Every node reads scenes and writes frames over the same shared storage as the rest of the farm, so a slow connection becomes the bottleneck before CPU or RAM do. See [Network speed](#network-speed) below.
 
 ## Operating systems
 
-RenderFlow 2 runs as a server, a workstation or a render node on all three platforms, and a single farm can mix them freely — **Settings → Mapped Paths** translates file paths between operating systems so the same job renders everywhere.
+RenderFlow runs on all three platforms, and a single farm can mix them freely. **Settings → Mapped Paths** translates file paths between operating systems so the same job renders everywhere.
 
 | OS | Status |
 |----|--------|
 | Windows 10, 11, Server 2019 and later | Supported |
 | macOS 13 (Ventura) and later | Supported |
-| Linux: Rocky 8, 9 and 10, Ubuntu, and other RHEL- and Debian-based distributions | Supported |
+| Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | Supported |
 
 ## Network
 
@@ -63,11 +64,11 @@ Port 44445 only listens when TLS is switched on, and even then the machine's own
 
 The installer configures the system firewall for you:
 
-- **Windows** — program rules for `RenderFlow.exe` and `rfsv.exe`, plus port rules for `44443/udp` and `44444/tcp`.
-- **Linux** — `44442/tcp`, `44443/udp`, `44444/tcp` and `44445/tcp` through `firewalld` (Rocky, RHEL, Fedora) or `ufw` (Ubuntu, Debian). On any other firewall the installer prints the ports so you can open them by hand.
-- **macOS** — Application Firewall exceptions for `rfsv` and the RenderFlow app. The macOS firewall works per process rather than per port, so no port rules are needed.
+- **Windows**: program rules for `RenderFlow.exe` and `rfsv.exe`, plus port rules for `44443/udp`, `44444/tcp`, `44445/tcp`.
+- **Linux**: `44442/tcp`, `44443/udp`, `44444/tcp` and `44445/tcp` through `firewalld` (Rocky, RHEL, Fedora) or `ufw` (Ubuntu, Debian). On any other firewall the installer prints the ports so you can open them by hand.
+- **macOS**: Application Firewall exceptions for `rfsv` and the RenderFlow app. The macOS firewall works per process rather than per port, so no port rules are needed.
 
-A third-party firewall or a corporate security policy will need these exceptions added manually.
+A third-party firewall or a corporate security policy will need these exceptions added manually, along with outbound access on the server to `*.pulze.io` (skip it entirely if you are on offline licensing) and, optionally, `*.renderflow.com`. See [Internet access](#internet-access) below for what each domain is for.
 
 ### Fixed IP addresses
 
@@ -81,9 +82,11 @@ How much bandwidth you need depends on the size of the farm and on the work it d
 
 The farm needs one folder that every machine can reach, called the **repository**, where RenderFlow keeps job files, task logs, frame previews and backups. The server asks for it during setup.
 
-<Warning>
-Address it with a UNC path (`\\server\share\...`) rather than a mapped drive letter, for the repository and for the paths inside your scenes alike. A drive letter belongs to a logged-in user session, so a render node running as a service has no session in which that letter exists.
-</Warning>
+<Tip>
+Address it with a UNC path (`\\server\share\...`) if any machine touching it runs RenderFlow as a service, which is the usual setup for a render node: a drive letter belongs to a logged-in user session, so a service has no session in which that letter exists. A mapped drive letter works fine on a machine you stay signed in to.
+
+Running Windows, Linux and macOS side by side? Point your scenes and the repository at one UNC-style path and let **Settings → Mapped Paths** translate it to what each platform expects.
+</Tip>
 
 ## Database
 
@@ -97,12 +100,12 @@ Only the server needs internet access; render nodes and workstations do not.
 
 | Domain | Purpose | Required |
 |--------|---------|----------|
-| `*.pulze.io` | Sign-in, licensing and the update check | Yes, on the server |
+| `*.pulze.io` | Sign-in, licensing and the update check | On the server, unless you are on offline licensing |
 | `*.renderflow.com` | Relayed email notifications and the AI agent features | Optional |
 
 Blocking `*.renderflow.com` costs you two optional conveniences and nothing more: email notifications sent through Pulze's relay, and the AI agent features. Slack, Teams, Discord and webhook notifications go straight to those services, and an email channel pointed at your own SMTP server is unaffected.
 
-RenderFlow can also run in a sealed environment with no route to the internet at all. If that is your situation, [contact support](mailto:support@pulze.io) and we will set you up.
+RenderFlow can also run in a sealed environment with no route to the internet at all, on **offline licensing**. If that is your situation, [contact support](mailto:support@pulze.io) and we will set you up.
 
 ## Next steps
 

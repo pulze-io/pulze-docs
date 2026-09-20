@@ -1,0 +1,71 @@
+---
+title: "Automating RenderFlow"
+sidebarTitle: "Overview"
+description: "Six ways to connect your own code to a RenderFlow farm: submit and control jobs through the REST API, the TypeScript and Python SDKs or the CLI, and hear about changes through live updates or webhooks."
+"og:title": "Automating RenderFlow"
+"og:description": "Submit and control jobs through the REST API, the SDKs or the CLI, and hear about changes through live updates or webhooks."
+"twitter:title": "Automating RenderFlow"
+keywords: ['render farm API', 'render farm automation', 'programmatic render submission', 'render pipeline integration', 'RenderFlow API']
+---
+
+## The model
+
+Four sentences carry almost everything:
+
+- A **job** holds an ordered list of **steps**.
+- A step is split into **tasks**.
+- Tasks run on **machines**.
+- You submit either a **recipe**, which is a job type plus a file and the flat fields that type understands, or a **step tree**, which is the whole structure spelled out.
+
+A recipe is how a DCC submits: `type`, `file`, `host`, and the handful of fields that matter for that application. The service expands it into steps for you. A step tree is what the submitter builds when a job does several things in order, such as render, then convert the frames, then encode a movie.
+
+## Which surface
+
+<CardGroup cols={2}>
+
+<Card title="REST API" icon="cloud" href="/renderflow/v2/developers/rest-api">
+  The whole surface. Everything else is built on it.
+</Card>
+
+<Card title="TypeScript SDK" icon="js" href="/renderflow/v2/developers/typescript-sdk">
+  Typed calls from Node or a browser.
+</Card>
+
+<Card title="Python SDK" icon="python" href="/renderflow/v2/developers/python-sdk">
+  No dependencies, so it can be used anywhere.
+</Card>
+
+<Card title="rfcli" icon="terminal" href="/renderflow/v2/developers/cli">
+  One command per operation, for scripts and scheduled tasks.
+</Card>
+
+<Card title="Live updates" icon="bolt" href="/renderflow/v2/developers/websocket">
+  One WebSocket. What the app itself uses.
+</Card>
+
+<Card title="Webhooks" icon="right-left" href="/renderflow/v2/developers/webhooks">
+  The farm calls you when a job or a machine changes.
+</Card>
+
+</CardGroup>
+
+## Choosing between them
+
+| You want | Use |
+|---|---|
+| To submit a job from inside Maya, Houdini or Nuke | The Python SDK, from the application's own interpreter |
+| To submit or query from a web service | The TypeScript SDK, or REST directly |
+| A shell script, a cron job, a scheduled task | RenderFlow CLI (rfcli) |
+| A dashboard that updates as the farm works | Live updates over the socket |
+| To be told when a job finishes | Webhooks |
+| To ask a question in plain language | The MCP server |
+
+Live updates and webhooks are not alternatives, and neither drives the farm the way the REST API, the SDKs and the CLI do: both only listen. A socket subscription sees every change across the farm's collections and needs a process of yours to stay connected. A webhook covers job and machine lifecycle and needs nothing running at all, because the farm makes the call.
+
+## One vocabulary
+
+An operation is named the same everywhere. `GET /jobs` is `rf.jobs.getJobs()` in TypeScript, `farm.jobs.get_jobs()` in Python, and `rfcli jobs list` on the command line. The names come from the API document's own operation ids, so a route you find in the reference reads the same in whichever client you picked.
+
+## Before you start
+
+You need the address of a server and an API key, unless your code runs on a machine that has RenderFlow installed, in which case it can talk to the service on `127.0.0.1` with no credential at all. That is how a DCC submitter works, and it is the shortest path to a first successful call.

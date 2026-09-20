@@ -1,0 +1,278 @@
+---
+title: "Python SDK"
+description: "The official RenderFlow client for Python: no dependencies, so it can be used anywhere, including inside Maya, Houdini, Nuke and VRED as they ship."
+"og:title": "RenderFlow Python SDK"
+"og:description": "No dependencies, so it can be used anywhere."
+"twitter:title": "RenderFlow Python SDK"
+keywords: ['render farm python sdk', 'maya submit to render farm', 'houdini render farm api', 'nuke render farm python', 'render farm automation python']
+---
+
+```bash
+pip install pulze-renderflow
+```
+
+```python
+import renderflow as rf
+
+farm = rf.connect()
+
+for job in farm.jobs.get_jobs(status="working").data:
+    print(job.name, job.status)
+```
+
+## No dependencies
+
+The package is standard library only. Drop the `renderflow` folder onto `sys.path` and `import renderflow` works in any Python, including a DCC's own bundled interpreter, with nothing to install:
+
+```python
+import sys
+sys.path.insert(0, "//NAS/pipeline/python")   # the folder holding renderflow/
+import renderflow as rf
+```
+
+<Note>
+The wheel declares **Python 3.10** or newer. The [plugin runtime](/renderflow/v2/scripting/rf-reference) a render node imports is a different file in the same package and is **3.8 syntax**, because a node resolves whatever interpreter it finds. If you are writing a step that runs on the farm, that is the one you are writing against.
+</Note>
+
+## Connecting
+
+```python
+farm = rf.connect()                                                    # this machine
+farm = rf.connect("http://10.11.30.40:44442", api_key="rf_live_...")   # a farm's server
+```
+
+Each argument falls back to the environment and then to this machine:
+
+| | Falls back to | Then to |
+|---|---|---|
+| `url` | `RENDERFLOW_URL` | `http://127.0.0.1:44442` |
+| `api_key` | `RENDERFLOW_API_KEY` | no credential at all |
+
+**No credential is a real configuration, not a missing one.** A caller on the machine running RenderFlow has already proved where it is, so a submitter inside an artist's application needs no key. A key is what a call from anywhere else needs, and [Authentication](/renderflow/v2/developers/authentication) covers both.
+
+The address may be given with or without `/api/v1`. `timeout` is per request and defaults to 60 seconds. `Farm` is a context manager, so `with rf.connect() as farm:` closes it.
+
+TLS is verified against the machine's own trust store. A server presenting a certificate from a studio certificate authority needs that authority installed on the machine doing the calling, the same as any other client on your network would.
+
+## Finding the operation you want
+
+Nothing in this package is written per operation. The methods **are** the operations of the API document shipped inside it, bound on first use, which is why the client is explorable rather than something you read a reference for:
+
+```python
+farm.tags()                  # every group
+dir(farm.jobs)               # every operation in one
+help(farm.jobs.get_jobs)     # what it takes, from the document
+```
+
+```
+>>> farm.tags()
+['archive', 'errors', 'info', 'jobs', 'licenses', 'nodes', 'pools',
+ 'schedule', 'service', 'tasks', 'user_groups', 'users', 'webhooks']
+
+>>> dir(farm.jobs)
+['create_job', 'delete_job', 'delete_jobs', 'finish_jobs', 'get_job', 'get_job_step',
+ 'get_job_summary', 'get_jobs', 'get_step_logs', 'open_submitter', 'reserve_job',
+ 'reset_job', 'reset_job_nodes', 'reset_job_step', 'reset_jobs', 'settled', 'stage_scene',
+ 'start_job', 'start_job_step', 'start_jobs', 'stop_job', 'stop_job_step', 'stop_jobs',
+ 'update_job', 'update_job_pool', 'update_jobs']
+```
+
+Names are the document's operation ids in snake case, so one operation reads the same here:
+
+| You want | You write |
+|---|---|
+| `GET /jobs` | `farm.jobs.get_jobs()` |
+| `GET /jobs/{id}` | `farm.jobs.get_job(job_id)` |
+| `POST /jobs` | `farm.jobs.create_job(body=...)` |
+| `POST /jobs/{id}/stop` | `farm.jobs.stop_job(job_id)` |
+| `GET /jobs/{id}/steps/{step_id}/logs` | `farm.jobs.get_step_logs(job_id, step_id, node_id=...)` |
+
+**Positional arguments are the path parameters, in the document's order.** Everything else is named: a query parameter by its own name, a request body as `body=`.
+
+## Reading an answer
+
+```python
+page = farm.jobs.get_jobs(status="working", limit=200)
+
+page.total            # how many match, ignoring the window
+page.data[0].name     # dot access, as deep as the payload goes
+page.data[0].to_dict()   # the raw payload, when you would rather have the dict
+```
+
+Answers read with dot access and hand back the payload with `to_dict()`. Requests are plain dicts.
+
+An operation the service does not answer as JSON comes back as **bytes**, which is what you want for the one that is not: a task preview is a rendered frame, and a frame decoded as text is mojibake.
+
+```python
+frame = farm.tasks.get_task_preview(task_id, size="preview")
+
+with open("frame.jpg", "wb") as handle:
+    handle.write(frame)
+```
+
+### Typed, with nothing installed
+
+```python
+from renderflow.models import MayaRenderRecipe
+
+recipe: MayaRenderRecipe = {
+    "type": "maya.render",
+    "file": "//NAS/projects/hero/shots/010/anim_v031.mb",
+    "host": {"id": "maya", "version": "2026"},
+    "frame": "1-240"
+}
+
+farm.jobs.create_job(body=recipe)
+```
+
+Every request and response schema has a name in `renderflow.models`, and your editor reads them from a stub file that the interpreter never loads. So autocomplete and `mypy` work, and the package still has no dependencies. At runtime a model is a dict, because the wire is JSON.
+
+## Submitting
+
+```python
+job = farm.jobs.create_job(body={
+    "type": "blender.render",
+    "name": "Hero 010 lighting",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": {"id": "blender", "version": "4.5"},
+    "frame": "1-240",
+    "resolution": "1920x1080",
+    "priority": 75
+}, wait=True)
+
+print(job.id, job.status)
+```
+
+That is a **recipe**: the flat per-application form, which the service expands into a step. `type`, `file` and `host` are required on every one of them, and there is one per job type. `wait=True` blocks until the job is built and answers 201; without it the call answers 202 with a job still being prepared, which is what you want inside an application you are not going to hold open.
+
+<Note>
+A job with several steps is the same call with a `steps` list instead of the flat fields, and each step's configuration is its `props`. Build the chain once in the submitter, read it back with `farm.jobs.get_job(job_id)`, and send that list with your own values. Guessing at `props` from the schema alone is the hard way.
+</Note>
+
+## Waiting for a job
+
+That resolves when the job reaches the required state or times out:
+
+```python
+job = farm.jobs.settled(job.id)                 # answers on completed or failed
+job = farm.jobs.settled(job.id, interval=30)    # a render measured in hours
+```
+
+`None` means the job is no longer there: archiving and deleting look the same from outside, and neither is going to finish. A stop is **not** an end, because suspending a job is resumable, so pass `statuses=["completed", "failed", "suspended"]` when a stop is an answer for your caller. A timeout raises `TimeoutError` rather than handing back a job that has not finished.
+
+**This polls rather than watching**, so a wait needs no socket, no thread and no reconnect behaviour, and it still works where a proxy passes HTTP and refuses an upgrade. The interval is the cost: two seconds is right for a test render and wrong for an overnight one. When the moment a job finishes is what matters, watch it instead.
+
+## Live updates
+
+One socket, shared by every subscription, opened on the first and closed with the last. No polling, and it is the same endpoint the operator UI watches.
+
+```python
+def draw(event):
+    if event.op == "resync":
+        return refetch()                 # events were missed, read the collection again
+    print(event.op, event.id, event.patch)
+
+stop = farm.jobs.on(draw, {"id": job.id})
+
+# ... later
+stop()
+```
+
+`on` is on every group whose collection the farm pushes: `jobs`, `tasks`, `nodes`, `pools`, `users`, `user_groups`, `errors`, `schedule` and `licenses`. The second argument narrows it, `id` on any of them, `step_id` on tasks, `node_id` on the node joins, and a list is one subscription over several ids rather than several subscriptions.
+
+An insert carries the whole row on `event.doc`. An update carries `event.patch`, **keyed by dotted path**, so a job's progress arrives as `event.patch["progress.percent"]` and a step's task counts as `event.patch["steps.0.task_info.done"]`. A delete carries the id and nothing else.
+
+<Warning>
+**`resync` arrives in the same stream as the changes, and it is not one.** It means events were missed and this collection has to be read again. The socket has no replay, so a reconnect, a dropped frame or a client the farm outran all mean the same thing. It comes through your handler rather than a second callback precisely so there is nothing to forget to pass.
+</Warning>
+
+The socket runs on a daemon thread, so a script that forgot to unsubscribe still exits. `farm.live.close()` drops everything, and `farm.live.on_error` reports a refused credential; it writes to stderr until you replace it.
+
+## Errors
+
+```python
+from renderflow.wire import ApiError
+
+try:
+    farm.jobs.delete_job(job_id)
+except ApiError as refused:
+    if refused.status == 409:
+        farm.jobs.stop_job(job_id)
+        farm.jobs.delete_job(job_id)
+    else:
+        raise
+```
+
+`ApiError` carries `status`, `body`, and the service's own sentence as its message, so `str(error)` is what to put in front of a person. A DCC submitter does exactly that.
+
+## A shelf button
+
+A Maya shelf button that submits the open scene and tells the artist what happened, running in Maya's own Python:
+
+```python
+import os
+
+import maya.cmds as cmds
+import renderflow as rf
+
+from renderflow.wire import ApiError
+
+
+def submit():
+    scene = cmds.file(query=True, sceneName=True)
+
+    if not scene:
+        cmds.warning("Save the scene before submitting it.")
+        return
+
+    if cmds.file(query=True, modified=True):
+        cmds.file(save=True)
+
+    start = int(cmds.getAttr("defaultRenderGlobals.startFrame"))
+    end = int(cmds.getAttr("defaultRenderGlobals.endFrame"))
+
+    farm = rf.connect()   # the service on this machine, no key
+
+    try:
+        job = farm.jobs.create_job(body={
+            "type": "maya.render",
+            "name": os.path.splitext(os.path.basename(scene))[0],
+            "file": scene.replace("\\", "/"),
+            "host": {"id": "maya", "version": str(cmds.about(majorVersion=True))},
+            "frame": "{0}-{1}".format(start, end),
+            "priority": 60
+        }, wait=True)
+    except ApiError as refused:
+        cmds.confirmDialog(title="RenderFlow", message=str(refused), button=["Close"])
+        return
+
+    cmds.inViewMessage(assistMessage="Submitted <hl>{0}</hl>".format(job.name), fade=True)
+```
+
+Forward slashes, because a path that crosses machines travels that way. And the error goes in a dialog as the sentence the service wrote, which is why that sentence is written for a person.
+
+## A nightly script
+
+Requeue everything that failed because a license was not free, which is the one failure that is worth retrying without a human looking at it:
+
+```python
+import renderflow as rf
+
+farm = rf.connect()   # RENDERFLOW_URL and RENDERFLOW_API_KEY from the environment
+
+failed = farm.tasks.get_tasks(status="failed", limit=500).data
+license_failures = []
+
+for task in failed:
+    log = farm.tasks.get_task_logs(task.id, offset=-40)
+    if any("license" in (line.message or "").lower() for line in log.lines):
+        license_failures.append(task.id)
+
+if license_failures:
+    result = farm.tasks.reset_tasks(body={"ids": license_failures})
+    print(result.message)
+else:
+    print("nothing waiting on a license")
+```
+
+A negative `offset` counts back from the end of the log, so that reads the tail rather than paging through a whole render.

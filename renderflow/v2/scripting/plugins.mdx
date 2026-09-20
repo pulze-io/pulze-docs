@@ -1,0 +1,315 @@
+---
+title: "Plugins"
+description: "Package a Python script as a job type the whole studio submits from the RenderFlow submitter, with its own fields, icon and software requirements."
+"og:title": "RenderFlow Plugins"
+"og:description": "Package a Python script as a job type the whole studio submits, with its own fields, icon and requirements."
+"twitter:title": "RenderFlow Plugins"
+keywords: ['custom render job type', 'render farm plugin', 'renderflow custom plugin', 'render farm extend', 'studio render pipeline tool']
+---
+
+A plugin adds a job type to the submitter: a script of yours, installed once, that shows up in the template picker for the whole studio with your fields, your icon and your name on it. It is the same `renderflow` module a plain [Python step](/renderflow/v2/scripting/python-steps) uses, packaged with a name, an icon and a manifest so other people can submit it without knowing where the script lives.
+
+## The folder
+
+```
+com.studio.publish/
+    plugin.toml     who this is and what it needs
+    main.py         the script
+    icon.svg        optional, picked up automatically
+```
+
+## plugin.toml
+
+Every plugin needs a `plugin.toml` beside `main.py`. It holds the plugin's identity: its name, version, icon, author and the software it requires; `main.py` is always the entry point.
+
+```toml
+[plugin]
+id      = "com.studio.publish"
+name    = "Publish to delivery"
+version = "2.1.0"
+type    = "job"
+author  = "Acme VFX"
+description = "Copies approved frames to the delivery share and writes a manifest"
+icon    = "icon.svg"
+
+[requires]
+python = ">=3.8"
+```
+
+| `[plugin]` | |
+|---|---|
+| `id` | Reverse-DNS, and **permanent**. It is the folder name on the farm and what a job records |
+| `name` | Title of the plugin, as seen in the job submitter |
+| `version` | Version of the plugin |
+| `type` | `job`. The only kind currently supported |
+| `author` | The developer of the plugin |
+| `description` | One line, under the name in the job submitter |
+| `icon` | A file inside this folder. An `icon.svg` or `icon.png` beside the manifest is found without naming it |
+
+## Declaring fields
+
+Each declaration below is a field in the submitter, a command-line flag, and the value, from a single line:
+
+```python
+import renderflow as rf
+
+plates = rf.files("plates", pattern="*.exr", label="Plates")
+```
+
+`rf.files("plates", ...)` does three things at once:
+
+- It **declares a field** in the submitter, labelled **Plates**, with a folder browser.
+- It **declares a flag**, so the same script runs from a terminal as `python main.py --plates ./shots/010`.
+- It **returns the value**, right there on the line, so the script reads it as an ordinary variable.
+
+The full set is in the [`rf` reference](/renderflow/v2/scripting/rf-reference): text, numbers, switches, choices, files, folders, resolutions, key-value pairs, an output, and the two that are work sources.
+
+<Note>
+Declarations run when the script is imported, and they return the operator's value at that moment. So they belong at module level, not inside a function. A declaration inside `@rf.execute` would be read once per item and would not appear in the submitter at all.
+</Note>
+
+They can also go in the manifest, which is what you want for a value an administrator sets and an artist should not:
+
+```toml
+[[params]]
+name  = "target"
+type  = "folder"
+label = "Delivery folder"
+default = "//NAS/delivery"
+```
+
+A manifest entry **shadows a script declaration of the same name, whole**. The plugin list records which came from where, so it is visible rather than a guess.
+
+## Splitting work across machines
+
+A script has at most one **work source**, and it is what turns one script into many tasks:
+
+| | |
+|---|---|
+| `rf.frames("frames", default="1-100")` | A frame range. Each number is one item |
+| `rf.files("plates", pattern="*.exr")` | A folder and a pattern. Each file is one item |
+
+The folder is listed on the machine that submits, so the job carries the actual list rather than a promise about a folder. The farm then chunks that list, hands each chunk to a machine as a task, and calls your `@rf.execute` once per item in it. Without a work source, a script is a single run on a single machine.
+
+## The four hooks
+
+```python
+@rf.submit
+def check():
+    """On the machine that is submitting, before the job exists."""
+
+@rf.prepare
+def open_things():
+    """Once per task, before its items."""
+
+@rf.execute
+def one(item):
+    """Once per item, on whichever machine got it."""
+
+@rf.cleanup
+def close_things():
+    """Once per task, whatever happened."""
+```
+
+`@rf.execute` is the only one a script needs.
+
+**`@rf.submit` is the one worth knowing about.** It runs on the artist's own machine at submit time, before a job exists, so it is where you check the things that make a job pointless if they are wrong:
+
+```python
+@rf.submit
+def check():
+    if not os.path.isdir(rf.path(plates)):
+        raise rf.Fatal("that plates folder is not reachable from this machine")
+```
+
+Raising stops the submission and puts your sentence in front of the person who pressed **Submit**.
+
+**`@rf.cleanup` runs whatever happened**, including after a failure, because a temporary folder and an open application are not conditional.
+
+With a work source, spreading the work over machines is one line on the decorated function:
+
+```python
+one.map(plates, batch=False, on_error="stop")
+one.once()          # one run, one machine
+one.every_node()    # one run on each machine
+```
+
+`on_error="continue"` finishes the rest of a slice before failing it, for a batch where one bad file should not cost you the other ninety-nine.
+
+## Finding applications
+
+```python
+exe = rf.app("cinema4d", path="cmd")     # the newest installed; `cmd` is the command-line renderer
+exe = rf.app("maya", version="2026")     # a specific build
+ffmpeg = rf.tool("ffmpeg")               # what RenderFlow ships beside itself
+```
+
+`rf.app()` asks what **this machine** has installed, which is the only place that question has an answer. Many applications ship more than one binary, and `path` names which: Cinema 4D's `exe` is the interface and its `cmd` is the command-line renderer, and a headless render wants the second.
+
+When the machine does not have it, `rf.app()` raises `rf.AppNotFound`:
+
+<Note>
+`AppNotFound` takes this machine out of **this task**, and the task runs somewhere else. It does not fail the job. A farm where only some machines have Nuke is a normal farm, and a script that asks for Nuke on a machine without it has discovered a fact about the machine, not an error.
+</Note>
+
+`rf.tool()` is different: `ffmpeg`, `ffprobe`, `imager` and `python` come with RenderFlow, so a script can rely on them without asking anyone to install anything.
+
+### Paths across machines
+
+```python
+source = rf.path(plate)
+```
+
+A Windows workstation submits `P:/shots/010`. A Linux node mounts the same folder at `/mnt/shots/010`. `rf.path()` returns the form **this** machine uses, through the farm's mapping table.
+
+## Requiring software
+
+```toml
+[requires]
+cinema4d = "2026"
+python   = ">=3.8"
+```
+
+Only machines that match are given the work. How precisely you write the version is how precisely it is matched:
+
+| You write | It matches |
+|---|---|
+| `"2026"` | The 2026 line, any update |
+| `"2026.2"` | That update, any build |
+| `"2026.2.0"` | That build |
+| `"*"` | Any version at all |
+
+A requirement may only name software RenderFlow already detects; anything else is refused, with the advice to check for it in the script with `rf.app()` instead, which requeues on another machine rather than pretending the farm knew about a tool it has never heard of. And `python` is a note about the interpreter for a reader, not something the farm matches.
+
+<Tip>
+For reporting progress, logging, and reading the rest of the job (`rf.job`, `rf.task`, `rf.step`), see [Python steps](/renderflow/v2/scripting/python-steps): the same `rf` module, and everything there works here too.
+</Tip>
+
+## Installing one
+
+<Steps>
+<Step title="Open Settings, then Plugins">
+</Step>
+<Step title="Press Add a plugin">
+</Step>
+<Step title="Check the row">
+The plugin appears with its name and version. A plugin that failed to load is listed with the reason, never hidden.
+</Step>
+</Steps>
+
+The folder is copied into the repository under its id, so every machine on the farm can reach it. Nothing is installed on the nodes.
+
+<Frame caption="Settings, Plugins: a studio's own job types, one of them retired">
+  <img src="/images/renderflow/v2/rf_settings_plugins.webp" alt="The Plugins settings panel listing three plugins with their versions, authors and an enabled switch, one of them switched off" />
+</Frame>
+
+## How the submitter learns your fields
+
+When a plugin is installed, the service runs `main.py` in inspect mode and reads back what it declares. That is the same thing `python main.py --rf-inspect` prints, so what the submitter will show is something you can see in a terminal before anyone installs anything.
+
+It also means a script that cannot be imported fails at installation rather than at render time.
+
+Once it is installed, the plugin is a step type like any other, listed under **Plugins** with its version beside it:
+
+<Frame caption="An installed plugin in the step list, beside the built-in types">
+  <img src="/images/renderflow/v2/rf_submitter_plugin_tile.webp" alt="The submitter's step list filtered to a Plugins group, showing a plugin with its icon and version badge" />
+</Frame>
+
+And the declarations in `main.py` are the controls an artist fills in. `rf.folder("delivery", label="Delivery folder", required=True)` is the second row here, with its default already in the box:
+
+<Frame caption="A plugin step: every control on it is a line of the script">
+  <img src="/images/renderflow/v2/rf_submitter_plugin_step.webp" alt="A plugin step in the submitter showing Frames, Delivery folder, a Burn in a slate checkbox and a Notify channel field, with Python in the requirements" />
+</Frame>
+
+## Submit from code
+
+A plugin job is a recipe like any other:
+
+<CodeGroup>
+```bash curl
+curl -X POST "http://127.0.0.1:44442/api/v1/jobs?wait=true" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "renderflow.custom_plugin",
+    "id": "com.studio.publish",
+    "name": "Hero 010 delivery",
+    "params": { "target": "//NAS/delivery/hero", "notify": true },
+    "work": { "type": "items", "items": ["010_a.exr", "010_b.exr"] }
+  }'
+```
+
+```python Python
+job = farm.jobs.create_job(body={
+    "type": "renderflow.custom_plugin",
+    "id": "com.studio.publish",
+    "name": "Hero 010 delivery",
+    "params": {"target": "//NAS/delivery/hero", "notify": True},
+    "work": {"type": "items", "items": ["010_a.exr", "010_b.exr"]}
+}, wait=True)
+```
+
+```typescript TypeScript
+const job = await rf.jobs.createJob({
+    type: "renderflow.custom_plugin",
+    id: "com.studio.publish",
+    name: "Hero 010 delivery",
+    params: { target: "//NAS/delivery/hero", notify: true },
+    work: { type: "items", items: ["010_a.exr", "010_b.exr"] }
+}, { wait: true });
+```
+</CodeGroup>
+
+`id` is required and `version` is optional: leave it out to take whichever version is installed, and the job pins whatever that was.
+
+## Example
+
+A studio job type in about thirty lines. It renders a Cinema 4D scene, one frame per task, and reports the renderer's own progress:
+
+```python
+"""Render a Cinema 4D scene through the command-line renderer."""
+
+import os
+import re
+import subprocess
+
+import renderflow as rf
+
+scene      = rf.file("scene", filter="*.c4d", required=True, label="Scene")
+frames     = rf.frames("frames", default="1-100", label="Frames")
+resolution = rf.resolution("resolution", label="Resolution")
+output     = rf.output("output", required=True, extensions=["png", "exr"], label="Output")
+
+PROGRESS = re.compile(r"Progress:\s*(\d+)%", re.IGNORECASE)
+FORMATS = {"png": "PNG", "exr": "EXR"}
+
+@rf.submit
+def check():
+    if not os.path.isfile(rf.path(scene)):
+        raise rf.Fatal("that scene is not reachable from this machine")
+
+@rf.execute
+def render(frame):
+    exe = rf.app("cinema4d", path="cmd")
+    target = os.path.splitext(rf.path(output))[0]
+
+    args = [exe, "-render", rf.path(scene), "-frame", str(frame), str(frame),
+            "-oimage", target, "-oformat", FORMATS[rf.paths.format]]
+
+    if resolution and all(resolution):
+        args += ["-oresolution", str(int(resolution[0])), str(int(resolution[1]))]
+
+    rf.log("frame {0} on {1}".format(frame, rf.node.name))
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+
+    for line in proc.stdout:
+        found = PROGRESS.search(line)
+        if found:
+            rf.progress(float(found.group(1)), "frame {0}".format(frame))
+        else:
+            rf.log(line.rstrip())
+
+    if proc.wait() != 0:
+        raise rf.Fatal("Cinema 4D exited with {0} on frame {1}".format(proc.returncode, frame))
+```
+
+With `cinema4d = "2026"` in `[requires]`, only machines with that line get the work, and `rf.app()` then picks the newest build on whichever machine it landed on.
