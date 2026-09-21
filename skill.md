@@ -139,6 +139,32 @@ RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) docu
 - Migrating (from RenderFlow 1 or Render Manager): /renderflow/v2/getting-started/migrating
 - Changelog: /renderflow/v2/changelog
 
+##### RenderFlow 2 — Scripting
+Running your own code on the farm. Three ways: a shell step, a Python step, or a plugin that adds a job type to the submitter.
+- Overview: /renderflow/v2/scripting/overview
+- Shell steps: /renderflow/v2/scripting/shell-steps
+- Python steps: /renderflow/v2/scripting/python-steps
+- rf module reference: /renderflow/v2/scripting/rf-reference
+- Plugins: /renderflow/v2/scripting/plugins
+
+##### RenderFlow 2 — Developers
+Driving the farm from outside. Every client is generated from one OpenAPI document, so an operation is named the same in the REST route, both SDKs, `rfcli` and the MCP tools.
+- Overview: /renderflow/v2/developers/overview
+- Authentication: /renderflow/v2/developers/authentication
+- REST API: /renderflow/v2/developers/rest-api
+- TypeScript SDK (`@pulze-io/renderflow`): /renderflow/v2/developers/typescript-sdk
+- Python SDK (`pulze-renderflow`, no dependencies, imports inside Maya and Houdini): /renderflow/v2/developers/python-sdk
+- CLI (`rfcli`): /renderflow/v2/developers/cli
+- Live updates over WebSocket: /renderflow/v2/developers/websocket
+- Webhooks (signed event callbacks) and notification channels: /renderflow/v2/developers/webhooks
+- MCP server: /renderflow/v2/developers/mcp-server
+- Cookbook (whole tasks in curl, Python, TypeScript and rfcli): /renderflow/v2/developers/cookbook
+
+##### RenderFlow 2 — API Reference
+Generated from the farm's own published document, one page per operation, with a request playground.
+- Introduction: /renderflow/v2/api-reference/introduction
+- 98 operation pages at /renderflow/v2/api-reference/[tag]/[action], for example /renderflow/v2/api-reference/jobs/create
+
 ### Project Dream
 AI-powered creative project generation tool.
 
@@ -158,6 +184,11 @@ AI-powered creative project generation tool.
 - **Archive and restore jobs**: Archive completed jobs from the context menu to keep the list clean. Restore them anytime from the archive panel. See /renderflow/jobs/overview.
 - **Schedule overnight rendering**: Use the Scheduler to automatically activate workstations after hours and suspend them before the workday. See /renderflow/scheduler/overview.
 - **Submit cloud jobs**: Switch to the Cloud tab in the Submitter to render on cloud nodes with included V-Ray and Corona licenses. See /renderflow/cloud-rendering/overview.
+- **Run a script on the farm (RenderFlow 2)**: Add a Shell step for a command you already have, or a Python step when the work has to spread across machines. A Python declaration such as `rf.files("plates")` becomes a field in the submitter, a command-line flag and the value, from one line. See /renderflow/v2/scripting/overview.
+- **Add a job type of your own (RenderFlow 2)**: Package a Python script as a plugin with a `plugin.toml` and install it once into the repository. It then appears in the submitter's template picker for the whole studio. See /renderflow/v2/scripting/plugins.
+- **Submit from code (RenderFlow 2)**: `POST /jobs` takes a flat per-application recipe or a step tree. On the machine running the service no credential is needed, which is how a DCC plugin submits; from anywhere else use an API key. See /renderflow/v2/developers/rest-api and /renderflow/v2/developers/cookbook.
+- **Follow a job without polling (RenderFlow 2)**: One WebSocket at `/api/v1/socket` carries every change. The TypeScript SDK wraps it as `rf.jobs.on()`, and both SDKs have `settled()` for waiting on one job. See /renderflow/v2/developers/websocket.
+- **Get called when a render finishes (RenderFlow 2)**: Subscribe a URL with `POST /webhooks` for signed, retried callbacks on job, step, task and machine events. For a message to a person instead, attach a notification channel at submit time. See /renderflow/v2/developers/webhooks.
 - **Batch render in Scene Manager**: Press the Batch Render button in the top toolbar to render all setups with one click. Or bake setups to native scene states. See /scene-manager/bake-setups.
 - **Organize 3ds Max scenes**: Create setups in Scene Manager to manage cameras, lighting, scene visibility, and render settings per shot. See /scene-manager/setups.
 

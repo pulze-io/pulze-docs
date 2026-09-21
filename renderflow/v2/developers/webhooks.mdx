@@ -1,0 +1,412 @@
+---
+title: "Webhooks"
+description: "Have a RenderFlow farm call your pipeline when a job finishes: signed HTTP callbacks on job, step, task and machine events, with retries and a delivery log."
+"og:title": "RenderFlow webhooks"
+"og:description": "Signed HTTP callbacks on job, step, task and machine events, with retries and a delivery log."
+"twitter:title": "RenderFlow webhooks"
+keywords: ['render farm webhook', 'render farm event callback', 'render farm production tracker integration', 'shotgrid render farm', 'render farm hmac signature']
+---
+
+A webhook is the farm calling **you**. Nothing of yours has to be running and nothing has to hold a connection open: when a job finishes, the farm posts a signed JSON event to a URL you own, retries it if your endpoint is having a bad afternoon, and keeps a log of the attempts so "it did not fire" is a question with an answer.
+
+## The events
+
+<Tabs>
+<Tab title="Jobs">
+| | |
+|---|---|
+| `job.created` | Submitted |
+| `job.started` | The first task went out |
+| `job.completed` | Every step finished |
+| `job.failed` | It stopped on a failure |
+| `job.suspended` | Stopped, and resumable |
+| `job.resumed` | Started again |
+| `job.removed` | Archived or deleted. From outside they are the same thing: it is no longer on the farm |
+</Tab>
+<Tab title="Steps and tasks">
+| | |
+|---|---|
+| `step.started` `step.completed` `step.failed` | One step of a chain |
+| `task.started` `task.completed` `task.failed` | One unit of work on one machine |
+
+Task events are per frame on a render, so a two-hundred-frame job posts four hundred of them. Subscribe to those when you are building something that needs them, and not otherwise.
+</Tab>
+<Tab title="Machines">
+| | |
+|---|---|
+| `node.offline` | A machine dropped off the farm |
+| `node.online` | It came back |
+| `node.error` | It is in trouble |
+
+**Only these three**, and not the statuses a machine moves through while it works. Idle, busy, finishing and reserved turn over on every task, so a farm of a hundred machines would post several callbacks a second saying nothing anyone can act on.
+
+`offline` is worth an event because it is already settled rather than momentary: a departure is held for fifteen seconds, and five minutes for a machine that was rendering, before the farm calls it gone.
+</Tab>
+</Tabs>
+
+<Warning>
+**There is no `job.progress`, and there will not be.** A percentage that moves several times a second is not an event, and an endpoint that received one would spend its life being told a number changed. Progress is what [the socket](/renderflow/v2/developers/websocket) is for.
+</Warning>
+
+## Subscribing
+
+```bash
+curl -X POST "http://10.11.30.40:44442/api/v1/webhooks" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Shot tracker",
+    "url": "https://tracker.studio.lan/hooks/renderflow",
+    "events": ["job.completed", "job.failed"],
+    "filter": { "pool_id": "68b1f0c2a4d3e5f6a7b8c9e1" }
+  }'
+```
+
+```json
+{
+  "id": "68b1f0c2a4d3e5f6a7b8c9f0",
+  "name": "Shot tracker",
+  "url": "https://tracker.studio.lan/hooks/renderflow",
+  "events": ["job.completed", "job.failed"],
+  "enabled": true,
+  "secret": "8f3c0a1d7e5b294c6a0f8d2b4e7c1a93",
+  "failures": 0,
+  "created_at": 1785846207000
+}
+```
+
+<Warning>
+**`secret` is in that answer and never in another one.** It is the HMAC key, it is shown once, and there is no route that reads it back. Store it where your receiver reads it from before you close the terminal.
+
+A lost or leaked key is rotated rather than recovered, and the subscription keeps its id:
+
+```bash
+curl -X PATCH ".../webhooks/68b1f0c2a4d3e5f6a7b8c9f0" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "secret": "a-new-key-of-at-least-16-characters" }'
+```
+
+The next delivery is signed with it, so change your receiver at the same time.
+</Warning>
+
+Bring your own key with `"secret": "..."` if your receiver already has one, at least 16 characters. `headers` adds request headers for an endpoint that wants its own authentication beside the signature.
+
+### Filters
+
+```json
+{ "filter": { "pool_id": "68b1f0c2a4d3e5f6a7b8c9e1" } }
+{ "filter": { "user_id": "68b1f0c2a4d3e5f6a7b8c9d5" } }
+```
+
+A pool narrows both jobs and machines, because a machine has a pool too. A user narrows jobs only, so a subscription filtered that way receives no `node.*`: a machine has no owner.
+
+**There is no filter by job id**, and that is a decision rather than a gap. A per-job subscription is one nothing would ever clean up, because the job it refers to gets archived and the subscription does not. "Call me when *this* job finishes" has a different answer: a [notification channel](#notification-channels) at submit time, which is stored on the job and dies with it.
+
+## What arrives
+
+```json
+{
+  "id": "d3f1a08c-6b2e-4c19-9a77-2f8e1b0c4d55",
+  "event": "job.completed",
+  "at": 1785846207000,
+  "farm": { "id": "68b1f0c2a4d3e5f6a7b8c000", "name": "RF-SERVER-01" },
+  "job": {
+    "id": "68b1f0c2a4d3e5f6a7b8c9d0",
+    "name": "Hero 010 lighting v014",
+    "status": "completed",
+    "user": "68b1f0c2a4d3e5f6a7b8c9d5",
+    "pool_id": "68b1f0c2a4d3e5f6a7b8c9e1"
+  }
+}
+```
+
+| | |
+|---|---|
+| `id` | **The delivery id.** The same value on every attempt at this event. Deduplicate on it |
+| `event` | Which of the events above |
+| `at` | Epoch milliseconds |
+| `farm` | The server's id and its hostname, the same pair `GET /info` answers with. What one endpoint serving two studios tells them apart by |
+| `job` | On every `job.*`, `step.*` and `task.*`. `user` is the submitting user's id, and is null when no user was signed in |
+| `step` | `id`, `name`, `index`, on `step.*` and `task.*` |
+| `task` | `id`, `index`, on `task.*` |
+| `node` | On `node.*` only, and those carry no `job` |
+
+The schema is fixed. Unlike a notification payload, which is a template an operator can edit, nothing here changes shape because wording was adjusted in the UI.
+
+### Headers
+
+| | |
+|---|---|
+| `x-renderflow-signature` | `sha256=<hex>`, an HMAC of the raw body. **Verify this** |
+| `x-renderflow-event` | The event name, so a router can dispatch without parsing |
+| `x-renderflow-delivery` | The delivery id, same as `id` in the body |
+| `x-renderflow-timestamp` | Epoch milliseconds, same as `at` |
+
+## Verifying the signature
+
+**This is the most important section on the page.** An endpoint that accepts an unverified webhook is a URL any machine on your network can post a "job completed" to, and yours probably goes on to move files or tell a tracker a shot is approved.
+
+The signature is `sha256=` plus an HMAC-SHA256 of the **raw request body** with your secret as the key. Two rules:
+
+1. **Hash the bytes you received, not a re-serialised object.** `JSON.parse` then `JSON.stringify` reorders keys and changes whitespace, and the signature will never match.
+2. **Compare in constant time.** `===` on a signature leaks it one character at a time to a caller willing to send a few thousand requests.
+
+<CodeGroup>
+```typescript Express
+import crypto from "crypto";
+import express from "express";
+
+const app = express();
+const SECRET = process.env.RENDERFLOW_WEBHOOK_SECRET!;
+
+// `raw`, not `json`: the signature is over the bytes that arrived.
+app.post("/hooks/renderflow", express.raw({ type: "application/json" }), (request, response) => {
+    const signature = String(request.header("x-renderflow-signature") ?? "");
+    const expected = `sha256=${crypto.createHmac("sha256", SECRET).update(request.body).digest("hex")}`;
+
+    if (signature.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
+        return response.status(401).send("bad signature");
+    }
+
+    const payload = JSON.parse(request.body.toString("utf8"));
+
+    // Answer first, work after: the farm gives you fifteen seconds and retries a timeout.
+    response.status(204).end();
+
+    void handle(payload);
+});
+```
+
+```python Flask
+import hmac
+import hashlib
+import os
+
+from flask import Flask, request, abort
+
+app = Flask(__name__)
+SECRET = os.environ["RENDERFLOW_WEBHOOK_SECRET"].encode()
+
+
+@app.post("/hooks/renderflow")
+def renderflow():
+    # request.data is the raw body. Never request.json here.
+    expected = "sha256=" + hmac.new(SECRET, request.data, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(expected, request.headers.get("X-RenderFlow-Signature", "")):
+        abort(401)
+
+    payload = request.get_json()
+
+    if seen(payload["id"]):          # at-least-once: the same event can arrive twice
+        return "", 204
+
+    queue(payload)                    # do the work somewhere else, answer now
+    return "", 204
+```
+</CodeGroup>
+
+## Delivery
+
+**At-least-once, never exactly-once.** Trying to promise exactly-once over HTTP to a service you do not run is a promise that cannot be kept, so the envelope carries a stable delivery id instead and **deduplicating is your side of the contract**. Keep the ids you have handled for an hour and drop a repeat.
+
+| | |
+|---|---|
+| Timeout | 15 seconds per attempt |
+| Success | Any 2xx |
+| Retries | 5, after 1s, 5s, 30s, 2m and 10m |
+| Order | One request in flight per subscription, so a job's events arrive in the order they happened. A slow endpoint does not hold up another |
+| Switched off | After **10** consecutive failed attempts, once an event has used up its retries. The row records the reason. One delivery that lands resets the count |
+
+A subscription that switched itself off is restarted by enabling it, which clears the failure count and the reason at the same time:
+
+```bash
+curl -X PATCH ".../webhooks/68b1f0c2a4d3e5f6a7b8c9f0" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "enabled": true }'
+```
+
+<Warning>
+**Undelivered events do not survive a service restart.** A queued event whose endpoint was down when RenderFlow was restarted is gone, and it is not retried afterwards. That is a stated limit rather than a hidden one. Where a missed event would be expensive, the reliable pattern is a webhook for the fast path and a periodic `GET /jobs?status=completed` to reconcile.
+</Warning>
+
+## When it does not arrive
+
+In this order, because it is the order that finds the problem fastest.
+
+<Steps>
+<Step title="Send a test delivery">
+```bash
+curl -X POST ".../webhooks/68b1f0c2a4d3e5f6a7b8c9f0/test" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "event": "job.completed" }'
+```
+
+A sample event, signed exactly like a real one, so the receiver can be proved before a job depends on it. Without a body it imitates the first event the subscription asked for.
+
+**The answer carries the body it sent**, which is the part that makes this useful rather than a ping:
+
+```json
+{
+  "message": "Test job.completed queued",
+  "payload": {
+    "id": "d3f1a08c-6b2e-4c19-9a77-2f8e1b0c4d55",
+    "event": "job.completed",
+    "at": 1785846207000,
+    "farm": { "id": "68b1f0c2a4d3e5f6a7b8c000", "name": "RF-SERVER-01" },
+    "job": { "id": "000000000000000000000000", "name": "Test delivery", "status": "completed", "user": null, "pool_id": null }
+  }
+}
+```
+
+Those are the exact bytes that were signed, so you can compute the HMAC yourself and compare it against what your endpoint received, without your verification having to work first. The job is named **Test delivery** with a zeroed id, so a test is never mistaken for a render that happened.
+</Step>
+<Step title="Read the attempts">
+```bash
+curl ".../webhooks/68b1f0c2a4d3e5f6a7b8c9f0/deliveries" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY"
+```
+
+```json
+[
+  { "delivery": "d3f1a08c...", "event": "job.completed", "attempt": 2, "status": 500, "error": "Internal Server Error", "at": 1785846210000 },
+  { "delivery": "d3f1a08c...", "event": "job.completed", "attempt": 1, "status": null, "error": "connect ETIMEDOUT", "at": 1785846207000 }
+]
+```
+
+Newest first, the last 50. A `status` says your endpoint answered and how; a `null` status with an `error` says the farm never got that far, which is a DNS, firewall or certificate problem rather than a code one.
+
+These are held in memory, so a restart clears them. They exist for debugging in the next few minutes, not as an audit trail.
+</Step>
+<Step title="Read the subscription">
+```bash
+curl ".../webhooks/68b1f0c2a4d3e5f6a7b8c9f0" -H "Authorization: Bearer $RENDERFLOW_API_KEY"
+```
+
+`enabled`, `failures`, `error` and `last_status` are the whole story. A `false` with an `error` means it switched itself off and says why.
+</Step>
+<Step title="Check what you subscribed to">
+A job that completed while your subscription only asked for `job.failed` is working exactly as configured. It is a more common answer than it sounds.
+</Step>
+</Steps>
+
+## A worked example
+
+Update a shot in a production tracker when its render finishes, verifying the signature and deduplicating. This is the whole pattern, and everything else is a variation on it:
+
+```python
+import hashlib
+import hmac
+import os
+import time
+
+from flask import Flask, request, abort
+
+import renderflow as rf
+
+app = Flask(__name__)
+
+SECRET = os.environ["RENDERFLOW_WEBHOOK_SECRET"].encode()
+SEEN = {}            # delivery id -> when. An hour is plenty for a retry window of ~13 minutes.
+KEEP_SECONDS = 3600
+
+
+def already_handled(delivery):
+    now = time.time()
+    for old in [key for key, at in SEEN.items() if now - at > KEEP_SECONDS]:
+        del SEEN[old]
+
+    if delivery in SEEN:
+        return True
+
+    SEEN[delivery] = now
+    return False
+
+
+@app.post("/hooks/renderflow")
+def renderflow():
+    expected = "sha256=" + hmac.new(SECRET, request.data, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(expected, request.headers.get("X-RenderFlow-Signature", "")):
+        abort(401)
+
+    payload = request.get_json()
+
+    if already_handled(payload["id"]):
+        return "", 204
+
+    event = payload["event"]
+    job = payload.get("job") or {}
+
+    if event == "job.completed":
+        tracker.set_status(shot_of(job["name"]), "render complete", note=job["name"])
+
+    elif event == "job.failed":
+        # The event says it failed. What failed is a question for the farm.
+        farm = rf.connect()
+        failed = farm.tasks.get_tasks(job_id=job["id"], status="failed", limit=5).data
+        reasons = []
+
+        for task in failed:
+            log = farm.tasks.get_task_logs(task.id, offset=-5)
+            reasons.append("frame {0}: {1}".format(task.index, log.lines[-1].message if log.lines else "no log"))
+
+        tracker.set_status(shot_of(job["name"]), "render failed", note="\n".join(reasons))
+
+    return "", 204
+```
+
+Two things worth copying. **The event is the trigger and the API is the source of truth**: the payload is small on purpose, and when you need detail you ask the farm rather than waiting for the farm to guess what you wanted.
+
+## Notification channels
+
+A notification is a message for a person, attached to one job at submit time, and it dies with the job.
+
+| | |
+|---|---|
+| Channels | `slack`, `teams`, `discord`, `webhook`, `email`, `desktop` |
+| Events | `job-completed`, `job-error`, `job-errors`, or `all` |
+| Body | A JSON template an operator edits, with `{{message}}` tokens. Email has no custom wording |
+
+`job-errors` is the batched digest that fires while a job is still running, which is the one that reports a render going wrong before it has finished going wrong.
+
+Attach one at submit time:
+
+<CodeGroup>
+```bash curl
+curl -X POST ".../jobs?wait=true" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "blender.render",
+    "name": "Hero 010 lighting",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": { "id": "blender", "version": "4.5" },
+    "frame": "1-240",
+    "notifications": [
+      { "channel": "slack", "type": "job-completed", "value": "68b1f0c2a4d3e5f6a7b8c9c1", "label": "#lighting" },
+      { "channel": "email", "type": "all", "value": "mia@studio.example" }
+    ]
+  }'
+```
+
+```python Python
+farm.jobs.create_job(body={
+    "type": "blender.render",
+    "name": "Hero 010 lighting",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    "host": {"id": "blender", "version": "4.5"},
+    "frame": "1-240",
+    "notifications": [
+        {"channel": "slack", "type": "job-completed", "value": slack_channel_id, "label": "#lighting"},
+        {"channel": "email", "type": "all", "value": "mia@studio.example"}
+    ]
+}, wait=True)
+```
+</CodeGroup>
+
+`value` is what the channel needs: a configured channel's id for Slack, Teams, Discord and a raw webhook; an address for email; a machine id for the desktop. The channels themselves are set up once in the app under **Settings**, **Notifications**, and a job refers to one rather than carrying a URL.
+
+**Use a notification when you want words in a room, and an event webhook when you want an event in a pipeline.** Both at once is a perfectly ordinary setup: a Slack message for the lighting lead, and a signed callback for the tracker.

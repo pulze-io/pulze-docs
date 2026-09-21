@@ -1,0 +1,24 @@
+---
+title: "API Reference"
+sidebarTitle: "Introduction"
+description: "Every published RenderFlow endpoint, with a console for trying each one against your own farm."
+"og:title": "RenderFlow API Reference"
+"og:description": "Every published RenderFlow endpoint, with a console for trying each one."
+"twitter:title": "RenderFlow API Reference"
+keywords: ['render farm API reference', 'render farm REST endpoints', 'RenderFlow API reference', 'render farm OpenAPI']
+---
+
+The pages under this one are generated from RenderFlow's own API document. Each endpoint carries its own parameters, request body, response schema and a console you can send a real request from.
+
+The SDKs, `rfcli` and the MCP tools are generated from that same document, which is why an operation is named identically in all of them.
+
+## Using the console
+
+Fill in two things and the **Send** button works against your own farm:
+
+- **The server.** Pick `http://localhost:44442/api/v1` if you are reading this on a machine with RenderFlow installed, which needs no credential. Otherwise replace `your-server` with your server's address.
+- **The bearer token.** An API key from **Settings → API Keys**. See [Authentication](/renderflow/v2/developers/authentication).
+
+<Warning>
+The console sends real requests to whichever farm you point it at. `POST /jobs` submits a job, and `DELETE /jobs/{id}` deletes one. Read the summary before pressing **Send** on anything that is not a `GET`.
+</Warning>

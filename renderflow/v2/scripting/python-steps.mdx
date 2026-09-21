@@ -1,0 +1,100 @@
+---
+title: "Python steps"
+description: "Add a Python step to a job in the RenderFlow submitter: reading the job, logging, reporting progress, and reusing another step's output."
+"og:title": "RenderFlow Python Steps"
+"og:description": "Add a Python step to a job: reading the job, logging, reporting progress, and reusing another step's output."
+"twitter:title": "RenderFlow Python Steps"
+keywords: ['render farm python', 'render farm pipeline python', 'python render job', 'RenderFlow python SDK']
+---
+
+A Python step runs a script on a render machine, the same way a [Shell step](/renderflow/v2/scripting/shell-steps) does. The difference is what it has access to: instead of reading `RF_*` environment variables, a Python step imports `renderflow` and reads the same facts as ordinary Python objects, plus a few conveniences a shell script does not get: a progress bar, a log level, and a clean way to fail with a sentence instead of a traceback.
+
+## Adding one
+
+<Steps>
+<Step title="Add the step">
+Press the **+** button at the end of the chain and pick **Python**.
+</Step>
+<Step title="Give it a script">
+Either press **Browse file** and pick a `.py` file off disk, or press **Type** and write it in the editor.
+</Step>
+<Step title="Add arguments, if it takes any">
+The **Arguments** field becomes `sys.argv` for your script, the same as a Shell step's Arguments field.
+</Step>
+</Steps>
+
+## Reading the job
+
+```python
+import renderflow as rf
+
+rf.job.name           # as the operator typed it
+rf.step.name          # this step
+rf.task.index         # which task of this step
+rf.node.name          # the machine running it
+rf.paths.temp         # this task's own scratch folder, swept when it ends
+```
+
+This is the Python form of what a Shell step reads from `RF_JOB_NAME`, `RF_TASK_INDEX` and the rest: the same facts, as attributes instead of environment variables.
+
+## Reusing another step's output
+
+```python
+rf.step["Render"].output       # the files another step made, by name
+rf.step[0].input                # the file the first step runs
+len(rf.step)                    # how many steps the job has
+```
+
+Addressing a step by name is usually what you want, because a script wired to another step is written against what that step *is*, not where it happens to sit in the chain.
+
+## Paths across machines
+
+```python
+source = rf.path(rf.step[0].output[0])
+```
+
+A Windows workstation submits `P:/shots/010`. A Linux node mounts the same folder at `/mnt/shots/010`. `rf.path()` returns the form **this** machine uses, through the farm's mapping table, so use it on any path: a step's input or output, an argument, or one you built yourself.
+
+## Saying how it is going
+
+```python
+rf.progress(62, "denoising")     # per cent, on the task an operator is watching
+rf.log("what happened")          # one line into the task's log
+rf.fatal("the LUT is missing")   # ends the task, with a reason
+```
+
+Plain `print()` reaches the log too; `rf.log` only adds a level tag. `rf.fatal` (or raising `rf.Fatal`) is how a script ends itself on purpose: the operator reads your sentence rather than a traceback.
+
+## Example
+
+```python
+import os
+import renderflow as rf
+
+source = rf.path(rf.step[0].output[0])
+target = os.path.join(rf.paths.temp, "stamped.exr")
+
+rf.log("checking {0}".format(os.path.basename(source)))
+
+if not os.path.isfile(source):
+    rf.fatal("expected {0}, found nothing".format(source))
+
+rf.progress(50, "stamping")
+# ... do the work ...
+rf.progress(100, "done")
+
+rf.log("wrote {0}".format(target))
+```
+
+## How a Python step ends
+
+| Exit | Means |
+|---|---|
+| 0 | Done |
+| 1 | The script failed. **The task fails here and is not retried elsewhere** |
+
+`rf.Fatal` and an uncaught exception both end the task with exit code 1, and the difference is what the operator reads: `Fatal` shows your sentence, an uncaught exception shows a traceback.
+
+## When a step needs more
+
+A Python step can also divide itself into tasks across machines, declare its own fields in the submitter, and ask for specific software before a machine is given the work. That is the same script with a name, an icon and a manifest: see [Plugins](/renderflow/v2/scripting/plugins).

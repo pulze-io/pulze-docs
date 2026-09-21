@@ -1,0 +1,74 @@
+---
+title: "Running your own code"
+sidebarTitle: "Overview"
+description: "The three ways to run your own code on a RenderFlow farm: a shell step, a Python step, or a plugin that adds a job type."
+"og:title": "Running your own code on RenderFlow"
+"og:description": "Shell steps, Python steps, and plugins that add a job type to the submitter."
+"twitter:title": "Running your own code on RenderFlow"
+keywords: ['render farm scripting', 'render farm python script', 'custom render job type', 'render farm pipeline script', 'RenderFlow plugin']
+---
+
+A render farm runs work on many machines and reports back what happened. Rendering is the usual job, but a step can just as well be your own script: a shell command, a Python script, or a plugin packaged for the whole studio.
+
+This page is about writing that code, so it runs on the farm. To drive RenderFlow from the outside instead, submitting jobs, reading status, reacting to events, see [Developers](/renderflow/v2/developers/overview).
+
+## Three ways
+
+<CardGroup cols={3}>
+
+<Card title="Shell step" icon="terminal" href="/renderflow/v2/scripting/shell-steps">
+  A command, a batch file, a PowerShell or bash script. Nothing to install.
+</Card>
+
+<Card title="Python step" icon="python" href="/renderflow/v2/scripting/python-steps">
+  Reading the job, logging, and reporting progress.
+</Card>
+
+<Card title="Plugin" icon="puzzle-piece" href="/renderflow/v2/scripting/plugins">
+  A job type of your own, in the submitter for the whole studio.
+</Card>
+
+</CardGroup>
+
+## Choosing
+
+| You have | Use |
+|---|---|
+| A command or script that already works | A **Shell step** |
+| Work that has to spread across machines | A **Python step** |
+| Work that has to report progress or fail one item without failing the rest | A **Python step** |
+| Something the studio will submit again and again | A **plugin** |
+
+The honest summary: start with a shell step, move to Python when you need the farm to divide the work, and turn it into a plugin when other people need to submit it without knowing where the script lives.
+
+A plugin is a Python step with a name, an icon and a manifest. Nothing you learn writing one is wasted on the other.
+
+## What is true of all three
+
+**Your code runs on the machine that took the task, not on the server.** That is the whole point, and it is also the source of every surprise. The machine may be Linux while you wrote the script on Windows. It may not have the drive letter you used. It will not have your environment variables.
+
+**Paths cross machines through the farm's mapping table.** A workstation submits `P:/shots/010` and a Linux node mounts the same folder at `/mnt/shots/010`. A Python step asks for the local form with `rf.path()`. A shell step gets paths already mapped in the values it is handed.
+
+**A step's files are staged into the repository first**, unless **Copy to repository** is switched off on the step. That is why a render node can read a scene an artist saved locally. If your script needs a file that was not staged, it needs a path every machine can reach.
+
+**A script step distributes only once it has a work list.** Without one it is a single run on a single machine. Give it a range, a count or a list of items and the farm splits it into tasks, hands them out, and retries the ones that fail. That is the same machinery a thousand-frame render uses.
+
+**Nothing is added to `sys.argv` or the environment behind your back.** The Arguments field is the whole of a script's arguments. The `RF_*` variables are the only ones RenderFlow adds, and they are [listed in full](/renderflow/v2/scripting/shell-steps).
+
+## What a step can find out
+
+Any script, in any language, can read where it is and what it belongs to:
+
+| | |
+|---|---|
+| The job | its id, name and status |
+| This step | its id, name and position in the chain |
+| This task | its id and index, which is the frame number for a render |
+| The machine | its id and hostname |
+| Earlier steps | what they produced, so a step can work on the output of the one before it |
+
+A shell step reads these as environment variables. A Python step gets the same facts as objects, plus the applications installed on the machine and the tools RenderFlow ships. The [`rf` reference](/renderflow/v2/scripting/rf-reference) is the complete list.
+
+<Note>
+Scripts are not sandboxed. A step runs with the permissions of the account the RenderFlow service runs as, which on an unattended node is usually a service account with access to your storage. Treat the ability to submit a script step as the ability to run code on the farm, and see [Authentication](/renderflow/v2/developers/authentication) for who can do that.
+</Note>

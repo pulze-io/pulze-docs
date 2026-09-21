@@ -1,0 +1,253 @@
+---
+title: "TypeScript SDK"
+description: "The official RenderFlow client for TypeScript and JavaScript: every endpoint typed, one socket for live updates."
+"og:title": "RenderFlow TypeScript SDK"
+"og:description": "Every endpoint typed, one socket for live updates."
+"twitter:title": "RenderFlow TypeScript SDK"
+keywords: ['render farm typescript sdk', 'render farm javascript api', 'renderflow npm', 'render farm node client', 'render farm automation']
+---
+
+```bash
+npm install @pulze-io/renderflow
+```
+
+```typescript
+import { RenderFlow } from "@pulze-io/renderflow";
+
+const rf = new RenderFlow();
+
+const { data, total } = await rf.jobs.getJobs({ status: "working" });
+console.log(`${data.length} of ${total} jobs`);
+```
+
+That runs on a machine with RenderFlow on it and no credential at all, because the default address is the service on this machine and a caller there has already proved where it is. It is how a workstation plugin submits.
+
+## Connecting to a farm
+
+```typescript
+const rf = new RenderFlow({
+    baseUrl: "http://10.11.30.40:44442/api/v1",
+    apiKey: process.env.RENDERFLOW_API_KEY
+});
+```
+
+| Option | |
+|---|---|
+| `baseUrl` | Defaults to `http://localhost:44442/api/v1`. The scheme decides the port: `44442` plaintext, `44445` TLS |
+| `apiKey` | Created in the app under **Settings**, **API Keys**. Required for anything but this machine |
+| `timeout` | Per request, in milliseconds. 30000 by default |
+| `fetch` | The `fetch` to send with. Where a private certificate authority or a proxy goes |
+| `WebSocket` | The `WebSocket` implementation live subscriptions are opened with. Node has had a global one since 22 |
+
+A call resolves to the response body and rejects on any non-2xx. There is nothing to unwrap.
+
+<Note>
+`fetch` and `WebSocket` are the implementation rather than a setting on purpose. Trusting a studio certificate authority is written differently on every runtime: Bun takes `tls: { ca }` on a request, Node's fetch wants an undici dispatcher, and a browser allows neither.
+</Note>
+
+## Finding the operation you want
+
+**Method names are the API document's operation ids.** There is no shorter alias layer.
+
+| You want | You write |
+|---|---|
+| `GET /jobs` | `rf.jobs.getJobs()` |
+| `GET /jobs/{id}` | `rf.jobs.getJob(id)` |
+| `POST /jobs` | `rf.jobs.createJob(body)` |
+| `POST /jobs/{id}/stop` | `rf.jobs.stopJob(id)` |
+| `PATCH /jobs` | `rf.jobs.updateJobs(body)` |
+| `GET /jobs/{id}/steps/{step_id}/logs` | `rf.jobs.getStepLogs(id, stepId, query)` |
+
+The groups are `jobs`, `jobsArchived`, `tasks`, `nodes`, `pools`, `users`, `userGroups`, `schedule`, `licenses`, `errors`, `webhooks`, `info` and `service`. Every request and response type is exported beside them, so `JobCreate`, `Node` and `WebhookEvent` are all importable.
+
+Path parameters are positional and in the document's order. A query object is the last argument, and a body comes before it.
+
+## Submitting
+
+```typescript
+const job = await rf.jobs.createJob({
+    type: "3dsmax.render",
+    name: "Hero 010 lighting",
+    file: "//NAS/projects/hero/shots/010/lighting_v014.max",
+    host: { id: "3dsmax", version: "2026" },
+    engine: { id: "vray", name: "V-Ray", version: "7.20.04" },
+    frame: "1-240",
+    resolution: "1920x1080",
+    priority: 75
+}, { wait: true });
+```
+
+That is a **recipe**: the flat per-application form, which the service expands into a step. `type`, `file` and `host` are required on every one of them, and the API reference lists the fields each type takes.
+
+`{ wait: true }` blocks until the job is built and answers 201. Without it the call answers 202 with a job that is still being prepared, A job arrives as `pending` by default and will be picked up; pass `status: "suspended"` to have it wait for an operator.
+
+<Note>
+**A job with several steps is the same call with a `steps` array instead of the flat fields**, and each step's configuration is its `props`, the tagged union the submitter fills in. Those are worth reading rather than guessing: build the chain once in the submitter, read it back with `rf.jobs.getJob(id)`, and send that `steps` array with your own values. `JobCreate` and `JobStepCreate` in the [API reference](/renderflow/v2/api-reference/introduction) are the full schema.
+</Note>
+
+## Waiting for a job
+
+```typescript
+const job = await rf.jobs.settled(job.id);
+```
+
+That resolves when the job reaches the required state or times out:
+
+```typescript
+await rf.jobs.settled(id, { timeout: 4 * 60 * 60 * 1000 });
+await rf.jobs.settled(id, { statuses: ["completed", "failed", "suspended"] });
+```
+
+`null` means the job is no longer there. Archiving and deleting are the same event on the socket, so either way it is not going to finish.
+
+Suspending a job is resumable, so `suspended` is not in the default set. Add it when a stop is an answer for your caller. There is no default timeout.
+
+## Live updates
+
+One socket, shared by every subscription, opened on the first and closed with the last. No polling, and no second feed: it is the same endpoint the operator UI watches.
+
+```typescript
+const stop = rf.jobs.on(event => {
+    if (event.op === "resync") return refetch();
+    console.log(event.op, event.id, event.patch);
+}, { id: job.id });
+
+stop();
+```
+
+`on` is on `jobs`, `tasks` and `nodes`. The second argument narrows it: `id` on any of them, `step_id` on tasks. An array is one subscription over several ids rather than several subscriptions.
+
+An insert carries the whole row on `doc`. An update carries `patch`, **keyed by dotted path**, so a job's progress arrives as `patch["progress.percent"]` and a step's task counts as `patch["steps.0.task_info.done"]`. A delete carries the id and nothing else.
+
+<Warning>
+**`resync` arrives in the same stream as the changes, and it is not one.** It means events were missed and this collection has to be read again. The socket has no replay, so a reconnect, a dropped frame or a client the farm outran all mean the same thing. It comes through your handler rather than a second callback precisely so there is nothing to forget to pass.
+</Warning>
+
+Closing on the last unsubscribe matters more than it sounds: a library that leaves a socket open keeps the process alive, and a script that watched a job to completion would then never exit. Subscribing again dials again.
+
+```typescript
+rf.live.onError = error => logger.warn(error.message);   // writes to stderr until you replace it
+rf.live.close();                                          // drop everything
+```
+
+The [WebSocket page](/renderflow/v2/developers/websocket) has the protocol underneath, for a client in another language.
+
+## Paging
+
+```typescript
+async function* everyFailedTask(jobId: string) {
+    for (let offset = 0; ; offset += 200) {
+        const { data, total } = await rf.tasks.getTasks({ job_id: jobId, status: "failed", limit: 200, offset });
+        yield* data;
+        if (offset + data.length >= total) return;
+    }
+}
+```
+
+`limit` defaults to 50 and caps at 500. `total` counts what matches the filter and ignores the window, so it is what a pager needs. Small collections answer with a bare array instead of an envelope: pools, user groups, the schedule, webhooks, licenses.
+
+## Errors
+
+A rejection is the `Response`, with the parsed body on `error`:
+
+```typescript
+try {
+    await rf.jobs.deleteJob(id);
+} catch (failure: any) {
+    if (failure.status === 409) {
+        await rf.jobs.stopJob(id);
+        await rf.jobs.deleteJob(id);
+    } else {
+        throw new Error(failure.error?.error ?? `RenderFlow answered ${failure.status}`);
+    }
+}
+```
+
+`failure.error.error` is one sentence written to be shown to a person as it is, and `failure.error.issues` carries every validation problem so a form can mark all of its fields at once. The [REST API page](/renderflow/v2/developers/rest-api) lists what each status means.
+
+## Frames
+
+```typescript
+const blob = await rf.tasks.getTaskPreview(taskId, { size: "thumb" });
+const buffer = Buffer.from(await blob.arrayBuffer());
+```
+
+`size` is `thumb`, `preview` or `full`. A `full` frame is transcoded on demand, so it costs the farm something and a wall dashboard should ask for `thumb`.
+
+## Nodes and the rest of the farm
+
+```typescript
+const { data } = await rf.nodes.getNodes({ status: "busy" });
+const node = await rf.nodes.getNode(id, { extend: true });   // joins hardware, software, benchmarks
+
+await rf.nodes.updateNodeStatus(id, { status: "suspended" });
+await rf.nodes.updateNodePool(id, { pool_id: pool.id });
+
+const ranking = await rf.nodes.getNodeBenchmarkRanking({ type: "vray" });
+```
+
+```typescript
+const summary = await rf.jobs.getJobSummary();     // task counts across the queue, by state
+const nodes = await rf.nodes.getNodeSummary();     // machine counts, by status
+const errors = await rf.errors.getErrorSummary({ by: "job", ids: job.id });
+```
+
+Those three are what a dashboard actually needs, and they are counts computed on the server rather than a list you total yourself.
+
+## One whole thing
+
+A release script that submits the overnight render, follows it, and reports what happened:
+
+```typescript
+import { RenderFlow } from "@pulze-io/renderflow";
+
+const rf = new RenderFlow({
+    baseUrl: "http://10.11.30.40:44442/api/v1",
+    apiKey: process.env.RENDERFLOW_API_KEY
+});
+
+const overnight = (await rf.pools.getPools()).find(pool => pool.name === "Overnight");
+
+const job = await rf.jobs.createJob({
+    type: "blender.render",
+    name: "Hero 010 lighting v014",
+    file: "//NAS/projects/hero/shots/010/lighting_v014.blend",
+    host: { id: "blender", version: "4.5" },
+    frame: "1-240",
+    resolution: "3840x2160",
+    priority: 80,
+    pool_id: overnight?.id
+}, { wait: true });
+
+console.log(`submitted ${job.name} as ${job.id}`);
+
+// Progress arrives as a patch keyed by dotted path. A patch without it costs nothing to ignore.
+const stop = rf.jobs.on(event => {
+    const percent = event.patch?.["progress.percent"] as number | undefined;
+    if (percent !== undefined) process.stdout.write(`\r${Math.round(percent)}%   `);
+}, { id: job.id });
+
+const finished = await rf.jobs.settled(job.id);
+stop();
+
+if (!finished) {
+    console.error(`\n${job.id} is no longer on the farm`);
+    process.exit(1);
+}
+
+if (finished.status === "failed") {
+    const { data: failed } = await rf.tasks.getTasks({ job_id: job.id, status: "failed", limit: 10 });
+
+    console.error(`\n${finished.name} failed, ${failed.length} task(s) down:`);
+    for (const task of failed) {
+        const { lines } = await rf.tasks.getTaskLogs(task.id, { offset: -5 });
+        console.error(`  task ${task.index} on ${task.node_id}: ${lines.at(-1)?.message ?? "no log"}`);
+    }
+
+    process.exit(1);
+}
+
+console.log(`\n${finished.name} completed`);
+```
+
+Nothing in that polls. The progress comes off the socket, the wait comes off the same socket, and the only reads are the ones that ask a question.

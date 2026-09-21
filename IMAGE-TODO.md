@@ -178,3 +178,25 @@ Apps with an in-app submit entry point (3ds Max, Blender, Cinema 4D, Maya, Houdi
 
 ### Updated existing screenshots
 - [x] `rf_jobs_template_selector.png` — Refresh: the template selector now lists the new 1.3.0 job types (Maya, Houdini, Nuke, After Effects, Unreal, Python, Shell, Redshift, Arnold) (`jobs/templates.md`)
+
+## RenderFlow 2 developer and scripting pages
+
+Captured 2026-09-18 from the replay harness (`bun run docs-shots` in the renderflow repo), compressed
+to webp and placed. The scene stages the API keys and the plugins the recorded farm never had. The
+plugins are the studio's own rather than the two examples that ship: a farm whose plugin list is the
+examples reads as a demo. What the submitter draws from them is built by the service's own
+`customPluginTemplates()` and `toFieldDecl()`, so a staged plugin renders exactly as a real one.
+
+- [x] `rf_settings_apikeys.webp` — **Settings, API Keys** with two keys listed. `developers/authentication`
+- [x] `rf_settings_plugins.webp` — **Settings, Plugins** with three the studio wrote, one switched off. `scripting/plugins`
+- [x] `rf_submitter_plugin_tile.webp` — an installed plugin in the submitter's step list, under **Plugins**, with its icon and version. `scripting/plugins`
+- [x] `rf_submitter_plugin_step.webp` — the plugin step, every control on it a line of the script. `scripting/plugins`
+- [x] `rf_submitter_shell_tokens.webp` — a Shell step with the token list open, in PowerShell's spelling. `scripting/shell-steps`
+
+Two are not captured, and neither is a matter of running the harness again:
+
+- [ ] `rf_settings_webhooks.webp` — there is no settings panel for a webhook subscription. The feature
+  is API-only, so there is nothing to photograph until one exists.
+- [ ] `rf_cli_live.webp` — `rfcli live` is a terminal rather than the app, so the replay harness cannot
+  reach it. It needs a pty capture and a typesetting step, and `rfcli live` wants raw-mode stdin,
+  which a headless run does not have. The CLI page shows its output as text instead.

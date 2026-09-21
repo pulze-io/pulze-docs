@@ -1,16 +1,16 @@
 ---
 title: "Silent Deployment"
-description: "Install and configure RenderFlow 2 without touching each machine: installer flags, rfsv config, environment variables, and signing in a headless server over SSH."
-"og:title": "Silent RenderFlow 2 Deployment"
-"og:description": "Deploy RenderFlow 2 across a fleet from a script: silent installer flags, rfsv config, environment variables, and headless server setup over SSH."
-"twitter:title": "Silent RenderFlow 2 Deployment"
+description: "Install and configure RenderFlow without touching each machine: installer flags, rfsv config, environment variables, and signing in a headless server over SSH."
+"og:title": "Silent RenderFlow Deployment"
+"og:description": "Deploy RenderFlow across a fleet from a script: silent installer flags, rfsv config, environment variables, and headless server setup over SSH."
+"twitter:title": "Silent RenderFlow Deployment"
 keywords: ['silent install render farm', 'unattended render node deployment', 'deploy render farm script', 'rfsv config flags', 'headless render farm setup', 'render farm SSH setup', 'RenderFlow silent install']
 ---
 
 Everything the setup wizard asks can be answered on the command line instead. The installer lands the files and hands its flags to `rfsv config`, which layers them over whatever the machine already holds, so any flag you leave out keeps its current value rather than being reset.
 
 <Note>
-Installing and configuring a machine does not start it. A workstation is started by the desktop app at user login, while an unattended machine needs the service registered — a deliberate second step, because that is where you choose the account the service runs as. Finish a headless deployment with [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+Installing and configuring a machine does not start it. A workstation is started by the desktop app at user login, while an unattended machine needs the service registered, a deliberate second step, because that is where you choose the account the service runs as. Finish a headless deployment with [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## Installer flags
@@ -120,15 +120,11 @@ ssh admin@render-server
 rfsv config
 ```
 
-At the sign-in step it prints a link, a short code and the same link as a QR code, and any one of the three completes it: open the link on your own machine, type the code into a browser that is already open, or scan the QR code with a phone. The wizard waits for the sign-in to land and then carries on with the remaining questions — the agreement, the role, the server address on a machine that joins one, and the repository on a server.
+At the sign-in step it prints a link, a code and a QR code, and completing any one of the three signs the machine in. The wizard then carries on with the remaining questions.
 
 <Frame caption="The sign-in step of rfsv config">
   <img src="/images/renderflow/v2/rf_cli_signin.webp" alt="A terminal at the rfsv config sign-in step, showing the activation link, the matching short code and the same link as a QR code" />
 </Frame>
-
-<Note>
-Pool, external database, proxy and TLS are flags only; the `rfsv config` wizard never asks about them, on the grounds that a provisioning script sets them and an operator at a terminal almost never changes them.
-</Note>
 
 ## Accepting the licence agreement
 
@@ -162,5 +158,5 @@ A machine that is reset while the server still holds its old record rejoins as a
 
 ## Next steps
 
-- [Run as a Service](/renderflow/v2/getting-started/run-as-a-service) — the step that makes a headless machine render
-- [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes) — the same farm, set up through the app
+- [Run as a Service](/renderflow/v2/getting-started/run-as-a-service): the step that makes a headless machine render
+- [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes): the same farm, set up through the app

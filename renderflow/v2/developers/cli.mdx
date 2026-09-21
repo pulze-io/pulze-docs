@@ -1,0 +1,242 @@
+---
+title: "Command line"
+sidebarTitle: "CLI"
+description: "rfcli drives a RenderFlow farm from a terminal or a script: every endpoint as a command, a table for you and JSON for your pipeline."
+"og:title": "RenderFlow command line"
+"og:description": "Every endpoint as a command, a table for you and JSON for your pipeline."
+"twitter:title": "RenderFlow command line"
+keywords: ['render farm cli', 'render farm command line', 'rfcli', 'render farm shell automation']
+---
+
+`rfcli` ships with RenderFlow and covers the whole published API, one command per operation, generated from the same document as the SDKs, so nothing drifts and nothing is missing.
+
+```bash
+rfcli jobs list --status working
+rfcli jobs stop 68b1f0c2a4d3e5f6a7b8c9d0
+rfcli nodes status 68b1f0c2a4d3e5f6a7b8c9e0 --status suspended
+```
+
+## Where it is
+
+It sits beside the service, in the installation folder, and **it is not added to `PATH`**:
+
+| | |
+|---|---|
+| Windows | `C:\Program Files\Pulze\RenderFlow\rfcli.exe` |
+| Linux | `/opt/Pulze/RenderFlow/rfcli` |
+| macOS | `/Applications/Pulze/RenderFlow/rfcli` |
+
+Call it by its full path, or add that folder to `PATH` yourself. Every example below writes `rfcli` for brevity.
+
+## Two things to set up
+
+**It needs an API key, always.** Even on the machine running the service, where the REST API itself would answer without one:
+
+```bash
+export RENDERFLOW_API_KEY=rf_live_...      # bash
+$env:RENDERFLOW_API_KEY = "rf_live_..."    # PowerShell
+```
+
+Create one in the app under **Settings**, **API Keys**.
+
+**It reaches a remote farm with an address.** Without one it talks to the service on this machine:
+
+```bash
+rfcli --server 10.11.30.40 jobs list
+rfcli --server https://10.11.30.40 jobs list
+
+export RENDERFLOW_URL=http://10.11.30.40     # the same variable the Python SDK reads
+```
+
+`--server` beats `RENDERFLOW_URL`, and both beat this machine. **The scheme rides on the address**, exactly as it does everywhere else in RenderFlow, and each picks its own port: a bare host or `http://` is the plaintext listener on 44442, `https://` is the farm's TLS listener on 44445. Name a port and that is the one used.
+
+For a server behind a studio certificate authority:
+
+```bash
+rfcli --server https://rf.studio.lan --ca //NAS/it/studio-ca.pem nodes list
+export RENDERFLOW_CA=//NAS/it/studio-ca.pem
+```
+
+## The shape of every command
+
+```
+rfcli <group> <action> [subjects] [--flags]
+```
+
+The mapping is mechanical in both directions:
+
+| | |
+|---|---|
+| `GET /jobs` | `rfcli jobs list` |
+| `GET /jobs/{id}` | `rfcli jobs get <id>` |
+| `POST /jobs/{id}/stop` | `rfcli jobs stop <id>` |
+| `POST /jobs/stop` | `rfcli jobs stop <id> <id> <id>` |
+| `PATCH /nodes/{id}/status` | `rfcli nodes status <id> --status suspended` |
+| `GET /jobs/{id}/steps/{step_id}/logs` | `rfcli jobs logs <id> <step_id>` |
+
+**One id uses the route built for one; more than one uses the bulk route.** They are the same sentence with a different number of nouns, and the CLI picks the endpoint. `--ids a,b,c` is the same thing comma separated, for a list that came out of another command.
+
+Subjects are always **ids**, never names. And a flag is the document's own field name, so it carries underscores: `--pool_id`, `--node_id`, `--job_id`, `--max_batch_size`. The dashed spelling is refused rather than ignored, which is the right way round.
+
+## Output
+
+A terminal gets a table; a pipe gets JSON.
+
+```bash
+$ rfcli jobs list --status working --limit 3
+_id                       name                  status   priority  progress  pool_id
+68b1f0c2a4d3e5f6a7b8c9d0  Hero 010 lighting     working  80        42%       68b1f0...
+68b1f0c2a4d3e5f6a7b8c9d1  Hero 020 lighting     working  75        7%        68b1f0...
+68b1f0c2a4d3e5f6a7b8c9d2  Env 050 cryptomatte   working  50        91%       68b1f0...
+```
+
+```bash
+$ rfcli jobs list --status working --limit 3 | jq '.data[].name'
+"Hero 010 lighting"
+"Hero 020 lighting"
+"Env 050 cryptomatte"
+```
+
+### Watching a read
+
+```bash
+rfcli jobs list --status working --watch
+rfcli nodes list --watch 10
+```
+
+`--watch` redraws every two seconds, or every N. It works on reads only: watching a write would re-send it on every redraw, which would stop a job, start it, and stop it again for as long as the terminal stayed open. It also needs a terminal, so in a script you write the loop yourself.
+
+## Live view
+
+```bash
+rfcli live
+rfcli live nodes
+```
+
+Two panes, jobs and nodes, fed by the same socket the operator UI uses rather than by polling.
+
+| Key | |
+|---|---|
+| `Tab`, `1`, `2` | Between jobs and nodes |
+| `↑` `↓`, `k` `j` | Move the selection |
+| `s` | Stop a job, or suspend a machine |
+| `r` | Reset a job, or resume a machine |
+| `g` | Start a job |
+| `f` | Finish a machine, letting it drain |
+| `q` | Leave |
+
+Every key runs the command it is named after, so `s` on a job is exactly `rfcli jobs stop <id>`. A key that had its own code path would be a key that could drift from the command.
+
+## Exit codes
+
+A command that fails prints its error and **leaves with a non-zero code**, which is the part that matters in a pipeline: `rfcli jobs get $id && publish` must not publish when that job is gone.
+
+| Code | |
+|---|---|
+| 0 | It worked |
+| 1 | The call failed. The printed `status` and `error` say how |
+| 4 | The service is not reachable, or its database is not connected |
+| 8 | No API key |
+| 9 | The API key is not valid |
+
+8 and 9 are separate on purpose: a launcher can tell "ask this person for a key" from "the key they gave is wrong", and those need different dialogs.
+
+## Submitting from the command line
+
+`jobs create` takes the request body as JSON:
+
+<CodeGroup>
+```bash bash
+rfcli jobs create --wait --data '{
+  "type": "blender.render",
+  "name": "Hero 010 lighting",
+  "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
+  "host": { "id": "blender", "version": "4.5" },
+  "frame": "1-240",
+  "priority": 75
+}'
+```
+
+```powershell PowerShell
+$body = @{
+    type  = "blender.render"
+    name  = "Hero 010 lighting"
+    file  = "//NAS/projects/hero/shots/010/lighting_v014.blend"
+    host  = @{ id = "blender"; version = "4.5" }
+    frame = "1-240"
+    priority = 75
+} | ConvertTo-Json -Depth 5 -Compress
+
+rfcli jobs create --wait --data $body
+```
+</CodeGroup>
+
+Every other write takes flags, and `--data` is there as well for the shapes a flag cannot express:
+
+```bash
+rfcli jobs update 68b1f0c2a4d3e5f6a7b8c9d0 --priority 100 --limit 5
+rfcli jobs pool 68b1f0c2a4d3e5f6a7b8c9d0 --pool_id 68b1f0c2a4d3e5f6a7b8c9e1
+rfcli tasks reset 68b1f0c2a4d3e5f6a7b8c9a1 68b1f0c2a4d3e5f6a7b8c9a2 --release_nodes true
+rfcli schedule create --data '{"name":"Nightly wake","every":"1d","action":{"kind":"command","type":"node.wakeup"},"targets":{"all":true}}'
+```
+
+`--data` merges over the flags rather than under them, so reaching for it never means fighting a flag you did not set.
+
+## Recipes
+
+Requeue everything that failed on one machine, then take the machine out:
+
+<CodeGroup>
+```bash bash
+NODE=68b1f0c2a4d3e5f6a7b8c9e0
+
+FAILED=$(rfcli --json tasks list --node_id "$NODE" --status failed --limit 500 \
+  | jq -r '[.data[].id] | join(",")')
+
+if [ -n "$FAILED" ]; then
+    rfcli tasks reset --ids "$FAILED"
+fi
+
+rfcli nodes status "$NODE" --status suspended
+```
+
+```powershell PowerShell
+$node = "68b1f0c2a4d3e5f6a7b8c9e0"
+
+$failed = (rfcli --json tasks list --node_id $node --status failed --limit 500 | ConvertFrom-Json).data
+
+if ($failed.Count -gt 0) {
+    rfcli tasks reset --ids ($failed.id -join ",")
+}
+
+rfcli nodes status $node --status suspended
+```
+</CodeGroup>
+
+Archive everything that finished more than a week ago, as a nightly job:
+
+```bash
+WEEK_AGO=$(( ($(date +%s) - 7 * 86400) * 1000 ))
+
+OLD=$(rfcli --json jobs list --status completed --sort finished_at --limit 500 \
+  | jq -r --argjson cutoff "$WEEK_AGO" '[.data[] | select(.finished_at < $cutoff) | .id] | join(",")')
+
+[ -n "$OLD" ] && rfcli archive create --ids "$OLD"
+```
+
+Timestamps on the wire are integer milliseconds, which is why that multiplies by a thousand.
+
+Drive the studio farm from a workstation, and fail the script if anything is wrong:
+
+```bash
+set -euo pipefail
+
+export RENDERFLOW_URL=http://10.11.30.40
+export RENDERFLOW_API_KEY=$(cat ~/.renderflow-key)
+
+rfcli service alive > /dev/null            # exits 4 if the farm is not answering
+rfcli jobs summary
+rfcli nodes list --status offline
+```
+
+`rfcli service alive` is the cheapest possible check that a farm is up, and it is the one route that answers without a credential, so it tells you about the farm rather than about your key.

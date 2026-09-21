@@ -1,0 +1,127 @@
+---
+title: "MCP server"
+description: "Point Claude, ChatGPT or any MCP client at your RenderFlow farm and ask it questions in plain language: what is running, why a job failed, submit this scene."
+"og:title": "RenderFlow MCP server"
+"og:description": "Point Claude or ChatGPT at your farm and ask in plain language what is running and why a job failed."
+"twitter:title": "RenderFlow MCP server"
+keywords: ['render farm mcp server', 'claude render farm', 'ai render farm management', 'mcp render farm', 'render farm assistant']
+---
+
+Every RenderFlow server speaks the **Model Context Protocol**, so an assistant can read the farm and act on it.
+
+```
+http://10.11.30.40:44442/api/v1/mcp
+http://localhost:44442/api/v1/mcp
+```
+
+It needs an API key, exactly like the rest of the published API, and it reaches no further than one: everything a tool can do, your key could already do over HTTP.
+
+## Connecting
+
+The transport is streamable HTTP and the server is **stateless**, with no session to establish and nothing retained between calls. So any number of service instances can answer any request, and a client that reconnects has lost nothing.
+
+**The credential is an API key in an `Authorization` header**, which means any client that can send a static header connects directly:
+
+```bash
+claude mcp add --transport http renderflow http://10.11.30.40:44442/api/v1/mcp \
+  --header "Authorization: Bearer $RENDERFLOW_API_KEY"
+```
+
+```json
+{
+  "transport": "streamable-http",
+  "url": "http://10.11.30.40:44442/api/v1/mcp",
+  "headers": { "Authorization": "Bearer rf_live_..." }
+}
+```
+
+### Claude Desktop
+
+Claude Desktop connects to a remote server as a **custom connector**, under **Settings**, **Connectors**, **Add custom connector**, and a custom connector expects the server to run its own authentication flow. RenderFlow's endpoint does not: it takes an API key, because that is what the rest of its API takes and a farm on a private network is not an OAuth provider.
+
+So a connector needs something in between that holds the key. `mcp-remote` is the usual one:
+
+```json
+{
+  "mcpServers": {
+    "renderflow": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://10.11.30.40:44442/api/v1/mcp",
+        "--header-file",
+        "C:/Users/you/.renderflow-mcp-headers.txt"
+      ]
+    }
+  }
+}
+```
+
+```text C:/Users/you/.renderflow-mcp-headers.txt
+Authorization: Bearer rf_live_...
+```
+
+The header file rather than `--header` for two reasons: a key on a command line is readable by anyone who can list processes, and Claude Desktop on Windows does not escape spaces inside `args`, which mangles a header passed that way.
+
+The config file is `claude_desktop_config.json`, under **Settings**, **Developer**, **Edit Config**.
+
+## The tools
+
+In the order a model should consider them:
+
+| | |
+|---|---|
+| `farm_overview` | The whole farm in one call: job counts by status, machine counts by status, the pools, the error tally, the version. The first call for anything open-ended, so a model does not answer "how is the farm doing" by listing three thousand machines |
+| `find_jobs` | Compact rows, newest first. What is running, what failed, what one person submitted. `archived: true` searches the archive instead |
+| `get_job` | One job in depth: its steps with per-step counts and progress, and the errors against it. The tool for "why is this stuck" |
+| `find_tasks` | The individual units of work, one per frame or work-list chunk. `status: "failed"` is the usual question |
+| `get_task_log` | What one task's process actually printed. The renderer's own output, tail first |
+| `find_nodes` | The machines and what each is doing. Hardware, installed software and benchmarks only on request, because they are large |
+| `find_errors` | What the farm has recorded, newest first. The farm-wide view, as against one process's output |
+| `list_schedule` | What runs unattended, when it next fires, and how the last run went |
+| `submit_job` | A render or a script. `type` picks the application, `file` is the scene |
+| `control_jobs` | `start`, `stop`, `reset`, `finish`, `archive`, `restore`, over one job or many |
+| `update_jobs` | Priority, pool, name. Settings, without touching what has rendered |
+| `control_tasks` | Put specific tasks back in the queue. Re-render a handful of frames without resetting the job |
+| `control_nodes` | `resume`, `suspend`, `finish`, `reserve`, or move machines to a pool |
+| `control_schedule` | `run` an event now, or `enable` and `disable` it, leaving the definition intact |
+
+<Warning>
+**No tool can delete anything, and that is permanent.** No job, no machine, no archived job.
+</Warning>
+
+Two verbs are worth knowing before you ask for them, because they lose work: `control_jobs` with `reset` puts every task back to pending, and `control_nodes` with `suspend` kills the task a machine is on. `finish` is the polite one, on both: a machine that finishes stops after the task it is holding.
+
+## Worth trying
+
+Not a demo script. These are the five that are genuinely faster than the UI:
+
+<AccordionGroup>
+
+<Accordion title="Why did Hero 010 fail?">
+It goes `find_jobs` for the id, `get_job` for the steps and the errors, `find_tasks` with `status: "failed"`, then `get_task_log` on one of them, and comes back with the renderer's own words.
+</Accordion>
+
+<Accordion title="Which machines have failed more than once today, and what did they say?">
+`find_errors` grouped by machine, then the logs. This is the question the UI answers least well, because it is a join.
+</Accordion>
+
+<Accordion title="Requeue every failed frame in the overnight pool, but leave the jobs that failed at submission alone.">
+`find_jobs` in the pool, `find_tasks` per job, `control_tasks` with the ids that are actually retryable. The judgement is the point: a task that failed because a scene path was wrong is not one to retry.
+</Accordion>
+
+<Accordion title="Submit this scene at 1920x1080, frames 1 to 240, in the Overnight pool, suspended.">
+`farm_overview` for the pool id, then `submit_job` with `status: "suspended"` so a person starts it.
+</Accordion>
+
+<Accordion title="Is anything scheduled to happen tonight that would take machines away from the queue?">
+`list_schedule` with `occurrences`. A recurrence rule is more than a repeat interval, and "when does this happen again" is a question the farm should answer rather than you reading a rule.
+</Accordion>
+
+</AccordionGroup>
+
+## What it does not do
+
+There is no streaming, because every tool here is a set of synchronous reads with no progress to report. And there is no memory between calls.
+
+If you want an assistant that watches a farm over time rather than answering a question about it, that is [the socket](/renderflow/v2/developers/websocket) plus your own loop, and the MCP tools are the hands it would use.

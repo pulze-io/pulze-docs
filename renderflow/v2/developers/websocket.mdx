@@ -1,0 +1,232 @@
+---
+title: "Live updates"
+sidebarTitle: "WebSocket"
+description: "One WebSocket tells you everything happening on a RenderFlow farm as it happens."
+"og:title": "RenderFlow live updates over WebSocket"
+"og:description": "One socket, every change on the farm as it happens."
+"twitter:title": "RenderFlow live updates"
+keywords: ['render farm websocket', 'render farm live updates', 'render farm event stream', 'render farm dashboard api', 'renderflow socket protocol']
+---
+
+A render farm is a thing that changes constantly, and asking it what changed is the wrong shape. RenderFlow has **one WebSocket**, and it is the same one the operator UI runs on.
+
+```
+ws://localhost:44442/api/v1/socket    the service on this machine
+ws://10.11.30.40:44442/api/v1/socket  a farm's server
+```
+
+Turn on TLS on the server and the same farm answers on `wss://10.11.30.40:44445/api/v1/socket` instead.
+
+Both SDKs wrap this, so if you are writing TypeScript or Python you can stop reading:
+
+```typescript
+const stop = rf.jobs.on(event => draw(event), { id: job.id });
+```
+
+```python
+stop = farm.jobs.on(draw, {"id": job.id})
+```
+
+The rest of this page is the protocol, for a client in another language, a dashboard in a browser, or a service of your own.
+
+## The handshake
+
+**The first message must be the credential**, and nothing flows before it:
+
+```json
+{ "auth": "rf_live_..." }
+```
+
+An empty string is right from the machine running the service, where the peer address is the proof, exactly as it is over HTTP. The farm answers:
+
+```json
+{ "seq": 0, "hello": { "access": "public" } }
+```
+
+A connection that has not authenticated within **five seconds** is closed with 4401. That is not a grace period to lean on: an unauthenticated socket must not be a way to hold a slot open on a render farm.
+
+## Subscribe
+
+```json
+{ "subscribe": [{ "entity": "jobs", "filter": { "id": "68b1f0c2a4d3e5f6a7b8c9d0" } }] }
+```
+
+```json
+{ "unsubscribe": [{ "entity": "jobs", "filter": { "id": "68b1f0c2a4d3e5f6a7b8c9d0" } }] }
+```
+
+Several in one message is fine, and an unfiltered subscription is the whole collection. **Unsubscribing matches on the filter as well as the entity**, so it has to be the same filter you sent.
+
+A subscription the farm will not accept answers with a message rather than closing the connection, because one bad entity name is not a reason to drop a working socket:
+
+```json
+{ "error": "unknown entity \"job\"" }
+```
+
+### Filters
+
+| Key | Works on |
+|---|---|
+| `id` | Every entity. The row itself |
+| `step_id` | `tasks` |
+| `node_id` | `software`, `hardware`, `benchmarks` |
+
+**A value may name several ids, comma separated**, and that is one subscription rather than several:
+
+```json
+{ "subscribe": [{ "entity": "nodes", "filter": { "id": "68b1...c9e0,68b1...c9e1,68b1...c9e2" } }] }
+```
+
+That is what a paged table wants: watch the machines on the screen, not the three thousand that are not. Unfiltered, a large farm sends about six hundred hardware samples a second, and a client that discards them still paid for them.
+
+## The frames
+
+```json
+{
+  "seq": 41,
+  "events": [
+    { "entity": "jobs", "id": "68b1f0c2a4d3e5f6a7b8c9d0", "op": "update", "patch": { "progress.percent": 42.5 } },
+    { "entity": "tasks", "id": "68b1f0c2a4d3e5f6a7b8c9a7", "op": "update", "patch": { "status": "completed" }, "keys": { "step_id": "step-1" } }
+  ]
+}
+```
+
+| | |
+|---|---|
+| `seq` | Per connection, monotonic, starting at the `hello` of 0. **A gap means events were lost** |
+| `op` | `insert`, `update` or `delete` |
+| `doc` | The whole row, on an insert. Also on an update, for the entities marked below |
+| `patch` | What changed on an update, **keyed by dotted path**: `progress.percent`, `steps.0.task_info.done` |
+| `removed` | Field names an update removed |
+| `keys` | The narrowing fields, so a client holding two subscriptions on one socket can tell which is which |
+
+An update is a patch and not the row, for most entities, and that is a deliberate saving rather than an omission. A task update measured 553 bytes with the document attached and a rendering farm writes hundreds a second, so the document is sent only where a client genuinely replaces the row whole.
+
+### The entities
+
+Every one of these mirrors a `public` REST route, so an API key sees on the socket exactly what it can read over HTTP.
+
+| Entity | An update carries | |
+|---|---|---|
+| `jobs` | a patch | |
+| `tasks` | a patch, plus `keys.step_id` | |
+| `nodes` | a patch | A node's `alive` and `last_seen` heartbeat is dropped rather than sent. It is bookkeeping, and nothing renders it |
+| `hardware` | a patch | One sample per machine every few seconds. Filter it |
+| `software` | the document | Replaced whole when a machine re-reports |
+| `benchmarks` | the document | |
+| `pools` | a patch | |
+| `users`, `user-groups` | a patch | |
+| `errors` | a patch | |
+| `licenses` | the document | Seat counts move every tick the farm's usage does |
+| `schedule` | the document | Including the fire bookkeeping, `last_status` and `next_run_at` |
+
+## Resync
+
+**There is no replay.** When events are missed, the farm says so and the answer is to read the collection again:
+
+```json
+{ "seq": 42, "resync": ["jobs", "tasks"] }
+```
+
+Three things mean the same thing, and a correct client treats them identically:
+
+1. A `resync` frame naming collections.
+2. **A gap in `seq`.** You got 41 and then 43.
+3. A reconnect. Whatever happened while you were away is gone.
+
+<Warning>
+A client that ignores `resync` is a client that drifts, and it drifts silently: the screen keeps updating, and it is showing a farm that no longer exists. This is the one part of the protocol worth getting right before anything else.
+</Warning>
+
+Why it exists rather than a buffer: a client that stops reading gets nothing appended past **one megabyte** of unsent data, and when its buffer drains below 64 kilobytes it gets one `resync` frame and a clean slate. Admitting the gap costs a flag. Holding memory for one stalled client on behalf of a farm that keeps working costs the farm.
+
+## Staying alive
+
+Every thirty seconds the farm sends a protocol ping and a frame you can see from script:
+
+```json
+{ "hb": 1 }
+```
+
+Ignore it, or use it. A client's own silence watchdog wants the second one, because a protocol ping is invisible to JavaScript, and a link that died without closing looks exactly like a farm with nothing to say. **Anything inbound counts as proof of life**, and after ninety seconds of silence the farm closes the connection with 1001 rather than writing into a socket that is not being read.
+
+## Closing
+
+| Code | |
+|---|---|
+| 4401 | No credential, an invalid one, or five seconds of not sending one. **Do not retry**: it will be refused again |
+| 4400 | A protocol error. The message was not JSON |
+| 1001 | Ninety seconds of silence from your end |
+| 1000, 1006 | An ordinary close, or the network. Reconnect with backoff, then resync |
+
+Refusing to retry a 4401 matters more than it sounds: a reconnect loop on a bad key is a loop that never ends and never says why, and on a farm with three thousand machines it is a loop that also floods a log.
+
+## Example
+
+The shape that is correct rather than the shortest: sequence checking, resync, backoff, and no retry on a refused credential.
+
+```typescript
+type LiveEvent = {
+    entity: string;
+    id: string;
+    op: "insert" | "update" | "delete";
+    doc?: Record<string, unknown>;
+    patch?: Record<string, unknown>;
+    removed?: string[];
+    keys?: Record<string, string>;
+};
+
+function watch(url: string, key: string, subscribe: object[], onEvent: (event: LiveEvent) => void, onResync: (entities: string[]) => void) {
+    let attempt = 0;
+    let seq = 0;
+    let stopped = false;
+
+    const connect = () => {
+        const socket = new WebSocket(url);
+
+        socket.onopen = () => socket.send(JSON.stringify({ auth: key }));
+
+        socket.onmessage = message => {
+            const frame = JSON.parse(String(message.data));
+
+            if (frame.hb) return;
+
+            if (frame.hello) {
+                const reconnected = attempt > 0;
+                attempt = 0;
+                seq = 0;
+                socket.send(JSON.stringify({ subscribe }));
+                // A reconnect missed whatever happened while it was down, whether or not the farm says so.
+                if (reconnected) onResync(subscribe.map((entry: any) => entry.entity));
+                return;
+            }
+
+            if (typeof frame.error === "string") return console.error(`RenderFlow refused: ${frame.error}`);
+
+            if (typeof frame.seq === "number") {
+                const expected = seq + 1;
+                seq = frame.seq;
+                if (frame.seq !== expected) onResync(subscribe.map((entry: any) => entry.entity));
+            }
+
+            if (Array.isArray(frame.resync)) return onResync(frame.resync);
+            if (Array.isArray(frame.events)) frame.events.forEach(onEvent);
+        };
+
+        socket.onclose = event => {
+            if (stopped) return;
+
+            if (event.code === 4401) {
+                console.error("RenderFlow refused the credential. Check the API key.");
+                return;
+            }
+
+            const wait = Math.min(30000, 1000 * 2 ** attempt++);
+            setTimeout(connect, wait);
+        };
+    };
+
+    connect();
+    return () => { stopped = true; };
+}
+```

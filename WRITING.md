@@ -54,6 +54,16 @@ Write for the primary reader. Do not assume knowledge the secondary reader lacks
 - Steps use `<Steps>`. Per-OS instructions use `<Tabs>`, in the order Windows, Linux, macOS.
 - Images: `<Frame caption>` around `<img src="/images/renderflow/rf_*.png" alt>`. The caption names what is on screen. Never reference an image that does not exist in `images/renderflow/`.
 
+## Developer pages
+
+The Scripting and Developers groups, and the generated API reference. Everything above still applies.
+
+- REST examples use `<CodeGroup>` with curl, Python and TypeScript, in that order. Cookbook entries add `rfcli` last.
+- Values in examples are plausible studio values, never `foo`. A scene is `//NAS/projects/hero/shots/010/lighting_v014.blend`, a pool is `Overnight`, an id is a 24-character hex string.
+- No field appears in an example unless it exists in `packages/service/openapi.public.json`. No `rf.*` call unless it is in `renderflow/runtime.py`'s `__all__`. No `rfcli` command unless it is in `packages/cli/src/generated/commands.ts`.
+- Each surface page opens with the one-machine case, which needs no credential, before the studio case.
+- The API reference is generated from a committed copy of `openapi.public.json` by `scripts/sync-openapi.mjs`. Never edit that copy: fix the service's own annotations and re-run the script. It shortens each operation's title for the sidebar and moves the sentence to the description, and it strips the document's em dashes, because the spec writes for its own readers and this site does not.
+
 ## Before and after
 
 | Do not write | Write |
