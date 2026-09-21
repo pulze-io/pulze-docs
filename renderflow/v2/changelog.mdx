@@ -5,6 +5,68 @@ mode: "wide"
 rss: true
 ---
 
-<Update label="2.0.0-beta" description="TBD">
-First public beta of RenderFlow 2. Release notes are published here when the beta is available.
+<Update label="2.0.9-beta" description="September 21, 2026">
+RenderFlow 2 ships 35 job templates across 20 applications and renderers, on Windows, Linux and macOS. A job is no longer a single render: it is a chain of steps that render, export, convert, encode and run your own scripts, in one submission.
+
+**Platforms:**
+- Full macOS and Linux support
+
+**Submitting:**
+- Job submitter — a completely redesigned interface
+- Multi-step jobs — render, export, convert, encode and script in one submission
+- Processing steps — run your scripted jobs with 3ds Max, Maya, Blender, Cinema 4D or Houdini
+- Export steps — write `.ass`, `.vrscene`, `.rs` or `.usd` files, then render them with a standalone
+- Prompt to job (preview) — describe the job in a sentence and the submitter builds the chain for it
+- Custom plugins — create and register your own plugin that becomes a job type in the submitter
+- Job templates — save and manage templates centrally in Settings
+- Image step — convert between image formats using OpenImageIO
+- Video step — encode a sequence with the built-in ffmpeg
+- Frame orders — linear, first and last, every nth
+
+**Job types:**
+- 17 more applications and renderers: Maya, Houdini, Nuke, After Effects, Unreal Engine, VRED, Chaos Vantage, Premiere Pro, DaVinci Resolve, Adobe Media Encoder, Toon Boom Harmony, KeyShot, RenderMan, Arnold, Redshift, Python and Shell
+- Batch submit per state or render item for Houdini, After Effects, Unreal Engine, Chaos Vantage and DaVinci Resolve
+
+**Monitoring:**
+- Farm view — every machine and job on one canvas
+- Frame gallery — a thumbnail per finished frame, and a live preview of the one still rendering
+- Error catalog — common errors explained in plain language, shown inline in the log where they happened
+- Audit and Events logs — who did what, and what the farm did on its own
+- GPU monitoring — VRAM, temperature and utilization
+
+**Farm and administration:**
+- Pool sharing — lend and borrow machines between pools
+- Pool admission — allowed job types, priority ceiling, machine limit per job
+- Group permissions — 48 features with granular control over who can access certain views, jobs or features
+- Render licenses — jobs wait for a free renderer seat instead of failing
+- Automation — rule based idle detection, return to user, power-off and wakeup settings
+- Notification channels — your own SMTP, error events, and custom Slack, Teams and Discord messages
+- Job clean-up — delete or archive jobs automatically, from immediately to a week after they finish
+- Offline licensing — run with no internet connection (Enterprise)
+- TLS settings — certificate, private key and certificate authority
+- Security settings — discovery and allowed addresses
+- Per-app custom search paths and environment variables
+- Headless server configuration and authentication
+
+**Interface:**
+- One design system across every screen — tables, dialogs and settings all behave the same way
+- Reworked Settings — every section, from pools and groups to security and notifications
+- Handles 1000+ machines and thousands of jobs without slowing down
+- Faster filtering, search and sorting
+
+**Developers:**
+- One consistent API across every client
+- New Webhooks system
+- Python SDK for custom job plugins
+- Updated Python and TypeScript SDKs
+- Updated `rfcli` command line tool
+- Updated MCP server
+
+**Changes from RenderFlow 1:**
+- Jobs, settings and history are not migrated
+- The API and SDKs have changed, so a 1.x integration needs updating
+- V-Ray DR and Corona DR are now a Distributed switch in the 3ds Max job type
+- Scene Manager states are now submitted from the 3ds Max job type
+- The Agentic Jobs and ComfyUI previews are not yet available in the current beta
+- Cloud rendering and the deploy feature are not part of RenderFlow 2
 </Update>

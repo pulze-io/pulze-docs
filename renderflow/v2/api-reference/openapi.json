@@ -24,21 +24,6 @@
       "bearerAuth": []
     }
   ],
-  "tags": [
-    { "name": "Jobs" },
-    { "name": "Archive" },
-    { "name": "Tasks" },
-    { "name": "Nodes" },
-    { "name": "Pools" },
-    { "name": "Schedule" },
-    { "name": "Webhooks" },
-    { "name": "Errors" },
-    { "name": "Licenses" },
-    { "name": "Users" },
-    { "name": "UserGroups" },
-    { "name": "Info" },
-    { "name": "Service" }
-  ],
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -128,6 +113,15 @@
             "$ref": "#/components/schemas/BlenderRenderRecipe"
           },
           {
+            "$ref": "#/components/schemas/HarmonyRenderRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/KeyShotRenderRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/RenderManRenderRecipe"
+          },
+          {
             "$ref": "#/components/schemas/Cinema4DRenderRecipe"
           },
           {
@@ -179,6 +173,33 @@
             "$ref": "#/components/schemas/PythonRecipe"
           },
           {
+            "$ref": "#/components/schemas/MaxScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/BlenderScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/Cinema4DScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MayaScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/HoudiniScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MaxExportRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MayaExportRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/BlenderExportRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/Cinema4DExportRecipe"
+          },
+          {
             "$ref": "#/components/schemas/RenderFlowCustomPluginRecipe"
           }
         ],
@@ -189,6 +210,9 @@
             "arnold.render": "#/components/schemas/ArnoldRenderRecipe",
             "after.render": "#/components/schemas/AfterRenderRecipe",
             "blender.render": "#/components/schemas/BlenderRenderRecipe",
+            "harmony.render": "#/components/schemas/HarmonyRenderRecipe",
+            "keyshot.render": "#/components/schemas/KeyShotRenderRecipe",
+            "renderman.render": "#/components/schemas/RenderManRenderRecipe",
             "cinema4d.render": "#/components/schemas/Cinema4DRenderRecipe",
             "maya.render": "#/components/schemas/MayaRenderRecipe",
             "nuke.render": "#/components/schemas/NukeRenderRecipe",
@@ -206,6 +230,15 @@
             "fusion.render": "#/components/schemas/FusionRenderRecipe",
             "shell": "#/components/schemas/ShellRecipe",
             "python": "#/components/schemas/PythonRecipe",
+            "3dsmax.script": "#/components/schemas/MaxScriptRecipe",
+            "blender.script": "#/components/schemas/BlenderScriptRecipe",
+            "cinema4d.script": "#/components/schemas/Cinema4DScriptRecipe",
+            "maya.script": "#/components/schemas/MayaScriptRecipe",
+            "houdini.script": "#/components/schemas/HoudiniScriptRecipe",
+            "3dsmax.export": "#/components/schemas/MaxExportRecipe",
+            "maya.export": "#/components/schemas/MayaExportRecipe",
+            "blender.export": "#/components/schemas/BlenderExportRecipe",
+            "cinema4d.export": "#/components/schemas/Cinema4DExportRecipe",
             "renderflow.custom_plugin": "#/components/schemas/RenderFlowCustomPluginRecipe"
           }
         }
@@ -345,7 +378,7 @@
           "type"
         ],
         "additionalProperties": false,
-        "title": "3ds Max Render"
+        "title": "3ds Max"
       },
       "LiveHostHints": {
         "type": "object",
@@ -375,7 +408,9 @@
               "corona_image_editor",
               "fusion",
               "fusion_render_node",
+              "harmony",
               "houdini",
+              "keyshot",
               "maya",
               "nuke",
               "nvidia",
@@ -387,9 +422,9 @@
               "powershell",
               "photoshop",
               "python",
+              "renderman",
               "revit",
               "rhino",
-              "topaz_video",
               "sketchup",
               "vray",
               "vray_standalone",
@@ -1054,6 +1089,327 @@
         ],
         "additionalProperties": false,
         "title": "Blender"
+      },
+      "HarmonyRenderRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "file": {
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/SoftwareRef"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineRef"
+          },
+          "plugins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PluginRef"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "_v": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneDescription"
+          },
+          "spec": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {}
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "harmony.render"
+            ]
+          },
+          "camera": {
+            "type": "string"
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/Resolution"
+          },
+          "args": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "host",
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Harmony"
+      },
+      "KeyShotRenderRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "file": {
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/SoftwareRef"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineRef"
+          },
+          "plugins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PluginRef"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "_v": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneDescription"
+          },
+          "spec": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {}
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "keyshot.render"
+            ]
+          },
+          "camera": {
+            "type": "string"
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/Resolution"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageOutput"
+            }
+          },
+          "args": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "host",
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "KeyShot"
+      },
+      "RenderManRenderRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "file": {
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/SoftwareRef"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineRef"
+          },
+          "plugins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PluginRef"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "_v": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneDescription"
+          },
+          "spec": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {}
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "renderman.render"
+            ]
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "args": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "host",
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "RenderMan"
       },
       "Cinema4DRenderRecipe": {
         "type": "object",
@@ -3105,6 +3461,872 @@
         "additionalProperties": false,
         "title": "Python"
       },
+      "MaxScriptRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "script": {
+            "type": "string",
+            "description": "The .py to run. A job carrying a typed script instead leaves it out",
+            "example": "P:/pipeline/export_abc.py"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "3dsmax.script"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "3ds Max Script"
+      },
+      "BlenderScriptRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "script": {
+            "type": "string",
+            "description": "The .py to run. A job carrying a typed script instead leaves it out",
+            "example": "P:/pipeline/export_abc.py"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "blender.script"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Blender Script"
+      },
+      "Cinema4DScriptRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "script": {
+            "type": "string",
+            "description": "The .py to run. A job carrying a typed script instead leaves it out",
+            "example": "P:/pipeline/export_abc.py"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "cinema4d.script"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Cinema 4D Script"
+      },
+      "MayaScriptRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "script": {
+            "type": "string",
+            "description": "The .py to run. A job carrying a typed script instead leaves it out",
+            "example": "P:/pipeline/export_abc.py"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "maya.script"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Maya Script"
+      },
+      "HoudiniScriptRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "script": {
+            "type": "string",
+            "description": "The .py to run. A job carrying a typed script instead leaves it out",
+            "example": "P:/pipeline/export_abc.py"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "houdini.script"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Houdini Script"
+      },
+      "MaxExportRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "format": {
+            "type": "string",
+            "description": "What to export to: `ass`, `vrscene`, `rs` or `usd`",
+            "example": "vrscene"
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageOutput"
+            }
+          },
+          "prepare": {
+            "type": "string",
+            "description": "A script run in the same session before the export",
+            "example": "P:/pipeline/set_renderer.py"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "3dsmax.export"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "3ds Max Export"
+      },
+      "MayaExportRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "format": {
+            "type": "string",
+            "description": "What to export to: `ass`, `vrscene`, `rs` or `usd`",
+            "example": "vrscene"
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageOutput"
+            }
+          },
+          "prepare": {
+            "type": "string",
+            "description": "A script run in the same session before the export",
+            "example": "P:/pipeline/set_renderer.py"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "maya.export"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Maya Export"
+      },
+      "BlenderExportRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "format": {
+            "type": "string",
+            "description": "What to export to: `ass`, `vrscene`, `rs` or `usd`",
+            "example": "vrscene"
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageOutput"
+            }
+          },
+          "prepare": {
+            "type": "string",
+            "description": "A script run in the same session before the export",
+            "example": "P:/pipeline/set_renderer.py"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "blender.export"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Blender Export"
+      },
+      "Cinema4DExportRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "file": {
+            "type": "string",
+            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "example": "P:/shot010/scene.ma"
+          },
+          "args": {
+            "type": "string"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkList"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Values for the script's own declarations, bound before it is imported",
+            "example": {
+              "lut": "show.cube"
+            }
+          },
+          "format": {
+            "type": "string",
+            "description": "What to export to: `ass`, `vrscene`, `rs` or `usd`",
+            "example": "vrscene"
+          },
+          "frame": {
+            "$ref": "#/components/schemas/FrameSpec"
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageOutput"
+            }
+          },
+          "prepare": {
+            "type": "string",
+            "description": "A script run in the same session before the export",
+            "example": "P:/pipeline/set_renderer.py"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "cinema4d.export"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "Cinema 4D Export"
+      },
       "RenderFlowCustomPluginRecipe": {
         "type": "object",
         "properties": {
@@ -3363,8 +4585,11 @@
           "imager",
           "ffmpeg",
           "fusion.render",
+          "harmony.render",
+          "keyshot.render",
           "maya.render",
           "nuke.render",
+          "renderman.render",
           "premiere.render",
           "media_encoder.encode",
           "davinci.render",
@@ -3378,6 +4603,15 @@
           "vred.render",
           "comfyui.render",
           "agentic",
+          "3dsmax.script",
+          "blender.script",
+          "cinema4d.script",
+          "maya.script",
+          "houdini.script",
+          "3dsmax.export",
+          "maya.export",
+          "blender.export",
+          "cinema4d.export",
           "renderflow.custom_plugin"
         ]
       },
@@ -6339,10 +7573,6 @@
             "type": "boolean",
             "default": false
           },
-          "chunked_batches": {
-            "type": "boolean",
-            "description": "One task per batch of frames rather than per frame; omitted lets the task type decide"
-          },
           "copy_to_repository": {
             "type": "boolean",
             "description": "Stage this step's files into the repository; omitted is true. False renders them where they already are, for a scene every node can already read"
@@ -7409,6 +8639,15 @@
             "$ref": "#/components/schemas/BlenderRenderRecipe"
           },
           {
+            "$ref": "#/components/schemas/HarmonyRenderRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/KeyShotRenderRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/RenderManRenderRecipe"
+          },
+          {
             "$ref": "#/components/schemas/Cinema4DRenderRecipe"
           },
           {
@@ -7458,6 +8697,33 @@
           },
           {
             "$ref": "#/components/schemas/PythonRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MaxScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/BlenderScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/Cinema4DScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MayaScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/HoudiniScriptRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MaxExportRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/MayaExportRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/BlenderExportRecipe"
+          },
+          {
+            "$ref": "#/components/schemas/Cinema4DExportRecipe"
           },
           {
             "$ref": "#/components/schemas/RenderFlowCustomPluginRecipe"
@@ -13088,6 +14354,140 @@
         "description": "Delete archived jobs"
       }
     },
+    "/licenses": {
+      "get": {
+        "operationId": "getLicenses",
+        "tags": [
+          "Licenses"
+        ],
+        "summary": "List",
+        "responses": {
+          "200": {
+            "description": "All render licenses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/License"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unhandled server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "description": "List render licenses, with the seats currently held"
+      },
+      "post": {
+        "operationId": "createLicense",
+        "tags": [
+          "Licenses"
+        ],
+        "summary": "Create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LicenseCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created license",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/License"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A license with that name exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unhandled server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a render license"
+      }
+    },
     "/nodes": {
       "get": {
         "operationId": "getNodes",
@@ -13550,140 +14950,6 @@
           }
         },
         "description": "Create a pool"
-      }
-    },
-    "/licenses": {
-      "get": {
-        "operationId": "getLicenses",
-        "tags": [
-          "Licenses"
-        ],
-        "summary": "List",
-        "responses": {
-          "200": {
-            "description": "All licenses",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/License"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unhandled server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "description": "List licenses, with the seats currently held"
-      },
-      "post": {
-        "operationId": "createLicense",
-        "tags": [
-          "Licenses"
-        ],
-        "summary": "Create",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LicenseCreate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The created license",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/License"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "A license with that name exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unhandled server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Create a license"
       }
     },
     "/schedule": {
@@ -15621,6 +16887,51 @@
         "description": "Task counts across the queue, by state"
       }
     },
+    "/licenses/presets": {
+      "get": {
+        "operationId": "getLicensePresets",
+        "tags": [
+          "Licenses"
+        ],
+        "summary": "Presets",
+        "responses": {
+          "200": {
+            "description": "Presets to create a license from",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LicensePreset"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unhandled server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "description": "The licenses a farm commonly buys, and the software ids each covers"
+      }
+    },
     "/nodes/hardware": {
       "get": {
         "operationId": "listNodeHardware",
@@ -15850,51 +17161,6 @@
           }
         },
         "description": "Distinct tags across the whole farm, or a given subset of nodes"
-      }
-    },
-    "/licenses/presets": {
-      "get": {
-        "operationId": "getLicensePresets",
-        "tags": [
-          "Licenses"
-        ],
-        "summary": "Presets",
-        "responses": {
-          "200": {
-            "description": "Presets to create a license from",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LicensePreset"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unhandled server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "description": "The licenses a farm commonly buys, and the software ids each covers"
       }
     },
     "/schedule/preview": {
@@ -16827,6 +18093,263 @@
         "description": "Delete a job. Refused while it is running, stop it first"
       }
     },
+    "/licenses/{id}": {
+      "get": {
+        "operationId": "getLicense",
+        "tags": [
+          "Licenses"
+        ],
+        "summary": "Retrieve",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The license",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/License"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unhandled server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a render license by id"
+      },
+      "patch": {
+        "operationId": "updateLicense",
+        "tags": [
+          "Licenses"
+        ],
+        "summary": "Update",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LicenseUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated license",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/License"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unhandled server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update a render license. The seat count takes effect on the next matching tick"
+      },
+      "delete": {
+        "operationId": "deleteLicense",
+        "tags": [
+          "Licenses"
+        ],
+        "summary": "Delete",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unhandled server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete a render license. Work holding a seat keeps running, uncounted"
+      }
+    },
     "/nodes/{id}": {
       "get": {
         "operationId": "getNode",
@@ -17370,263 +18893,6 @@
           }
         },
         "description": "Delete a pool"
-      }
-    },
-    "/licenses/{id}": {
-      "get": {
-        "operationId": "getLicense",
-        "tags": [
-          "Licenses"
-        ],
-        "summary": "Retrieve",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
-            },
-            "required": true,
-            "name": "id",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The license",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/License"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unhandled server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get a license by id"
-      },
-      "patch": {
-        "operationId": "updateLicense",
-        "tags": [
-          "Licenses"
-        ],
-        "summary": "Update",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
-            },
-            "required": true,
-            "name": "id",
-            "in": "path"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LicenseUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The updated license",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/License"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unhandled server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Update a license. The seat count takes effect on the next matching tick"
-      },
-      "delete": {
-        "operationId": "deleteLicense",
-        "tags": [
-          "Licenses"
-        ],
-        "summary": "Delete",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
-            },
-            "required": true,
-            "name": "id",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Deleted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unhandled server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "description": "Delete a license. Work holding a seat keeps running, uncounted"
       }
     },
     "/schedule/{id}": {
