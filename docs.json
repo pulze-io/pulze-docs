@@ -179,7 +179,7 @@
             ]
           },
           {
-            "group": "Reference",
+            "group": "Resources",
             "pages": [
               "renderflow/faq",
               "renderflow/glossary",
@@ -250,9 +250,10 @@
             ]
           },
           {
-            "group": "Reference",
+            "group": "Resources",
             "pages": [
-              "renderflow/v2/changelog"
+              "renderflow/v2/changelog",
+              "renderflow/v2/roadmap"
             ]
           }
         ]
@@ -301,7 +302,7 @@
             ]
           },
           {
-            "group": "Reference",
+            "group": "Resources",
             "pages": [
               "scene-manager/changelog"
             ]
@@ -323,7 +324,7 @@
             ]
           },
           {
-            "group": "Reference",
+            "group": "Resources",
             "pages": [
               "project-dream/changelog"
             ]
