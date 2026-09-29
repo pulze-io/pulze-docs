@@ -1,0 +1,97 @@
+---
+title: "How LayerWise Works"
+sidebarTitle: "How it works"
+description: "The core ideas behind LayerWise: render engines, render elements, name matching, templates, smart objects and mask targets."
+---
+
+LayerWise rests on a handful of ideas. Once you know them, every screen in the plugin makes sense.
+
+<Frame caption="Render files are matched to elements by name, then placed into a template's layer structure">
+  <img src="/images/layerwise/lw_concepts_diagram.webp" alt="Diagram: render files, matched to element names, placed into a template, resulting in a layered PSD" />
+</Frame>
+
+## Render engine
+
+LayerWise knows three render engines: **V-Ray**, **Corona** and **FStorm**. Each engine has its own list of render elements and its own templates. You pick the engine your renders come from on the [Home screen](/layerwise/interface#home), and everything else follows that choice.
+
+## Render elements and name matching
+
+A **render element** (also called a pass or AOV) is one component of the image your renderer saves as its own file: Reflection, Lighting, ZDepth, and so on. LayerWise ships with the element names of each engine (74 for V-Ray, 35 for Corona, 24 for FStorm) and you can [add your own](/layerwise/render-elements).
+
+LayerWise recognizes a file or a layer by its **name**. If the name contains an element name, it belongs to that element:
+
+| File name | Element |
+|---|---|
+| `cam01.Reflection.png` | Reflection |
+| `Kitchen_VRayLighting_0001.exr` | Lighting |
+| `cam01.MultiMatteElement.#Wood#Glass#Stone.png` | MultiMatteElement |
+| `cam01.RandomFile.png` | *not recognized* |
+
+Matching is **case-sensitive**, and LayerWise avoids the usual false matches between related passes. `Reflection` does not match `ReflectionFilter`, `RawReflection`, `TotalReflection`, `ReflectionAnalysis` or `CShading_Reflection`, so each of those lands on its own element.
+
+<Tip>
+You don't need a special naming scheme. The file names V-Ray, Corona and FStorm save by default already contain the element names.
+</Tip>
+
+### Element flags
+
+Every element has three switches that change how LayerWise treats it:
+
+| Flag | What it does | Typical elements |
+|---|---|---|
+| **Import all** | Import every matching file, not just one. | LightSelect, MultiMatteElement, ZDepth, MtlID |
+| **RGB masks** | The file is a multimatte: its red, green and blue channels become three masks. | MultiMatteElement, CMasking_Mask, MultiMatte |
+| **Luma mask** | The file's brightness becomes a mask. | Alpha, ZDepth, ReflectionFilter |
+
+See [Masks](/layerwise/masks) for how the masks are made and where they go.
+
+## Templates
+
+A **template** describes the layer structure of a post-production PSD: a tree of groups, each with a name, label colour, blend mode, opacity and visibility, and **element slots** inside the groups where the render files go. A template also sets the bit depth of the document (8, 16 or 32 bits).
+
+LayerWise comes with eight built-in templates, and you can [create your own](/layerwise/templates) from any PSD or in the [template editor](/layerwise/template-editor).
+
+<Frame caption="A template: groups with their blend modes, and element slots inside them">
+  <img src="/images/layerwise/lw_concepts_template_tree.webp" alt="Inspect template dialog showing a V-Ray template's group tree and element slots" />
+</Frame>
+
+## Smart objects
+
+LayerWise places every render as a **smart object**. That's what makes updating possible: a smart object's contents can be replaced later without touching what's attached to the layer (its mask, smart filters, layer styles, blend mode and opacity).
+
+- **Embedded** smart objects store the render inside the PSD. This is the default.
+- **Linked** smart objects point to the render file on disk and keep the PSD small.
+
+You choose between them in [Settings](/layerwise/settings).
+
+When LayerWise opens an existing PSD to [update its renders](/layerwise/workflows/update-renders), it looks for smart objects whose layer names match an element. A layer called `cam01.Reflection.png` or simply `Reflection` is recognized as the Reflection element.
+
+<Warning>
+Render element layers must stay smart objects for updating to work. If you rasterized them, use [Convert to smart objects](/layerwise/tools#convert-to-smart-objects) first.
+</Warning>
+
+## Mask targets
+
+A **mask target** is any layer or group whose name matches the name of a mask. When LayerWise makes a mask called `#Wood` from a multimatte, it puts that mask on every layer or group named exactly `#Wood`, and creates such a group if none exists. It also saves the mask as an alpha channel with the same name in the Channels panel.
+
+This is the trick that keeps your masks up to date: name a group `#Wood`, put your wood adjustments inside, and every time you update the renders, the group's mask is regenerated from the new multimatte.
+
+## Undo, cancel and safety
+
+- Every job runs as **undo steps you can step back through** in the History panel, one step per element (for example *Replacing Reflection*).
+- A job can be cancelled at any time from the progress overlay or with **Esc**. If a step fails, only that step is rolled back.
+- Only one job runs at a time.
+
+## What stays on your computer
+
+LayerWise works on your files locally. It uses the internet only to:
+
+- sign you in with your Pulze account (after the first sign-in it also works offline),
+- list and store your [cloud templates](/layerwise/cloud-templates), if you use them,
+- check once per launch whether a new version is available.
+
+There is no telemetry or analytics. The optional [AI assistant bridge](/layerwise/ai-assistant) only talks to apps on your own computer.
+
+## Next steps
+
+[Install LayerWise](/layerwise/installation), take the [tour of the interface](/layerwise/interface), then [create your first document](/layerwise/workflows/create-document).

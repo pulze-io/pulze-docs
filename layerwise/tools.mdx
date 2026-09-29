@@ -1,0 +1,62 @@
+---
+title: "Tools"
+description: "One-click macros for templates, layer transforms, masks, merged layers and batch conversion."
+---
+
+**Tools** collects the small jobs that eat time in post-production. Open it from the shortcut on Home. Each tool shows whether it works on the **whole document** or the **selected layers**, and confirms when it's done.
+
+<Frame caption="The Tools screen">
+  <img src="/images/layerwise/lw_tools.webp" alt="The Tools screen with its setup tools and document tools" />
+</Frame>
+
+Every tool that changes the document is a single undo step in the History panel.
+
+## Set up
+
+### Save document as template
+
+Turns the group structure of the open document into a reusable template. See [Create a template from a document](/layerwise/templates#create-a-template-from-a-document).
+
+### Manage render elements
+
+Opens the [Render elements](/layerwise/render-elements) list.
+
+## On the open document
+
+### Reset layer transforms
+
+*Whole document.* Bakes every smart object at 100% scale without changing how it looks. Useful after [Update renders](/layerwise/workflows/update-renders) fitted a larger render into an old footprint, when you want the smart objects to read 100% again.
+
+<Warning>
+Baking turns linked smart objects into embedded ones.
+</Warning>
+
+### Collapse groups
+
+*Whole document.* Folds every group in the Layers panel.
+
+### Extract layer masks
+
+*Selected layers.* Makes masked groups from the R, G and B channels of the selected multimatte smart objects, using the [nametags](/layerwise/masks#nametags) in their file names (or their layer names). Existing layers and groups with the mask's name get the mask; otherwise a new group is created. See [Masks](/layerwise/masks).
+
+### Refresh merged layer
+
+*Selected layers.* For a "stamp visible" layer with smart filters on top of your stack (for example a merged layer carrying Camera Raw or sharpening): merges everything visible into a new smart object, moves the selected layer's smart filters onto it, and puts it in the old layer's place with the same name, opacity, blend mode and visibility.
+
+Run it after you've changed layers below, and your finishing filters are applied to the fresh result. The selected layer must have smart filters.
+
+<Frame caption="Refresh merged layer: a fresh stamp of the image with the same smart filters">
+  <img src="/images/layerwise/lw_tools_refresh_merged.webp" alt="The Layers panel before and after refreshing a merged layer with smart filters" />
+</Frame>
+
+### Convert to smart objects
+
+*Whole document.* Turns every render element pixel layer (a layer whose name contains an element name) into a smart object, keeping its opacity, visibility and blend mode. Use it on PSDs where the renders were placed as normal layers, so [Update renders](/layerwise/workflows/update-renders) can work with them.
+
+### Rasterize render elements
+
+*Whole document.* Rasterizes every render element smart object, keeping its look, opacity, visibility and blend mode. Useful before handing a PSD to someone who doesn't need live smart objects.
+
+<Warning>
+Rasterized layers can no longer be updated by LayerWise. Keep a copy of the smart object version.
+</Warning>

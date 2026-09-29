@@ -1,0 +1,93 @@
+---
+title: "FAQ"
+description: "Answers to common LayerWise questions and fixes for common problems."
+---
+
+## General
+
+<AccordionGroup>
+  <Accordion title="Is LayerWise free?">
+    Yes. You only need a free Pulze account to sign in. There are no license tiers or subscriptions.
+  </Accordion>
+  <Accordion title="Which Photoshop versions are supported?">
+    Photoshop 2025 (26.0) and newer, on Windows and macOS.
+  </Accordion>
+  <Accordion title="Does it work offline?">
+    Yes, after the first sign-in. Only [cloud templates](/layerwise/cloud-templates) and the update check need a connection.
+  </Accordion>
+  <Accordion title="Does LayerWise collect data about my work?">
+    No. There's no telemetry or analytics, and your renders and PSDs never leave your computer. The internet is used only for sign-in, your cloud templates and the update check.
+  </Accordion>
+  <Accordion title="Can I use renders from another engine, like Arnold or Redshift?">
+    LayerWise ships with element lists for V-Ray, Corona and FStorm. Other renderers work if their file names contain names you add to one of those lists in [Render elements](/layerwise/render-elements). Pick the engine whose list you extended.
+  </Accordion>
+  <Accordion title="Can I undo what LayerWise did?">
+    Yes. Every job is in the History panel as named steps, one per element. Step back or press Ctrl+Z / Cmd+Z.
+  </Accordion>
+</AccordionGroup>
+
+## Renders and matching
+
+<AccordionGroup>
+  <Accordion title="Some of my files are listed under 'These files matched no element'">
+    Their names don't contain any element name of the selected engine. Check the engine on Home, or add the missing name in [Render elements](/layerwise/render-elements). Matching is case-sensitive.
+  </Accordion>
+  <Accordion title="Corona or FStorm: my beauty pass isn't recognized">
+    The beauty often has no element name in its file name (just `cam01.png`). LayerWise asks **Which file is the Beauty pass?** in [Create new document](/layerwise/workflows/create-document#what-gets-built). Pick it there, or save the beauty with "Beauty" in its name.
+  </Accordion>
+  <Accordion title="The wrong file was picked for an element">
+    In Create new document, press **Show every match** and choose the file for each element. In Update renders, choose the source for each row in the plan.
+  </Accordion>
+  <Accordion title="My multichannel EXR 'can't be split'">
+    It's multi-part, tiled, deep, or uses B44 or DWA compression. Save it again as a scanline EXR with ZIP, PIZ or no compression, or save the elements as separate files. See [Multichannel EXR](/layerwise/workflows/multichannel-exr#supported-exrs).
+  </Accordion>
+</AccordionGroup>
+
+## Updating renders
+
+<AccordionGroup>
+  <Accordion title="'No render elements in this document'">
+    LayerWise looks for **smart objects** whose names contain element names of the selected engine. Check the engine on Home. If your render layers are pixel layers, run [Convert to smart objects](/layerwise/tools#convert-to-smart-objects) first. If you renamed them, put the element name back into their names.
+  </Accordion>
+  <Accordion title="After updating, my smart objects don't read 100% scale">
+    When a render of a different size is fitted into an old layer's footprint, LayerWise scales the smart object instead of baking it, so no resolution is lost. Run [Reset layer transforms](/layerwise/tools#reset-layer-transforms) if you want them at 100%.
+  </Accordion>
+  <Accordion title="My masks weren't updated">
+    Check that the multimatte file name has [nametags](/layerwise/masks#nametags) matching your group names exactly (including the wildcard, for example `#Wood`), and that **Update existing layer masks** was on. Masks are only updated for rows that were switched on.
+  </Accordion>
+  <Accordion title="The aspect ratio warning appears">
+    The new renders have a different aspect ratio than the document. Updating still works, but layers will be stretched to fit. Render at the same aspect ratio if you can.
+  </Accordion>
+</AccordionGroup>
+
+## Templates and settings
+
+<AccordionGroup>
+  <Accordion title="My templates are gone after updating Photoshop">
+    Photoshop keeps plugin data separately for each major version. Your templates are still in the old version. Export them there and import them in the new one, or keep them in the [cloud](/layerwise/cloud-templates).
+  </Accordion>
+  <Accordion title="Can my team share templates?">
+    Export templates as `.pmt` files and share them, or have each person import them. Cloud templates are per account.
+  </Accordion>
+</AccordionGroup>
+
+## Panel problems
+
+<AccordionGroup>
+  <Accordion title="The panel is blank">
+    On Windows, the panel needs Microsoft Edge WebView2. It comes with Windows 10 and 11, but can be missing on some managed machines. Install the **WebView2 Runtime** from Microsoft, then restart Photoshop.
+  </Accordion>
+  <Accordion title="Photoshop keyboard shortcuts stop working">
+    On Windows, shortcuts can stop after clicking in the panel. Click once on the canvas to get them back. This is a known Photoshop issue with panels like this one.
+  </Accordion>
+  <Accordion title="'Photoshop is busy'">
+    Photoshop is in the middle of something, such as editing text or a transform. Finish or cancel it, then try again.
+  </Accordion>
+  <Accordion title="The sign-in code expired">
+    Press **Get a new code** and confirm the new one in the browser.
+  </Accordion>
+</AccordionGroup>
+
+## Still stuck?
+
+Email [support@pulze.io](mailto:support@pulze.io) with your LayerWise and Photoshop versions (shown in [Settings → About](/layerwise/settings#about-and-updates)), or ask on our [Discord](https://discord.gg/BxtBs9aN4E).

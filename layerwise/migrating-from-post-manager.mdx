@@ -1,0 +1,58 @@
+---
+title: "Migrating from Post Manager"
+description: "LayerWise replaces Pulze Post Manager. What's the same, what's better, and how to bring your templates along."
+---
+
+LayerWise is the successor of **Pulze Post Manager**, rebuilt from scratch as a modern Photoshop plugin. Everything Post Manager did, LayerWise does too, and your PSDs and templates keep working.
+
+## What's the same
+
+- The three render engines: V-Ray, Corona and FStorm, with the same element lists (now extended with newer passes).
+- The same two workflows: **Create new document** (Template Builder in Post Manager) and **Update renders** (Element Replacer), including **Merge as regions**.
+- The same eight built-in templates, and the same `.pmt` template files.
+- The same multimatte nametags (`#Wood#Glass#Stone`) and `[LUMA]` masks.
+- The same tools, and the same settings.
+- Your cloud templates: LayerWise reads and writes the same cloud templates as Post Manager.
+
+PSDs made with Post Manager can be updated with LayerWise as they are.
+
+## What's better
+
+- **Updates keep full resolution.** When fitting a larger render into an old layer's footprint, LayerWise scales the smart object instead of baking it, so full-resolution contents, linked files, smart filters and layer styles all survive.
+- **Masks follow the new renders.** Nametags are read from the new multimatte's file name, so renamed tags or renamed layers no longer break mask updates.
+- **The mask options do exactly what they say.** *Update existing* only updates, *Create new* only creates.
+- **Multichannel EXR** splitting is built in and works the same on Windows and macOS.
+- **A template editor**, a default template per engine, and **Duplicate and edit** for any template.
+- **Refresh merged layer** leaves your clipboard alone.
+- **AI assistant** support.
+- **Free, with sign-in only.** No license tiers, no license server.
+- Many small Post Manager bugs are fixed (for example ruler units left changed, masks switched on after a scan, stray helper layers).
+
+## Bring your templates along
+
+<Steps>
+  <Step title="Export from Post Manager">
+    In Post Manager, export each template you want to keep as a `.pmt` file. Templates you uploaded to the cloud don't need exporting.
+  </Step>
+  <Step title="Import into LayerWise">
+    In LayerWise, open **Templates** → **Import** and choose the `.pmt` (or `.plz`) file. See [Import a template](/layerwise/templates#import-a-template).
+  </Step>
+  <Step title="Check your cloud templates">
+    Your Post Manager cloud templates appear in the **Cloud** section of Templates as soon as you sign in with the same Pulze account.
+  </Step>
+</Steps>
+
+Settings and custom render elements don't move over automatically. Set them again in [Settings](/layerwise/settings) and [Render elements](/layerwise/render-elements). Templates that use custom elements offer to add them on import.
+
+## Names that changed
+
+| Post Manager | LayerWise |
+|---|---|
+| Template Builder / Create New Document | [Create new document](/layerwise/workflows/create-document) |
+| Element Replacer / Replace / Merge Render Elements | [Update renders](/layerwise/workflows/update-renders) |
+| Tools & Macros | [Tools](/layerwise/tools) |
+| Create Template File | Save document as template |
+| Collapse Folders | Collapse groups |
+| Extract Layermasks | Extract layer masks |
+| Batch Convert: Smart Objects | Convert to smart objects |
+| Batch Convert: Rasterize | Rasterize render elements |

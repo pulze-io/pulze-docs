@@ -1,0 +1,70 @@
+---
+title: "Template Editor"
+description: "Build and change templates visually: groups, element slots, label colours, blend modes and opacity, with a live preview."
+---
+
+The template editor lets you shape a template the way you'd shape the Layers panel: add groups, drop render elements into them, and set each item's label colour, blend mode, opacity and visibility.
+
+Open it from [Templates](/layerwise/templates):
+
+- the **pencil** on one of your own templates edits it,
+- **Duplicate and edit** on any template (including built-in and cloud ones) edits a copy.
+
+<Frame caption="The template editor">
+  <img src="/images/layerwise/lw_editor_overview.webp" alt="The template editor with the layer stack, the element palette and the live preview" />
+</Frame>
+
+- **The stack** (middle). The template from top to bottom, just like the Layers panel.
+- **Properties.** Press a row to edit it in place, as with LIGHTING above.
+- **Render elements** (right). The element palette of the template's engine. Drag chips into the stack.
+- **Preview** (top left). A live sketch of the structure: groups in their label colour, elements in green, dimmed when hidden or transparent. Click a plate to select its row.
+
+## Template settings
+
+At the top: the template's **name** and the **bit depth of new documents** (8, 16 or 32 bits) built from it.
+
+## Groups and elements
+
+**Add a group** and name it. For each group you set:
+
+- **Group name.** Name a group like a mask (`#Wood`, `[LUMA]Alpha`) to make it a [mask target](/layerwise/masks#where-the-masks-go). It's marked with a *Mask target* icon.
+- **Label colour.** The colour of the group in Photoshop's Layers panel.
+- **Blend mode.** Photoshop's blend modes, including *Pass Through* for groups.
+- **Opacity** and **visibility** (the eye).
+
+**Add render elements** by dragging chips from the palette into the stack, or click a chip to add it at the selected position. Filter the palette with its search field; elements already used are ticked. Each element slot has its own blend mode, opacity and visibility, for example *Linear Dodge (Add)* for light passes.
+
+An element that isn't in the engine's list is marked **Not in the element list**. It still works in the template, but LayerWise won't recognize files for it until you [add it](/layerwise/render-elements).
+
+## Arranging
+
+- **Drag** rows to move them. Dropping on the top part of a group puts the item above it, the middle puts it inside, the bottom (of a collapsed group) puts it below.
+- Or use the buttons: **Move up**, **Move down**, **Move into the group above**, **Move out of this group**, **Duplicate** and **Delete**.
+- Collapse and expand groups with the chevron.
+
+<Frame caption="AO dragged from the palette into the GRADING group">
+  <img src="/images/layerwise/lw_editor_drag.webp" alt="Dragging a render element chip from the palette into a group in the template stack" />
+</Frame>
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+|---|---|
+| **Ctrl+Z / Cmd+Z** | Undo |
+| **Ctrl+Shift+Z** or **Ctrl+Y** | Redo |
+| **Ctrl+S / Cmd+S** | Save |
+| **Del** | Delete the selected item |
+| **↑ / ↓** | Select the item above / below |
+| **Alt+↑ / Alt+↓** | Move the selected item up / down |
+
+## Save
+
+Press **Save template**. LayerWise warns you if the template uses elements that aren't in the engine's list. If you leave with unsaved changes, it asks first.
+
+## Duplicate a template
+
+**Duplicate and edit** opens an unsaved copy called *"&lt;name&gt; copy"*. The editor shows **Not saved yet**, and the save button reads **Save duplicate**: it adds the copy to your templates and leaves the original untouched.
+
+<Tip>
+Built-in and cloud templates are read-only. Duplicate them to make your own version.
+</Tip>

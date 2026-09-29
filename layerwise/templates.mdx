@@ -1,0 +1,93 @@
+---
+title: "Templates"
+description: "Built-in and custom templates: the layer structure LayerWise builds new documents from."
+---
+
+A template is the layer structure of a post-production PSD: groups with names, label colours, blend modes, opacity and visibility, the **element slots** where renders go, and the document's bit depth. [Create new document](/layerwise/workflows/create-document) builds from one.
+
+Open **Templates** from the menu or the shortcut on Home.
+
+<Frame caption="The Templates screen">
+  <img src="/images/layerwise/lw_templates_list.webp" alt="The Templates screen listing built-in, user and cloud templates with their actions" />
+</Frame>
+
+## Built-in templates
+
+LayerWise comes with eight templates made by Pulze:
+
+| Template | Engines | Bit depth | What's in it |
+|---|---|---|---|
+| **Pulze Template - Standard** | V-Ray, Corona | 8-bit | The full studio structure: Background, the beauty, an Elements group with Lighting, Reflection, Refraction and Shadows sub-groups, then Adjustments, Masks, Matte, People and Final adjustments groups ready for your work. |
+| **Pulze Template - Linear** | V-Ray, Corona, FStorm | 32-bit | A linear-light setup: the lighting components (GI, lighting, reflection, refraction, specular or their Corona equivalents) in one Elements group, with the same organizing groups around them. |
+| **Barebone** | V-Ray, Corona, FStorm | 8-bit (FStorm 16-bit) | Just the common elements in a single group, without the extra structure. A good starting point for your own template. |
+
+Built-in templates can't be changed, but you can [duplicate and edit](/layerwise/template-editor#duplicate-a-template) them.
+
+## Row actions
+
+| Action | What it does |
+|---|---|
+| ★ **Use as default for new documents** | Makes this template the first choice in Create new document. There's one default per engine. |
+| 👁 **Inspect** | Shows the full layer tree. |
+| ✎ **Edit** | Opens your own templates in the [template editor](/layerwise/template-editor). |
+| **Duplicate and edit** | Makes an editable copy of any template. |
+| **Export as .pmt** | Saves the template as a file to share or back up. |
+| **Upload to the cloud** | Copies your template to your [cloud templates](/layerwise/cloud-templates). |
+| **Delete** | Removes one of your own templates from this computer (after a confirmation). |
+
+## Default template
+
+The default template (marked **Default**) is preselected when you create a new document. Each engine has its own, so you can have one for V-Ray and another for Corona.
+
+## Inspect a template
+
+The inspect dialog shows the template from top to bottom, in the same order as Photoshop's Layers panel.
+
+<Frame caption="Inspecting a template's layer tree">
+  <img src="/images/layerwise/lw_templates_inspect.webp" alt="The Inspect template dialog with groups, blend modes and element chips" />
+</Frame>
+
+- **Group rows** show visibility, the label colour, the name, the blend mode (if not *Pass Through*) and opacity (if not 100%). A link icon marks a [mask target](/layerwise/masks#where-the-masks-go) group, such as `#Wood` or `[LUMA]Alpha`.
+- **Element chips** show the element and its flags (*Import all*, *RGB masks*, *Luma mask*), plus the blend mode and opacity of the slot.
+- **Not recognized** marks an element that isn't in your [render element list](/layerwise/render-elements). Press **+** to add it.
+
+## Create a template from a document
+
+The quickest way to make your own template is from a PSD you already like.
+
+<Steps>
+  <Step title="Open the PSD">
+    Open a document whose group structure you want to reuse. Its render layers should be named after their elements.
+  </Step>
+  <Step title="Run Save document as template">
+    Go to [Tools](/layerwise/tools) → **Save document as template**.
+  </Step>
+  <Step title="Name and save">
+    Check the structure, give it a unique name and a version, and press save.
+  </Step>
+</Steps>
+
+LayerWise keeps the groups (with their names, label colours, blend modes, opacity and visibility) and every layer whose name matches a render element. Other layers, such as adjustment layers or paintings, are not part of templates. Empty groups are kept, so your `#Wood`-style mask groups become part of the template.
+
+<Frame caption="Saving the open document's structure as a template">
+  <img src="/images/layerwise/lw_templates_save_dialog.webp" alt="The dialog for saving a document's structure as a new template" />
+</Frame>
+
+<Warning>
+Render layers that sit at the top level of the document, outside any group, are not supported in templates. LayerWise warns you. Put them into a group first.
+</Warning>
+
+## Import a template
+
+Press **Import** at the top of the list and choose a `.pmt` file (or a legacy `.plz`). LayerWise shows the template and its engine; give it a name and save.
+
+If the template uses elements that aren't in that engine's list, LayerWise offers to **add the new elements** for you.
+
+Templates exported from Pulze Post Manager import as they are. See [Migrating from Post Manager](/layerwise/migrating-from-post-manager).
+
+## Move templates to another computer or Photoshop version
+
+Your templates are stored with LayerWise's settings, which Photoshop keeps separately for each major version. To take them along:
+
+- **Export** each one as a `.pmt` file and **import** it on the other side, or
+- **Upload** them to your [cloud templates](/layerwise/cloud-templates). They follow your Pulze account everywhere.
