@@ -1,0 +1,157 @@
+---
+title: "Plugin not installed"
+description: "What to do when the Project Dream plugin doesn't show up in your host application — re-run the installer or install the plugin manually."
+---
+
+Sometimes the Project Dream plugin doesn't appear inside a host application (no toolbar, no menu entry) even though Project Dream itself is installed. This usually happens for one of two reasons:
+
+- **You installed the host application *after* Project Dream.** The installer only sets up plugins for the apps it detects at install time, so anything installed later is skipped.
+- **The automatic plugin install silently failed** for an app that was already present.
+
+Work through the two fixes below in order. **Fix 1** resolves the large majority of cases.
+
+## Fix 1 — Re-run the installer
+
+This is the right fix when you installed (or reinstalled) a host application after Project Dream, and the quickest thing to try in every other case too.
+
+<Steps>
+  <Step title="Close your host applications">
+    Fully quit any apps you want the plugin in (3ds Max, Blender, Cinema 4D, Maya, Photoshop, Revit, Rhino, SketchUp). The installer can't write plugin files while an app is running.
+  </Step>
+  <Step title="Run the Project Dream installer again">
+    Launch the same installer you used originally. You don't need to uninstall first — running it again is safe and won't remove your settings.
+  </Step>
+  <Step title="Tick the apps you use">
+    On the application selection screen, **make sure the apps (and versions) you actually use are checked.** The installer auto-detects what's installed, but confirm your app is ticked — especially one you added recently.
+  </Step>
+  <Step title="Finish and relaunch">
+    Complete the install, then start your host application. The Project Dream toolbar/panel should now be there.
+  </Step>
+</Steps>
+
+<Note>
+If a host app's checkbox is greyed out or missing, the installer didn't detect it. Confirm the app is installed in its default location and that it's a supported version, then re-run the installer. If it still isn't detected, use the manual steps below.
+</Note>
+
+## Fix 2 — Install the plugin manually
+
+If re-running the installer didn't help, you can place the plugin files yourself. Everything you need already ships with Project Dream.
+
+<Warning>
+Close the host application before copying files. Some destinations (under `C:\ProgramData`, `C:\Program Files`, or the registry) require **administrator rights** — copy as an administrator if Windows asks.
+</Warning>
+
+**Where the plugin files live.** After a normal install, the per-app plugin payloads are inside your Project Dream install folder, by default:
+
+```
+C:\Program Files\Pulze\Project Dream\plugins\
+```
+
+Each app has its own subfolder there (`blender`, `cinema`, `max`, `maya`, `photoshop`, `revit`, `rhino`, `sketchup`). Below, this folder is referred to as the **source folder**. Replace `<year>` / `<version>` with your app's version throughout.
+
+<Tabs>
+  <Tab title="3ds Max">
+    1. Copy the contents of `…\plugins\max\<year>\`, **plus** the `…\plugins\max\toolbar.ms` file, into:
+       ```
+       C:\ProgramData\Autodesk\ApplicationPlugins\ProjectDreamMax<year>\
+       ```
+    2. Copy the four icons from `…\plugins\max\icons\` (`ProjectDreamMax_24.png`, `_30`, `_36`, `_48`) into **both** of these folders inside your 3ds Max install:
+       ```
+       <3ds Max install>\UI_ln\Icons\Light\
+       <3ds Max install>\UI_ln\Icons\Dark\
+       ```
+       A typical install path is `C:\Program Files\Autodesk\3ds Max <year>\`.
+    3. Start 3ds Max. The plugin loads automatically.
+  </Tab>
+
+  <Tab title="Blender">
+    1. Open the source folder `…\plugins\blender\`.
+    2. Copy its **entire contents** into:
+       ```
+       %APPDATA%\Blender Foundation\Blender\<version>\scripts\addons\projectdream_blender\
+       ```
+       Create the `projectdream_blender` folder if it doesn't exist. (`%APPDATA%` is `C:\Users\<you>\AppData\Roaming`.)
+    3. Start Blender and go to **Edit → Preferences → Add-ons**.
+    4. Search for **Project Dream** and tick it to enable it.
+  </Tab>
+
+  <Tab title="Cinema 4D">
+    1. Open the source folder `…\plugins\cinema\`.
+    2. Copy its **entire contents** into a new `ProjectDream` folder inside your Cinema 4D install's `plugins` directory:
+       ```
+       <Cinema 4D install>\plugins\ProjectDream\
+       ```
+       A typical path is `C:\Program Files\Maxon Cinema 4D <year>\plugins\ProjectDream\`.
+    3. Start Cinema 4D. Project Dream loads automatically; you'll find it in the Extensions menu.
+  </Tab>
+
+  <Tab title="Maya">
+    1. Open the source folder `…\plugins\maya\`.
+    2. Copy its **entire contents** into:
+       ```
+       C:\ProgramData\Autodesk\ApplicationPlugins\ProjectDreamMaya\
+       ```
+       The same folder is used for all Maya versions — the plugin detects your version automatically.
+    3. Start Maya. The plugin auto-loads; you can confirm it under **Windows → Settings/Preferences → Plug-in Manager**.
+  </Tab>
+
+  <Tab title="Photoshop">
+    The Photoshop plugin is an Adobe extension package (`.ccx`) installed through Adobe's plugin installer.
+
+    1. Locate the package in the source folder:
+       ```
+       …\plugins\photoshop\project-dream-photoshop.ccx
+       ```
+    2. **Easiest:** double-click `project-dream-photoshop.ccx`. Adobe Creative Cloud handles the install.
+    3. **If double-clicking doesn't work,** run Adobe's installer agent from a Command Prompt (adjust the path if needed):
+       ```
+       "C:\Program Files\Common Files\Adobe\Adobe Desktop Common\RemoteComponents\UPI\UnifiedPluginInstallerAgent\UnifiedPluginInstallerAgent.exe" /install "C:\Program Files\Pulze\Project Dream\plugins\photoshop\project-dream-photoshop.ccx"
+       ```
+    4. Restart Photoshop. Project Dream appears under the **Plugins** menu.
+  </Tab>
+
+  <Tab title="Revit">
+    Revit needs the add-in manifest *and* a small edit so it points at the plugin DLL.
+
+    1. From `…\plugins\revit\<year>\`, copy **`ProjectDreamRevit<year>.addin`** into:
+       ```
+       C:\ProgramData\Autodesk\Revit\Addins\<year>\
+       ```
+    2. Open the copied `.addin` file in a text editor (Notepad). Find the `<Assembly>` line and set it to the full path of the DLL in your source folder:
+       ```xml
+       <Assembly>C:\Program Files\Pulze\Project Dream\plugins\revit\<year>\ProjectDreamRevit<year>.dll</Assembly>
+       ```
+       Save the file. (This step matters: a fresh copy of the manifest may still contain a placeholder build path that won't exist on your machine.)
+    3. Start Revit. Project Dream loads automatically; you can confirm it under **Add-Ins**.
+  </Tab>
+
+  <Tab title="Rhino">
+    The Rhino plugin file (`.rhp`) already sits in your source folder — you just need Rhino to load it.
+
+    1. Locate the plugin for your version:
+       ```
+       …\plugins\rhino\7\ProjectDreamRhino7.rhp   (Rhino 7)
+       …\plugins\rhino\8\ProjectDreamRhino8.rhp   (Rhino 8)
+       ```
+    2. **Easiest:** start Rhino and **drag the `.rhp` file onto the Rhino window.** Rhino registers and loads the plugin. Leave the `.rhp` where it is — don't delete the source folder afterward.
+    3. Verify under **Tools → Options → Plug-ins** — "Project Dream for Rhino" should be listed and enabled. Restart Rhino if the toolbar doesn't appear immediately.
+  </Tab>
+
+  <Tab title="SketchUp">
+    SketchUp ships its plugin as an installable extension package (`.rbz`) that you install from inside SketchUp.
+
+    1. Start SketchUp and open **Window → Extension Manager**.
+    2. Click **Install Extension** and select the package from the source folder:
+       ```
+       …\plugins\sketchup\extension\project_dream.rbz
+       ```
+    3. Confirm the install. **Project Dream** appears in the Extension Manager — make sure it's enabled, then restart SketchUp.
+  </Tab>
+</Tabs>
+
+## Still not working?
+
+If the plugin still doesn't show up after both fixes, reach out and we'll help track it down. Let us know which host application and version you're on.
+
+- Email [support@pulze.io](mailto:support@pulze.io)
+- Join our [Discord](https://discord.com/invite/BxtBs9aN4E)
