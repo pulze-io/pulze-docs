@@ -5,6 +5,31 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="2.0.16-beta" description="September 30, 2026">
+RenderFlow 2.0.16 adds a ComfyUI job type, easier submitter installs and important fixes.
+
+**Updates:**
+- New ComfyUI job type: run your ComfyUI workflows on the farm, submitted straight from ComfyUI
+- Houdini submits from **Render** > **Submit to RenderFlow**
+- Houdini, Nuke and Fusion submitters install for every user on the machine
+- Premiere Pro panel installs through Adobe's plugin installer
+- Editing several jobs at once covers more settings
+- A job that every machine has failed waits for an operator instead of failing
+- Application environment variables can be set per platform
+- The `HTTPS_PROXY` and `NO_PROXY` environment variables also apply to licensing
+
+**Fixes:**
+- Fixed the Default pool and groups resetting on server restart
+- Fixed machines dropping off long jobs after a few unrelated failures
+- Fixed batches rendering the wrong frames in Blender, Cinema 4D and Maya
+- Fixed Maya Arnold jobs requiring the wrong Arnold version
+- Fixed upgrades and uninstalls leaving old DCC plugins behind
+- Fixed pool lending stopping after a loan
+- Fixed a proxy address entered with `http://` blocking every connection, including the licence check
+- Fixed several DaVinci Resolve, Fusion and Chaos Vantage issues
+- Various stability improvements
+</Update>
+
 <Update label="2.0.9-beta" description="September 21, 2026">
 RenderFlow 2 ships 35 job templates across 20 applications and renderers, on Windows, Linux and macOS. A job is no longer a single render: it is a chain of steps that render, export, convert, encode and run your own scripts, in one submission.
 

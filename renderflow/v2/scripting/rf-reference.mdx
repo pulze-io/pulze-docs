@@ -15,7 +15,7 @@ The module a [Python step](/renderflow/v2/scripting/python-steps) and a [plugin]
 
 ## Declarations
 
-Each one is a field in the submitter, a command-line flag, and the value, from a single line. In a plugin, these are what generate the operator's UI automatically; run the same script from a terminal instead, and they are its `--flags`. Every declaration takes `label` (what the submitter shows), `required`, `default`, and `show_if`.
+Each one is a field in the submitter and the value, from a single line. In a plugin, these are what generate the operator's UI automatically. Every declaration takes `label` (what the submitter shows), `required`, `default`, and `show_if`.
 
 | | |
 |---|---|
@@ -29,11 +29,10 @@ Each one is a field in the submitter, a command-line flag, and the value, from a
 | `rf.pairs(name)` | Key-value rows, as a dict |
 | `rf.resolution(name)` | A width and a height, as a two-item list |
 | `rf.output(name)` | Where the job writes. See below |
-| `rf.frames(name)` | **A work source.** A frame range |
-| `rf.files(name, pattern="*")` | **A work source.** A folder, listed on the submitting machine |
+| `rf.frames(name)` | A frame range. `rf.expand()` turns it into a list |
 | `rf.args(name, type=...)` | The escape hatch every one of the above compiles to |
 
-Two rules the module enforces by raising at import: **one work source per script**, and **one output per script**. Declaring a second of either is a mistake worth finding immediately rather than at dispatch.
+One rule the module enforces by raising at import: **one output per script**. A second is a mistake worth finding immediately rather than at dispatch.
 
 `show_if` hides a field until another holds a value: `rf.text("codec", show_if={"encode": True})`.
 
@@ -52,31 +51,80 @@ With `extensions`, the submitter's browse button becomes the operating system's 
 | | Runs |
 |---|---|
 | `@rf.execute` | Once per item, on the machine that got it. The only one a script needs |
+| `@rf.tasks` | On the submitting machine, before the job exists. Returns the work list, one entry per task |
 | `@rf.submit` | On the submitting machine, before the job exists. Raise to stop the submission |
+| `@rf.read` | On the submitting machine, when the operator asks. Returns the fields it read out of the scene |
 | `@rf.prepare` | Once per task, before its items |
 | `@rf.cleanup` | Once per task, whatever happened |
 
+### Planning the tasks
+
+`@rf.tasks` is what turns one script into many. It returns a list, and every entry becomes one task:
+
+```python
+@rf.tasks
+def plan():
+    return [{"shot": "010", "camera": "shotcam"}, {"shot": "020", "camera": "witness"}]
+```
+
+An entry is anything JSON can carry, and it reaches `@rf.execute(item)` exactly as it left, so a task can be a frame, a file, or a whole description of what that one machine should do. Two helpers cover the ordinary cases:
+
+| | |
+|---|---|
+| `rf.expand("1-3,7")` | A frame range as `[1, 2, 3, 7]`. A list or a single number passes straight through |
+| `rf.list(folder, "*.exr", recursive=False)` | The matching files in a folder, sorted, mapped through `rf.path()` |
+
+It runs on the machine that is submitting, because the farm needs the list before it can make anything. Raising stops the submission with your message; returning an empty list is refused, since a job with no tasks never finishes. Without `@rf.tasks`, a script runs once on one machine.
+
+### Reading the scene
+
+A job type built into RenderFlow reads the scene an operator browsed for: a `.max` through its own reader, an `.aep` by starting After Effects. A plugin's scene is its own business, and `@rf.read` is where it answers what it found:
+
+```python
+@rf.read
+def scan():
+    flows = probe(rf.path(scene))
+
+    rf.state.flows = flows
+    return {
+        "flow": {"options": [entry["name"] for entry in flows], "value": flows[0]["name"]},
+        "scene": {"readonly": True},
+        "frame_start": 0,
+        "frame_end": 100
+    }
+```
+
+One key per field. A bare value answers the field; a dict may also carry `options`, which is what the operator may pick from, and `readonly`, for a field the scene has settled. Anything written to `rf.state` reaches `@rf.tasks` and `@rf.execute` unchanged.
+
+It runs on the machine that is submitting, and only when the operator presses Read the scene. Say so in the manifest before the button appears:
+
+```toml
+[submit]
+scene   = "read"
+open_in = true
+```
+
+`scene` is `"browse"` (a path field, the default), `"read"` (a path field and the button) or `"in-app"` (no path field, so RenderFlow says to submit from the application instead). `open_in` adds a button that opens the scene in the application named by `[requires]`.
+
 ### Distributing the work
 
-Called on the decorated `@rf.execute` function, to say how its calls should be spread over the farm instead of running once on a single machine:
+Called on the decorated `@rf.execute` function, to say how its calls should be spread:
 
 ```python
 @rf.execute
 def one(item):
     ...
 
-one.map(items, batch=False, on_error="stop")
+one.map(batch=False, on_error="stop")
 one.once()
-one.every_node()
 ```
 
 | | |
 |---|---|
-| `map(source, batch, on_error)` | Run `one` once per item in `source`, chunked across as many machines as the farm gives the task. `batch=True` hands a machine its whole slice in one call instead of one item at a time; `on_error="continue"` finishes the rest of a slice before failing it |
-| `once()` | Run `one` a single time, on a single machine |
-| `every_node()` | Run `one` once on every machine currently in the farm |
+| `map(batch, on_error)` | Run `one` once per planned task, chunked across as many machines as the farm gives it. `batch=True` hands a machine its whole slice in one call instead of one item at a time; `on_error="continue"` finishes the rest of a slice before failing it |
+| `once()` | Run `one` a single time over the whole list, on a single machine |
 
-Call none of these, and `@rf.execute` still runs, just once, on whichever single machine the task lands on.
+Call none of these and the farm decides, which is one task per planned entry.
 
 ## Context
 
@@ -149,11 +197,12 @@ The module writes these to standard output, and the service reads them. You neve
 | `RF_DONE` | The slice finished |
 | `RF_SCHEMA` | What the script declares, printed in inspect mode |
 
-## Running a script by hand
+## Seeing what a script declares
 
 ```bash
-python stamp.py --plates ./shots/010
 python stamp.py --rf-inspect        # print RF_SCHEMA and exit
 ```
 
-A bare run binds the flags from `argv`, materialises the whole work source, and runs it in that process, through the same code path a node uses. An unknown flag fails and names the ones the script declares.
+This is the one thing a script does when you run it yourself, and it is the same thing the service does when a plugin is installed: import the file, collect the declarations, print them. What the submitter will show is something you can read in a terminal before anyone installs anything.
+
+A script is not otherwise runnable as a program. It runs as a task, where the values, the node, its installed software and the farm's path mapping are all bound before your code sees them. None of that exists in a terminal, so a local run could only ever prove that the file imports.

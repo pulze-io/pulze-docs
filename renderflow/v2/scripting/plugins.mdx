@@ -46,23 +46,44 @@ python = ">=3.8"
 | `description` | One line, under the name in the job submitter |
 | `icon` | A file inside this folder. An `icon.svg` or `icon.png` beside the manifest is found without naming it |
 
+### Where your scene comes from
+
+A `[submit]` table says how a scene reaches your step. One key answers it, and one more says whether there is an application to open the scene in:
+
+```toml
+[submit]
+scene   = "read"
+open_in = true
+```
+
+| `scene` | What the operator gets |
+|---|---|
+| `"browse"` | A path field. The default, and what every plugin gets without a `[submit]` table |
+| `"read"` | A path field and a **Read the scene** button, which runs your `@rf.read` |
+| `"in-app"` | No path field. RenderFlow says to open the scene in the application and submit from there |
+
+Pick `"in-app"` when nothing outside the application can answer your fields: a Cinema 4D take, a Maya render layer, a tyFlow object in a closed `.max`.
+
+Pick `"read"` when your `@rf.read` can get those answers by starting the application itself. It is a button rather than something that happens on Browse, because a cold application start is a wait the operator should choose. A manifest with `scene = "read"` and no `@rf.read` is refused at installation, since the button would answer nothing.
+
+`open_in = true` puts an **open in \<application\>** button beside the field, using the first entry in `[requires]`. Without a `[requires]` application there is nothing to open, and no button appears.
+
 ## Declaring fields
 
-Each declaration below is a field in the submitter, a command-line flag, and the value, from a single line:
+Each declaration below is a field in the submitter and the value, from a single line:
 
 ```python
 import renderflow as rf
 
-plates = rf.files("plates", pattern="*.exr", label="Plates")
+plates = rf.folder("plates", label="Plates")
 ```
 
-`rf.files("plates", ...)` does three things at once:
+`rf.folder("plates", ...)` does two things at once:
 
 - It **declares a field** in the submitter, labelled **Plates**, with a folder browser.
-- It **declares a flag**, so the same script runs from a terminal as `python main.py --plates ./shots/010`.
 - It **returns the value**, right there on the line, so the script reads it as an ordinary variable.
 
-The full set is in the [`rf` reference](/renderflow/v2/scripting/rf-reference): text, numbers, switches, choices, files, folders, resolutions, key-value pairs, an output, and the two that are work sources.
+The full set is in the [`rf` reference](/renderflow/v2/scripting/rf-reference): text, numbers, switches, choices, files, folders, resolutions, key-value pairs, a frame range and an output.
 
 <Note>
 Declarations run when the script is imported, and they return the operator's value at that moment. So they belong at module level, not inside a function. A declaration inside `@rf.execute` would be read once per item and would not appear in the submitter at all.
@@ -82,21 +103,56 @@ A manifest entry **shadows a script declaration of the same name, whole**. The p
 
 ## Splitting work across machines
 
-A script has at most one **work source**, and it is what turns one script into many tasks:
+One script becomes many tasks because it says so. `@rf.tasks` returns a list, and **every entry becomes one task**:
+
+```python
+@rf.tasks
+def plan():
+    return [1, 2, 3, 7]
+```
+
+That is four tasks, handed to whichever machines are free, and `@rf.execute` is called once per entry with the entry itself.
+
+An entry is anything JSON can carry, which is the point. A task does not have to be a frame or a file:
+
+```python
+@rf.tasks
+def plan():
+    return [
+        {"shot": "010", "camera": "shotcam", "samples": 256},
+        {"shot": "020", "camera": "witness", "samples": 64}
+    ]
+
+@rf.execute
+def render(item):
+    rf.log("{0} through {1}".format(item["shot"], item["camera"]))
+```
+
+Two helpers cover the ordinary cases, so the common plan stays one line:
 
 | | |
 |---|---|
-| `rf.frames("frames", default="1-100")` | A frame range. Each number is one item |
-| `rf.files("plates", pattern="*.exr")` | A folder and a pattern. Each file is one item |
+| `rf.expand("1-3,7")` | A frame range as a list, `[1, 2, 3, 7]`. Takes what `rf.frames()` returns |
+| `rf.list(plates, "*.exr")` | The matching files in a folder, sorted |
 
-The folder is listed on the machine that submits, so the job carries the actual list rather than a promise about a folder. The farm then chunks that list, hands each chunk to a machine as a task, and calls your `@rf.execute` once per item in it. Without a work source, a script is a single run on a single machine.
+`@rf.tasks` runs on the machine that is submitting, before the job exists. It has to, because the farm needs the list to make the tasks. That also means it is the machine that can see the operator's folders. Raising stops the submission with your message, and planning nothing is refused rather than becoming a job that never finishes.
 
-## The four hooks
+**Without `@rf.tasks` a script is a single run on a single machine**, which is all a lot of plugins need.
+
+## The hooks
 
 ```python
+@rf.tasks
+def plan():
+    """The work list. One entry per task; without this, one task."""
+
 @rf.submit
 def check():
     """On the machine that is submitting, before the job exists."""
+
+@rf.read
+def scan():
+    """Reads the chosen scene into field values, when the operator asks for it."""
 
 @rf.prepare
 def open_things():
@@ -126,12 +182,11 @@ Raising stops the submission and puts your sentence in front of the person who p
 
 **`@rf.cleanup` runs whatever happened**, including after a failure, because a temporary folder and an open application are not conditional.
 
-With a work source, spreading the work over machines is one line on the decorated function:
+How the tasks are spread is one line on the decorated function:
 
 ```python
-one.map(plates, batch=False, on_error="stop")
-one.once()          # one run, one machine
-one.every_node()    # one run on each machine
+one.map(batch=False, on_error="stop")
+one.once()          # one task over the whole list, on one machine
 ```
 
 `on_error="continue"` finishes the rest of a slice before failing it, for a batch where one bad file should not cost you the other ninety-nine.
@@ -234,7 +289,7 @@ curl -X POST "http://127.0.0.1:44442/api/v1/jobs?wait=true" \
     "id": "com.studio.publish",
     "name": "Hero 010 delivery",
     "params": { "target": "//NAS/delivery/hero", "notify": true },
-    "work": { "type": "items", "items": ["010_a.exr", "010_b.exr"] }
+    "state": { "plates": ["010_a.exr", "010_b.exr"] }
   }'
 ```
 
@@ -244,7 +299,7 @@ job = farm.jobs.create_job(body={
     "id": "com.studio.publish",
     "name": "Hero 010 delivery",
     "params": {"target": "//NAS/delivery/hero", "notify": True},
-    "work": {"type": "items", "items": ["010_a.exr", "010_b.exr"]}
+    "state": {"plates": ["010_a.exr", "010_b.exr"]}
 }, wait=True)
 ```
 
@@ -254,12 +309,67 @@ const job = await rf.jobs.createJob({
     id: "com.studio.publish",
     name: "Hero 010 delivery",
     params: { target: "//NAS/delivery/hero", notify: true },
-    work: { type: "items", items: ["010_a.exr", "010_b.exr"] }
+    state: { plates: ["010_a.exr", "010_b.exr"] }
 }, { wait: true });
 ```
 </CodeGroup>
 
 `id` is required and `version` is optional: leave it out to take whichever version is installed, and the job pins whatever that was.
+
+`state` is the plugin's own, in whatever shape it likes. RenderFlow carries it and never looks inside. It reaches the script as `rf.state`, so a submitter you wrote inside a DCC can gather anything it can see there and hand it over:
+
+```python
+@rf.tasks
+def plan():
+    return [{"plate": plate} for plate in rf.state.plates]
+
+@rf.execute
+def convert(item):
+    rf.log(item["plate"])
+```
+
+A key nobody set is falsy rather than an error, so `rf.state.lut or "aces.cube"` reads as "theirs, or a default".
+
+## Submit from inside an application
+
+Some answers only exist inside the application: which tyFlow objects a `.max` holds, which takes a Cinema 4D scene has. A script you run there can read them with the application's own API, put them in a recipe, and open the RenderFlow submitter with every field already filled. The artist checks it and presses **Submit**, exactly as with a built-in job type.
+
+The [Python SDK](/renderflow/v2/developers/python-sdk) needs nothing outside the standard library, so it runs in the application's own Python:
+
+```python
+import renderflow as rf
+
+flows = find_flows()            # your code, using the application's API
+
+recipe = {
+    "type": "renderflow.custom_plugin",
+    "id": "com.studio.tyflow",
+    "host": {"id": "3dsmax", "version": "2026"},
+    "params": {"scene": scene_path, "flow": flows[0]},
+    "fields": {
+        "flow": {"options": flows, "batch": True},
+        "scene": {"readonly": True}
+    },
+    "state": {"flows": flows}
+}
+
+farm = rf.connect()
+result = farm.jobs.open_submitter(body=recipe)
+if not result.opened:
+    print(result.reason)
+```
+
+Three keys make it more than a plain submission:
+
+| | |
+|---|---|
+| `host` | The application it was submitted from. Its version fills in the requirement for that application |
+| `fields` | What a field may be answered with, for this submission only. `options` is the list the operator picks from, `readonly` locks a field the scene has settled, and `batch` makes one job per option |
+| `state` | Anything else the script found. It reaches `rf.state` unchanged |
+
+`fields` can only narrow a field your script declares. It cannot add a field or change its type.
+
+`open_submitter` opens the submitter on this machine and creates nothing until the artist presses **Submit**. When the RenderFlow app is not running, `opened` is `false` and `reason` says why. To skip the submitter and send the job straight to the farm, call `farm.jobs.create_job(body=recipe)` with the same recipe.
 
 ## Example
 
