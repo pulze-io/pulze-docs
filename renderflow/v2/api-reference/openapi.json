@@ -173,6 +173,9 @@
             "$ref": "#/components/schemas/PythonRecipe"
           },
           {
+            "$ref": "#/components/schemas/ComfyUIRenderRecipe"
+          },
+          {
             "$ref": "#/components/schemas/MaxScriptRecipe"
           },
           {
@@ -230,6 +233,7 @@
             "fusion.render": "#/components/schemas/FusionRenderRecipe",
             "shell": "#/components/schemas/ShellRecipe",
             "python": "#/components/schemas/PythonRecipe",
+            "comfyui.render": "#/components/schemas/ComfyUIRenderRecipe",
             "3dsmax.script": "#/components/schemas/MaxScriptRecipe",
             "blender.script": "#/components/schemas/BlenderScriptRecipe",
             "cinema4d.script": "#/components/schemas/Cinema4DScriptRecipe",
@@ -304,12 +308,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -472,6 +489,7 @@
               "corona",
               "fstorm",
               "redshift",
+              "renderman",
               "vray"
             ]
           },
@@ -506,6 +524,17 @@
           "name",
           "version"
         ]
+      },
+      "JobEnv": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "description": "Environment variables for every application the job starts, over the app's own. `$NAME` reads the value the app would have had.",
+        "example": {
+          "OCIO": "//studio/config/aces.ocio",
+          "PATH": "$PATH;//studio/tools/bin"
+        }
       },
       "SceneDescription": {
         "type": "object",
@@ -782,12 +811,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -895,12 +937,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1041,12 +1096,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1151,12 +1219,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1258,12 +1339,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1371,12 +1465,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1472,12 +1579,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1582,12 +1702,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1695,12 +1828,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1796,12 +1942,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -1974,12 +2133,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2085,12 +2257,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2196,12 +2381,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2316,12 +2514,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2446,12 +2657,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2571,12 +2795,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2678,12 +2915,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2785,12 +3035,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -2898,12 +3161,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -3005,12 +3281,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -3172,12 +3461,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -3273,12 +3575,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -3413,12 +3728,25 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
           },
           "_v": {
             "type": "integer",
@@ -3460,6 +3788,129 @@
         ],
         "additionalProperties": false,
         "title": "Python"
+      },
+      "ComfyUIRenderRecipe": {
+        "type": "object",
+        "properties": {
+          "live_host": {
+            "$ref": "#/components/schemas/LiveHostHints"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 255
+          },
+          "file": {
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/SoftwareRef"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineRef"
+          },
+          "plugins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PluginRef"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "suspended"
+            ]
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+            }
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0",
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
+          },
+          "pool_id": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
+          "_v": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneDescription"
+          },
+          "spec": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {}
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "comfyui.render"
+            ]
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageOutput"
+            }
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The workflow's declared fields (positive/negative/seed/cfg/... or `${nodeId}_${widgetName}`), plus run_count/seed_mode/seed_increment. A key left out keeps what the workflow parse set",
+            "example": {
+              "seed": 12345,
+              "run_count": 1
+            }
+          }
+        },
+        "required": [
+          "file",
+          "host",
+          "type"
+        ],
+        "additionalProperties": false,
+        "title": "comfyui.render"
       },
       "MaxScriptRecipe": {
         "type": "object",
@@ -3507,16 +3958,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "script": {
@@ -3597,16 +4061,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "script": {
@@ -3687,16 +4164,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "script": {
@@ -3777,16 +4267,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "script": {
@@ -3867,16 +4370,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "script": {
@@ -3957,16 +4473,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "args": {
@@ -4061,16 +4590,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "args": {
@@ -4165,16 +4707,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "args": {
@@ -4269,16 +4824,29 @@
             ],
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-            "description": "The machine that runs this step's render. A distributed render's dispatcher. It must be one of `nodes` when those are given"
+            "description": "The machine that runs this step's render — a distributed render's dispatcher. It must be one of `nodes` when those are given"
           },
           "pool_id": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50,
+            "description": "Render licences the step takes a seat of, by name — for what the scene cannot say, like a plugin inside it"
+          },
           "file": {
             "type": "string",
-            "description": "The scene the script opens. It is never parsed. The script decides what to do with it. And a script that needs none leaves it out",
+            "description": "The scene the script opens. It is never parsed — the script decides what to do with it — and a script that needs none leaves it out",
             "example": "P:/shot010/scene.ma"
           },
           "args": {
@@ -4358,8 +4926,68 @@
               "lut": "show.cube"
             }
           },
-          "work": {
-            "$ref": "#/components/schemas/WorkList"
+          "state": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The plugin's own state, in its own shape — carried to the script untouched"
+          },
+          "host": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "description": "The application this was submitted from; its version pre-fills that app's requirement"
+          },
+          "fields": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {},
+                          "label": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "readonly": {
+                  "type": "boolean"
+                },
+                "batch": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "description": "What a field may be answered with, for this submission only — a list only the application could know, whether it is settled, and whether the farm should make one job per option"
           },
           "status": {
             "type": "string",
@@ -4393,6 +5021,18 @@
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
             "example": "68b1f0c2a4d3e5f6a7b8c9d0"
+          },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9_-]+$"
+            },
+            "maxItems": 50
           }
         },
         "required": [
@@ -4426,7 +5066,7 @@
         "properties": {
           "path": {
             "type": "string",
-            "description": "Where the scene is now. Submit the step pointing here"
+            "description": "Where the scene is now — submit the step pointing here"
           },
           "saved": {
             "type": "boolean",
@@ -4450,7 +5090,7 @@
           "port": {
             "type": "integer",
             "exclusiveMinimum": 0,
-            "description": "The live host holding the scene. The port its RenderFlow plugin bound"
+            "description": "The live host holding the scene — the port its RenderFlow plugin bound"
           },
           "file": {
             "type": "string",
@@ -4557,7 +5197,7 @@
               "string",
               "null"
             ],
-            "description": "The machine this step's render is pinned to. A distributed render's dispatcher. Null means the matcher chooses"
+            "description": "The machine this step's render is pinned to — a distributed render's dispatcher. Null means the matcher chooses"
           },
           "save_option": {
             "type": "string",
@@ -4903,9 +5543,14 @@
             },
             "default": []
           },
-          "live_only": {
-            "type": "boolean",
-            "default": false
+          "provides": {
+            "$ref": "#/components/schemas/SubmitProvides"
+          },
+          "host_id": {
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "sequence": {
             "type": "boolean",
@@ -4974,6 +5619,47 @@
             },
             "default": []
           }
+        },
+        "additionalProperties": {}
+      },
+      "SubmitProvides": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "boolean",
+            "default": false
+          },
+          "live": {
+            "type": "boolean",
+            "default": false
+          },
+          "file": {
+            "type": "boolean",
+            "default": false
+          },
+          "opens": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "gui": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "detail": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "default": {
+          "payload": false,
+          "live": false,
+          "file": true
         },
         "additionalProperties": {}
       },
@@ -5786,7 +6472,7 @@
             "required": [
               "name"
             ],
-            "description": "The node inside the scene that writes this output. A Nuke Write or CopyCat. Present only where switching the output off leaves that node out of the render"
+            "description": "The node inside the scene that writes this output — a Nuke Write or CopyCat. Present only where switching the output off leaves that node out of the render"
           }
         },
         "additionalProperties": {}
@@ -6017,6 +6703,53 @@
               "string",
               "null"
             ]
+          },
+          "provides": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "payload": {
+                "type": "boolean",
+                "default": false
+              },
+              "live": {
+                "type": "boolean",
+                "default": false
+              },
+              "file": {
+                "type": "boolean",
+                "default": false
+              },
+              "opens": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "gui": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "detail": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": {},
+            "description": "What can describe the scene this field holds — file declarations only"
+          },
+          "host_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Which application that scene belongs to"
           }
         },
         "required": [
@@ -6145,7 +6878,7 @@
               "boolean",
               "null"
             ],
-            "description": "Not one of the items. Picking it returns the step to the scene as it stands"
+            "description": "Not one of the items — picking it returns the step to the scene as it stands"
           }
         },
         "additionalProperties": {}
@@ -7720,6 +8453,9 @@
             },
             "default": []
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
           "notifications": {
             "type": "array",
             "items": {
@@ -7987,6 +8723,9 @@
             },
             "default": []
           },
+          "env": {
+            "$ref": "#/components/schemas/JobEnv"
+          },
           "notifications": {
             "type": "array",
             "items": {
@@ -8174,7 +8913,7 @@
               "string",
               "null"
             ],
-            "description": "The machine this step's render is pinned to. A distributed render's dispatcher. Null means the matcher chooses"
+            "description": "The machine this step's render is pinned to — a distributed render's dispatcher. Null means the matcher chooses"
           },
           "task_info": {
             "$ref": "#/components/schemas/TaskInfo"
@@ -8290,7 +9029,7 @@
           "all_list": {
             "type": "string",
             "default": "",
-            "description": "Every frame the step covers, as ranges. The order its tasks are in"
+            "description": "Every frame the step covers, as ranges — the order its tasks are in"
           },
           "pending_list": {
             "type": "string",
@@ -8699,6 +9438,9 @@
             "$ref": "#/components/schemas/PythonRecipe"
           },
           {
+            "$ref": "#/components/schemas/ComfyUIRenderRecipe"
+          },
+          {
             "$ref": "#/components/schemas/MaxScriptRecipe"
           },
           {
@@ -8846,7 +9588,7 @@
           "whole_step": {
             "type": "boolean",
             "default": false,
-            "description": "True when the log could not be narrowed to this task. A plain-text log from before lines carried one, so these are every task this machine ran on the step"
+            "description": "True when the log could not be narrowed to this task — a plain-text log from before lines carried one, so these are every task this machine ran on the step"
           }
         },
         "required": [
@@ -8875,7 +9617,7 @@
               "warn",
               "dbg"
             ],
-            "description": "Absent is an ordinary line. Severity is decided on the node, not guessed from the text"
+            "description": "Absent is an ordinary line — severity is decided on the node, not guessed from the text"
           },
           "error": {
             "type": "string",
@@ -11626,6 +12368,12 @@
               "null"
             ]
           },
+          "build": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
           "build_type": {
             "type": [
               "string",
@@ -11653,6 +12401,7 @@
         "required": [
           "node_id",
           "version",
+          "build",
           "build_type",
           "node_type",
           "platform",
@@ -11872,14 +12621,14 @@
               "string",
               "null"
             ],
-            "description": "When the window closes, or null for a moment rather than a window. The event reverses itself there. A suspend resumes, a spawner stop starts. So an action with no reverse cannot have one. A time-of-day at or before `starts_at` crosses midnight. Not `until`: this is when tonight's window shuts."
+            "description": "When the window closes, or null for a moment rather than a window. The event reverses itself there — a suspend resumes, a spawner stop starts — so an action with no reverse cannot have one. A time-of-day at or before `starts_at` crosses midnight. Not `until`: this is when tonight's window shuts."
           },
           "every": {
             "type": [
               "string",
               "null"
             ],
-            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless. The anchor is snapped to the unit, so `1h` means the top of every hour."
+            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless — the anchor is snapped to the unit, so `1h` means the top of every hour."
           },
           "days": {
             "type": "array",
@@ -11894,7 +12643,7 @@
               "number",
               "null"
             ],
-            "description": "Day of the month, or -1 for its last day. The one thing `starts_at` cannot say, since months differ in length"
+            "description": "Day of the month, or -1 for its last day — the one thing `starts_at` cannot say, since months differ in length"
           },
           "nth": {
             "type": [
@@ -11954,7 +12703,7 @@
               "skipped",
               null
             ],
-            "description": "Whether the last fire got its work *sent*. Not whether that work succeeded"
+            "description": "Whether the last fire got its work *sent* — not whether that work succeeded"
           },
           "last_error": {
             "type": [
@@ -11989,7 +12738,7 @@
               "number",
               "null"
             ],
-            "description": "Computed by the server. Never derive it client-side"
+            "description": "Computed by the server — never derive it client-side"
           },
           "history": {
             "type": "array",
@@ -12069,7 +12818,7 @@
             ],
             "properties": {},
             "additionalProperties": {},
-            "description": "Command payload. `pool_id` for a pool change, `soft_id`/`version`/`type` for a spawner"
+            "description": "Command payload — `pool_id` for a pool change, `soft_id`/`version`/`type` for a spawner"
           }
         },
         "required": [
@@ -12260,7 +13009,7 @@
               "null"
             ],
             "minLength": 1,
-            "description": "When the window closes, or null for a moment rather than a window. The event reverses itself there. A suspend resumes, a spawner stop starts. So an action with no reverse cannot have one. A time-of-day at or before `starts_at` crosses midnight. Not `until`: this is when tonight's window shuts."
+            "description": "When the window closes, or null for a moment rather than a window. The event reverses itself there — a suspend resumes, a spawner stop starts — so an action with no reverse cannot have one. A time-of-day at or before `starts_at` crosses midnight. Not `until`: this is when tonight's window shuts."
           },
           "every": {
             "type": [
@@ -12268,7 +13017,7 @@
               "null"
             ],
             "maxLength": 32,
-            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless. The anchor is snapped to the unit, so `1h` means the top of every hour.",
+            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless — the anchor is snapped to the unit, so `1h` means the top of every hour.",
             "example": "1d"
           },
           "days": {
@@ -12288,7 +13037,7 @@
             ],
             "minimum": -31,
             "maximum": 31,
-            "description": "Day of the month, or -1 for its last day. The one thing `starts_at` cannot say, since months differ in length"
+            "description": "Day of the month, or -1 for its last day — the one thing `starts_at` cannot say, since months differ in length"
           },
           "nth": {
             "type": [
@@ -12433,7 +13182,7 @@
               "null"
             ],
             "maxLength": 32,
-            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless. The anchor is snapped to the unit, so `1h` means the top of every hour.",
+            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless — the anchor is snapped to the unit, so `1h` means the top of every hour.",
             "example": "1d"
           },
           "days": {
@@ -12453,7 +13202,7 @@
             ],
             "minimum": -31,
             "maximum": 31,
-            "description": "Day of the month, or -1 for its last day. The one thing `starts_at` cannot say, since months differ in length"
+            "description": "Day of the month, or -1 for its last day — the one thing `starts_at` cannot say, since months differ in length"
           },
           "nth": {
             "type": [
@@ -12515,7 +13264,7 @@
               "null"
             ],
             "maxLength": 32,
-            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless. The anchor is snapped to the unit, so `1h` means the top of every hour.",
+            "description": "How often it repeats: `15m`, `1h`, `1d`, `2w`, `1 month`. Null fires once. With no `starts_at` this is dateless — the anchor is snapped to the unit, so `1h` means the top of every hour.",
             "example": "1d"
           },
           "days": {
@@ -12535,7 +13284,7 @@
             ],
             "minimum": -31,
             "maximum": 31,
-            "description": "Day of the month, or -1 for its last day. The one thing `starts_at` cannot say, since months differ in length"
+            "description": "Day of the month, or -1 for its last day — the one thing `starts_at` cannot say, since months differ in length"
           },
           "nth": {
             "type": [
@@ -12686,6 +13435,14 @@
           "title": {
             "type": "string"
           },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "renderer",
+              "application"
+            ],
+            "description": "A renderer, or an application licensed per machine"
+          },
           "soft_ids": {
             "type": "array",
             "items": {
@@ -12702,6 +13459,7 @@
         "required": [
           "name",
           "title",
+          "kind",
           "soft_ids",
           "task_types"
         ]
@@ -12998,7 +13756,7 @@
             "properties": {
               "secret": {
                 "type": "string",
-                "description": "The HMAC key. Shown once. Store it now; it cannot be read back"
+                "description": "The HMAC key. Shown once — store it now; it cannot be read back"
               }
             },
             "required": [
@@ -13307,7 +14065,7 @@
         "tags": [
           "Errors"
         ],
-        "summary": "List",
+        "summary": "List errors",
         "parameters": [
           {
             "schema": {
@@ -13460,15 +14218,14 @@
               }
             }
           }
-        },
-        "description": "List errors"
+        }
       },
       "delete": {
         "operationId": "deleteErrors",
         "tags": [
           "Errors"
         ],
-        "summary": "Delete many",
+        "summary": "Delete errors — by id, or every error of a node or a job",
         "parameters": [
           {
             "schema": {
@@ -13561,8 +14318,7 @@
               }
             }
           }
-        },
-        "description": "Delete errors. By id, or every error of a node or a job"
+        }
       }
     },
     "/info": {
@@ -13571,7 +14327,7 @@
         "tags": [
           "Info"
         ],
-        "summary": "Retrieve",
+        "summary": "Identify this service instance",
         "responses": {
           "200": {
             "description": "Service identity and version",
@@ -13603,8 +14359,7 @@
               }
             }
           }
-        },
-        "description": "Identify this service instance"
+        }
       }
     },
     "/jobs": {
@@ -13613,7 +14368,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "List",
+        "summary": "List jobs",
         "parameters": [
           {
             "schema": {
@@ -13718,7 +14473,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Matching jobs, without the per-task data a list never draws: each step's `tasks` and its `task_info.*_list` state ranges come back empty, because both hold one entry per task. The counts and `all_list` stay. Read the one job (`GET /jobs/{id}`), or the tasks themselves, for the rest",
+            "description": "Matching jobs, without the per-task data a list never draws: each step's `tasks` and its `task_info.*_list` state ranges come back empty, because both hold one entry per task. The counts and `all_list` stay — read the one job (`GET /jobs/{id}`), or the tasks themselves, for the rest",
             "content": {
               "application/json": {
                 "schema": {
@@ -13767,15 +14522,14 @@
               }
             }
           }
-        },
-        "description": "List jobs"
+        }
       },
       "post": {
         "operationId": "createJob",
         "tags": [
           "Jobs"
         ],
-        "summary": "Create",
+        "summary": "Submit a job — a full step tree, or a recipe the service expands",
         "parameters": [
           {
             "schema": {
@@ -13850,7 +14604,7 @@
             }
           },
           "409": {
-            "description": "Refused. The job's type, priority or machine limit is outside what the pool admits, or outside what the submitter's role may ask for",
+            "description": "Refused — the job's type, priority or machine limit is outside what the pool admits, or outside what the submitter's role may ask for",
             "content": {
               "application/json": {
                 "schema": {
@@ -13879,15 +14633,14 @@
               }
             }
           }
-        },
-        "description": "Submit a job. A full step tree, or a recipe the service expands"
+        }
       },
       "patch": {
         "operationId": "updateJobs",
         "tags": [
           "Jobs"
         ],
-        "summary": "Update many",
+        "summary": "Update many jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -13939,7 +14692,7 @@
             }
           },
           "409": {
-            "description": "Refused. The edit would take a job past what its pool admits or what its owner's role may ask for. No job is updated",
+            "description": "Refused — the edit would take a job past what its pool admits or what its owner's role may ask for. No job is updated",
             "content": {
               "application/json": {
                 "schema": {
@@ -13968,15 +14721,14 @@
               }
             }
           }
-        },
-        "description": "Update many jobs"
+        }
       },
       "delete": {
         "operationId": "deleteJobs",
         "tags": [
           "Jobs"
         ],
-        "summary": "Delete many",
+        "summary": "Delete many jobs — running jobs are skipped, stop them first",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14057,8 +14809,7 @@
               }
             }
           }
-        },
-        "description": "Delete many jobs. Running jobs are skipped, stop them first"
+        }
       }
     },
     "/jobs-archived": {
@@ -14067,7 +14818,7 @@
         "tags": [
           "Archive"
         ],
-        "summary": "List",
+        "summary": "List archived jobs",
         "parameters": [
           {
             "schema": {
@@ -14193,8 +14944,7 @@
               }
             }
           }
-        },
-        "description": "List archived jobs"
+        }
       },
       "post": {
         "operationId": "archiveJobs",
@@ -14279,7 +15029,7 @@
         "tags": [
           "Archive"
         ],
-        "summary": "Delete many",
+        "summary": "Delete archived jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14350,8 +15100,7 @@
               }
             }
           }
-        },
-        "description": "Delete archived jobs"
+        }
       }
     },
     "/licenses": {
@@ -14360,7 +15109,7 @@
         "tags": [
           "Licenses"
         ],
-        "summary": "List",
+        "summary": "List render licenses, with the seats currently held",
         "responses": {
           "200": {
             "description": "All render licenses",
@@ -14395,15 +15144,14 @@
               }
             }
           }
-        },
-        "description": "List render licenses, with the seats currently held"
+        }
       },
       "post": {
         "operationId": "createLicense",
         "tags": [
           "Licenses"
         ],
-        "summary": "Create",
+        "summary": "Create a render license",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14484,8 +15232,7 @@
               }
             }
           }
-        },
-        "description": "Create a render license"
+        }
       }
     },
     "/nodes": {
@@ -14494,7 +15241,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "List",
+        "summary": "List nodes",
         "parameters": [
           {
             "schema": {
@@ -14666,15 +15413,14 @@
               }
             }
           }
-        },
-        "description": "List nodes"
+        }
       },
       "patch": {
         "operationId": "updateNodes",
         "tags": [
           "Nodes"
         ],
-        "summary": "Update many",
+        "summary": "Update many nodes",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14745,15 +15491,14 @@
               }
             }
           }
-        },
-        "description": "Update many nodes"
+        }
       },
       "delete": {
         "operationId": "deleteNodes",
         "tags": [
           "Nodes"
         ],
-        "summary": "Delete many",
+        "summary": "Delete many nodes",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14824,8 +15569,7 @@
               }
             }
           }
-        },
-        "description": "Delete many nodes"
+        }
       }
     },
     "/pools": {
@@ -14834,7 +15578,7 @@
         "tags": [
           "Pools"
         ],
-        "summary": "List",
+        "summary": "List pools",
         "responses": {
           "200": {
             "description": "All pools",
@@ -14869,15 +15613,14 @@
               }
             }
           }
-        },
-        "description": "List pools"
+        }
       },
       "post": {
         "operationId": "createPool",
         "tags": [
           "Pools"
         ],
-        "summary": "Create",
+        "summary": "Create a pool",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14948,8 +15691,7 @@
               }
             }
           }
-        },
-        "description": "Create a pool"
+        }
       }
     },
     "/schedule": {
@@ -14958,7 +15700,7 @@
         "tags": [
           "Schedule"
         ],
-        "summary": "List events",
+        "summary": "List scheduled events",
         "parameters": [
           {
             "schema": {
@@ -15028,15 +15770,14 @@
               }
             }
           }
-        },
-        "description": "List scheduled events"
+        }
       },
       "post": {
         "operationId": "createScheduleEvent",
         "tags": [
           "Schedule"
         ],
-        "summary": "Create event",
+        "summary": "Create a scheduled event — targets are resolved when it fires, not when it is saved",
         "requestBody": {
           "content": {
             "application/json": {
@@ -15107,8 +15848,7 @@
               }
             }
           }
-        },
-        "description": "Create a scheduled event. Targets are resolved when it fires, not when it is saved"
+        }
       }
     },
     "/tasks": {
@@ -15117,7 +15857,7 @@
         "tags": [
           "Tasks"
         ],
-        "summary": "List",
+        "summary": "List tasks",
         "parameters": [
           {
             "schema": {
@@ -15304,15 +16044,14 @@
               }
             }
           }
-        },
-        "description": "List tasks"
+        }
       },
       "patch": {
         "operationId": "updateTasks",
         "tags": [
           "Tasks"
         ],
-        "summary": "Update many",
+        "summary": "Update many tasks",
         "requestBody": {
           "content": {
             "application/json": {
@@ -15383,8 +16122,7 @@
               }
             }
           }
-        },
-        "description": "Update many tasks"
+        }
       }
     },
     "/user-groups": {
@@ -15393,7 +16131,7 @@
         "tags": [
           "UserGroups"
         ],
-        "summary": "List",
+        "summary": "List user groups",
         "responses": {
           "200": {
             "description": "All groups",
@@ -15428,15 +16166,14 @@
               }
             }
           }
-        },
-        "description": "List user groups"
+        }
       },
       "post": {
         "operationId": "createUserGroup",
         "tags": [
           "UserGroups"
         ],
-        "summary": "Create",
+        "summary": "Create a user group",
         "requestBody": {
           "content": {
             "application/json": {
@@ -15507,8 +16244,7 @@
               }
             }
           }
-        },
-        "description": "Create a user group"
+        }
       }
     },
     "/users": {
@@ -15517,7 +16253,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "List",
+        "summary": "List users",
         "parameters": [
           {
             "schema": {
@@ -15631,15 +16367,14 @@
               }
             }
           }
-        },
-        "description": "List users"
+        }
       },
       "post": {
         "operationId": "createUser",
         "tags": [
           "Users"
         ],
-        "summary": "Create",
+        "summary": "Create a user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -15720,15 +16455,14 @@
               }
             }
           }
-        },
-        "description": "Create a user"
+        }
       },
       "patch": {
         "operationId": "updateUsers",
         "tags": [
           "Users"
         ],
-        "summary": "Update many",
+        "summary": "Update many users",
         "requestBody": {
           "content": {
             "application/json": {
@@ -15799,15 +16533,14 @@
               }
             }
           }
-        },
-        "description": "Update many users"
+        }
       },
       "delete": {
         "operationId": "deleteUsers",
         "tags": [
           "Users"
         ],
-        "summary": "Delete many",
+        "summary": "Delete many users",
         "requestBody": {
           "content": {
             "application/json": {
@@ -15888,8 +16621,7 @@
               }
             }
           }
-        },
-        "description": "Delete many users"
+        }
       }
     },
     "/webhooks": {
@@ -15898,7 +16630,7 @@
         "tags": [
           "Webhooks"
         ],
-        "summary": "List",
+        "summary": "List webhook subscriptions",
         "responses": {
           "200": {
             "description": "Every subscription. Secrets are not included",
@@ -15933,15 +16665,14 @@
               }
             }
           }
-        },
-        "description": "List webhook subscriptions"
+        }
       },
       "post": {
         "operationId": "createWebhook",
         "tags": [
           "Webhooks"
         ],
-        "summary": "Create",
+        "summary": "Subscribe to farm events. The secret is in the answer and is never shown again",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16012,8 +16743,7 @@
               }
             }
           }
-        },
-        "description": "Subscribe to farm events. The secret is in the answer and is never shown again"
+        }
       }
     },
     "/errors/summary": {
@@ -16022,7 +16752,7 @@
         "tags": [
           "Errors"
         ],
-        "summary": "Summary",
+        "summary": "Error count and worst level for a named set of nodes or jobs",
         "parameters": [
           {
             "schema": {
@@ -16043,10 +16773,10 @@
             "schema": {
               "type": "string",
               "minLength": 1,
-              "description": "Comma-separated ids. Node ids, job ids, or `<job_id>:<node_id>` pairs to match `by`"
+              "description": "Comma-separated ids — node ids, job ids, or `<job_id>:<node_id>` pairs to match `by`"
             },
             "required": true,
-            "description": "Comma-separated ids. Node ids, job ids, or `<job_id>:<node_id>` pairs to match `by`",
+            "description": "Comma-separated ids — node ids, job ids, or `<job_id>:<node_id>` pairs to match `by`",
             "name": "ids",
             "in": "query"
           }
@@ -16105,8 +16835,7 @@
               }
             }
           }
-        },
-        "description": "Error count and worst level for a named set of nodes or jobs"
+        }
       }
     },
     "/jobs-archived/filters": {
@@ -16115,7 +16844,7 @@
         "tags": [
           "Archive"
         ],
-        "summary": "Filters",
+        "summary": "Filter values present in the archive",
         "responses": {
           "200": {
             "description": "Available filter values",
@@ -16147,8 +16876,7 @@
               }
             }
           }
-        },
-        "description": "Filter values present in the archive"
+        }
       }
     },
     "/jobs-archived/restore": {
@@ -16157,7 +16885,7 @@
         "tags": [
           "Archive"
         ],
-        "summary": "Restore many",
+        "summary": "Restore archived jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16228,8 +16956,7 @@
               }
             }
           }
-        },
-        "description": "Restore archived jobs"
+        }
       }
     },
     "/jobs-archived/size": {
@@ -16238,7 +16965,7 @@
         "tags": [
           "Archive"
         ],
-        "summary": "Size",
+        "summary": "Archive size on disk",
         "responses": {
           "200": {
             "description": "Bytes used by archived job data",
@@ -16270,8 +16997,7 @@
               }
             }
           }
-        },
-        "description": "Archive size on disk"
+        }
       }
     },
     "/jobs/finish": {
@@ -16280,7 +17006,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Finish many",
+        "summary": "Finish many jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16351,8 +17077,7 @@
               }
             }
           }
-        },
-        "description": "Finish many jobs"
+        }
       }
     },
     "/jobs/reserve": {
@@ -16361,7 +17086,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Reserve",
+        "summary": "Take a job id and its repository folder before submitting — for a scene that has to be written there first",
         "responses": {
           "200": {
             "description": "The id to submit as `job_id`, and the folder it names",
@@ -16393,8 +17118,7 @@
               }
             }
           }
-        },
-        "description": "Take a job id and its repository folder before submitting. For a scene that has to be written there first"
+        }
       }
     },
     "/jobs/reset": {
@@ -16403,7 +17127,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Reset many",
+        "summary": "Reset many jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16474,8 +17198,7 @@
               }
             }
           }
-        },
-        "description": "Reset many jobs"
+        }
       }
     },
     "/jobs/stage-scene": {
@@ -16484,7 +17207,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Stage scene",
+        "summary": "Save an open scene into a reserved job folder — this machine only",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16565,8 +17288,7 @@
               }
             }
           }
-        },
-        "description": "Save an open scene into a reserved job folder. This machine only"
+        }
       }
     },
     "/jobs/start": {
@@ -16575,7 +17297,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Start many",
+        "summary": "Start many jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16646,8 +17368,7 @@
               }
             }
           }
-        },
-        "description": "Start many jobs"
+        }
       }
     },
     "/jobs/stop": {
@@ -16656,7 +17377,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Stop many",
+        "summary": "Stop many jobs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -16727,8 +17448,7 @@
               }
             }
           }
-        },
-        "description": "Stop many jobs"
+        }
       }
     },
     "/jobs/submitter": {
@@ -16737,7 +17457,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Open submitter",
+        "summary": "Open the local submitter pre-filled with a job — this machine only",
         "parameters": [
           {
             "schema": {
@@ -16772,7 +17492,7 @@
         },
         "responses": {
           "200": {
-            "description": "Whether the submitter opened. `opened: false` with a reason when the desktop app isn't running. The request itself succeeded",
+            "description": "Whether the submitter opened. `opened: false` with a reason when the desktop app isn't running — the request itself succeeded",
             "content": {
               "application/json": {
                 "schema": {
@@ -16841,8 +17561,7 @@
               }
             }
           }
-        },
-        "description": "Open the local submitter pre-filled with a job. This machine only"
+        }
       }
     },
     "/jobs/summary": {
@@ -16851,7 +17570,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Summary",
+        "summary": "Task counts across the queue, by state",
         "responses": {
           "200": {
             "description": "One row for the whole queue",
@@ -16883,8 +17602,7 @@
               }
             }
           }
-        },
-        "description": "Task counts across the queue, by state"
+        }
       }
     },
     "/licenses/presets": {
@@ -16893,7 +17611,7 @@
         "tags": [
           "Licenses"
         ],
-        "summary": "Presets",
+        "summary": "The licenses a farm commonly buys, and the software ids each covers",
         "responses": {
           "200": {
             "description": "Presets to create a license from",
@@ -16928,8 +17646,7 @@
               }
             }
           }
-        },
-        "description": "The licenses a farm commonly buys, and the software ids each covers"
+        }
       }
     },
     "/nodes/hardware": {
@@ -16938,7 +17655,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "List hardware",
+        "summary": "Current hardware readings of every node, paged",
         "parameters": [
           {
             "schema": {
@@ -17042,8 +17759,7 @@
               }
             }
           }
-        },
-        "description": "Current hardware readings of every node, paged"
+        }
       }
     },
     "/nodes/summary": {
@@ -17052,7 +17768,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Summary",
+        "summary": "Node counts across the farm, by status",
         "responses": {
           "200": {
             "description": "One row for the whole farm",
@@ -17084,8 +17800,7 @@
               }
             }
           }
-        },
-        "description": "Node counts across the farm, by status"
+        }
       }
     },
     "/nodes/tags": {
@@ -17094,7 +17809,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Tags",
+        "summary": "Distinct tags across the whole farm, or a given subset of nodes",
         "parameters": [
           {
             "schema": {
@@ -17159,8 +17874,7 @@
               }
             }
           }
-        },
-        "description": "Distinct tags across the whole farm, or a given subset of nodes"
+        }
       }
     },
     "/schedule/preview": {
@@ -17169,7 +17883,7 @@
         "tags": [
           "Schedule"
         ],
-        "summary": "Preview",
+        "summary": "The next times a repeat would fire, for a repeat that has not been saved yet",
         "requestBody": {
           "content": {
             "application/json": {
@@ -17240,8 +17954,7 @@
               }
             }
           }
-        },
-        "description": "The next times a repeat would fire, for a repeat that has not been saved yet"
+        }
       }
     },
     "/service/alive": {
@@ -17250,7 +17963,7 @@
         "tags": [
           "Service"
         ],
-        "summary": "Alive",
+        "summary": "Liveness probe (no credential required)",
         "parameters": [
           {
             "schema": {
@@ -17302,8 +18015,7 @@
               }
             }
           }
-        },
-        "description": "Liveness probe (no credential required)"
+        }
       }
     },
     "/tasks/reset": {
@@ -17312,7 +18024,7 @@
         "tags": [
           "Tasks"
         ],
-        "summary": "Reset many",
+        "summary": "Reset tasks so they can run again",
         "requestBody": {
           "content": {
             "application/json": {
@@ -17383,8 +18095,7 @@
               }
             }
           }
-        },
-        "description": "Reset tasks so they can run again"
+        }
       }
     },
     "/nodes/benchmarks/ranking": {
@@ -17393,7 +18104,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Benchmark ranking",
+        "summary": "Rank nodes by benchmark score",
         "parameters": [
           {
             "schema": {
@@ -17480,8 +18191,7 @@
               }
             }
           }
-        },
-        "description": "Rank nodes by benchmark score"
+        }
       }
     },
     "/errors/{id}": {
@@ -17490,7 +18200,7 @@
         "tags": [
           "Errors"
         ],
-        "summary": "Retrieve",
+        "summary": "Get an error by id",
         "parameters": [
           {
             "schema": {
@@ -17564,15 +18274,14 @@
               }
             }
           }
-        },
-        "description": "Get an error by id"
+        }
       },
       "delete": {
         "operationId": "deleteError",
         "tags": [
           "Errors"
         ],
-        "summary": "Delete",
+        "summary": "Delete an error",
         "parameters": [
           {
             "schema": {
@@ -17646,8 +18355,7 @@
               }
             }
           }
-        },
-        "description": "Delete an error"
+        }
       }
     },
     "/jobs-archived/{id}": {
@@ -17656,7 +18364,7 @@
         "tags": [
           "Archive"
         ],
-        "summary": "Retrieve",
+        "summary": "Get an archived job",
         "parameters": [
           {
             "schema": {
@@ -17730,15 +18438,14 @@
               }
             }
           }
-        },
-        "description": "Get an archived job"
+        }
       },
       "delete": {
         "operationId": "deleteArchivedJob",
         "tags": [
           "Archive"
         ],
-        "summary": "Delete",
+        "summary": "Delete an archived job",
         "parameters": [
           {
             "schema": {
@@ -17812,8 +18519,7 @@
               }
             }
           }
-        },
-        "description": "Delete an archived job"
+        }
       }
     },
     "/jobs/{id}": {
@@ -17822,7 +18528,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a job by id",
         "parameters": [
           {
             "schema": {
@@ -17896,15 +18602,14 @@
               }
             }
           }
-        },
-        "description": "Get a job by id"
+        }
       },
       "patch": {
         "operationId": "updateJob",
         "tags": [
           "Jobs"
         ],
-        "summary": "Update",
+        "summary": "Update a job",
         "parameters": [
           {
             "schema": {
@@ -17968,7 +18673,7 @@
             }
           },
           "409": {
-            "description": "Refused. The edit would take the job past what its pool admits or what its owner's role may ask for",
+            "description": "Refused — the edit would take the job past what its pool admits or what its owner's role may ask for",
             "content": {
               "application/json": {
                 "schema": {
@@ -17997,15 +18702,14 @@
               }
             }
           }
-        },
-        "description": "Update a job"
+        }
       },
       "delete": {
         "operationId": "deleteJob",
         "tags": [
           "Jobs"
         ],
-        "summary": "Delete",
+        "summary": "Delete a job — refused while it is running, stop it first",
         "parameters": [
           {
             "schema": {
@@ -18089,8 +18793,7 @@
               }
             }
           }
-        },
-        "description": "Delete a job. Refused while it is running, stop it first"
+        }
       }
     },
     "/licenses/{id}": {
@@ -18099,7 +18802,7 @@
         "tags": [
           "Licenses"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a render license by id",
         "parameters": [
           {
             "schema": {
@@ -18173,15 +18876,14 @@
               }
             }
           }
-        },
-        "description": "Get a render license by id"
+        }
       },
       "patch": {
         "operationId": "updateLicense",
         "tags": [
           "Licenses"
         ],
-        "summary": "Update",
+        "summary": "Update a render license — the seat count takes effect on the next matching tick",
         "parameters": [
           {
             "schema": {
@@ -18264,15 +18966,14 @@
               }
             }
           }
-        },
-        "description": "Update a render license. The seat count takes effect on the next matching tick"
+        }
       },
       "delete": {
         "operationId": "deleteLicense",
         "tags": [
           "Licenses"
         ],
-        "summary": "Delete",
+        "summary": "Delete a render license — work holding a seat keeps running, uncounted",
         "parameters": [
           {
             "schema": {
@@ -18346,8 +19047,7 @@
               }
             }
           }
-        },
-        "description": "Delete a render license. Work holding a seat keeps running, uncounted"
+        }
       }
     },
     "/nodes/{id}": {
@@ -18356,7 +19056,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a node by id",
         "parameters": [
           {
             "schema": {
@@ -18441,15 +19141,14 @@
               }
             }
           }
-        },
-        "description": "Get a node by id"
+        }
       },
       "patch": {
         "operationId": "updateNode",
         "tags": [
           "Nodes"
         ],
-        "summary": "Update",
+        "summary": "Update a node",
         "parameters": [
           {
             "schema": {
@@ -18532,15 +19231,14 @@
               }
             }
           }
-        },
-        "description": "Update a node"
+        }
       },
       "delete": {
         "operationId": "deleteNode",
         "tags": [
           "Nodes"
         ],
-        "summary": "Delete",
+        "summary": "Delete a node",
         "parameters": [
           {
             "schema": {
@@ -18595,7 +19293,7 @@
             }
           },
           "409": {
-            "description": "The machine is rendering. Stop or finish it first",
+            "description": "The machine is rendering — stop or finish it first",
             "content": {
               "application/json": {
                 "schema": {
@@ -18624,8 +19322,7 @@
               }
             }
           }
-        },
-        "description": "Delete a node"
+        }
       }
     },
     "/pools/{id}": {
@@ -18634,7 +19331,7 @@
         "tags": [
           "Pools"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a pool by id",
         "parameters": [
           {
             "schema": {
@@ -18708,15 +19405,14 @@
               }
             }
           }
-        },
-        "description": "Get a pool by id"
+        }
       },
       "patch": {
         "operationId": "updatePool",
         "tags": [
           "Pools"
         ],
-        "summary": "Update",
+        "summary": "Update a pool",
         "parameters": [
           {
             "schema": {
@@ -18799,15 +19495,14 @@
               }
             }
           }
-        },
-        "description": "Update a pool"
+        }
       },
       "delete": {
         "operationId": "deletePool",
         "tags": [
           "Pools"
         ],
-        "summary": "Delete",
+        "summary": "Delete a pool",
         "parameters": [
           {
             "schema": {
@@ -18891,8 +19586,7 @@
               }
             }
           }
-        },
-        "description": "Delete a pool"
+        }
       }
     },
     "/schedule/{id}": {
@@ -18901,7 +19595,7 @@
         "tags": [
           "Schedule"
         ],
-        "summary": "Event",
+        "summary": "Get a scheduled event",
         "parameters": [
           {
             "schema": {
@@ -18975,15 +19669,14 @@
               }
             }
           }
-        },
-        "description": "Get a scheduled event"
+        }
       },
       "patch": {
         "operationId": "updateScheduleEvent",
         "tags": [
           "Schedule"
         ],
-        "summary": "Update event",
+        "summary": "Update a scheduled event",
         "parameters": [
           {
             "schema": {
@@ -19066,15 +19759,14 @@
               }
             }
           }
-        },
-        "description": "Update a scheduled event"
+        }
       },
       "delete": {
         "operationId": "deleteScheduleEvent",
         "tags": [
           "Schedule"
         ],
-        "summary": "Delete event",
+        "summary": "Delete a scheduled event",
         "parameters": [
           {
             "schema": {
@@ -19148,8 +19840,7 @@
               }
             }
           }
-        },
-        "description": "Delete a scheduled event"
+        }
       }
     },
     "/tasks/{id}": {
@@ -19158,7 +19849,7 @@
         "tags": [
           "Tasks"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a task by id",
         "parameters": [
           {
             "schema": {
@@ -19232,15 +19923,14 @@
               }
             }
           }
-        },
-        "description": "Get a task by id"
+        }
       },
       "patch": {
         "operationId": "updateTask",
         "tags": [
           "Tasks"
         ],
-        "summary": "Update",
+        "summary": "Update a task",
         "parameters": [
           {
             "schema": {
@@ -19323,8 +20013,7 @@
               }
             }
           }
-        },
-        "description": "Update a task"
+        }
       }
     },
     "/user-groups/{id}": {
@@ -19333,7 +20022,7 @@
         "tags": [
           "UserGroups"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a user group by id",
         "parameters": [
           {
             "schema": {
@@ -19407,15 +20096,14 @@
               }
             }
           }
-        },
-        "description": "Get a user group by id"
+        }
       },
       "patch": {
         "operationId": "updateUserGroup",
         "tags": [
           "UserGroups"
         ],
-        "summary": "Update",
+        "summary": "Update a user group",
         "parameters": [
           {
             "schema": {
@@ -19479,7 +20167,7 @@
             }
           },
           "409": {
-            "description": "The update breaks one of the group's own invariants. The message names it",
+            "description": "The update breaks one of the group's own invariants — the message names it",
             "content": {
               "application/json": {
                 "schema": {
@@ -19508,15 +20196,14 @@
               }
             }
           }
-        },
-        "description": "Update a user group"
+        }
       },
       "delete": {
         "operationId": "deleteUserGroup",
         "tags": [
           "UserGroups"
         ],
-        "summary": "Delete",
+        "summary": "Delete a user group",
         "parameters": [
           {
             "schema": {
@@ -19600,8 +20287,7 @@
               }
             }
           }
-        },
-        "description": "Delete a user group"
+        }
       }
     },
     "/users/{id}": {
@@ -19610,7 +20296,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Retrieve",
+        "summary": "Get a user by id",
         "parameters": [
           {
             "schema": {
@@ -19684,15 +20370,14 @@
               }
             }
           }
-        },
-        "description": "Get a user by id"
+        }
       },
       "patch": {
         "operationId": "updateUser",
         "tags": [
           "Users"
         ],
-        "summary": "Update",
+        "summary": "Update a user",
         "parameters": [
           {
             "schema": {
@@ -19775,15 +20460,14 @@
               }
             }
           }
-        },
-        "description": "Update a user"
+        }
       },
       "delete": {
         "operationId": "deleteUser",
         "tags": [
           "Users"
         ],
-        "summary": "Delete",
+        "summary": "Delete a user",
         "parameters": [
           {
             "schema": {
@@ -19867,8 +20551,7 @@
               }
             }
           }
-        },
-        "description": "Delete a user"
+        }
       }
     },
     "/webhooks/{id}": {
@@ -19877,7 +20560,7 @@
         "tags": [
           "Webhooks"
         ],
-        "summary": "Retrieve",
+        "summary": "Read one subscription",
         "parameters": [
           {
             "schema": {
@@ -19951,15 +20634,14 @@
               }
             }
           }
-        },
-        "description": "Read one subscription"
+        }
       },
       "patch": {
         "operationId": "updateWebhook",
         "tags": [
           "Webhooks"
         ],
-        "summary": "Update",
+        "summary": "Change a subscription. Enabling one clears why it stopped",
         "parameters": [
           {
             "schema": {
@@ -20042,15 +20724,14 @@
               }
             }
           }
-        },
-        "description": "Change a subscription. Enabling one clears why it stopped"
+        }
       },
       "delete": {
         "operationId": "deleteWebhook",
         "tags": [
           "Webhooks"
         ],
-        "summary": "Delete",
+        "summary": "Unsubscribe",
         "parameters": [
           {
             "schema": {
@@ -20124,8 +20805,7 @@
               }
             }
           }
-        },
-        "description": "Unsubscribe"
+        }
       }
     },
     "/jobs/{id}/pool": {
@@ -20134,7 +20814,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Update pool",
+        "summary": "Move a job to a pool",
         "parameters": [
           {
             "schema": {
@@ -20198,7 +20878,7 @@
             }
           },
           "409": {
-            "description": "Refused. The pool moved into does not admit this job as it stands",
+            "description": "Refused — the pool moved into does not admit this job as it stands",
             "content": {
               "application/json": {
                 "schema": {
@@ -20227,8 +20907,7 @@
               }
             }
           }
-        },
-        "description": "Move a job to a pool"
+        }
       }
     },
     "/jobs/{id}/reset": {
@@ -20237,7 +20916,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Reset",
+        "summary": "Reset a job",
         "parameters": [
           {
             "schema": {
@@ -20321,8 +21000,7 @@
               }
             }
           }
-        },
-        "description": "Reset a job"
+        }
       }
     },
     "/jobs/{id}/reset-nodes": {
@@ -20331,7 +21009,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Reset nodes",
+        "summary": "Give nodes their attempts back on a job and clear their errors",
         "parameters": [
           {
             "schema": {
@@ -20414,8 +21092,7 @@
               }
             }
           }
-        },
-        "description": "Give nodes their attempts back on a job and clear their errors"
+        }
       }
     },
     "/jobs/{id}/start": {
@@ -20424,7 +21101,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Start",
+        "summary": "Start a job",
         "parameters": [
           {
             "schema": {
@@ -20508,8 +21185,7 @@
               }
             }
           }
-        },
-        "description": "Start a job"
+        }
       }
     },
     "/jobs/{id}/stop": {
@@ -20518,7 +21194,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Stop",
+        "summary": "Stop a job",
         "parameters": [
           {
             "schema": {
@@ -20602,8 +21278,7 @@
               }
             }
           }
-        },
-        "description": "Stop a job"
+        }
       }
     },
     "/nodes/{id}/pool": {
@@ -20612,7 +21287,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Update pool",
+        "summary": "Move a node to a pool",
         "parameters": [
           {
             "schema": {
@@ -20695,8 +21370,7 @@
               }
             }
           }
-        },
-        "description": "Move a node to a pool"
+        }
       }
     },
     "/nodes/{id}/status": {
@@ -20705,7 +21379,7 @@
         "tags": [
           "Nodes"
         ],
-        "summary": "Update status",
+        "summary": "Set a node's status",
         "parameters": [
           {
             "schema": {
@@ -20779,7 +21453,7 @@
             }
           },
           "409": {
-            "description": "The machine declined. Its current status does not allow this one",
+            "description": "The machine declined — its current status does not allow this one",
             "content": {
               "application/json": {
                 "schema": {
@@ -20808,8 +21482,7 @@
               }
             }
           }
-        },
-        "description": "Set a node's status"
+        }
       }
     },
     "/schedule/{id}/occurrences": {
@@ -20818,7 +21491,7 @@
         "tags": [
           "Schedule"
         ],
-        "summary": "Occurrences",
+        "summary": "The next times an event fires — the server's own reading of its rule",
         "parameters": [
           {
             "schema": {
@@ -20913,8 +21586,7 @@
               }
             }
           }
-        },
-        "description": "The next times an event fires. The server's own reading of its rule"
+        }
       }
     },
     "/schedule/{id}/run": {
@@ -20923,7 +21595,7 @@
         "tags": [
           "Schedule"
         ],
-        "summary": "Run event",
+        "summary": "Run a scheduled event now, ignoring the clock — its scheduled occurrence still happens",
         "parameters": [
           {
             "schema": {
@@ -20997,8 +21669,7 @@
               }
             }
           }
-        },
-        "description": "Run a scheduled event now, ignoring the clock. Its scheduled occurrence still happens"
+        }
       }
     },
     "/tasks/{id}/logs": {
@@ -21007,7 +21678,7 @@
         "tags": [
           "Tasks"
         ],
-        "summary": "Logs",
+        "summary": "Read a page of a task's log",
         "parameters": [
           {
             "schema": {
@@ -21026,10 +21697,10 @@
                 "null"
               ],
               "default": 0,
-              "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines. How a viewer opens on the newest output without reading the log first"
+              "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines — how a viewer opens on the newest output without reading the log first"
             },
             "required": false,
-            "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines. How a viewer opens on the newest output without reading the log first",
+            "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines — how a viewer opens on the newest output without reading the log first",
             "name": "offset",
             "in": "query"
           },
@@ -21116,8 +21787,7 @@
               }
             }
           }
-        },
-        "description": "Read a page of a task's log"
+        }
       }
     },
     "/tasks/{id}/preview": {
@@ -21126,7 +21796,7 @@
         "tags": [
           "Tasks"
         ],
-        "summary": "Preview",
+        "summary": "The task's preview image",
         "parameters": [
           {
             "schema": {
@@ -21158,10 +21828,10 @@
                 "full"
               ],
               "default": "thumb",
-              "description": "A tile, one frame on screen, or the source transcoded. `full` is made on demand"
+              "description": "A tile, one frame on screen, or the source transcoded — `full` is made on demand"
             },
             "required": false,
-            "description": "A tile, one frame on screen, or the source transcoded. `full` is made on demand",
+            "description": "A tile, one frame on screen, or the source transcoded — `full` is made on demand",
             "name": "size",
             "in": "query"
           },
@@ -21238,8 +21908,7 @@
               }
             }
           }
-        },
-        "description": "The task's preview image"
+        }
       }
     },
     "/users/{id}/node": {
@@ -21248,7 +21917,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Set node",
+        "summary": "Attach a user to a node, or detach with null",
         "parameters": [
           {
             "schema": {
@@ -21331,8 +22000,7 @@
               }
             }
           }
-        },
-        "description": "Attach a user to a node, or detach with null"
+        }
       }
     },
     "/webhooks/{id}/deliveries": {
@@ -21341,7 +22009,7 @@
         "tags": [
           "Webhooks"
         ],
-        "summary": "Deliveries",
+        "summary": "The last delivery attempts, newest first. Held in memory, so a restart clears them",
         "parameters": [
           {
             "schema": {
@@ -21418,8 +22086,7 @@
               }
             }
           }
-        },
-        "description": "The last delivery attempts, newest first. Held in memory, so a restart clears them"
+        }
       }
     },
     "/webhooks/{id}/test": {
@@ -21428,7 +22095,7 @@
         "tags": [
           "Webhooks"
         ],
-        "summary": "Test",
+        "summary": "Send a sample delivery, so an endpoint can be verified before a job depends on it",
         "parameters": [
           {
             "schema": {
@@ -21511,8 +22178,7 @@
               }
             }
           }
-        },
-        "description": "Send a sample delivery, so an endpoint can be verified before a job depends on it"
+        }
       }
     },
     "/jobs/{id}/steps/{step_id}": {
@@ -21521,7 +22187,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Step",
+        "summary": "Get one step of a job",
         "parameters": [
           {
             "schema": {
@@ -21605,8 +22271,7 @@
               }
             }
           }
-        },
-        "description": "Get one step of a job"
+        }
       }
     },
     "/jobs/{id}/steps/{step_id}/logs": {
@@ -21615,7 +22280,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Step logs",
+        "summary": "Read a page of a node's log for a step",
         "parameters": [
           {
             "schema": {
@@ -21644,10 +22309,10 @@
                 "null"
               ],
               "default": 0,
-              "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines. How a viewer opens on the newest output without reading the log first"
+              "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines — how a viewer opens on the newest output without reading the log first"
             },
             "required": false,
-            "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines. How a viewer opens on the newest output without reading the log first",
+            "description": "Where to start, in lines. Negative counts back from the end, so `-200` is the last 200 lines — how a viewer opens on the newest output without reading the log first",
             "name": "offset",
             "in": "query"
           },
@@ -21667,10 +22332,10 @@
               "type": "string",
               "pattern": "^[a-fA-F0-9]{24}$",
               "example": "68b1f0c2a4d3e5f6a7b8c9d0",
-              "description": "Whose copy of the step's log to read. The file is one per node"
+              "description": "Whose copy of the step's log to read — the file is one per node"
             },
             "required": true,
-            "description": "Whose copy of the step's log to read. The file is one per node",
+            "description": "Whose copy of the step's log to read — the file is one per node",
             "name": "node_id",
             "in": "query"
           }
@@ -21746,8 +22411,7 @@
               }
             }
           }
-        },
-        "description": "Read a page of a node's log for a step"
+        }
       }
     },
     "/jobs/{id}/steps/{step_id}/reset": {
@@ -21756,7 +22420,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Reset step",
+        "summary": "Reset one step's tasks, completed ones included",
         "parameters": [
           {
             "schema": {
@@ -21850,8 +22514,7 @@
               }
             }
           }
-        },
-        "description": "Reset one step's tasks, completed ones included"
+        }
       }
     },
     "/jobs/{id}/steps/{step_id}/start": {
@@ -21860,7 +22523,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Start step",
+        "summary": "Release a step that was waiting to be started",
         "parameters": [
           {
             "schema": {
@@ -21954,8 +22617,7 @@
               }
             }
           }
-        },
-        "description": "Release a step that was waiting to be started"
+        }
       }
     },
     "/jobs/{id}/steps/{step_id}/stop": {
@@ -21964,7 +22626,7 @@
         "tags": [
           "Jobs"
         ],
-        "summary": "Stop step",
+        "summary": "Hold a step's remaining work",
         "parameters": [
           {
             "schema": {
@@ -22058,8 +22720,7 @@
               }
             }
           }
-        },
-        "description": "Hold a step's remaining work"
+        }
       }
     }
   },
