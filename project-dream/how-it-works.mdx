@@ -1,0 +1,54 @@
+---
+title: "How Project Dream Works"
+sidebarTitle: "How it works"
+description: "The core ideas behind Project Dream: modes, models, jobs, projects, credits and workflows."
+---
+
+Six ideas explain the whole app.
+
+<Frame caption="Input + mode + model → a job → results in your project">
+  <img src="https://placehold.co/1424x700?text=pd_concepts_diagram" alt="Diagram: an input image and prompt go into a mode with a chosen model, become a job, and land as results in a project" />
+</Frame>
+
+## Modes
+
+A **mode** is what you want to do: *Text to Image*, *Edit Image*, *Creative Upscaler*, *Animate Image* and so on. You pick it on the **left rail**, grouped into Image, Video, Audio and 3D. Each mode shows only the inputs and settings it needs.
+
+| Group | Modes |
+|---|---|
+| Image | [Text to Image, Image to Image](/project-dream/modes/text-and-image-to-image), [Edit Image](/project-dream/modes/edit-image), [Creative Upscaler](/project-dream/modes/creative-upscaler), [Character Enhancer](/project-dream/modes/character-enhancer) |
+| Video | [Animate Image, Video Upscale, Edit Video](/project-dream/modes/video) |
+| Audio | [Music Generation, Audio Generation](/project-dream/modes/3d-and-audio) |
+| 3D | [Image to 3D Model](/project-dream/modes/3d-and-audio) |
+
+## Models
+
+Inside a mode you choose a **model**: Pulze's own (ClearVision, VividDreams…) or third-party ones like Nano Banana, Seedream, Kling, Veo or Magnific. Every mode has a sensible default, so you can ignore the picker until you want something specific. The picker shows each model's price, speed and what inputs it takes. See [all models](/project-dream/models).
+
+<Frame caption="The model picker: tags, price tier and credits per result">
+  <img src="https://placehold.co/1424x1044?text=pd_concepts_model_picker" alt="Model picker open in Edit Image, showing model cards with maker logos, Recommended/New tags, Budget/Standard/Premium tier and credits per image" />
+</Frame>
+
+<Note>
+Third-party models run on their makers' servers, so your inputs are uploaded there. Dream asks for your consent the first time. You can hide all third-party models in [Settings](/project-dream/account/settings).
+</Note>
+
+## Jobs
+
+Pressing **Dream** creates a **job**. It moves through *Pending → Queued → Running → Saving → Completed* (or *Failed*) and shows up as a card in your feed right away, so you can keep working while it runs. A job keeps everything that made it: inputs, prompt, model and settings. That's what lets you retry it or reuse its inputs later.
+
+## Projects
+
+Every job lands in a **project**. The **Playground** is your scratchpad and the default target. Make projects per client or per scene, share them with your team, and move jobs between them by dragging. See [Projects](/project-dream/results/projects).
+
+## Credits
+
+Most jobs cost **credits**. The price is on the Dream button before you press it. Pulze's own models are free with a license (watermarked on trial). Failed jobs can be refunded. See [Credits & licenses](/project-dream/account/credits-and-licenses).
+
+## Chaining
+
+Results are inputs for the next step. From any result you can **Send result to** another mode (upscale it, animate it, edit it, make it 3D). When you want the same chain again and again, build it as a [Flow Graph](/project-dream/workflows/flow-graph). To compare and iterate visually, use a [Canvas](/project-dream/workflows/canvas).
+
+<Frame caption="A typical chain: viewport → Edit Image → Creative Upscaler → Animate Image">
+  <img src="https://placehold.co/1424x500?text=pd_concepts_chain" alt="Four thumbnails left to right: a clay viewport grab, the photoreal edit, the upscaled image with a 4x badge, and a video frame with a play icon" />
+</Frame>

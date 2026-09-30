@@ -1,0 +1,61 @@
+---
+title: "Working with Results"
+sidebarTitle: "Results"
+description: "The job feed, job cards, the viewer, and everything you can do with a result."
+---
+
+## The job feed
+
+Every job appears as a card the moment you press Dream, grouped by day. Switch between **Grid view**, **List view** and **Compact view**, and make tiles larger or smaller.
+
+- **Search prompts** with **/**.
+- **Filters:** job type, rating, *With notes*, *Unseen jobs*.
+- **Select** jobs with their checkbox (Shift-click for a range), then **Delete**.
+
+<Frame caption="The feed in grid view with the filter panel open">
+  <img src="https://placehold.co/1424x1044?text=pd_results_feed" alt="Job feed in grid view grouped under 'Today' and 'Yesterday', one job running with a progress indicator, the Filters panel open with Job type, Rating and Show only options" />
+</Frame>
+
+## The job card
+
+<Frame caption="A job card">
+  <img src="https://placehold.co/1424x900?text=pd_results_job_card" alt="Completed Edit Image job card with numbered callouts: 1 results, 2 prompt with Use prompt in input, 3 model and attribute chips, 4 rating, 5 note, 6 menu with Copy to input / Retry / Delete" />
+</Frame>
+
+- **Status** while it runs: Pending, Queued, Running, Saving, then Completed or Failed.
+- **Rating** from *Something is off* to *Awesome*. Filter by it later.
+- **Add a note** to remember why you liked it.
+- **Use prompt in input** / **Copy to input** reloads the prompt or all the inputs into the composer, to tweak and run again.
+- **View job details:** resolution, times, credits used.
+- **Prompt review:** tips on how to write the prompt better. See [Prompts](/project-dream/results/prompts).
+
+### Failed jobs
+
+A failed job shows its error, a free **Retry**, and **Refund**, which deletes the job and returns its credits.
+
+## Result actions
+
+Hover or open a result for its actions:
+
+| Action | |
+|---|---|
+| **Download image** | PNG (uncompressed) or JPG (90%) |
+| **Copy image to clipboard** / **Copy Image URL** | |
+| **Send result to** | Edit image, Creative upscale, Simple upscale, Enhance characters, Animate Image, Image to 3D Model, Create variations… |
+| **Send to canvas** / **Send to graph** | Continue on a [Canvas](/project-dream/workflows/canvas) or in a [Flow Graph](/project-dream/workflows/flow-graph) |
+| **Send to Photoshop** | Places the image in the open document (desktop app + Photoshop plugin) |
+| **Add to public showcase** | Share it in the [Showcase](/project-dream/results/showcase) |
+
+Videos add **Send last frame to video input**, **Upscale video** and **Edit video**. 3D results open in a viewer with **Download model**.
+
+## The viewer
+
+Click a result to open it full screen. Step through results with the arrow keys, see the inputs and settings with **Show details**, and **Compare with this input** to slide between before and after. The **Inspector** lets you zoom in to check detail.
+
+<Frame caption="The viewer in compare mode">
+  <img src="https://placehold.co/1424x1044?text=pd_results_viewer_compare" alt="Full-screen viewer comparing an input viewport and its result with a vertical slider, details panel on the right showing prompt, model and settings, thumbnails of other results below" />
+</Frame>
+
+## Artifacts
+
+Masked and drawn edits keep their in-between steps, such as the mask crop or the raw output before it was pasted back. **Show artifacts** on the card shows them. Useful when a masked edit looks off.

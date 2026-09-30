@@ -1,0 +1,44 @@
+---
+title: "Claude Connector"
+description: "Generate, edit, upscale and animate images with Project Dream from a Claude chat."
+---
+
+The Project Dream connector lets Claude use Dream for you. Ask in plain words, like *"Make this render look like a winter evening and upscale it 2×"*, and Claude picks the model, tells you the price, runs the job and shows the result in the chat.
+
+<Frame caption="Dream inside a Claude chat">
+  <img src="https://placehold.co/1424x1044?text=pd_claude_chat" alt="Claude chat: user asks to turn a facade render into a winter evening; Claude replies with the estimated credits, runs edit_image, and shows the result image inline" />
+</Frame>
+
+## Add it to Claude
+
+<Steps>
+  <Step title="Add the connector">
+    In Claude (claude.ai or Claude Desktop), open **Settings → Connectors → Add custom connector** and paste:
+
+    ```
+    https://dream-mcp.pulze.io
+    ```
+    Or use the **Add to Claude** button in Dream's [Settings](/project-dream/account/settings) → MCP.
+  </Step>
+  <Step title="Sign in with Pulze">
+    Sign in with your existing Project Dream account and allow access.
+  </Step>
+  <Step title="Just ask">
+    Start a chat and ask for an image.
+  </Step>
+</Steps>
+
+On Team and Enterprise plans, an owner adds the connector once under **Organization settings → Connectors**, then members press **Connect**.
+
+## What Claude can do
+
+- **Generate** images from text, **edit** images, **upscale** them and make **videos**.
+- **List models**, **estimate costs** and check your **credit balance** (free).
+- Manage jobs: check, wait, cancel, retry, delete.
+
+## Good to know
+
+- You need an existing Project Dream account. Sign up in the app first.
+- Jobs land in your **Playground** project and use your **personal credits**, like any other job.
+- Files you attach in the chat don't reach Dream. Claude gives you an **upload link** to drop the image into instead.
+- Claude tells you the price before anything expensive, like video.

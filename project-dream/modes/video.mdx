@@ -1,0 +1,61 @@
+---
+title: "Video"
+description: "Animate stills, upscale footage to 4K, and restyle existing videos."
+---
+
+Three modes live in the **Video** group of the rail.
+
+## Animate Image
+
+Turn a still into a clip, or make a clip from text alone. Default model: Seedance 2.0 Fast. Others include Kling 3.0, Veo 3.1, Seedance 2.5, Runway Gen-4.5, Hailuo and Wan.
+
+The model picker's **Filter by mode** decides the inputs:
+
+| Mode | Inputs |
+|---|---|
+| **Text to video** | Prompt only |
+| **Image to video** | A start frame |
+| **First & Last frames** | Start and end frame; the clip travels between them. **Swap** flips them. |
+| **Reference Images** | Up to 6 images of people, products or places to feature |
+
+<Frame caption="First & Last frames: the camera moves from one view to the other">
+  <img src="https://placehold.co/1424x600?text=pd_video_first_last" alt="Animate Image composer with a Start frame (exterior, street view) and End frame (same house, closer to the entrance), Swap button between them, and a prompt 'slow dolly towards the front door'" />
+</Frame>
+
+| Setting | What it does |
+|---|---|
+| **Aspect ratio** | Taken from the image in image modes. |
+| **Resolution** | e.g. 720p / 1080p. Affects the price. |
+| **Clip length** | Seconds. |
+| **Audio** | Native sound, on models that support it. |
+| **Draft (480p preview)** | Cheap preview. Happy with it? **Finalize in 1080p** renders the same shot in full quality. |
+
+**Describe video from input image** writes a camera-aware prompt from your frames.
+
+**Cost:** credits **per second** of video; the rate depends on model, resolution and audio. The picker shows the rate and typical render time.
+
+## Video Upscale
+
+Upscale a video to 4K, double its frame rate, or slow it down.
+
+- **Input:** MP4, up to 50 MB. Dream shows its size, length and frame rate.
+- **Models:** TopazLabs Video AI (default, with presets such as Starlight and Astra), Magnific Creative / Precision, FLUX Video Upscale, FlashVSR.
+- **Settings:** **Upscale ratio**, **Frame interpolation**, **Slowmo** (keeps the frame rate, stretches the duration), **Creativity**, **Sharpness**.
+- **Cost:** per second of video.
+
+## Edit Video
+
+Restyle or change an existing video: new season, new materials, new lighting, add a character.
+
+- **Input video:** up to 1920 px wide (larger videos are scaled down).
+- Depending on the model, also a **Re-styled first frame** (edit frame one with [Edit Image](/project-dream/modes/edit-image) first, and the whole clip follows), **Reference Images**, and a prompt.
+- **Models:** Seedance 2.0 (default), Runway Aleph 2, Kling o3, Luma Ray, Gemini Omni Flash and more.
+- **Cost:** per second of the source video.
+
+<Frame caption="Edit Video with a re-styled first frame">
+  <img src="https://placehold.co/1424x600?text=pd_video_edit_restyle" alt="Three panels: a summer drone clip frame, the same first frame edited to snowy winter, and a frame from the resulting winter video" />
+</Frame>
+
+<Tip>
+A video's **Send last frame to video input** starts the next clip where this one ended, for longer sequences.
+</Tip>

@@ -313,19 +313,78 @@
         "tab": "Project Dream",
         "cta": {
           "label": "Get Started",
-          "href": "/project-dream/index"
+          "href": "/project-dream/getting-started/quick-start"
         },
         "groups": [
           {
-            "group": "Project Dream",
+            "group": "Overview",
             "pages": [
               "project-dream/index",
-              "project-dream/models"
+              "project-dream/how-it-works"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "project-dream/getting-started/installation",
+              "project-dream/getting-started/interface",
+              "project-dream/getting-started/quick-start"
+            ]
+          },
+          {
+            "group": "Modes",
+            "pages": [
+              "project-dream/modes/text-and-image-to-image",
+              "project-dream/modes/edit-image",
+              "project-dream/modes/creative-upscaler",
+              "project-dream/modes/character-enhancer",
+              "project-dream/modes/video",
+              "project-dream/modes/3d-and-audio"
+            ]
+          },
+          {
+            "group": "Results",
+            "pages": [
+              "project-dream/results/results",
+              "project-dream/results/prompts",
+              "project-dream/results/projects",
+              "project-dream/results/showcase"
+            ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "project-dream/workflows/flow-graph",
+              "project-dream/workflows/canvas"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "project-dream/integrations/plugins",
+              "project-dream/integrations/photoshop",
+              "project-dream/integrations/claude-connector"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "project-dream/account/credits-and-licenses",
+              "project-dream/account/teams",
+              "project-dream/account/settings"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "project-dream/troubleshooting/plugin-not-installed"
             ]
           },
           {
             "group": "Resources",
             "pages": [
+              "project-dream/models",
+              "project-dream/faq",
               "project-dream/changelog"
             ]
           }

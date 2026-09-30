@@ -1,0 +1,67 @@
+---
+title: "Edit Image"
+description: "Change an image with plain instructions, steered by masks, drawings and reference images."
+---
+
+Edit Image changes an existing image the way you tell it to: *"Make it winter"*, *"Add a tree in the foreground"*, *"Turn this viewport into a photo"*. It's the most used mode in Dream.
+
+<Frame caption="One image, three instructions">
+  <img src="https://placehold.co/1424x500?text=pd_edit_examples" alt="A modern house render and three edits of it labelled 'Make it winter', 'Night, warm interior lights', 'Add a family on the terrace'" />
+</Frame>
+
+## Inputs
+
+- **Images:** 1 to 6, depending on the model. The **first image is the one being edited**; the others are references ("put this chair in the room"). Drag to reorder.
+- **Prompt:** an instruction, at least 7 characters. Short and specific works best.
+- **Describe input image** writes a description of the image for you to start from.
+
+## Settings
+
+| Setting | What it does |
+|---|---|
+| **Model** | Default Nano Banana 2. Models tagged *Supports masking* can take a mask. |
+| **Aspect ratio** | *Auto* keeps the input's shape. Set it when you combine several images. |
+| **Upscale result to 4K** | A 2× upscale after the edit. Costs more. |
+| **Layer decomposition** | Splits the result into editable layers (some models). |
+| **Fast mode** | Skips prompt optimization. Same price. |
+| **Auto-pad image** | Pads the image to a ratio the model supports. |
+
+## Mask: only change this region
+
+Paint where the edit may happen. Everything outside stays pixel-identical. Dream crops the masked area, edits only that, and pastes it back, so small regions get more detail.
+
+<Steps>
+  <Step title="Open the Mask block">
+    Press **Draw mask** (or **Browse mask image** for a mask you made elsewhere).
+  </Step>
+  <Step title="Paint">
+    Paint over what may change. **Erase** with Alt, change the **Brush size**, **Invert mask** to flip it.
+  </Step>
+  <Step title="Save mask">
+    The block shows the mask over your image. Write the instruction and press **Dream**.
+  </Step>
+</Steps>
+
+<Frame caption="The mask editor">
+  <img src="https://placehold.co/1424x1044?text=pd_edit_mask_editor" alt="Inpaint mask editor over a kitchen render with the countertop painted in orange, brush size slider, Draw/Erase/Clear buttons, '18% masked' and Save mask" />
+</Frame>
+
+<Note>
+Only models tagged *Supports masking* take a mask. With a mask, the aspect ratio is fixed to *Auto*, and Auto-pad and Layer decomposition are off.
+</Note>
+
+## Draw and annotate
+
+Draw shapes and short notes on the image to show *what* goes *where*: circle a spot and write "hat", draw a rectangle labelled "window here". Your drawing is baked onto the image before it's sent, and works with every model.
+
+- Draw freehand or with rectangles; select a shape to move, resize, name or delete it.
+- **Crop region** edits only the drawn area, like a mask. It's off when you've painted a mask (the mask wins).
+- You can use a mask and a drawing together.
+
+<Frame caption="Draw and annotate: the drawing and the result">
+  <img src="https://placehold.co/1424x600?text=pd_edit_draw_annotate" alt="Left: a living room with a red rectangle on the empty wall labelled 'large abstract painting' and a circle on the floor labelled 'round rug'. Right: the result with a painting and a round rug in those places" />
+</Frame>
+
+## Cost
+
+A fixed price per image for the chosen model, times the number of results. **Upscale result to 4K** raises it. Edit Image always costs credits.

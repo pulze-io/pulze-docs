@@ -1,0 +1,61 @@
+---
+title: "Text to Image & Image to Image"
+sidebarTitle: "Text & Image to Image"
+description: "Create new images from a prompt, or from your viewport or render."
+---
+
+## Text to Image
+
+Make an image from a prompt alone. Good for mood boards, materials, backgrounds and early concepts.
+
+- **Input:** a prompt of at least 10 characters.
+- **Default model:** Nano Banana 2. Others include Nano Banana Pro, Seedream 5 Pro, Flux 2 Pro Realism, Flux Krea [Dev] and Pulze's ClearVision.
+
+| Setting | What it does |
+|---|---|
+| **Aspect ratio** | Shape of the image. Default 1:1. |
+| **Refine image** | Twice the resolution. Slower, costs more. |
+| **Number of results** | 1, 2 or 4, if the model supports it. |
+
+With a Pulze model you also get a negative prompt, **Reference mood**, **Magic salt** and a seed (see below).
+
+<Frame caption="Text to Image settings">
+  <img src="https://placehold.co/1424x1044?text=pd_t2i_composer" alt="Text to Image composer: model picker set to Nano Banana 2, aspect ratio shapes with 16:9 selected, Refine image toggle, and a prompt describing a Nordic cabin at dusk" />
+</Frame>
+
+## Image to Image
+
+Turn a viewport, clay render or sketch into a polished image with Pulze models, while keeping its composition. Unlike [Edit Image](/project-dream/modes/edit-image), you describe the *result*, not a change.
+
+- **Input image:** **Connections** (grab from a connected 3D app) or **Upload image**.
+- **Prompt:** describe the finished image, at least 7 characters.
+- **Models:** ClearVision (default) and the legacy VividDreams.
+
+| Setting | What it does |
+|---|---|
+| **Creativity** | How much freedom the AI takes. Low = close to your input. |
+| **Resemblance** | How strongly the input image is kept. |
+| **Presets** | Ready slider combos: Touchup, Light, Default, Medium, High, Re-imagine. Save your own with **Save preset**. |
+| **Refine image** | Twice the resolution. Not available with a mask. |
+| **Mask** | Only change the painted area. |
+
+<Frame caption="Same viewport at Touchup, Default and Re-imagine">
+  <img src="https://placehold.co/1424x500?text=pd_i2i_presets" alt="Three results from the same clay viewport of a facade: Touchup (almost unchanged, cleaner), Default (photoreal), Re-imagine (materials and planting reinterpreted)" />
+</Frame>
+
+## Pulze-model extras
+
+| Option | What it does |
+|---|---|
+| **Reference mood** | An image whose light and mood the result borrows. Set **Reference type** (Light / Medium / Heavy) and **Influence**. Browse ready ones in the **Reference mood gallery**. |
+| **Magic salt** | Adds Pulze's preset prompt enhancements. |
+| **Negative prompt** | Things to avoid. |
+| **Seed** | Random, or fixed to repeat a result. |
+
+<Frame caption="Reference mood: input, mood image, result">
+  <img src="https://placehold.co/1424x500?text=pd_i2i_reference_mood" alt="Three panels: a daylight viewport, a warm sunset reference photo, and the result with the viewport's composition and the reference's sunset light" />
+</Frame>
+
+## Cost
+
+Pulze models are free with a license and watermarked on a trial. Third-party models cost credits per image, times the number of results; **Refine image** costs extra. See [Credits](/project-dream/account/credits-and-licenses).

@@ -1,0 +1,41 @@
+---
+title: "Prompts"
+description: "Write prompts that work, and let Dream help: enhance, describe, examples and prompt review."
+---
+
+## Two kinds of prompt
+
+Models want one of two styles, and the prompt block tells you which with a chip:
+
+| Style | Used by | Example |
+|---|---|---|
+| **Instruction style** | Edit Image, most edit models | *Replace the carpet with oak floorboards.* |
+| **Descriptive style** | Text to Image, Image to Image, most video models | *A bright Scandinavian living room, oak floor, soft morning light.* |
+
+Keep Edit Image instructions short (about 10–140 characters) and name what should stay the same.
+
+## Helpers in the prompt block
+
+<Frame caption="The prompt block and its tools">
+  <img src="https://placehold.co/1424x700?text=pd_prompts_block" alt="Prompt block with callouts: 1 Instruction style chip, 2 Enhance prompt with a Suggestion and Apply suggestion, 3 Describe input image, 4 Prompt examples, 5 Prompt history, 6 undo/redo" />
+</Frame>
+
+- **Enhance prompt** rewrites your prompt with AI and shows a suggestion to **Apply**. Turn on *Auto-apply* to skip the step.
+- **Describe input image** (**Ctrl + ↑**) writes a prompt from your input image.
+- **Prompt examples** opens clickable building blocks for the current mode.
+- **Prompt history** searches everything you've written before.
+
+## Prompt review
+
+After a job runs, Dream checks your prompt against what the model likes. If it can help, the job card shows **How to improve this prompt?**, sometimes with a **Suggested prompt** you can load with **Use this prompt**. A common tip: *"This model wants an instruction, not a description"*.
+
+<Frame caption="A prompt review on a job card">
+  <img src="https://placehold.co/1424x600?text=pd_prompts_review" alt="Job card with an expanded 'How to improve this prompt?' box: 'This model wants an instruction, not a description', a suggested prompt, and Use this prompt / Copy to clipboard buttons" />
+</Frame>
+
+## Writing for architecture
+
+- **Lock the design.** "Keep the architecture, camera and proportions exactly the same."
+- **Name materials and light.** "Board-formed concrete, overcast sky, soft shadows" beats "make it nice".
+- **Add life in its own step.** People, cars and planting are easier as a second edit.
+- **Iterate.** Generate 2–4, rate the best, and **Copy to input** to refine it.

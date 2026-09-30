@@ -1,0 +1,41 @@
+---
+title: "3D & Audio"
+description: "Make 3D models from images, add sound to videos, and compose music."
+---
+
+## Image to 3D Model
+
+Build a textured 3D model from a picture: furniture, props, products, entourage.
+
+- **Front image** (required). Multi-view models also take **Back**, **Left** and **Right** images for a more accurate result.
+- **Models:** Tripo H3.1 (default), Tripo P2, Meshy V7, Hunyuan3D, Rodin 2.5, Trellis 2 and more. The picker lists their input views and output formats.
+- **Generate PBR** adds metallic, roughness and normal maps.
+- Results open in a 3D viewer; **Download model** to use them in your 3D app.
+- **Cost:** a fixed price per model.
+
+<Frame caption="From a product photo to a 3D model">
+  <img src="https://placehold.co/1424x600?text=pd_3d_result" alt="Left: a front photo of an armchair as input. Right: the 3D viewer showing the generated armchair model, rotated, with Download model button" />
+</Frame>
+
+## Audio Generation
+
+Adds sound effects and Foley that match a video: footsteps, traffic, birds, water.
+
+- **Input video:** up to 30 seconds, 50 MB.
+- **Prompt (optional):** describe the sounds you want.
+- **Models:** Mirelo SFX 1.6 (default), Hunyuan Video Foley, Sonilo.
+- You get the video back with the new soundtrack. **Cost:** per second.
+
+## Music Generation
+
+Composes an original track from a description, with optional lyrics.
+
+- **Prompt:** genre, mood, instruments, tempo.
+- **Lyrics (optional):** leave empty for an instrumental.
+- **Duration** on some models.
+- **Models:** MiniMax Music 3 (default), Google Lyria, ElevenLabs Music.
+- **Cost:** per track or per minute, depending on the model.
+
+<Frame caption="Music Generation with lyrics">
+  <img src="https://placehold.co/1424x800?text=pd_music_composer" alt="Music Generation composer: prompt 'calm piano and strings, warm, 90 bpm, for a real estate film', empty Lyrics block with 'Leave empty for instrumental' hint, Duration 60 s, and a finished track with a waveform player in the feed" />
+</Frame>

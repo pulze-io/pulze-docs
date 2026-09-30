@@ -1,0 +1,39 @@
+---
+title: "Photoshop"
+description: "Use Project Dream inside Photoshop: edit, upscale and generate on your selection, with results placed back as layers."
+---
+
+The Project Dream plugin for Photoshop brings the main modes into a Photoshop panel and works on your document directly.
+
+<Frame caption="The Project Dream panel in Photoshop">
+  <img src="https://placehold.co/1424x1044?text=pd_ps_panel" alt="Photoshop with a living room render open, a marquee selection around the sofa, and the Project Dream panel docked on the right showing the Instruct tab with a prompt and the Dream button" />
+</Frame>
+
+## Setup
+
+- Photoshop 2023 or newer (24.4+). The plugin comes with the [desktop app installer](/project-dream/getting-started/installation).
+- Open it from **Plugins → Project Dream**.
+- Sign in: the panel shows a code and opens your browser. Confirm it there.
+
+## Selection in, layer out
+
+1. Make a **marquee selection** of the area to change. No selection = the whole canvas.
+2. Choose a mode: **Instruct** (Edit Image), **Upscale**, **Prompt** (Text to Image) or **Generate** (Image to Image).
+3. Press Dream. Dream sends the selection with a little padding around it.
+4. The result is placed back **exactly in your selection**, clipped to its shape, as a new layer.
+
+<Frame caption="Selection → result placed back as a smart object">
+  <img src="https://placehold.co/1424x600?text=pd_ps_selection_result" alt="Three frames: a selection around an empty terrace, the Dream result with furniture, and the Layers panel showing a new smart object 'Instruct - add outdoor furniture' clipped to the selection" />
+</Frame>
+
+- **Smart object** (on by default) puts all versions into one smart object; turn it off to get one layer per result.
+- Several results? They're all placed; toggle visibility to choose.
+- Layers are named after the mode and prompt.
+
+## With the desktop app
+
+The desktop app can also **Grab Document** or **Grab Selection** from Photoshop, and any result in Dream has **Send to Photoshop** to place it in the open document.
+
+<Note>
+The Photoshop plugin and the desktop app on the same computer share one license seat.
+</Note>

@@ -1,0 +1,41 @@
+---
+title: "Character Enhancer"
+description: "Turn 3D people in your renders into photoreal humans, without touching the rest of the image."
+---
+
+3D people are often the weakest part of an archviz image. The Character Enhancer finds the people in your render and makes each one look photographed, leaving the rest of the image as it was.
+
+<Frame caption="Before and after, zoomed on the people">
+  <img src="https://placehold.co/1424x600?text=pd_character_before_after" alt="Crop of a plaza render: left two stiff 3D-scanned people, right the same people with realistic skin, hair and clothing, same poses" />
+</Frame>
+
+## How to use it
+
+<Steps>
+  <Step title="Add your render">
+    Up to 7680 px. Dream detects the characters automatically and shows how many it found, e.g. *"3 selected of 3"*.
+  </Step>
+  <Step title="Choose who to enhance">
+    Open the selection editor to turn characters on or off, or draw your own boxes. **Re-detect characters** runs detection again. At least one must be selected.
+  </Step>
+  <Step title="Pick a preset and Dream">
+    **Minimal**, **Default**, **Medium**, **Heavy** or **Extreme**. The prompt is optional and applies to every character.
+  </Step>
+</Steps>
+
+<Frame caption="The selection editor">
+  <img src="https://placehold.co/1424x1044?text=pd_character_segments" alt="Edit Segments dialog over a street render, with detected people outlined; two enabled in orange, one disabled in grey, a hand-drawn box, and '2 of 3 enabled'" />
+</Frame>
+
+## Settings
+
+| Setting | What it does |
+|---|---|
+| **Creativity** / **Resemblance** | Freedom versus faithfulness, per character. |
+| **Presets** | From barely touched (Minimal) to fully redone (Extreme). Per-character prompts only apply with *Extreme*. |
+| **Use Character Enhancer v2** | The newer engine. On by default. |
+| **Mask** | Limit where characters are searched for. |
+
+## Cost
+
+Free with a license (watermarked on trial). Otherwise priced by the megapixels of the selected characters.

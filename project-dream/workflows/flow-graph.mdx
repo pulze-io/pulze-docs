@@ -1,0 +1,67 @@
+---
+title: "Flow Graph"
+description: "Chain Dream's tools into reusable, node-based pipelines and run them with one click."
+---
+
+A Flow Graph is a pipeline you draw: nodes for inputs, prompts and generation steps, wired together. Build it once, then run it on any image, against any project. Typical use: *viewport → Edit Image → Creative Upscale → Image to Video*, every time a new view comes in.
+
+<Frame caption="A graph: viewport in, photoreal image, upscale and video out">
+  <img src="https://placehold.co/1424x1044?text=pd_graph_overview" alt="Flow Graph editor with Plugin input, Prompt input, Edit Image, Creative Upscale and Image to Video nodes wired left to right, results shown inside the nodes, the Dream button with credit cost at the bottom" />
+</Frame>
+
+## Graphs
+
+Graphs aren't tied to a project. Open **Flow Graph** in the header to see **Your graphs**: create, rename, clone, organize into folders, or **Share with team**. Open graphs appear as tabs.
+
+**New Graph** starts empty or from a template, such as *Viewport rendering with Edit Image*. Team graphs are read-only; **Duplicate to edit & run**.
+
+## Building
+
+- **Add nodes:** right-click the canvas, drag from the node list, or paste an image or text.
+- **Connect:** drag from an output to a matching input. Wires carry *Image*, *Prompt*, *Video*, *Drawing* or *3D model*; only matching types connect. Drag a wire into empty space to see only nodes that accept it.
+- **Group** nodes with **Ctrl + G** and run a group on its own.
+
+<Frame caption="The add-node menu, grouped by type">
+  <img src="https://placehold.co/1424x900?text=pd_graph_add_menu" alt="Right-click menu on the graph canvas with sections Inputs, Image, Video, 3D, Utilities, listing nodes like Image input, Plugin input, Edit Image, Creative Upscale" />
+</Frame>
+
+## Nodes
+
+| Group | Nodes |
+|---|---|
+| **Inputs** | **Image input** (upload), **Plugin input** (fetch from a connected 3D app, desktop app only), **Prompt input** (can also describe an image) |
+| **Image** | **Edit Image**, **Text to Image**, **Image to Image**, **Creative Upscale**, **Mask**, **Draw and annotate** |
+| **Video** | **Image to Video**, **Video Upscale**, **Edit Video** |
+| **3D** | **Image to 3D** (front, back, left, right views) |
+| **Utilities** | **LLM Prompt** (let an AI write or rewrite text), **Image Comparer**, **Notes**, **Reroute**, **Group** |
+
+Generation nodes have the same settings as their [modes](/project-dream/how-it-works#modes).
+
+## Running
+
+- **Dream** runs the whole graph and shows the total cost. Select nodes or a group to **Dream selection** / **Dream group** instead.
+- Per node: **Run node**, **Run to here** (everything upstream, then this one), **Pause node**.
+- Choose the **target project** first; every job the graph makes lands there.
+- Each node shows its status (*Queued*, *Running*, *Done*, *Failed*, *Needs input*) and its result. A node keeps a history of past runs.
+- If a node fails, the nodes after it are skipped. **Stop** halts the run.
+
+<Frame caption="A graph mid-run">
+  <img src="https://placehold.co/1424x900?text=pd_graph_running" alt="Graph during a run: Edit Image node Done with its result, Creative Upscale node Running with a spinner, Image to Video Queued, and the 'Graph is running — editing is locked' banner with a Stop button" />
+</Frame>
+
+## Shortcuts
+
+| | |
+|---|---|
+| Right-click | Add node |
+| Space + drag | Pan |
+| Alt + drag | Duplicate |
+| Ctrl + C / V | Copy / paste |
+| Ctrl + Z / Y | Undo / redo |
+| Ctrl + G | Group |
+| Ctrl + S | Save |
+| Double-click a node title | Zoom to node |
+
+<Info>
+Flow Graph needs a screen at least 1024 px wide.
+</Info>
