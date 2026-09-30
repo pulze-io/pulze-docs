@@ -29,6 +29,8 @@ LayerWise recognizes a file or a layer by its **name**. If the name contains an 
 
 Matching is **case-sensitive**, and LayerWise avoids the usual false matches between related passes. `Reflection` does not match `ReflectionFilter`, `RawReflection`, `TotalReflection`, `ReflectionAnalysis` or `CShading_Reflection`, so each of those lands on its own element.
 
+A **multichannel EXR** that holds all passes in one file works the same way: LayerWise splits it into one file per pass, named after the pass, and matches those. See [Multichannel EXR](/layerwise/workflows/multichannel-exr).
+
 <Tip>
 You don't need a special naming scheme. The file names V-Ray, Corona and FStorm save by default already contain the element names.
 </Tip>
@@ -80,7 +82,6 @@ This is the trick that keeps your masks up to date: name a group `#Wood`, put yo
 
 - Every job runs as **undo steps you can step back through** in the History panel, one step per element (for example *Replacing Reflection*).
 - A job can be cancelled at any time from the progress overlay or with **Esc**. If a step fails, only that step is rolled back.
-- Only one job runs at a time.
 
 ## What stays on your computer
 
