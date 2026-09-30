@@ -85,6 +85,18 @@ That is a **recipe**: the flat per-application form, which the service expands i
 **A job with several steps is the same call with a `steps` array instead of the flat fields**, and each step's configuration is its `props`, the tagged union the submitter fills in. Those are worth reading rather than guessing: build the chain once in the submitter, read it back with `rf.jobs.getJob(id)`, and send that `steps` array with your own values. `JobCreate` and `JobStepCreate` in the [API reference](/renderflow/v2/api-reference/introduction) are the full schema.
 </Note>
 
+### Using the RenderFlow submitter
+
+You do not have to build a submitter of your own. Send the same recipe to `openSubmitter` and RenderFlow opens its own submitter on this machine, with the job and the scene's properties already filled in from what you sent. This is how the **Submit to RenderFlow** buttons in every supported application work.
+
+```typescript
+const result = await rf.jobs.openSubmitter(recipe);
+
+if (!result.opened) console.log(result.reason);
+```
+
+The artist gets the full submitter, can change anything in it, and presses **Submit** to create the job. The RenderFlow app has to be running on this machine: when it is not, `opened` is `false` and `reason` says why. When several people are signed in to one machine, pass `{ user: "<name>" }` as the second argument to open it on that person's desktop.
+
 ## Waiting for a job
 
 ```typescript

@@ -149,6 +149,19 @@ That is a **recipe**: the flat per-application form, which the service expands i
 A job with several steps is the same call with a `steps` list instead of the flat fields, and each step's configuration is its `props`. Build the chain once in the submitter, read it back with `farm.jobs.get_job(job_id)`, and send that list with your own values. Guessing at `props` from the schema alone is the hard way.
 </Note>
 
+### Using the RenderFlow submitter
+
+You do not have to build a submitter of your own. Send the same recipe to `open_submitter` and RenderFlow opens its own submitter on this machine, with the job and the scene's properties already filled in from what you sent. This is how the **Submit to RenderFlow** buttons in every supported application work.
+
+```python
+result = farm.jobs.open_submitter(body=recipe)
+
+if not result.opened:
+    print(result.reason)
+```
+
+The artist gets the full submitter, can change anything in it, and presses **Submit** to create the job. The RenderFlow app has to be running on this machine: when it is not, `opened` is `false` and `reason` says why. When several people are signed in to one machine, pass `user="<name>"` to open it on that person's desktop.
+
 ## Waiting for a job
 
 That resolves when the job reaches the required state or times out:

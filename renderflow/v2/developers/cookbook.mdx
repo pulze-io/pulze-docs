@@ -391,6 +391,8 @@ def submit():
 
 The same shape works in Houdini, Nuke and VRED: `sys.path` gets the folder holding `renderflow`, and the rest is the same three calls. The [Python SDK page](/renderflow/v2/developers/python-sdk) has the reasoning.
 
+You do not have to write a dialog of your own either. Call `farm.jobs.open_submitter(body=...)` with the same body instead of `create_job`, and RenderFlow opens its own submitter with the job and the scene's properties filled in from it, the way its **Submit to RenderFlow** buttons do. The job is created when the artist presses **Submit**.
+
 ## The numbers a wall dashboard needs
 
 Two calls, both counted on the server. Do not total a list yourself: a farm has more tasks than you want to page through.

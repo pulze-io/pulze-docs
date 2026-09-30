@@ -332,7 +332,7 @@ A key nobody set is falsy rather than an error, so `rf.state.lut or "aces.cube"`
 
 ## Submit from inside an application
 
-Some answers only exist inside the application: which tyFlow objects a `.max` holds, which takes a Cinema 4D scene has. A script you run there can read them with the application's own API, put them in a recipe, and open the RenderFlow submitter with every field already filled. The artist checks it and presses **Submit**, exactly as with a built-in job type.
+Some answers only exist inside the application: which tyFlow objects a `.max` holds, which takes a Cinema 4D scene has. A script you run there can read them with the application's own API and put them in a recipe. You do not have to build a submitter around it: send the recipe to `open_submitter` and RenderFlow opens its own, with the job and the scene's properties already filled in. This is how the **Submit to RenderFlow** buttons in every supported application work.
 
 The [Python SDK](/renderflow/v2/developers/python-sdk) needs nothing outside the standard library, so it runs in the application's own Python:
 
@@ -369,7 +369,7 @@ Three keys make it more than a plain submission:
 
 `fields` can only narrow a field your script declares. It cannot add a field or change its type.
 
-`open_submitter` opens the submitter on this machine and creates nothing until the artist presses **Submit**. When the RenderFlow app is not running, `opened` is `false` and `reason` says why. To skip the submitter and send the job straight to the farm, call `farm.jobs.create_job(body=recipe)` with the same recipe.
+The artist gets the full submitter, can change anything in it, and the job is created when they press **Submit**. When the RenderFlow app is not running on this machine, `opened` is `false` and `reason` says why. To skip the submitter and send the job straight to the farm, call `farm.jobs.create_job(body=recipe)` with the same recipe.
 
 ## Example
 
