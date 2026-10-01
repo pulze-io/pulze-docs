@@ -34,7 +34,7 @@ The same flags work on every platform.
 | `--tls` | Serve all farm communication over HTTPS. Needs `--tls-cert` and `--tls-key` |
 | `--tls-cert=<path>` | Server certificate (PEM) |
 | `--tls-key=<path>` | Its private key (PEM) |
-| `--tls-ca=<path>` | CA to validate the server against, when it is not publicly trusted |
+| `--tls-ca=<path>` | CA certificate to trust for HTTPS: a private server certificate, or a proxy that re-signs TLS |
 | `--tls-port=<port>` | Port of the HTTPS listener, default 44445. Server only |
 | `--server-tls` | The server answers over TLS, which `--server=https://host` also says. Node and workstation only |
 
@@ -61,6 +61,12 @@ A node behind a proxy:
 
 ```powershell
 renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=node --server=render01 --proxy-host=proxy.studio --proxy-port=3128
+```
+
+A server behind a proxy that inspects HTTPS, with the company's CA certificate. See [Behind a proxy](/renderflow/v2/getting-started/requirements#behind-a-proxy) for the error this fixes:
+
+```powershell
+renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
 ```
 
 <Warning>

@@ -3,7 +3,7 @@ name: pulze
 description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
 metadata:
   author: pulze
-  version: "1.3"
+  version: "1.4"
 ---
 
 # Pulze Documentation
@@ -136,6 +136,7 @@ RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) docu
 - Server and Nodes: /renderflow/v2/getting-started/server-and-nodes
 - Silent Deployment: /renderflow/v2/getting-started/silent-deploy
 - Run as a Service: /renderflow/v2/getting-started/run-as-a-service
+- Offline Licensing (Enterprise, a server with no internet access): /renderflow/v2/getting-started/offline-licensing
 - Migrating (from RenderFlow 1 or Render Manager): /renderflow/v2/getting-started/migrating
 - Changelog: /renderflow/v2/changelog
 
