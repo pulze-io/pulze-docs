@@ -105,7 +105,27 @@ Only the server needs internet access; render nodes and workstations do not.
 
 Blocking `*.renderflow.com` costs you two optional conveniences and nothing more: email notifications sent through Pulze's relay, and the AI agent features. Slack, Teams, Discord and webhook notifications go straight to those services, and an email channel pointed at your own SMTP server is unaffected.
 
-RenderFlow can also run in a sealed environment with no route to the internet at all, on **offline licensing**. If that is your situation, [contact support](mailto:support@pulze.io) and we will set you up.
+### Behind a proxy
+
+Point the server at your proxy with `--proxy-host` and `--proxy-port` when you install it, adding `--proxy-user` and `--proxy-pass` if the proxy asks for credentials, and `--proxy-bypass` for internal hosts that must not go through it. [Silent Deployment](/renderflow/v2/getting-started/silent-deploy#installer-flags) lists every flag.
+
+**A proxy that inspects HTTPS.** Many corporate proxies decrypt HTTPS traffic and re-sign it with the company's own certificate authority. RenderFlow does not trust that authority on its own, so the server cannot reach Pulze and its log shows:
+
+```
+Failed to resolve https://backend.pulze.io, attempt 2/2: [GET] 'https://backend.pulze.io': unable to get local issuer certificate
+```
+
+Give RenderFlow your company's CA certificate as a PEM file with `--tls-ca`. RenderFlow trusts it in addition to the public certificate authorities, for every HTTPS connection it makes:
+
+```powershell
+renderflow-2.0.0-windows-x64.exe --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
+```
+
+**Saving the settings.** The installer saves its flags, so the service uses them every time it starts. Flags given to `rfsv` itself apply to that run only. To change the settings of a machine that is already installed, stop the service and run `rfsv config` with the new values, for example `rfsv config --tls-ca=C:\certs\studio-ca.pem`, then start the service again.
+
+### No internet access
+
+RenderFlow can also run in a sealed environment with no route to the internet at all, on **offline licensing**, which is part of RenderFlow Enterprise. See [Offline Licensing](/renderflow/v2/getting-started/offline-licensing).
 
 ## Next steps
 
