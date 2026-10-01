@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 1600px; height: 1000px; background: #262624; color: #e8e6e1; font-family: 'Segoe UI', system-ui, sans-serif; display: flex; overflow: hidden; }
+  .side { width: 260px; background: #1f1e1d; border-right: 1px solid #33322f; padding: 14px 10px; font-size: 13.5px; color: #c9c6be; display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 16px; font-family: Georgia, serif; font-size: 21px; color: #f3f1ec; }
+  .brand img { width: 24px; height: 24px; }
+  .nav div { padding: 6px 8px; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
+  .nav .ic { width: 15px; height: 15px; border: 1.6px solid #9a978f; border-radius: 4px; opacity: .8; }
+  .nav .ic.round { border-radius: 50%; }
+  .label { font-size: 12px; color: #8b887f; margin: 22px 8px 6px; }
+  .chat { padding: 6px 8px; border-radius: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chat.on { background: #34332f; color: #f3f1ec; }
+  .user { margin-top: auto; padding: 8px; display: flex; gap: 10px; align-items: center; border-top: 1px solid #33322f; }
+  .av { width: 26px; height: 26px; border-radius: 50%; background: #d97757; color: #1f1e1d; font-weight: 600; font-size: 12px; display: grid; place-items: center; }
+  .main { flex: 1; display: flex; flex-direction: column; position: relative; }
+  .top { height: 52px; display: flex; align-items: center; padding: 0 18px; font-size: 14px; color: #e8e6e1; }
+  .top span { padding: 6px 10px; border-radius: 8px; }
+  .top span::after { content: ' \25BE'; color: #8b887f; }
+  .col { width: 700px; margin: 0 auto; padding-top: 18px; display: flex; flex-direction: column; gap: 18px; }
+  .u { align-self: flex-end; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .u img { width: 290px; border-radius: 12px; display: block; }
+  .bubble { background: #141413; border-radius: 14px; padding: 10px 16px; font-size: 15px; max-width: 520px; line-height: 1.45; }
+  .tools { font-size: 13.5px; color: #9a978f; display: flex; align-items: center; gap: 8px; }
+  .tools .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 4px; border: 1px solid #3a3935; border-radius: 999px; color: #c9c6be; }
+  .tools .chip b { width: 18px; height: 18px; border-radius: 5px; background: #f97316; color: #141416; font: 700 11px 'Segoe UI'; display: grid; place-items: center; }
+  .a { font-family: Georgia, 'Times New Roman', serif; font-size: 16.5px; line-height: 1.6; color: #ece9e2; }
+  .a p + p { margin-top: 12px; }
+  .a a { color: #8fb5ff; text-decoration: underline; text-underline-offset: 2px; }
+  .result { border-radius: 12px; overflow: hidden; width: 500px; border: 1px solid #3a3935; }
+  .result img { width: 100%; display: block; }
+  .result .cap { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #1f1e1d; font-size: 13px; color: #c9c6be; }
+  .result .cap i { font-style: normal; color: #8b887f; }
+  .btn { border: 1px solid #45443f; border-radius: 8px; padding: 5px 12px; color: #e8e6e1; }
+  .composer { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); width: 720px; background: #30302e; border: 1px solid #45443f; border-radius: 18px; padding: 14px 16px 12px; box-shadow: 0 10px 30px -12px rgba(0,0,0,.5); }
+  .composer .ph { font-size: 15px; color: #8b887f; }
+  .composer .row { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; font-size: 13px; color: #c9c6be; }
+  .plus { width: 30px; height: 30px; border: 1px solid #45443f; border-radius: 8px; display: grid; place-items: center; color: #c9c6be; font-size: 18px; }
+  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 170px; background: linear-gradient(to bottom, rgba(38,38,36,0), #262624 55%); }
+</style>
+</head>
+<body>
+  <aside class="side">
+    <div class="brand"><img src="{{SKILL}}/assets/claude.svg">Claude</div>
+    <div class="nav">
+      <div><span class="ic round"></span>New chat</div>
+      <div><span class="ic"></span>Projects</div>
+      <div><span class="ic"></span>Artifacts</div>
+      <div><span class="ic"></span>Customize</div>
+    </div>
+    <div class="label">Recents</div>
+    <div class="chat on">Winter render with Project Dream</div>
+    <div class="chat">Harbour masterplan client notes</div>
+    <div class="chat">Upscale the facade study to 4K</div>
+    <div class="chat">Lobby mood board ideas</div>
+    <div class="chat">Kitchen concept, oak vs walnut</div>
+    <div class="chat">Competition brief summary</div>
+    <div class="chat">Timber office render variations</div>
+    <div class="user"><span class="av">A</span>Alex Morgan</div>
+  </aside>
+  <main class="main">
+    <div class="top"><span>Winter render with Project Dream</span></div>
+    <div class="col">
+      <div class="u">
+        <img src="file:///D:/Github/pulze-docs/scripts/dream-images/src/assets/house.jpg">
+        <div class="bubble">With Project Dream, make this render a snowy winter evening. Keep the house and the camera exactly the same.</div>
+      </div>
+      <div class="tools"><span class="chip"><b>D</b>Pulze Project Dream</span>Used 3 tools ›</div>
+      <div class="a">
+        <p>That's an Edit Image job on Nano Banana 2 for 13 credits; you have 4,820. Here's the winter evening version: snow on the roof, terrace and pines, a dusk sky and warm light in the windows. Same house, same camera.</p>
+      </div>
+      <div class="result">
+        <img src="file:///D:/Github/pulze-docs/scripts/dream-images/src/assets/house-winter.jpg">
+        <div class="cap"><span>Forest house, winter evening <i>· Edit Image · Nano Banana 2 · 13 credits</i></span><span class="btn">Download</span></div>
+      </div>
+      <div class="a"><p>It's saved in your Playground project too. Want me to upscale it to 4K with Creative Upscale?</p></div>
+    </div>
+    <div class="fade"></div>
+    <div class="composer">
+      <div class="ph">Reply to Claude…</div>
+      <div class="row"><span class="plus">+</span><span>Opus 5</span></div>
+    </div>
+  </main>
+</body>
+</html>

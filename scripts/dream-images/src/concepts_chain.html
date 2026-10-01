@@ -1,0 +1,28 @@
+<style>
+.row{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:18px;padding:0 40px}
+.card{background:#18181b;border:1px solid rgba(255,255,255,.08);border-radius:12px;box-shadow:0 24px 60px -20px rgba(40,12,4,.45);color:#f4f4f5;padding:12px;width:300px;box-sizing:border-box}
+.frame{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:16/9}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.zoom img{transform:scale(2.2);transform-origin:30% 55%}
+.badge{position:absolute;top:8px;right:8px;background:rgba(9,9,11,.75);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600}
+.play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.play span{width:44px;height:44px;border-radius:50px;background:rgba(9,9,11,.6);display:flex;align-items:center;justify-content:center;font-size:16px;padding-left:4px;box-sizing:border-box}
+.bar{position:absolute;left:10px;right:10px;bottom:10px;height:4px;border-radius:4px;background:rgba(255,255,255,.3)}
+.bar i{display:block;width:40%;height:100%;border-radius:4px;background:#f97316}
+.label{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-size:13px;font-weight:600}
+.label span{font-size:11px;font-weight:400;color:#a1a1aa}
+.arrow{color:#fff;font-size:30px;font-weight:300}
+</style>
+<div class="row">
+  <div class="card"><div class="frame"><img src="assets/clay-livingroom.jpg"></div>
+    <div class="label">Viewport <span>3ds Max</span></div></div>
+  <div class="arrow">→</div>
+  <div class="card"><div class="frame"><img src="assets/clay-livingroom-edit.jpg"></div>
+    <div class="label">Edit Image <span>Nano Banana 2</span></div></div>
+  <div class="arrow">→</div>
+  <div class="card"><div class="frame zoom"><img src="assets/clay-livingroom-edit.jpg"><div class="badge">4×</div></div>
+    <div class="label">Creative Upscaler <span>Magnific</span></div></div>
+  <div class="arrow">→</div>
+  <div class="card"><div class="frame"><img src="assets/clay-livingroom-edit.jpg" style="transform:scale(1.08)"><div class="play"><span>▶</span></div><div class="bar"><i></i></div><div class="badge">5 s</div></div>
+    <div class="label">Animate Image <span>Seedance</span></div></div>
+</div>

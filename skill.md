@@ -1,9 +1,9 @@
 ---
 name: pulze
-description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
+description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, the RenderFlow API, or Project Dream's AI image, video, upscale, 3D and audio generation (modes, models, credits, Flow Graph, Canvas, 3D-app and Photoshop plugins, Claude connector).
 metadata:
   author: pulze
-  version: "1.3"
+  version: "1.4"
 ---
 
 # Pulze Documentation
@@ -166,9 +166,58 @@ Generated from the farm's own published document, one page per operation, with a
 - 98 operation pages at /renderflow/v2/api-reference/[tag]/[action], for example /renderflow/v2/api-reference/jobs/create
 
 ### Project Dream
-AI-powered creative project generation tool.
+An AI studio for architectural visualization and 3D work. It brings the leading image, video, 3D and audio models (Pulze's own, plus Nano Banana, Seedream, Kling, Veo, Magnific, Topaz and others) into one app. Users pick a **mode** on the left rail, choose a **model** (every mode has a default), add inputs, and press **Dream** (Ctrl + Enter). That creates a **job**, which lands in a **project** (the **Playground** by default) and costs **credits**. Pulze's own models are free with a license. Available as a web app (dream.pulze.io, also on phones), a Windows desktop app with 3D-app plugins, a Photoshop plugin, and a Claude connector.
 
-- Overview: /project-dream/index
+#### Overview
+- Introduction: /project-dream/index
+- How it works (modes, models, jobs, projects, credits, chaining): /project-dream/how-it-works
+
+#### Getting Started
+- Installation (web vs desktop, installer, supported app versions, accounts): /project-dream/getting-started/installation
+- The interface (header, mode rail, composer, Dream dock, feed, Home, phones): /project-dream/getting-started/interface
+- Quick start (viewport → Edit Image → upscale): /project-dream/getting-started/quick-start
+
+#### Modes
+- Text to Image & Image to Image (prompt or viewport → new image; Creativity/Resemblance presets, Reference mood, Magic salt): /project-dream/modes/text-and-image-to-image
+- Edit Image (change an image with instructions; up to 6 inputs, mask "only change this region", Draw and annotate): /project-dream/modes/edit-image
+- Creative Upscaler (ClearVision, Magnific Creative, Magnific Precision v2, Clarity AI; "precision upscale" is Magnific Precision): /project-dream/modes/creative-upscaler
+- Character Enhancer (realistic people; auto-detected characters, selection editor, presets): /project-dream/modes/character-enhancer
+- Video (Animate Image with text/image/first & last/reference modes, Video Upscale, Edit Video): /project-dream/modes/video
+- 3D & Audio (Image to 3D Model, Audio Generation for sound effects, Music Generation): /project-dream/modes/3d-and-audio
+
+#### Results
+- Working with results (feed, job card, failed jobs, result actions, viewer, artifacts): /project-dream/results/results
+- Prompts (instruction vs descriptive style, Enhance prompt, Describe input image, prompt review): /project-dream/results/prompts
+- Projects (Playground, Latest, folders, team projects): /project-dream/results/projects
+- Showcase (public and team galleries): /project-dream/results/showcase
+
+#### Workflows
+- Flow Graph (node-based pipelines; node list, running, shortcuts): /project-dream/workflows/flow-graph
+- Canvas (image board, generate from a selected image, live team collaboration): /project-dream/workflows/canvas
+
+#### Integrations
+- 3D app plugins (fetch the Viewport or VFB under Connections → Plugin connections; 3ds Max, Maya, Revit, Rhino, SketchUp, Cinema 4D, Blender): /project-dream/integrations/plugins
+- Photoshop (selection in, result placed back as a layer or smart object): /project-dream/integrations/photoshop
+- Claude connector (https://dream-mcp.pulze.io; existing users only, jobs land in the Playground, personal credits): /project-dream/integrations/claude-connector
+
+#### Account
+- Credits & licenses (pricing basis, what's free, refunds, 7-day / 250-credit trial, Pro license seats): /project-dream/account/credits-and-licenses
+- Teams (team credits and licenses, sharing projects, canvases, graphs, showcase): /project-dream/account/teams
+- Settings (language, privacy / hide 3rd-party models, MCP, app options): /project-dream/account/settings
+
+#### Troubleshooting & Reference
+- Plugin not installed (re-run the installer, or install the plugin manually per app): /project-dream/troubleshooting/plugin-not-installed
+- Models (every integrated model by category and creator): /project-dream/models
+- FAQ: /project-dream/faq
+- Changelog: /project-dream/changelog
+
+#### Key facts
+- Fetching from 3D apps and Photoshop needs the **desktop app** (Windows) plus the plugin. The web app can't do it.
+- Third-party models upload inputs to their makers. To keep only Pulze models, turn on **Settings → Privacy → Hide 3rd party models and services**.
+- Failed jobs: **Retry** is free, and **Refund** deletes the job and returns its credits.
+- Trial: Pulze-model results are watermarked (baked in; upgrading does not remove it from existing results), one job runs at a time, downloads and copying are locked, and results can't go to the public Showcase.
+- Flow Graph and Canvas need a screen at least 1024 px wide.
+- Credit prices change often, so point to the price shown on the Dream button and in the model picker rather than quoting numbers.
 
 ## Common Tasks
 
@@ -191,6 +240,13 @@ AI-powered creative project generation tool.
 - **Get called when a render finishes (RenderFlow 2)**: Subscribe a URL with `POST /webhooks` for signed, retried callbacks on job, step, task and machine events. For a message to a person instead, attach a notification channel at submit time. See /renderflow/v2/developers/webhooks.
 - **Batch render in Scene Manager**: Press the Batch Render button in the top toolbar to render all setups with one click. Or bake setups to native scene states. See /scene-manager/bake-setups.
 - **Organize 3ds Max scenes**: Create setups in Scene Manager to manage cameras, lighting, scene visibility, and render settings per shot. See /scene-manager/setups.
+- **Turn a viewport into a photoreal image (Project Dream)**: Use Edit Image with an instruction that says what must stay, e.g. "Make this a photorealistic render, keep the architecture exactly the same". Fetch the viewport with the desktop app, or paste or drop a screenshot. See /project-dream/getting-started/quick-start and /project-dream/modes/edit-image.
+- **Change only part of an image (Project Dream)**: In Edit Image, paint a mask with a model tagged "Supports masking", or use Draw and annotate (works with every model) to show what goes where. See /project-dream/modes/edit-image.
+- **Upscale a render for delivery (Project Dream)**: Use the Creative Upscaler. Magnific Precision v2 stays faithful to the original; Magnific Creative adds the most detail; lower Creativity if detail gets invented. See /project-dream/modes/creative-upscaler.
+- **Make a video from a still (Project Dream)**: Animate Image in Image to video or First & Last frames mode. Priced per second; Draft (480p preview) then Finalize in 1080p saves credits. See /project-dream/modes/video.
+- **Automate a repeated chain (Project Dream)**: Build a Flow Graph (e.g. Plugin input → Edit Image → Creative Upscale → Image to Video), choose the target project, and press Dream. See /project-dream/workflows/flow-graph.
+- **The Dream plugin is missing in a 3D app**: Close the app, re-run the Project Dream installer and tick the app; otherwise install the plugin manually. See /project-dream/troubleshooting/plugin-not-installed.
+- **Use Dream from Claude**: Add https://dream-mcp.pulze.io as a custom connector in Claude and sign in with an existing Pulze account. See /project-dream/integrations/claude-connector.
 
 ## Support
 

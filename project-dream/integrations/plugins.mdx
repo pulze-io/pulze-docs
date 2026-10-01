@@ -4,28 +4,28 @@ sidebarTitle: "3D app plugins"
 description: "Grab viewports and frame buffers from 3ds Max, SketchUp, Revit and other 3D apps straight into Project Dream."
 ---
 
-With the desktop app, Dream talks to your 3D software. No more screenshot, save, upload: press **Grab viewport** and the current view is in your input.
+With the desktop app, Dream talks to your 3D software. No more screenshot, save, upload: click **Viewport** under **Plugin connections** and the current view is in your input.
 
-<Frame caption="From the 3ds Max viewport to Dream in one click">
-  <img src="https://placehold.co/1424x800?text=pd_plugins_grab_flow" alt="Left: 3ds Max with a clay viewport and the Project Dream toolbar button; right: Project Dream desktop app with the same view in the Input image block after pressing Grab viewport" />
+<Frame caption="From a 3ds Max viewport to a Dream input">
+  <img src="/images/project-dream/pd_plugins_grab_flow.webp" alt="Left: a 3ds Max window with a clay living-room viewport and the Project Dream toolbar button. Right: Dream's Input image block on Connections with Viewport and VFB chips for villa_living.max" />
 </Frame>
 
 ## How it works
 
 1. The [installer](/project-dream/getting-started/installation) puts a Project Dream plugin into each supported app.
 2. Open your 3D app and the Project Dream desktop app. The app finds the running hosts on its own; **Refresh host list** if it doesn't.
-3. In any image input, press the grab button for what you want.
+3. In an image input, choose **Connections** and click the chip for what you want. Each chip shows the app's icon and the open file's name.
 
-| Button | Takes | Available in |
+| Chip | Takes | Available in |
 |---|---|---|
-| **Grab viewport** | The active viewport | 3ds Max, Maya, Revit, Rhino, SketchUp, Cinema 4D, Blender |
-| **Grab VFB** | The last render in the frame buffer | 3ds Max with V-Ray or Corona |
-| **Grab Document** / **Grab Selection** | The open image or selection | Photoshop |
+| **Viewport** | The active viewport | 3ds Max, Maya, Revit, Rhino, SketchUp, Cinema 4D, Blender |
+| **VFB** | The last render in the frame buffer | 3ds Max with V-Ray or Corona |
+| **Open document** / **Current selection** | The open image or selection | Photoshop |
 
 The plugin's button in your 3D app starts the desktop app or brings it to the front.
 
-<Frame caption="The grab buttons in an input block">
-  <img src="https://placehold.co/1424x500?text=pd_plugins_grab_buttons" alt="Input image block with Plugin connections showing '3ds Max 2026' connected, and the Grab viewport and Grab VFB buttons" />
+<Frame caption="The fetch chips in an input block">
+  <img src="/images/project-dream/pd_plugins_grab_buttons.webp" alt="Plugin connections with a Viewport and a VFB chip for villa_living.max from 3ds Max, and the refresh button" />
 </Frame>
 
 ## Where to find the plugin
@@ -46,5 +46,5 @@ Don't minimize the 3D app before grabbing: minimized windows give lower-quality 
 ## Troubleshooting
 
 - **"No hosts found":** make sure the 3D app is open and its plugin is installed. See [Plugin not installed](/project-dream/troubleshooting/plugin-not-installed).
-- **Grab VFB fails:** open the V-Ray or Corona frame buffer window in 3ds Max first.
-- **Grab buttons missing:** you're in the web app. Grabbing needs the desktop app.
+- **VFB fetch fails:** open the V-Ray or Corona frame buffer window in 3ds Max first.
+- **No Connections option:** you're in the web app. Fetching needs the desktop app.

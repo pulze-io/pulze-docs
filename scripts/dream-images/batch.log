@@ -1,0 +1,229 @@
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ! overview.dark (1 error(s))
+  ! running.dark (2 error(s))
+  ! context-menu.dark (1 error(s))
+
+3 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\graph
+
+Pages that logged errors:
+  overview.dark
+    Failed to load resource: the server responded with a status of 401 (Unauthorized)
+  running.dark
+    Failed to load resource: the server responded with a status of 401 (Unauthorized)
+    Failed to load resource: the server responded with a status of 401 (Unauthorized)
+  context-menu.dark
+    Failed to load resource: the server responded with a status of 401 (Unauthorized)
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ board.dark
+  ✓ selected-image.dark
+  ✓ floater-anchored.dark
+  ✓ peers.dark
+
+4 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\canvas
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ completed.dark
+  ✓ mismatch.dark
+  ✓ improve.dark
+  ✓ hover.dark
+
+4 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\jobcard
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ teams-menu.dark
+  ✓ license-pro.dark
+  ✓ credits-pro.dark
+
+3 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\badges
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ default.dark
+
+1 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\credits
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ desktop.dark
+  ✓ web.dark
+  ✓ prompting.dark
+  ✓ privacy.dark
+  ✓ search.dark
+  ✓ mobile.dark
+  ✓ desktop-de.dark
+
+7 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\settings
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ public.dark
+  ✓ wide.dark
+
+2 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\showcase
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ default.dark
+  ✓ team.dark
+
+2 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\projectlist
+▲ [WARNING] Duplicate key "shoot:about" in object literal [duplicate-object-key]
+
+    package.json:21:8:
+      21 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+  The original key "shoot:about" is here:
+
+    package.json:20:8:
+      20 │         "shoot:about": "node harness/shoot-about.mjs",
+         ╵         ~~~~~~~~~~~~~
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The `purge`/`content` options have changed in Tailwind CSS v3.0.
+[1m[33mwarn[39m[22m - Update your configuration file to eliminate this warning.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/upgrade-guide#configure-content-sources
+  ✓ upscaler.dark
+  ✓ video_modify.dark
+  ✓ detailer.dark
+  ✓ image_to_model.dark
+  ✓ music.dark
+
+5 shot(s) in dark theme(s) → D:\Github\pulze-docs\scripts\dream-images\shots\composer

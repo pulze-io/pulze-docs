@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1600px; height: 1000px; overflow: hidden; }
+  body { background: #535353; font-family: 'Segoe UI', sans-serif; font-size: 12px; color: #d6d6d6; display: grid; grid-template-rows: 30px 38px 1fr; }
+  .menubar { background: #323232; display: flex; align-items: center; gap: 18px; padding: 0 12px; color: #cfcfcf; font-size: 12.5px; }
+  .menubar .app { width: 20px; height: 20px; border-radius: 4px; background: #001e36; border: 1px solid #31a8ff; }
+  .options { background: #3c3c3c; border-bottom: 1px solid #2a2a2a; display: flex; align-items: center; gap: 14px; padding: 0 12px; }
+  .opt { width: 22px; height: 22px; border-radius: 3px; border: 1px solid #555; }
+  .work { display: grid; grid-template-columns: 44px 1fr 390px 300px; min-height: 0; }
+  .tools { background: #3c3c3c; border-right: 1px solid #2a2a2a; display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 10px; }
+  .tool { width: 22px; height: 22px; border-radius: 3px; background: #4a4a4a; }
+  .tool.on { background: #636363; }
+  .doc { display: flex; flex-direction: column; min-width: 0; }
+  .tabs { height: 28px; background: #323232; display: flex; }
+  .tab { background: #535353; padding: 6px 14px; color: #eee; font-size: 12px; }
+  .canvasArea { flex: 1; display: grid; place-items: center; position: relative; }
+  .canvas { width: 720px; position: relative; box-shadow: 0 0 0 1px #2a2a2a, 0 10px 30px rgba(0,0,0,.35); }
+  .canvas img { width: 100%; display: block; }
+  .marquee { position: absolute; left: 36%; top: 36%; width: 30%; height: 50%; border: 1.5px dashed #fff; outline: 1.5px dashed #000; outline-offset: -1.5px; }
+  /* Dream panel */
+  .dream { background: #1b1b1c; border-left: 1px solid #2a2a2a; display: flex; flex-direction: column; font-family: Poppins, 'Segoe UI', sans-serif; position: relative; overflow: hidden; }
+  .phead { background: #323232; height: 28px; display: flex; align-items: center; padding: 0 10px; font-size: 11.5px; color: #ddd; font-family: 'Segoe UI'; }
+  .pbody { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .row { display: flex; align-items: center; gap: 8px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #111; font: 700 9px Poppins; display: grid; place-items: center; }
+  .who b { display: block; font-size: 12.5px; color: #f4f4f5; font-weight: 500; }
+  .who span { font-size: 10.5px; color: #8b8b90; }
+  .sq { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #2e2e31; background: #18181b; }
+  .credits { height: 32px; padding: 0 10px; border-radius: 8px; border: 1px solid #2e2e31; background: #18181b; display: flex; align-items: center; gap: 6px; font-weight: 600; color: #f4f4f5; font-size: 12px; }
+  .coin { width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; }
+  .select { flex: 1; height: 32px; border-radius: 8px; border: 1px solid #2e2e31; background: #18181b; display: flex; align-items: center; padding: 0 10px; color: #f4f4f5; font-size: 12.5px; }
+  .btn2 { height: 32px; padding: 0 12px; border-radius: 8px; background: #d4d4d8; color: #18181b; display: flex; align-items: center; font-size: 12px; }
+  .modes { display: flex; border-bottom: 1px solid #2e2e31; margin: 0 -12px; padding: 0 12px; }
+  .mode { flex: 1; text-align: center; padding: 10px 0; color: #a1a1aa; font-size: 12.5px; }
+  .mode.on { color: #f97316; border-bottom: 2px solid #f97316; font-weight: 500; }
+  .block { background: #18181b; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .bt { font-size: 12.5px; color: #f4f4f5; font-weight: 500; }
+  .model { border: 1px solid #2e2e31; border-radius: 8px; padding: 9px 10px; }
+  .model b { font-size: 12.5px; color: #f4f4f5; font-weight: 500; }
+  .model span { display: block; font-size: 10.5px; color: #8b8b90; margin-top: 2px; }
+  .toggle { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #d4d4d8; }
+  .sw { width: 30px; height: 16px; border-radius: 99px; background: #3f3f46; position: relative; }
+  .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 10px; height: 10px; border-radius: 50%; background: #71717a; }
+  .sw.on { background: #52525b; } .sw.on::after { left: 17px; background: #fff; }
+  .prompt { border: 1px solid #f97316; border-radius: 8px; padding: 10px; height: 74px; font-size: 12.5px; color: #e4e4e7; }
+  .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .slot { aspect-ratio: 1; border-radius: 8px; border: 1px dashed #3f3f46; background: #141416; }
+  .slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block; }
+  .dreamBtn { height: 42px; border-radius: 10px; background: linear-gradient(90deg, #f97316, #f59e0b); color: #fff; display: grid; place-items: center; font-weight: 500; font-size: 13px; }
+  /* Blocking generation card */
+  .overlay { position: absolute; inset: 28px 0 0 0; background: rgba(0,0,0,.45); backdrop-filter: blur(2.5px); display: grid; place-items: center; padding: 16px; }
+  .gen { width: 100%; max-width: 330px; background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 20px -15px rgba(0,0,0,.2); }
+  .gen .h { display: flex; justify-content: space-between; align-items: flex-start; }
+  .gen .t { font-size: 13.5px; color: #f4f4f5; font-weight: 500; display: flex; gap: 7px; align-items: center; }
+  .gen .d { font-size: 11px; color: #71717a; margin-top: 2px; }
+  .ib { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #27272a; display: grid; place-items: center; }
+  .ib.bg { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,.18); }
+  .tip { position: absolute; right: 0; top: -32px; white-space: nowrap; background: rgba(24,24,27,.95); border: 1px solid #3f3f46; color: #f4f4f5; font-size: 11px; padding: 4px 8px; border-radius: 6px; }
+  .gen .p { display: flex; gap: 10px; align-items: center; font-size: 12.5px; color: #d4d4d8; }
+  .gen .p img { width: 46px; height: 46px; object-fit: cover; border-radius: 6px; border: 1px solid #27272a; }
+  .gen hr { border: 0; border-top: 1px solid #27272a; }
+  .status { display: flex; justify-content: space-between; font-size: 12px; color: #38bdf8; }
+  .bar { height: 5px; border-radius: 99px; background: #27272a; overflow: hidden; }
+  .bar i { display: block; width: 63%; height: 100%; background: #0ea5e9; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .meta p { font-size: 10px; color: #71717a; } .meta b { font-size: 12px; color: #f4f4f5; font-weight: 500; }
+  /* Right dock */
+  .dock { background: #323232; border-left: 1px solid #2a2a2a; display: flex; flex-direction: column; }
+  .ptabs { display: flex; gap: 14px; padding: 7px 10px; background: #2b2b2b; font-size: 11.5px; color: #a8a8a8; }
+  .ptabs b { color: #eee; font-weight: 600; }
+  .props { flex: 1; padding: 10px; color: #bbb; font-size: 11.5px; display: flex; flex-direction: column; gap: 8px; }
+  .field { display: flex; gap: 8px; align-items: center; } .field span { width: 18px; }
+  .field i { font-style: normal; background: #262626; border: 1px solid #4a4a4a; padding: 2px 6px; width: 90px; }
+  .layers { padding: 8px; display: flex; flex-direction: column; gap: 3px; }
+  .layer { display: flex; align-items: center; gap: 8px; padding: 5px 6px; border-radius: 3px; font-size: 12px; color: #ddd; }
+  .layer.sel { background: #4a4a4a; }
+  .eye { width: 12px; height: 8px; border: 1.5px solid #bbb; border-radius: 50%; }
+  .lthumb { width: 40px; height: 26px; position: relative; }
+  .lthumb img { width: 100%; height: 100%; object-fit: cover; border: 1px solid #1f1f1f; display: block; }
+  .so { position: absolute; right: -3px; bottom: -3px; width: 11px; height: 11px; background: #ddd; border: 1px solid #333; border-radius: 2px; }
+  .overlay { display: none; }
+</style>
+</head>
+<body>
+  <div class="menubar"><span class="app"></span><span>File</span><span>Edit</span><span>Image</span><span>Layer</span><span>Type</span><span>Select</span><span>Filter</span><span>3D</span><span>View</span><span>Plugins</span><span>Window</span><span>Help</span></div>
+  <div class="options"><span class="opt"></span><span class="opt"></span><span class="opt"></span><span style="color:#bbb">Feather: 0 px</span><span style="color:#bbb">Style: Normal</span></div>
+  <div class="work">
+    <div class="tools"><span class="tool"></span><span class="tool on"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span><span class="tool"></span></div>
+    <div class="doc">
+      <div class="tabs"><span class="tab">hotel_lobby.psd @ 50% (Dream · Instruct, RGB/8)</span></div>
+      <div class="canvasArea">
+        <div class="canvas">
+          <img src="{{REPO}}/packages/frontend/harness/fixtures/hotel-lobby-guest.jpg">
+          <div class="marquee"></div>
+        </div>
+      </div>
+    </div>
+    <div class="dream">
+      <div class="phead">Dream for Photoshop</div>
+      <div class="pbody">
+        <div class="row">
+          <span class="avatar">Pulze</span><div class="who"><b>Aurora Studio</b><span>studio@example.com</span></div>
+          <span style="flex:1"></span><span class="sq"></span><span class="credits">4,820 <span class="coin"></span></span><span class="sq"></span>
+        </div>
+        <div class="row"><span class="select">Aurora Hotel</span><span class="btn2">+ New Project</span></div>
+        <div class="modes"><span class="mode on">Instruct</span><span class="mode">Upscale</span><span class="mode">Prompt</span><span class="mode">Generate</span></div>
+        <div class="block">
+          <div class="bt">Settings</div>
+          <div class="model"><b>Google Nano Banana 2</b><span>Gemini 3.1 Flash Image, Google's image generation and editing…</span></div>
+          <div class="toggle">Upscale result to 4K <span class="sw"></span></div>
+          <div class="toggle">Smart object <span class="sw on"></span></div>
+        </div>
+        <div class="block">
+          <div class="bt">Prompts</div>
+          <div class="prompt">Add a woman in a camel wool coat checking in at the reception desk</div>
+        </div>
+        <div class="block">
+          <div class="bt">Input image</div>
+          <div class="thumbs"><div class="slot"><img src="{{REPO}}/packages/frontend/harness/fixtures/hotel-lobby-guest.jpg"></div><div class="slot"></div><div class="slot"></div></div>
+        </div>
+        <div class="dreamBtn">Dream</div>
+      </div>
+      <div class="overlay">
+        <div class="gen">
+          <div class="h">
+            <div><div class="t">Instruct</div><div class="d">September 24, 2026, 17:42</div></div>
+            <div class="row" style="gap:4px; position:relative">
+              <span class="ib bg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f4f4f5" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="ib"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.6"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></span>
+              <span class="tip">Run in background</span>
+            </div>
+          </div>
+          <div class="p"><img src="{{REPO}}/packages/frontend/harness/fixtures/hotel-lobby-guest.jpg"><span>Warm evening light through the windows, lamps on</span></div>
+          <hr>
+          <div class="status"><span>Running · Dreaming</span><span>63%</span></div>
+          <div class="bar"><i></i></div>
+          <div class="meta"><div><p>Model</p><b>Google Nano Banana 2</b></div><div><p>Document</p><b>hotel_lobby.psd</b></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="dock">
+      <div class="ptabs"><b>Properties</b><span>Adjustments</span><span>Libraries</span></div>
+      <div class="props">
+        <div style="color:#ddd">Smart Object</div>
+        <div class="field"><span>W</span><i>2560 px</i></div>
+        <div class="field"><span>H</span><i>1706 px</i></div>
+        <div style="margin-top:6px">Embedded · Dream · Instruct.png</div>
+      </div>
+      <div class="ptabs"><b>Layers</b><span>Channels</span><span>Paths</span></div>
+      <div class="layers">
+        <div class="layer sel"><span class="eye"></span><span class="lthumb"><img src="{{REPO}}/packages/frontend/harness/fixtures/hotel-lobby-guest.jpg"><span class="so"></span></span>Instruct · Add a woman in a camel coat</div>
+        <div class="layer"><span class="eye"></span><span class="lthumb"><img src="{{REPO}}/packages/frontend/harness/fixtures/hotel-lobby.jpg"></span><i>Background</i></div>
+      </div>
+      <div style="height:160px"></div>
+    </div>
+  </div>
+</body>
+</html>
