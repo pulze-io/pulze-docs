@@ -204,7 +204,7 @@ Two are not captured, and neither is a matter of running the harness again:
 
 ## LayerWise
 
-All 32 images are placed as `/images/layerwise/<name>.webp` (made 2026-09-29).
+All 36 images are placed as `/images/layerwise/<name>.webp` (made 2026-09-29).
 
 - **UI screenshots** come from the LayerWise repo's screenshot harness against its mock host (`apps/ui/harness/shoot.mjs`; docs-only states: `signin`, `signin-code`, `menu-docs`, `replace-region`, `tools-done`, `tools-save-template`, `settings-docs`). They are framed like the RenderFlow v2 screenshots: 1424×1044 on the LayerWise green brand background, with `FRAME_SIZE=1424x1044 node .claude/skills/marketing-update/scripts/frame.mjs <in.png> <out.png>` in the LayerWise repo. Reshoot them when the UI changes.
 - **Photoshop and diagram images** are HTML mockups built on the marketing skill's Photoshop styles and three Pulze-generated renders. The multimatte, masks and region renders are derived from those renders; they are illustrations, not real render passes.
@@ -242,3 +242,7 @@ All 32 images are placed as `/images/layerwise/<name>.webp` (made 2026-09-29).
 - [x] `lw_replace_import.webp` — Step 2 of the Update renders wizard: the step bar (Document done, Renders active), a "Document" card with Kitchen_final.psd, its path and 3000 × 2000, and the "Now pick the new renders" area with Browse folder / Pick files buttons. (`workflows\update-renders.mdx`)
 - [x] `lw_replace_plan.webp` — Step 3 at wide layout. Left: the "Layers" list, one row per element (Lighting, Reflection, Refraction, LightSelect with a "3" layer-count badge and an expand chevron, MultiMatteElement...), each with a magnifier button, the chosen source file name or a select, and an on/off switch; one row switched off and hatched. Right sticky column "Also": "Resize the document to 4000 × 2667", "Keep each layer's current size and position", "Update 3 of 4 layer masks" with chips (#Wood #Glass #Stone dimmed #Metal), "Create 1 new layer masks". Bottom bar: Back, Pick again, Merge as regions (outline), Replace render elements. (`workflows\update-renders.mdx`)
 - [x] `lw_replace_before_after.webp` — A split image of the same kitchen render PSD in Photoshop: left "Before" (day render), right "After" (night re-render) with the Layers panel identical on both sides – same adjustment layers, same masked #Wood/#Glass groups, same smart filters listed under a layer. (`workflows\update-renders.mdx`)
+- [x] `lw_crypto_picker.webp` — the Cryptomatte masks section in Create new document, two mattes picked (`cryptomatte.mdx`, harness `build-crypto`)
+- [x] `lw_crypto_view.webp` — Pick in image over a Cryptomatte (the mock shows the mattes in false colour; reshoot with a real beauty when available) (`cryptomatte.mdx`, `build-crypto-view`)
+- [x] `lw_crypto_replace.webp` — the Cryptomatte masks section in Update renders, mattes in document pre-picked (`cryptomatte.mdx`, `replace-crypto`)
+- [x] `lw_tools_crypto.webp` — Tools → Masks from Cryptomatte dialog (`tools.mdx`, `tools-crypto`)

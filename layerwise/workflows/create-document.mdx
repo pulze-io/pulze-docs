@@ -29,13 +29,17 @@ LayerWise reads each file's size, resolution and bit depth, and sorts every file
 
 This step shows everything that will be built, so you can check it before anything happens in Photoshop.
 
-<Frame caption="Step 2, Plan: check the name, template, size and what gets built">
+<Frame caption="Step 2, Plan: check the name, saving, template, size and what gets built">
   <img src="/images/layerwise/lw_build_configure.webp" alt="The second step of the Create new document wizard with document settings and the list of what will be built" />
 </Frame>
 
-### Document
+### File
 
 - **Name.** Taken from your beauty pass (RGB_color for V-Ray, Beauty for Corona and FStorm): the file name up to the first dot. Change it if you like.
+- **Save next to the renders.** *Off* (the default), *PSB* or *PSD*. With PSB or PSD, LayerWise saves the new document into the render folder when it's built, under its name. An existing file is never replaced: a number is added instead (`cam01 2.psb`). Pick PSB for files over 2 GB. Your choice is remembered.
+
+### Document
+
 - **Template.** The templates of the current engine, with your [default template](/layerwise/templates#default-template) first, then your own and cloud templates, then the built-in ones. The chip shows the template's bit depth. It turns red if it differs from the bit depth of your renders (for example an 8-bit template with 32-bit EXRs).
 - **Inspect template** (the eye) shows the template's full layer tree.
 
@@ -52,6 +56,7 @@ If some of your renders have no slot in the chosen template, a warning lists the
 - **Which file is the Beauty pass?** For Corona and FStorm, the beauty pass often has no element name in it (for example just `cam01.png`). If the template needs a Beauty and none was matched, LayerWise asks you to choose it among the files that matched nothing.
 - **Placeholders for N missing elements.** Creates an empty smart object in the slot of every template element you didn't render, so the structure is complete and you can fill them later with [Update renders](/layerwise/workflows/update-renders).
 - **Extract N layer masks.** Makes masks from your multimatte and luma passes. The chips show every mask that will be made, such as `#Wood` from a multimatte's nametags or `[LUMA]Alpha` from the Alpha pass. See [Masks](/layerwise/masks). The toggle is disabled when there are no multimatte or luma elements among your renders.
+- **Cryptomatte masks.** Shown when your renders include a Cryptomatte. Pick the objects or materials you want masks for, in a list or straight in the image. See [Cryptomatte](/layerwise/cryptomatte).
 
 Files that matched no element are listed under **These files matched no element**. If one of them should be recognized, add its name in [Render elements](/layerwise/render-elements).
 
@@ -62,9 +67,10 @@ Press **Build document**.
 1. A new document at your renders' size and the template's bit depth.
 2. The template's groups, top to bottom, each with its name, label colour, blend mode, opacity and visibility.
 3. Every render placed as a smart object inside its group, at its native size, with the slot's blend mode and opacity. Multimatte and wire colour layers are hidden, since they are only used for masks.
-4. Masks on the matching groups (created where needed), and the same masks saved as alpha channels.
+4. Masks on the matching groups (created where needed), and the same masks saved as alpha channels. Picked Cryptomatte mattes become `#name` groups in the template's Cryptomatte slot.
 5. The document resized to your width, height and DPI, if you changed them.
 6. If [Layer transforms in new documents](/layerwise/settings#layers) is set to *Reset to 100%*, every smart object is baked so its scale reads 100%.
+7. If **Save next to the renders** is on, the document saved as PSB or PSD in the render folder.
 
 <Frame caption="The built document: groups, smart objects, masked groups and saved channels">
   <img src="/images/layerwise/lw_build_result.webp" alt="The Photoshop Layers panel of a document built by LayerWise, next to the Done step of the wizard" />
@@ -72,7 +78,7 @@ Press **Build document**.
 
 ## 3. Done
 
-The new document is open in Photoshop. Press **Build another** to start again, or **Done** to go Home.
+The new document is open in Photoshop. If you chose to save it, the Done step shows where. Press **Build another** to start again, or **Done** to go Home.
 
 ## Tips
 

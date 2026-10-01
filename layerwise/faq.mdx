@@ -38,6 +38,9 @@ description: "Answers to common LayerWise questions and fixes for common problem
   <Accordion title="The wrong file was picked for an element">
     In Create new document, press **Show every match** and choose the file for each element. In Update renders, choose the source for each row in the plan.
   </Accordion>
+  <Accordion title="My Cryptomatte shows no mattes">
+    The picker says why: usually the manifest is in a sidecar file, or the Cryptomatte was saved as half float. Embed the manifest and save the Cryptomatte as full 32-bit float. Corona users: rename the `.cxr` file to `.exr`. See [Cryptomatte](/layerwise/cryptomatte#files-that-cant-be-read).
+  </Accordion>
   <Accordion title="My multichannel EXR 'can't be split'">
     It's multi-part, tiled, deep, or uses B44 or DWA compression. Save it again as a scanline EXR with ZIP, PIZ or no compression, or save the elements as separate files. See [Multichannel EXR](/layerwise/workflows/multichannel-exr#supported-exrs).
   </Accordion>

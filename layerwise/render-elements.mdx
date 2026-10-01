@@ -18,6 +18,7 @@ Open it from the menu, the shortcut on Home, [Tools](/layerwise/tools) → **Man
 | **Import all** ★ | Import every file of this element, not just one (for example one LightSelect per light). |
 | **RGB masks** | A multimatte: the red, green and blue channels become [three masks](/layerwise/masks#nametags). |
 | **Luma mask** | The brightness becomes a [`[LUMA]` mask](/layerwise/masks#luma-masks). |
+| **Crypto** | A Cryptomatte: the mattes you pick become [`#name` masks](/layerwise/cryptomatte). It never becomes a layer. |
 
 ## Add an element
 
@@ -38,29 +39,32 @@ Changes apply when you press **Save**. **Cancel** throws them away, and **Restor
 ## Default element lists
 
 <Tabs>
-  <Tab title="V-Ray (74)">
+  <Tab title="V-Ray (75)">
     **Import all:** LightSelect, MultiMatteElement, MtlID, ZDepth
     **RGB masks:** MultiMatteElement
+    **Crypto:** Cryptomatte
     **Luma mask:** Alpha, ZDepth, ReflectionFilter, RefractionFilter, RawReflectionFilter, RawRefractionFilter
 
-    Alpha, AO, Background, Atmosphere, BumpNormals, DRBucket, Caustics, RGB_color, effectsResult, origRGB, Denoiser, ExtraTex, Glare, Illuminance, LightSelect, MatteShadow, MultiMatteElement, MtlID, MtlReflectGlossiness, MtlReflectHilightGlossiness, MtlReflectIOR, MtlRefractGlossiness, Metalness, Roughness, MtlSelect, NoiseLevel, Normals, ObjectID, ObjectSelect, OptionRE, DiffuseFilter, GlobalIllumination, Lighting, LightingAnalysis, Reflection, Refraction, Shadows, TotalLighting, RawDiffuseFilter, RawGlobalIllumination, RawLighting, RawReflection, RawRefraction, RawShadow, RawTotalLighting, RawReflectionFilter, RawRefractionFilter, ReflectionFilter, RefractionFilter, CoatFilter, RawCoatFilter, CoatReflection, RawCoatReflection, CoatGlossiness, CoatSpecular, SheenFilter, RawSheenFilter, SheenReflection, RawSheenReflection, SheenGlossiness, SheenSpecular, SelfIllumination, Specular, WireColor, ZDepth, RenderID, SampleRate, SamplerInfo, SSS2, Toon, Velocity, UnclampedColor, RenderTime, GaussianSplats
+    Alpha, AO, Background, Atmosphere, BumpNormals, DRBucket, Caustics, RGB_color, effectsResult, origRGB, Denoiser, ExtraTex, Glare, Illuminance, LightSelect, MatteShadow, MultiMatteElement, Cryptomatte, MtlID, MtlReflectGlossiness, MtlReflectHilightGlossiness, MtlReflectIOR, MtlRefractGlossiness, Metalness, Roughness, MtlSelect, NoiseLevel, Normals, ObjectID, ObjectSelect, OptionRE, DiffuseFilter, GlobalIllumination, Lighting, LightingAnalysis, Reflection, Refraction, Shadows, TotalLighting, RawDiffuseFilter, RawGlobalIllumination, RawLighting, RawReflection, RawRefraction, RawShadow, RawTotalLighting, RawReflectionFilter, RawRefractionFilter, ReflectionFilter, RefractionFilter, CoatFilter, RawCoatFilter, CoatReflection, RawCoatReflection, CoatGlossiness, CoatSpecular, SheenFilter, RawSheenFilter, SheenReflection, RawSheenReflection, SheenGlossiness, SheenSpecular, SelfIllumination, Specular, WireColor, ZDepth, RenderID, SampleRate, SamplerInfo, SSS2, Toon, Velocity, UnclampedColor, RenderTime, GaussianSplats
   </Tab>
-  <Tab title="Corona (35)">
+  <Tab title="Corona (36)">
     **Import all:** CGeometry_ZDepth, CMasking_ID, CMasking_Mask, CMasking_WireColor, CShading_LightMix, CShading_LightSelect
     **RGB masks:** CMasking_Mask
+    **Crypto:** CMasking_Cryptomatte
     **Luma mask:** Alpha, CGeometry_ZDepth, CShading_Alpha
 
-    Alpha, Beauty, CESSENTIAL_Direct, CESSENTIAL_Indirect, CESSENTIAL_Reflect, CESSENTIAL_Refract, CESSENTIAL_Translucency, CESSENTIAL_Emission, CESSENTIAL_Volumetrics, CGeometry_NormalsDotProduct, CGeometry_NormalsGeometry, CGeometry_NormalsShading, CGeometry_UvwCoords, CGeometry_WorldPosition, CGeometry_ZDepth, CGeometry_Velocity, CMasking_ID, CMasking_Mask, CMasking_WireColor, CShading_Albedo, CShading_Alpha, CShading_Beauty, CShading_Components, CShading_RawComponent, CShading_Shadows, CShading_SourceColor, CTexmap, CShading_BloomGlare, CShading_LightMix, CShading_LightSelect, CShading_Caustics, CInfo_SamplingFocus, CInfo_TimePerSample, CInfo_RenderStamp, CInfo_NetworkRenderDebugging
+    Alpha, Beauty, CESSENTIAL_Direct, CESSENTIAL_Indirect, CESSENTIAL_Reflect, CESSENTIAL_Refract, CESSENTIAL_Translucency, CESSENTIAL_Emission, CESSENTIAL_Volumetrics, CGeometry_NormalsDotProduct, CGeometry_NormalsGeometry, CGeometry_NormalsShading, CGeometry_UvwCoords, CGeometry_WorldPosition, CGeometry_ZDepth, CGeometry_Velocity, CMasking_ID, CMasking_Mask, CMasking_Cryptomatte, CMasking_WireColor, CShading_Albedo, CShading_Alpha, CShading_Beauty, CShading_Components, CShading_RawComponent, CShading_Shadows, CShading_SourceColor, CTexmap, CShading_BloomGlare, CShading_LightMix, CShading_LightSelect, CShading_Caustics, CInfo_SamplingFocus, CInfo_TimePerSample, CInfo_RenderStamp, CInfo_NetworkRenderDebugging
   </Tab>
-  <Tab title="FStorm (24)">
+  <Tab title="FStorm (25)">
     **Import all:** LightSelect, MaterialIdChannel, Materials, MultiMatte, ZDepth
     **RGB masks:** MultiMatte
+    **Crypto:** CryptoMatte
     **Luma mask:** ZDepth
 
-    AO, Beauty, Coordinates, DirectLighting, Edges, Emission, Environment, Glare, IndirectDiffuse, IndirectReflections, IndirectRefractions, IndirectTranslucence, LightSelect, MaterialIdChannel, Materials, MultiMatte, Normals, Objects, Shadows, SSS, Texture, UVW, Wire, ZDepth
+    AO, Beauty, Coordinates, DirectLighting, Edges, Emission, Environment, Glare, IndirectDiffuse, IndirectReflections, IndirectRefractions, IndirectTranslucence, LightSelect, MaterialIdChannel, Materials, MultiMatte, CryptoMatte, Normals, Objects, Shadows, SSS, Texture, UVW, Wire, ZDepth
   </Tab>
 </Tabs>
 
 <Info>
-Cryptomatte isn't in the lists: it stores object IDs rather than an image, so it can't be used as a layer. Use MultiMatte or CMasking_Mask elements for masks.
+Your own elements and the flags you changed are kept when LayerWise is updated, and new default elements show up on their own. You don't need **Restore defaults** after an update.
 </Info>

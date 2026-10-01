@@ -39,6 +39,14 @@ Baking turns linked smart objects into embedded ones.
 
 *Selected layers.* Makes masked groups from the R, G and B channels of the selected multimatte smart objects, using the [nametags](/layerwise/masks#nametags) in their file names (or their layer names). Existing layers and groups with the mask's name get the mask; otherwise a new group is created. See [Masks](/layerwise/masks).
 
+### Masks from Cryptomatte
+
+*Whole document.* Makes masks from a Cryptomatte on the open document, without updating any renders. Browse the Cryptomatte EXR (and the beauty render too, if the EXR has none), pick mattes in the list or in the image, and press **Make masks**. Layers and groups already named `#name` get new masks, and the other mattes get new groups. See [Cryptomatte](/layerwise/cryptomatte).
+
+<Frame caption="Masks from Cryptomatte: pick mattes, then Make masks">
+  <img src="/images/layerwise/lw_tools_crypto.webp" alt="The Masks from Cryptomatte dialog over the Tools screen, with mattes picked and a Make masks button" />
+</Frame>
+
 ### Refresh merged layer
 
 *Selected layers.* For a "stamp visible" layer with smart filters on top of your stack (for example a merged layer carrying Camera Raw or sharpening): merges everything visible into a new smart object, moves the selected layer's smart filters onto it, and puts it in the old layer's place with the same name, opacity, blend mode and visibility.

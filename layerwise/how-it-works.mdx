@@ -16,7 +16,7 @@ LayerWise knows three render engines: **V-Ray**, **Corona** and **FStorm**. Each
 
 ## Render elements and name matching
 
-A **render element** (also called a pass or AOV) is one component of the image your renderer saves as its own file: Reflection, Lighting, ZDepth, and so on. LayerWise ships with the element names of each engine (74 for V-Ray, 35 for Corona, 24 for FStorm) and you can [add your own](/layerwise/render-elements).
+A **render element** (also called a pass or AOV) is one component of the image your renderer saves as its own file: Reflection, Lighting, ZDepth, and so on. LayerWise ships with the element names of each engine (75 for V-Ray, 36 for Corona, 25 for FStorm) and you can [add your own](/layerwise/render-elements).
 
 LayerWise recognizes a file or a layer by its **name**. If the name contains an element name, it belongs to that element:
 
@@ -44,6 +44,7 @@ Every element has three switches that change how LayerWise treats it:
 | **Import all** | Import every matching file, not just one. | LightSelect, MultiMatteElement, ZDepth, MtlID |
 | **RGB masks** | The file is a multimatte: its red, green and blue channels become three masks. | MultiMatteElement, CMasking_Mask, MultiMatte |
 | **Luma mask** | The file's brightness becomes a mask. | Alpha, ZDepth, ReflectionFilter |
+| **Crypto** | A Cryptomatte: pick objects or materials and get a mask for each. | Cryptomatte, CMasking_Cryptomatte, CryptoMatte |
 
 See [Masks](/layerwise/masks) for how the masks are made and where they go.
 

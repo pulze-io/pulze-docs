@@ -364,7 +364,8 @@
           {
             "group": "Masks",
             "pages": [
-              "layerwise/masks"
+              "layerwise/masks",
+              "layerwise/cryptomatte"
             ]
           },
           {

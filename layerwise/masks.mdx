@@ -5,10 +5,11 @@ description: "How LayerWise turns multimatte and luminance passes into layer mas
 
 Selective adjustments are the core of arch-viz post-production: warm up the wood, darken the glass, lift the plants. LayerWise builds the masks for that from your matte passes, and puts them on groups you can drop adjustment layers into.
 
-There are two kinds of mask source:
+There are three kinds of mask source:
 
 - **Multimatte** elements (*RGB masks*): each of the red, green and blue channels holds one object selection, so one file makes up to **three** masks. Examples: V-Ray MultiMatteElement, Corona CMasking_Mask, FStorm MultiMatte.
 - **Luma mask** elements: the brightness of the whole image is the mask. Examples: Alpha, ZDepth, ReflectionFilter.
+- **Cryptomatte** elements: one ID per object or material, so you pick the masks you want after rendering. See [Cryptomatte](/layerwise/cryptomatte).
 
 Which elements are which is set in [Render elements](/layerwise/render-elements).
 
@@ -64,3 +65,4 @@ You can also name any existing layer or group yourself, for example `#Plants`, a
 | [Create new document](/layerwise/workflows/create-document) with **Extract layer masks** on | Masks are made right after each matte is placed. Groups of the template with matching names get them; missing ones are created. Matte layers are hidden afterwards. |
 | [Update renders](/layerwise/workflows/update-renders) | **Update existing layer masks** regenerates the masks of existing targets; **Create new layer masks** adds groups for new tags. Both run after any resize. |
 | [Extract layer masks](/layerwise/tools#extract-layer-masks) tool | Makes masks from the selected multimatte layers, any time. |
+| [Masks from Cryptomatte](/layerwise/tools#masks-from-cryptomatte) tool | Makes masks from the mattes you pick in a Cryptomatte EXR, any time. |

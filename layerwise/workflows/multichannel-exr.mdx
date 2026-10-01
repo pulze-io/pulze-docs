@@ -28,7 +28,8 @@ The layers are only extracted when you start the job. You'll see *Splitting cam0
 | A layer with a single channel | That channel copied into grey |
 
 - Only the beauty pass keeps its alpha channel. Every other element is written without alpha.
-- **Cryptomatte** layers and Corona **variance** (`Sqr`) layers are skipped.
+- **Cryptomatte** layers don't become layers. They feed [Cryptomatte masks](/layerwise/cryptomatte) instead.
+- Corona **variance** (`Sqr`) layers are skipped.
 
 ## Where the split files go
 
