@@ -3,7 +3,7 @@ title: "AI Assistant"
 description: "Let Claude or another AI app use LayerWise and Photoshop for you, through a local MCP bridge."
 ---
 
-LayerWise can let an AI app on your computer, such as **Claude Desktop** or **Claude Code**, drive Photoshop for you. You ask in plain words ("Swap tonight's renders into this PSD and keep my masks") and the assistant runs the same LayerWise jobs you'd run from the panel, plus Photoshop actions of its own.
+LayerWise lets an AI app on your computer, such as **Claude Desktop** or **Claude Code**, drive Photoshop for you. You ask in plain words ("Swap tonight's renders into this PSD and keep my masks") and the assistant runs the same LayerWise jobs you'd run from the panel, plus Photoshop actions of its own.
 
 It works through **MCP** (Model Context Protocol), the standard way AI apps connect to tools. The bridge is **off by default** and only runs on your computer.
 
@@ -13,7 +13,7 @@ It works through **MCP** (Model Context Protocol), the standard way AI apps conn
 
 ## Set it up
 
-Open the menu → **AI assistant**. The page walks you through three steps, and each one ticks itself off when it's done.
+Open the menu → **AI assistant**. The page walks you through three steps, and each one ticks itself off when done.
 
 <Frame caption="The AI assistant page: three steps that tick themselves">
   <img src="/images/layerwise/lw_ai_setup.webp" alt="The AI assistant setup page with its three steps" />
@@ -72,7 +72,7 @@ When you ask for an AI edit such as adding a person or removing a lamp, the assi
 3. asks that service for the edit,
 4. places the result back into Photoshop as a **new layer**, fitted exactly over the crop.
 
-Working on a crop keeps full resolution where the change is, and leaves the rest of the render untouched. For whole-image changes it can send the full image.
+Working on a crop keeps full resolution where the change is and leaves the rest of the render untouched. For whole-image changes, it can send the full image.
 
 <Frame caption="An image AI edit: crop out, edit, place back as a layer">
   <img src="/images/layerwise/lw_ai_dream_roundtrip.webp" alt="The crop, edit and place-back steps of an image AI edit" />
