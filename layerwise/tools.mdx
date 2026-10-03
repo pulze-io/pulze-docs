@@ -1,0 +1,70 @@
+---
+title: "Tools"
+description: "One-click macros for templates, layer transforms, masks, merged layers and batch conversion."
+---
+
+**Tools** handles the small post-production jobs that eat your time. Open it from the shortcut on Home. Each tool shows whether it works on the **whole document** or the **selected layers**, and confirms when it's done.
+
+<Frame caption="The Tools screen">
+  <img src="/images/layerwise/lw_tools.webp" alt="The Tools screen with its setup tools and document tools" />
+</Frame>
+
+Every tool that changes the document is a single undo step in the History panel.
+
+## Set up
+
+### Save document as template
+
+Turns the group structure of the open document into a reusable template. See [Create a template from a document](/layerwise/templates#create-a-template-from-a-document).
+
+### Manage render elements
+
+Opens the [Render elements](/layerwise/render-elements) list.
+
+## On the open document
+
+### Reset layer transforms
+
+*Whole document.* Bakes every smart object at 100% scale without changing how it looks. Run it after [Update renders](/layerwise/workflows/update-renders) fitted a larger render into an old footprint and you want the smart objects to read 100% again.
+
+<Warning>
+Baking turns linked smart objects into embedded ones.
+</Warning>
+
+### Collapse groups
+
+*Whole document.* Folds every group in the Layers panel.
+
+### Extract layer masks
+
+*Selected layers.* Makes masked groups from the R, G and B channels of the selected multimatte smart objects, using the [nametags](/layerwise/masks#nametags) in their file names (or their layer names). Existing layers and groups with the mask's name get the mask; otherwise a new group is created. See [Masks](/layerwise/masks).
+
+### Masks from Cryptomatte
+
+*Whole document.* Makes masks from a Cryptomatte on the open document, without updating any renders. Browse the Cryptomatte EXR (and the beauty render too, if the EXR has none), pick mattes in the list or in the image, and press **Make masks**. Layers and groups already named `#name` get new masks, and the other mattes get new groups. See [Cryptomatte](/layerwise/cryptomatte).
+
+<Frame caption="Masks from Cryptomatte: pick mattes, then Make masks">
+  <img src="/images/layerwise/lw_tools_crypto.webp" alt="The Masks from Cryptomatte dialog over the Tools screen, with mattes picked and a Make masks button" />
+</Frame>
+
+### Refresh merged layer
+
+*Selected layers.* Rebuilds a "stamp visible" layer with smart filters on top of your stack (for example a merged layer carrying Camera Raw or sharpening). It merges everything visible into a new smart object, moves the selected layer's smart filters onto it, and puts it in the old layer's place with the same name, opacity, blend mode and visibility.
+
+Run it after you change layers below, so your finishing filters apply to the fresh result. The selected layer must have smart filters.
+
+<Frame caption="Refresh merged layer: a fresh stamp of the image with the same smart filters">
+  <img src="/images/layerwise/lw_tools_refresh_merged.webp" alt="The Layers panel before and after refreshing a merged layer with smart filters" />
+</Frame>
+
+### Convert to smart objects
+
+*Whole document.* Turns every render element pixel layer (a layer whose name contains an element name) into a smart object, keeping its opacity, visibility and blend mode. Use it on PSDs where the renders were placed as normal layers, so [Update renders](/layerwise/workflows/update-renders) can work with them.
+
+### Rasterize render elements
+
+*Whole document.* Rasterizes every render element smart object, keeping its look, opacity, visibility and blend mode. Handy before you hand a PSD to someone who doesn't need live smart objects.
+
+<Warning>
+Rasterized layers can no longer be updated by LayerWise. Keep a copy of the smart object version.
+</Warning>

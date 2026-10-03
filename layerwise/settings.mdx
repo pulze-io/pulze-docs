@@ -1,0 +1,54 @@
+---
+title: "Settings"
+description: "Layer, mask, AI assistant and account settings, plus About and update checks."
+---
+
+Open **Settings** from the menu. Changes are saved as you make them.
+
+<Frame caption="The Settings screen">
+  <img src="/images/layerwise/lw_settings.webp" alt="The LayerWise Settings screen" />
+</Frame>
+
+## Layers
+
+<ResponseField name="Layer transforms in new documents" type="Reset to 100% | Leave as placed" default="Reset to 100%">
+  With **Reset to 100%**, [Create new document](/layerwise/workflows/create-document) bakes every placed smart object at the end so its scale reads 100%. The image looks the same. With **Leave as placed**, smart objects keep the scale they were placed at.
+</ResponseField>
+
+<ResponseField name="Created layers are" type="Smart objects | Linked smart objects" default="Smart objects">
+  **Smart objects** store the render inside the PSD. **Linked smart objects** link to the render file on disk. The PSD stays small, but the files must stay where they are.
+
+  Baking embeds linked smart objects, so new documents still get embedded ones while *Reset to 100%* is on. The screen reminds you of this.
+</ResponseField>
+
+<ResponseField name="Name created layers after the" type="File name | Element name" default="File name">
+  **File name** keeps Photoshop's default name, for example `cam01.Reflection.png`. **Element name** uses the element's name, for example `Reflection`. Multimatte and luma layers always keep their file name, since it holds the [nametags](/layerwise/masks#nametags).
+</ResponseField>
+
+## Masks
+
+<ResponseField name="Multimatte channels to extract" type="R, G, B" default="All on">
+  Which multimatte channels become masks. Turn off any you never use. The other channels keep their tags.
+</ResponseField>
+
+<ResponseField name="Nametag wildcard" type="# | $ | & | @ | %" default="#">
+  The character that starts a [nametag](/layerwise/masks#nametags) in multimatte file names and names the mask targets (`#Wood`, `$Wood`…). The example below the picker shows the result.
+</ResponseField>
+
+**Manage render elements** opens the [Render elements](/layerwise/render-elements) list.
+
+## AI assistant (MCP)
+
+Shows whether the AI assistant bridge is **Off**, **On, waiting for your AI app**, or **Connected**. **Set up** opens the [AI assistant](/layerwise/ai-assistant) page.
+
+## Account
+
+Shows the Pulze account you're signed in with, and **Sign out**.
+
+## About and updates
+
+Shows the LayerWise version, and the Photoshop and UXP versions it's running in.
+
+- **Check for updates** checks right away for a newer version. If there is one, the button becomes **Update to *version*** and shows what's new.
+- Settings, templates and element lists are stored **per Photoshop version**. [Export your templates](/layerwise/templates#move-templates-to-another-computer-or-photoshop-version) to move them to a newer Photoshop.
+- The End-User License Agreement, and the support address: [support@pulze.io](mailto:support@pulze.io).

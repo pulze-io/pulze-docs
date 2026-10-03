@@ -1,0 +1,46 @@
+---
+title: "Changelog"
+description: "Release notes and version history for LayerWise."
+mode: "wide"
+rss: true
+---
+
+<Update label="2.0.5" description="October 1, 2026">
+**New Features:**
+- Cryptomatte masks: pick objects and materials from a V-Ray, Corona or FStorm Cryptomatte, in a list or straight in the image, and get a masked `#name` group for each, in new documents and when updating renders
+- Tools → Masks from Cryptomatte for the open document
+- Cryptomatte elements in the default element lists, and a Cryptomatte slot in the built-in templates
+- Create new document can save the new PSD or PSB next to the renders
+- The AI assistant can build a document from a render folder you name and save it as PSB or PSD
+- New default render elements now appear after an update, while your own elements and flags are kept
+- The panel moved to **Plugins → Pulze → LayerWise**
+
+**Fixes:**
+- Hidden layers (Alpha, MultiMatte, ZDepth…) are now fitted too when updating to renders of another size, so their masks line up
+- Placed renders land on the canvas even when the view is zoomed or scrolled
+- Two LayerWise panels with the AI assistant on no longer take the bridge from each other
+</Update>
+
+<Update label="2.0.2" description="September 2026">
+**LayerWise is here.** The successor of Pulze Post Manager, rebuilt from the ground up as a modern Photoshop plugin.
+
+**New Features:**
+- New name, new look, and a panel that adapts from a narrow dock to a full-width layout
+- Create new document and Update renders, with a plan you review before anything changes
+- Non-destructive fitting of new renders into old footprints: full resolution, linked files, smart filters and styles are kept
+- Built-in multichannel EXR splitting, on Windows and macOS
+- Template editor with drag and drop, live preview and undo; Duplicate and edit for any template
+- A default template per engine
+- Cloud templates, shared with Post Manager
+- AI assistant bridge for Claude Desktop, Claude Code and other MCP apps
+- Update notifications with release notes
+- Newer V-Ray, Corona and FStorm render elements (V-Ray coat and sheen passes, Corona caustics and info passes, FStorm environment and LightSelect)
+- Sign-in with your Pulze account; works offline afterwards
+- Supports Photoshop 2025 (26.0) and newer
+
+**Fixes compared to Post Manager:**
+- Mask updates read nametags from the new renders
+- *Update existing* and *Create new* mask options do exactly what they say
+- Turning off a multimatte channel no longer shifts the other tags
+- Ruler units, mask visibility and the clipboard are no longer changed as a side effect
+</Update>

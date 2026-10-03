@@ -1,0 +1,105 @@
+---
+title: "LayerWise Documentation"
+sidebarTitle: "Introduction"
+description: "LayerWise is a free Photoshop plugin by Pulze that turns V-Ray, Corona and FStorm render elements into organized, masked PSDs, and keeps them up to date when you re-render."
+"og:title": "LayerWise Documentation - Render Elements to Photoshop"
+"og:description": "Build layered, masked PSDs from V-Ray, Corona and FStorm render elements, and swap in new renders without losing your retouching."
+"twitter:title": "LayerWise Documentation - Render Elements to Photoshop"
+keywords: ['LayerWise', 'Pulze LayerWise', 'Photoshop render elements', 'V-Ray render elements Photoshop', 'Corona render elements Photoshop', 'FStorm Photoshop', 'arch-viz post-production', 'multimatte masks Photoshop', 'Post Manager']
+mode: "wide"
+---
+
+LayerWise is a Photoshop plugin for arch-viz post-production. Point it at your render elements and it builds the PSD for you: passes sorted into groups, set to the right blend modes, with masks already cut from your multimatte and alpha passes.
+
+When the client asks for changes and you re-render, LayerWise swaps the new files into the same PSD. Your adjustment layers, masks, smart filters and layer styles stay put.
+
+## What it's good for
+
+- **Starting a post-production PSD in seconds.** Pick your render output folder and a template, and LayerWise builds the whole layer structure. No more dragging in 20 passes by hand and setting each one to Linear Dodge.
+- **Re-renders without redoing your work.** Update a finished PSD with tonight's renders. Each render element layer gets its new file, and everything you built on top survives.
+- **Multichannel EXRs, as they are.** Rendered everything into one EXR? LayerWise splits it into passes for you, no extra software needed.
+- **Masks from your mattes.** MultiMatte, CMasking_Mask and luminance passes such as Alpha or ZDepth become layer masks on groups, ready for selective adjustments. With a Cryptomatte, pick any object or material after rendering to get its mask.
+- **Region renders.** Merge a re-rendered region back into the full image, cropped by its alpha.
+- **Your studio's structure, every time.** Save your group structure as a template and share it with your team, or keep it in the cloud.
+- **Tedious fixes in one click.** Reset layer transforms, collapse groups, batch-convert to smart objects and more.
+- **AI assistants.** If you want, let Claude or another AI app drive Photoshop through LayerWise.
+
+LayerWise replaces **Pulze Post Manager**. Coming from Post Manager? See [Migrating from Post Manager](/layerwise/migrating-from-post-manager).
+
+## Start here
+
+<CardGroup cols={3}>
+
+<Card title="How it works" icon="lightbulb" href="/layerwise/how-it-works">
+  The ideas behind LayerWise, in five minutes.
+</Card>
+
+<Card title="Installation" icon="download" href="/layerwise/installation">
+  Install the plugin and sign in.
+</Card>
+
+<Card title="The interface" icon="table-columns" href="/layerwise/interface">
+  A tour of the panel.
+</Card>
+
+</CardGroup>
+
+## Workflows
+
+<CardGroup cols={2}>
+
+<Card title="Create new document" icon="file-circle-plus" href="/layerwise/workflows/create-document">
+  Build a PSD from a template and your render output.
+</Card>
+
+<Card title="Update renders" icon="arrows-rotate" href="/layerwise/workflows/update-renders">
+  Swap new renders into an existing PSD.
+</Card>
+
+<Card title="Merge region renders" icon="crop-simple" href="/layerwise/workflows/merge-regions">
+  Blend a re-rendered region into the full image.
+</Card>
+
+<Card title="Multichannel EXR" icon="layer-group" href="/layerwise/workflows/multichannel-exr">
+  Use a single EXR that holds all your passes.
+</Card>
+
+</CardGroup>
+
+## Reference
+
+<CardGroup cols={4}>
+
+<Card title="Masks" icon="mask" href="/layerwise/masks">
+  Multimatte, luma masks and nametags.
+</Card>
+
+<Card title="Templates" icon="sitemap" href="/layerwise/templates">
+  Built-in, your own and cloud templates.
+</Card>
+
+<Card title="Tools" icon="wrench" href="/layerwise/tools">
+  One-click macros.
+</Card>
+
+<Card title="AI Assistant" icon="robot" href="/layerwise/ai-assistant">
+  Let Claude drive Photoshop.
+</Card>
+
+<Card title="Render Elements" icon="list-check" href="/layerwise/render-elements">
+  The element names LayerWise recognizes.
+</Card>
+
+<Card title="Settings" icon="gear" href="/layerwise/settings">
+  Layer, mask and account options.
+</Card>
+
+<Card title="FAQ" icon="circle-question" href="/layerwise/faq">
+  Common questions and fixes.
+</Card>
+
+<Card title="Changelog" icon="clock-rotate-left" href="/layerwise/changelog">
+  Release notes.
+</Card>
+
+</CardGroup>
