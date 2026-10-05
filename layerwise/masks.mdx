@@ -3,19 +3,19 @@ title: "Masks"
 description: "How LayerWise turns multimatte and luminance passes into layer masks, and how nametags name them."
 ---
 
-Selective adjustments are the core of arch-viz post-production: warm up the wood, darken the glass, lift the plants. LayerWise builds the masks for that from your matte passes, and puts them on groups you can drop adjustment layers into.
+LayerWise builds masks from your matte passes and puts them on groups you can drop adjustment layers into. Warm up the wood, darken the glass, lift the plants, each in its own group.
 
-There are three kinds of mask source:
+LayerWise reads three kinds of mask source:
 
 - **Multimatte** elements (*RGB masks*): each of the red, green and blue channels holds one object selection, so one file makes up to **three** masks. Examples: V-Ray MultiMatteElement, Corona CMasking_Mask, FStorm MultiMatte.
 - **Luma mask** elements: the brightness of the whole image is the mask. Examples: Alpha, ZDepth, ReflectionFilter.
 - **Cryptomatte** elements: one ID per object or material, so you pick the masks you want after rendering. See [Cryptomatte](/layerwise/cryptomatte).
 
-Which elements are which is set in [Render elements](/layerwise/render-elements).
+You set which elements are which in [Render elements](/layerwise/render-elements).
 
 ## Nametags
 
-A multimatte's three channels need names. You give them in the file name with **nametags**: a wildcard character (`#` by default) followed by a name, in the part of the file name after a dot.
+You name a multimatte's three channels in the file name with **nametags**: a wildcard character (`#` by default) followed by a name, in the part of the file name after a dot.
 
 ```
 cam01.MultiMatteElement.#Wood#Glass#Stone.png
@@ -28,7 +28,7 @@ The first tag names the red channel, the second the green, the third the blue. T
   <img src="/images/layerwise/lw_masks_multimatte.webp" alt="A multimatte with red leather furniture, green windows and blue brick, split into the masks #Leather, #Glass and #Brick" />
 </Frame>
 
-In most renderers you set this by naming the multimatte render element itself, for example naming the V-Ray MultiMatte element `MultiMatteElement.#Wood#Glass#Stone`.
+In most renderers you do this by naming the multimatte render element itself, for example naming the V-Ray MultiMatte element `MultiMatteElement.#Wood#Glass#Stone`.
 
 - **Missing tags** get a default name from the file name and the channel, such as `MultiMatteElement_R`. Default names have no wildcard.
 - **Fewer channels:** you can turn off the red, green or blue channel in [Settings](/layerwise/settings#masks). The other channels keep their tags (turning off green doesn't move the blue tag to green).
@@ -40,13 +40,13 @@ A luma mask element makes a single mask named `[LUMA]` followed by the element n
 
 ## Where the masks go
 
-Each mask has a name, such as `#Wood` or `[LUMA]Alpha`. LayerWise then:
+For each mask (`#Wood`, `[LUMA]Alpha` and so on), LayerWise:
 
 1. **Puts it on every layer or group with exactly that name**, anywhere in the document. Existing masks on those layers are replaced.
 2. **Creates a new group with that name** if none exists, at the top of the group the matte layer is in, with the mask on it.
 3. **Saves it as an alpha channel** with the same name in the Channels panel, so you can load it as a selection any time.
 
-A mask that would be completely empty hides everything, so an object that's no longer in the shot doesn't leave a stray selection.
+A completely empty mask hides everything, so an object that's no longer in the shot doesn't leave a stray selection.
 
 <Frame caption="Masked groups hold your adjustments; the same masks are saved as channels">
   <img src="/images/layerwise/lw_masks_targets.webp" alt="Masked groups in the Layers panel and matching alpha channels in the Channels panel" />
@@ -56,7 +56,7 @@ A mask that would be completely empty hides everything, so an object that's no l
 Put your selective adjustments **inside** the `#Wood`-style groups. Next time you [update the renders](/layerwise/workflows/update-renders), the group masks are regenerated from the new multimatte, and your adjustments follow the objects even if the camera or the model changed.
 </Tip>
 
-You can also name any existing layer or group yourself, for example `#Plants`, and render a multimatte with a `#Plants` tag. LayerWise will find it and mask it.
+You can also name an existing layer or group yourself, for example `#Plants`, and render a multimatte with a `#Plants` tag. LayerWise finds it and masks it.
 
 ## When masks are made
 
