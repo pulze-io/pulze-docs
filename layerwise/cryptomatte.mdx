@@ -3,7 +3,7 @@ title: "Cryptomatte"
 description: "Pick objects and materials from a Cryptomatte render and turn them into masked groups, in new documents and when updating renders."
 ---
 
-**Cryptomatte** is a render element that stores an ID for every object or material in the frame. You don't have to plan the masks before you render: pick any of them afterwards, and LayerWise turns each one into a mask.
+With **Cryptomatte** you don't have to plan masks before you render. Pick any object or material afterwards, and LayerWise turns each one into a mask.
 
 LayerWise reads Cryptomatte from an EXR, either as its own file or as layers inside a [multichannel EXR](/layerwise/workflows/multichannel-exr). Each matte you pick becomes a mask on a group named after it, such as `#Glass` or `#Wood`. These groups work like the [multimatte masks](/layerwise/masks#where-the-masks-go): put your adjustments inside them, and they're kept up to date when you update the renders.
 
@@ -15,7 +15,7 @@ LayerWise reads Cryptomatte from an EXR, either as its own file or as layers ins
 | Corona | CMasking_Cryptomatte | `CMasking_Cryptomatte` |
 | FStorm | CryptoMatte (FStorm 1.5.4G and newer) | `CryptoMatte` |
 
-These elements are in the default [render element lists](/layerwise/render-elements) with the **Crypto** flag. A Cryptomatte element never becomes a layer in your document. It only feeds the masks.
+These elements are in the default [render element lists](/layerwise/render-elements) with the **Crypto** flag. A Cryptomatte element never becomes a layer in your document; it only feeds the masks.
 
 <Note>
 Corona writes a correct Cryptomatte only to `.cxr` files, which are EXRs inside. Rename the file to `.exr` before picking it in LayerWise.
@@ -30,7 +30,7 @@ When your renders include a Cryptomatte, both workflows show a **Cryptomatte mas
 </Frame>
 
 - Tick the mattes you want. **Filter mattes** narrows the list, **Select all** and **Clear** pick or drop everything shown, and the chips below show what's picked.
-- **Pick in image** shows the render with the mattes on top. Point at the image to find a matte, then click it to pick or unpick it. LayerWise shows the beauty pass when there is one (from the EXR itself, or your RGB_color or Beauty render), and the mattes in false colour otherwise.
+- **Pick in image** shows the render with the mattes on top. Point at an object to find its matte, and click to pick or unpick it. LayerWise shows the beauty pass when there is one (from the EXR itself, or your RGB_color or Beauty render), and the mattes in false colour otherwise.
 
 <Frame caption="Pick in image: point at an object to find its matte, click to pick it">
   <img src="/images/layerwise/lw_crypto_view.webp" alt="The Pick in image view over a Cryptomatte, with the mattes shown as coloured areas" />
@@ -44,7 +44,7 @@ The groups go into the template's Cryptomatte slot, at the top of that slot's gr
 
 ## When updating renders
 
-In [Update renders](/layerwise/workflows/update-renders), mattes whose `#name` group or layer already exists in the document are picked for you, marked **in document**, and their masks are regenerated from the new render. Tick more mattes to add them: each one gets a new group next to the existing masks.
+In [Update renders](/layerwise/workflows/update-renders), mattes whose `#name` group or layer already exists in the document are picked for you, marked **in document**, and their masks are regenerated from the new render. Tick more mattes to add them; each one gets a new group next to the existing masks.
 
 <Frame caption="When updating, mattes already in the document are picked and updated">
   <img src="/images/layerwise/lw_crypto_replace.webp" alt="The Cryptomatte masks section in Update renders with Metal and Wood marked in document and Glass newly added" />
@@ -56,9 +56,9 @@ In [Update renders](/layerwise/workflows/update-renders), mattes whose `#name` g
 
 ## Files that can't be read
 
-If LayerWise can't read a Cryptomatte, the picker says why instead of listing mattes:
+If LayerWise can't read a Cryptomatte, the picker tells you why instead of listing mattes:
 
-- **The manifest is in a sidecar file.** The names of the mattes are stored in a separate file next to the EXR. Set your renderer to embed the manifest in the EXR.
+- **The manifest is in a sidecar file.** The matte names are in a separate file next to the EXR. Set your renderer to embed the manifest in the EXR.
 - **Cryptomatte stored as half float.** The IDs need full 32-bit float. Save the Cryptomatte as full float.
 - **No manifest** or **no Cryptomatte channels.** The file isn't a complete Cryptomatte.
 - A multichannel EXR that **can't be split** (multi-part, tiled, deep, or B44/DWA compression). See [Multichannel EXR](/layerwise/workflows/multichannel-exr#supported-exrs).

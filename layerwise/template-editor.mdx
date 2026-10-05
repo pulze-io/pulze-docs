@@ -3,7 +3,7 @@ title: "Template Editor"
 description: "Build and change templates visually: groups, element slots, label colours, blend modes and opacity, with a live preview."
 ---
 
-The template editor lets you shape a template the way you'd shape the Layers panel: add groups, drop render elements into them, and set each item's label colour, blend mode, opacity and visibility.
+In the template editor you shape a template the way you'd shape the Layers panel: add groups, drop render elements into them, and set each item's label colour, blend mode, opacity and visibility.
 
 Open it from [Templates](/layerwise/templates):
 
@@ -25,20 +25,20 @@ At the top: the template's **name** and the **bit depth of new documents** (8, 1
 
 ## Groups and elements
 
-**Add a group** and name it. For each group you set:
+**Add a group** and name it. Each group has:
 
 - **Group name.** Name a group like a mask (`#Wood`, `[LUMA]Alpha`) to make it a [mask target](/layerwise/masks#where-the-masks-go). It's marked with a *Mask target* icon.
-- **Label colour.** The colour of the group in Photoshop's Layers panel.
-- **Blend mode.** Photoshop's blend modes, including *Pass Through* for groups.
+- **Label colour.** Its colour in Photoshop's Layers panel.
+- **Blend mode.** Any Photoshop blend mode, including *Pass Through*.
 - **Opacity** and **visibility** (the eye).
 
-**Add render elements** by dragging chips from the palette into the stack, or click a chip to add it at the selected position. Filter the palette with its search field; elements already used are ticked. Each element slot has its own blend mode, opacity and visibility, for example *Linear Dodge (Add)* for light passes.
+**Add render elements** by dragging chips from the palette into the stack, or click a chip to add it at the selected position. The search field filters the palette, and elements already in use are ticked. Each element slot has its own blend mode, opacity and visibility, for example *Linear Dodge (Add)* for light passes.
 
-An element that isn't in the engine's list is marked **Not in the element list**. It still works in the template, but LayerWise won't recognize files for it until you [add it](/layerwise/render-elements).
+Elements missing from the engine's list are marked **Not in the element list**. They still work in the template, but LayerWise won't recognize their files until you [add them](/layerwise/render-elements).
 
 ## Arranging
 
-- **Drag** rows to move them. Dropping on the top part of a group puts the item above it, the middle puts it inside, the bottom (of a collapsed group) puts it below.
+- **Drag** rows to move them. Drop on the top part of a group to put the item above it, on the middle to put it inside, or on the bottom (of a collapsed group) to put it below.
 - Or use the buttons: **Move up**, **Move down**, **Move into the group above**, **Move out of this group**, **Duplicate** and **Delete**.
 - Collapse and expand groups with the chevron.
 
@@ -59,7 +59,7 @@ An element that isn't in the engine's list is marked **Not in the element list**
 
 ## Save
 
-Press **Save template**. LayerWise warns you if the template uses elements that aren't in the engine's list. If you leave with unsaved changes, it asks first.
+Press **Save template**. LayerWise warns you if the template uses elements that aren't in the engine's list. If you try to leave with unsaved changes, it asks first.
 
 ## Duplicate a template
 
