@@ -5,6 +5,36 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="2.0.17-beta" description="October 6, 2026">
+RenderFlow 2.0.17 adds Perforce sync for Unreal Engine, SketchUp, Rhino and Autograph, custom tabs and a view of which machines can render a step, along with many fixes.
+
+**Updates:**
+- New SketchUp and Rhino submitters, rendered with V-Ray Standalone
+- New Autograph job type
+- New Perforce sync for Unreal Engine projects
+- Unreal Engine projects are cached on each machine between jobs
+- New **Who can render**: see which machines can take a job, and why not
+- A step no machine can render waits with its reason instead of failing
+- New custom views for Jobs and Machines, named tabs with their own filters and sorting, per user
+- New **Open in…**: open a job's outputs in RV, mrv2, DJV or Chaos Player
+- New **Render on…**: rerun tasks on the machines you pick
+- Groups can hide pools from their members
+- Maya pre- and post-render scripts
+- Blender job can override the render engine and Cycles device
+- The frame gallery supports more renderers
+- Logs load as you scroll, and Save writes the whole log
+- Smoother farm view navigation
+- Plugins can read an earlier step's output and use mapped paths
+- New SDK examples
+
+**Fixes:**
+- Fixed Blender GPU renders falling back to the CPU
+- Fixed missing outputs for Blender 5, Cinema 4D, Maya, Unreal Engine and Arnold
+- Fixed the app staying on the error screen after the repository came back
+- Fixed selected rows being hard to see in light mode
+- Various stability improvements
+</Update>
+
 <Update label="2.0.16-beta" description="September 30, 2026">
 RenderFlow 2.0.16 adds a ComfyUI job type, easier submitter installs and important fixes.
 
