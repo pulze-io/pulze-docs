@@ -447,15 +447,14 @@ curl -X POST "$RF/webhooks" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
   }'
 ```
 
-**One job, one message, one person: use a notification at submit time instead.** It is stored on the job and disappears with it, which is exactly right for "tell the lighting lead when this one is done".
+**One job, one message, one person: use a notification at submit time instead.** It is stored on the job and disappears with it, which is exactly right for "tell the lighting lead when this one is done". A recipe does not take `notifications`, so send a step tree, read back as in [Build a multi-step job by reading one back](#build-a-multi-step-job-by-reading-one-back):
 
 ```python
+template = farm.jobs.get_job(reference_job_id).to_dict()
+
 farm.jobs.create_job(body={
-    "type": "blender.render",
     "name": "Hero 010 lighting v014",
-    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
-    "host": {"id": "blender", "version": "4.5"},
-    "frame": "1-240",
+    "steps": template["steps"],
     "notifications": [
         {"channel": "slack", "type": "job-completed", "value": slack_channel_id, "label": "#lighting"}
     ]

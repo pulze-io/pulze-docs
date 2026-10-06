@@ -207,12 +207,19 @@
             "pages": [
               "renderflow/v2/getting-started/quick-start",
               "renderflow/v2/getting-started/requirements",
+              "renderflow/v2/getting-started/supported-apps",
               "renderflow/v2/getting-started/installation",
               "renderflow/v2/getting-started/server-and-nodes",
               "renderflow/v2/getting-started/silent-deploy",
               "renderflow/v2/getting-started/run-as-a-service",
               "renderflow/v2/getting-started/offline-licensing",
               "renderflow/v2/getting-started/migrating"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "renderflow/v2/guides/unreal-and-perforce"
             ]
           },
           {

@@ -31,7 +31,7 @@ claude mcp add --transport http renderflow http://10.11.30.40:44442/api/v1/mcp \
 {
   "transport": "streamable-http",
   "url": "http://10.11.30.40:44442/api/v1/mcp",
-  "headers": { "Authorization": "Bearer rf_live_..." }
+  "headers": { "Authorization": "Bearer rf_a1b2c3..." }
 }
 ```
 
@@ -58,7 +58,7 @@ So a connector needs something in between that holds the key. `mcp-remote` is th
 ```
 
 ```text C:/Users/you/.renderflow-mcp-headers.txt
-Authorization: Bearer rf_live_...
+Authorization: Bearer rf_a1b2c3...
 ```
 
 The header file rather than `--header` for two reasons: a key on a command line is readable by anyone who can list processes, and Claude Desktop on Windows does not escape spaces inside `args`, which mangles a header passed that way.
@@ -77,12 +77,12 @@ In the order a model should consider them:
 | `find_tasks` | The individual units of work, one per frame or work-list chunk. `status: "failed"` is the usual question |
 | `get_task_log` | What one task's process actually printed. The renderer's own output, tail first |
 | `find_nodes` | The machines and what each is doing. Hardware, installed software and benchmarks only on request, because they are large |
-| `find_errors` | What the farm has recorded, newest first. The farm-wide view, as against one process's output |
+| `find_errors` | What the farm has recorded, newest first. The farm-wide view, as against one process's output. Filters by job, machine, task, level or tag, and folds repeated identical errors into one row with a count |
 | `list_schedule` | What runs unattended, when it next fires, and how the last run went |
 | `submit_job` | A render or a script. `type` picks the application, `file` is the scene |
 | `control_jobs` | `start`, `stop`, `reset`, `finish`, `archive`, `restore`, over one job or many |
-| `update_jobs` | Priority, pool, name. Settings, without touching what has rendered |
-| `control_tasks` | Put specific tasks back in the queue. Re-render a handful of frames without resetting the job |
+| `update_jobs` | Priority, pool, name and tags. Settings, without touching what has rendered |
+| `control_tasks` | Put specific tasks back in the queue, or park them with `status: "suspended"`. Re-render a handful of frames without resetting the job, and add `release_nodes` to free the machines they were on |
 | `control_nodes` | `resume`, `suspend`, `finish`, `reserve`, or move machines to a pool |
 | `control_schedule` | `run` an event now, or `enable` and `disable` it, leaving the definition intact |
 
@@ -90,7 +90,7 @@ In the order a model should consider them:
 **No tool can delete anything, and that is permanent.** No job, no machine, no archived job.
 </Warning>
 
-Two verbs are worth knowing before you ask for them, because they lose work: `control_jobs` with `reset` puts every task back to pending, and `control_nodes` with `suspend` kills the task a machine is on. `finish` is the polite one, on both: a machine that finishes stops after the task it is holding.
+Three verbs are worth knowing before you ask for them, because they lose work: `control_jobs` with `reset` puts every task back to pending, `control_jobs` with `finish` marks the job complete and drops the frames it has not rendered, and `control_nodes` with `suspend` kills the task a machine is on. On a machine, `finish` is the one that loses nothing: the machine stops after the task it is holding.
 
 ## Worth trying
 
@@ -103,7 +103,7 @@ It goes `find_jobs` for the id, `get_job` for the steps and the errors, `find_ta
 </Accordion>
 
 <Accordion title="Which machines have failed more than once today, and what did they say?">
-`find_errors` grouped by machine, then the logs. This is the question the UI answers least well, because it is a join.
+`find_errors` for the recent errors, `find_errors` again with each suspect machine's `node_id`, then the logs. The tool filters rather than groups, so the model does the counting, and that join is the question the UI answers least well.
 </Accordion>
 
 <Accordion title="Requeue every failed frame in the overnight pool, but leave the jobs that failed at submission alone.">

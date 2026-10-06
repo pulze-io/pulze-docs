@@ -79,7 +79,7 @@ const job = await rf.jobs.createJob({
 
 That is a **recipe**: the flat per-application form, which the service expands into a step. `type`, `file` and `host` are required on every one of them, and the API reference lists the fields each type takes.
 
-`{ wait: true }` blocks until the job is built and answers 201. Without it the call answers 202 with a job that is still being prepared, A job arrives as `pending` by default and will be picked up; pass `status: "suspended"` to have it wait for an operator.
+`{ wait: true }` blocks until the job is built and answers 201. Without it the call answers 202 with a job that is still being prepared. A job arrives as `pending` by default and will be picked up; pass `status: "suspended"` to have it wait for an operator.
 
 <Note>
 **A job with several steps is the same call with a `steps` array instead of the flat fields**, and each step's configuration is its `props`, the tagged union the submitter fills in. Those are worth reading rather than guessing: build the chain once in the submitter, read it back with `rf.jobs.getJob(id)`, and send that `steps` array with your own values. `JobCreate` and `JobStepCreate` in the [API reference](/renderflow/v2/api-reference/introduction) are the full schema.
@@ -95,7 +95,7 @@ const result = await rf.jobs.openSubmitter(recipe);
 if (!result.opened) console.log(result.reason);
 ```
 
-The artist gets the full submitter, can change anything in it, and presses **Submit** to create the job. The RenderFlow app has to be running on this machine: when it is not, `opened` is `false` and `reason` says why. When several people are signed in to one machine, pass `{ user: "<name>" }` as the second argument to open it on that person's desktop.
+The artist gets the full submitter, can change anything in it, and presses **Submit** to create the job. The RenderFlow app has to be running on this machine: when it is not, `opened` is `false` and `reason` says why. When several people are signed in to one machine, pass `{ user: "<name>" }` as the second argument to open it on that person's desktop. When the scene lists several render items, the submitter opens one job per item by default; add `batch: false` to the same object to open a single job.
 
 ## Waiting for a job
 
@@ -113,6 +113,19 @@ await rf.jobs.settled(id, { statuses: ["completed", "failed", "suspended"] });
 `null` means the job is no longer there. Archiving and deleting are the same event on the socket, so either way it is not going to finish.
 
 Suspending a job is resumable, so `suspended` is not in the default set. Add it when a stop is an answer for your caller. There is no default timeout.
+
+## Which machines can run a step
+
+When a step is not starting, its `wait` says whether it is waiting for a render license seat or for a machine that meets its requirements. To see which machines could take it and why the rest cannot, ask for its candidates:
+
+```typescript
+const report = await rf.jobs.getStepCandidates(job.id, job.steps[0].id, { verdict: "ineligible" });
+
+console.log(report.counts);   // { eligible: 42, ineligible: 6, excluded: 1 }
+for (const group of report.groups) console.log(`${group.count} ${group.title}`);
+```
+
+The [REST API page](/renderflow/v2/developers/rest-api) explains the verdicts and the rest of the report.
 
 ## Live updates
 

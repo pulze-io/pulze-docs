@@ -34,14 +34,16 @@ The rest of this page is the protocol, for a client in another language, a dashb
 **The first message must be the credential**, and nothing flows before it:
 
 ```json
-{ "auth": "rf_live_..." }
+{ "auth": "rf_a1b2c3..." }
 ```
 
-An empty string is right from the machine running the service, where the peer address is the proof, exactly as it is over HTTP. The farm answers:
+An empty string is right from the machine running the service, where the peer address is the proof, exactly as it is over HTTP. The farm answers with the reach the credential has:
 
 ```json
 { "seq": 0, "hello": { "access": "public" } }
 ```
+
+An API key is told `public`. A connection from the machine itself, with the empty string, is told `private`, and so is a machine of the farm using its own credential.
 
 A connection that has not authenticated within **five seconds** is closed with 4401. That is not a grace period to lean on: an unauthenticated socket must not be a way to hold a slot open on a render farm.
 
@@ -104,7 +106,7 @@ An update is a patch and not the row, for most entities, and that is a deliberat
 
 ### The entities
 
-Every one of these mirrors a `public` REST route, so an API key sees on the socket exactly what it can read over HTTP.
+Every one of these but `commands` mirrors a `public` REST route, so an API key sees on the socket exactly what it can read over HTTP.
 
 | Entity | An update carries | |
 |---|---|---|
@@ -117,8 +119,9 @@ Every one of these mirrors a `public` REST route, so an API key sees on the sock
 | `pools` | a patch | |
 | `users`, `user-groups` | a patch | |
 | `errors` | a patch | |
-| `licenses` | the document | Seat counts move every tick the farm's usage does |
+| `render-licenses` | the document | Seat counts move every tick the farm's usage does |
 | `schedule` | the document | Including the fire bookkeeping, `last_status` and `next_run_at` |
+| `commands` | the document | What the farm was told to do, such as `node.restart`, with its `status`, `message` and `error` as it runs. It has no public REST route |
 
 ## Resync
 

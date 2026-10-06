@@ -17,7 +17,7 @@ Press the gear icon, then **API Keys** under **Access**.
 Give it the name of the thing that will use it, not the person who made it. A key called `ftrack sync` is one you can revoke without wondering what breaks.
 </Step>
 <Step title="Copy the value">
-It is shown once. The list afterwards keeps the name and the first characters, which is enough to recognise a key and not enough to use one.
+It is shown once. The farm keeps only a fingerprint of it, so afterwards the list shows the key's **Name**, a masked fingerprint under **Key**, **Created By** and **Created At**. Nothing in the list can be used as a key.
 </Step>
 </Steps>
 
@@ -62,7 +62,7 @@ const { total } = await rf.jobs.getJobs({ limit: 5 });
 ```
 </CodeGroup>
 
-Both SDKs read `RENDERFLOW_API_KEY` from the environment when you do not pass a key, and `rfcli` requires that variable.
+The Python SDK reads `RENDERFLOW_API_KEY` from the environment when you do not pass a key, and `rfcli` requires that variable. The TypeScript SDK reads nothing from the environment, so pass `apiKey` yourself, as above.
 
 ## From the machine itself
 
@@ -91,12 +91,12 @@ Submit from the machine holding the scene, on loopback, rather than posting to t
 
 | Port | Serves | TLS |
 |---|---|---|
-| 44442 | The service on this machine, for submitters, `rfcli` and the app | Never |
-| 44445 | The farm, for everything off the machine | When the server was set up with `https://` on its address |
+| 44442 | The service on this machine, for submitters, `rfcli` and the app. With TLS off, the farm as well | Never |
+| 44445 | The farm, for everything off the machine | Always. The port is opened only when TLS is turned on |
 
 Loopback is plaintext on every role. A certificate for a public name does not validate against `127.0.0.1`, and a local caller cannot carry a private authority, so TLS there would break every submitter to encrypt traffic that never reaches a wire.
 
-Whether the farm listener uses TLS depends on how the server was set up: writing `https://` on its address is what turns it on. The scheme therefore rides on the address everywhere, and `https://10.11.30.40:44445` is a different farm from `http://10.11.30.40:44442` only in that respect.
+Turn TLS on with the **TLS** switch under **Settings**, **Server**, giving it your own certificate and private key, or start the service with `--tls`, `--tls-cert` and `--tls-key`. With TLS on, the server answers the farm over HTTPS on 44445 and 44442 answers loopback only. With TLS off, the farm is served in plaintext on 44442. A caller names the scheme in the address, so `https://10.11.30.40:44445` and `http://10.11.30.40:44442` reach the same farm through different listeners.
 
 ## What a key reaches
 

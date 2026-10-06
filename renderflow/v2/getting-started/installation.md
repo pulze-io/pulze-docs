@@ -14,7 +14,7 @@ One installer covers every machine in the farm. What a machine becomes (server, 
 - A [Pulze account](https://account.pulze.io/) with a RenderFlow subscription or an active trial. Only the server signs in to it; the machines that join it do not.
 - A shared network folder that every machine can reach, addressed as a UNC path.
 - The installer for each platform, from your [Pulze account](https://account.pulze.io/products/renderflow/downloads).
-- Close 3ds Max, Maya, Blender and any other supported application on the machine first, as the installer refuses to run while one of them is open.
+- On Windows, close 3ds Max, Maya, Blender and any other supported application on the machine first. The installer stops while one of them is open.
 
 ## The three roles
 
@@ -34,7 +34,7 @@ A workstation starts suspended so that it never renders while an artist is worki
 Run the downloaded installer:
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe
+renderflow-2.0.17.0044-windows-x64.exe
 ```
 
 RenderFlow is installed to:
@@ -49,8 +49,8 @@ C:\Program Files\Pulze\RenderFlow
 Unpack the downloaded archive and run the installer inside it as root:
 
 ```bash
-tar -xzf renderflow-2.0.0-linux-x64.tar.gz
-cd renderflow-2.0.0-linux-x64
+tar -xzf renderflow-2.0.17.0044-linux-x64.tar.gz
+cd renderflow-2.0.17.0044-linux-x64
 sudo ./install.sh
 ```
 
@@ -72,8 +72,8 @@ Firewall ports are opened through `firewalld` or `ufw`; on any other firewall th
 Unpack the downloaded archive and run the installer inside it as root:
 
 ```bash
-tar -xzf renderflow-2.0.0-macos-arm64.tar.gz
-cd renderflow-2.0.0-macos-arm64
+tar -xzf renderflow-2.0.17.0044-macos-arm64.tar.gz
+cd renderflow-2.0.17.0044-macos-arm64
 sudo ./install.sh
 ```
 
@@ -121,38 +121,34 @@ Run it as the user who installed RenderFlow; it refuses to run as root. Add `--h
 </Tabs>
 
 <Note>
-RenderFlow starts at user login, so a workstation needs nothing further. An unattended machine needs the service registered instead, a separate step: see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+On Windows, RenderFlow starts at user login, so a workstation needs nothing further. On Linux and macOS, start it with `start.sh`. An unattended machine needs the service registered instead, a separate step: see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## The licence agreement
 
-RenderFlow asks you to accept the licence agreement the first time it runs, either in the app's setup wizard or in the `rfsv config` wizard, and stores your acceptance on the machine. You can read the agreement any time at [pulze.io/eula/renderflow](https://www.pulze.io/eula/renderflow).
+A server asks you to accept the licence agreement the first time it runs, either in the app's setup wizard or in the `rfsv config` wizard, and stores your acceptance on the machine. Workstations and nodes do not ask for it. You can read the agreement any time at [pulze.io/eula/renderflow](https://www.pulze.io/eula/renderflow).
 
-For an unattended deployment, pass `--accept-eula` to the installer:
+To deploy a server unattended, pass `--accept-eula` to the installer:
 
 <Tabs>
 <Tab title="Windows">
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=node --server=render01
+renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow
 ```
-
-<Warning>
-`--silent` without `--accept-eula` fails with error level 3. A silent install shows no licence page, and the installer will not accept on your behalf.
-</Warning>
 
 </Tab>
 <Tab title="Linux">
 
 ```bash
-sudo ./install.sh --accept-eula --type=node --server=render01
+sudo ./install.sh --accept-eula --type=server --repository=//NAS/renderflow
 ```
 
 </Tab>
 <Tab title="macOS">
 
 ```bash
-sudo ./install.sh --accept-eula --type=node --server=render01
+sudo ./install.sh --accept-eula --type=server --repository=//NAS/renderflow
 ```
 
 </Tab>
@@ -164,11 +160,13 @@ On a machine that is already installed, `rfsv` accepts it just as well:
 rfsv eula --accept
 ```
 
+A silent install without `--accept-eula` still installs and applies its configuration. The server then starts only after the agreement is accepted, in the app or with `rfsv eula --accept`.
+
 ## Finish setup
 
 An installed machine still has to be configured, and there are two places to do that.
 
-**In the app.** The setup wizard opens by itself on first run and asks for the agreement, the role, sign-in on a server, the server's address on a workstation or node, and the repository on a server.
+**In the app.** The setup wizard opens by itself on first run and asks for the role. A server then asks for the agreement, sign-in and the repository; a workstation or node asks for the server's address.
 
 <Frame caption="The setup wizard, asking what this machine is">
   <img src="/images/renderflow/v2/rf_wizard_mode.webp" alt="The setup wizard offering three roles: Node, Workstation and Server" />

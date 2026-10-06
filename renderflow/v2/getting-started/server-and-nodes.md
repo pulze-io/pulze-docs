@@ -16,18 +16,18 @@ Installing puts RenderFlow on a machine; configuring it is what turns that machi
 Install RenderFlow on the machine that will coordinate the farm and launch it; the setup wizard opens by itself.
 
 <Steps>
-<Step title="Accept the licence agreement">
-Your acceptance is stored on the machine, and you can read the agreement any time at [pulze.io/eula/renderflow](https://www.pulze.io/eula/renderflow).
-</Step>
 <Step title="Choose Server">
 <Frame caption="The three roles offered by the setup wizard">
   <img src="/images/renderflow/v2/rf_wizard_mode.webp" alt="The setup wizard offering three roles: Node, Workstation and Server" />
 </Frame>
 </Step>
+<Step title="Accept the licence agreement">
+Your acceptance is stored on the machine, and you can read the agreement any time at [pulze.io/eula/renderflow](https://www.pulze.io/eula/renderflow).
+</Step>
 <Step title="Sign in">
 Press **Sign in with browser** to sign in with your Pulze account, or **Create account** if you do not have one yet. If the machine is already signed in, the wizard offers that account and you can either **Continue** with it or **Switch account**.
 
-Only the server signs in, and it holds the licences for the whole farm; the workstations and nodes that join it do not sign in at all.
+Only the server signs in, and it holds the licences for the whole farm; the workstations and nodes that join it do not sign in at all. If the account has no free RenderFlow licences, the wizard offers **Get licenses**. Press **Continue** to finish the setup first and manage them later in **Settings → Subscription**.
 
 <Frame caption="Signing in to the Pulze account that holds the farm's licences">
   <img src="/images/renderflow/v2/rf_wizard_signin.webp" alt="The setup wizard's sign-in screen, offering to sign in with a browser or create an account" />
@@ -67,8 +67,6 @@ Open **Settings → Security** and decide who is allowed to join:
 Install RenderFlow on each artist's machine and launch it.
 
 <Steps>
-<Step title="Accept the licence agreement">
-</Step>
 <Step title="Choose Workstation">
 The machine starts **Suspended**, so it will not render while the artist is working on it.
 </Step>
@@ -84,7 +82,7 @@ Type the server's address, or press **Discover** to list the servers answering o
 The machine appears on the server's Machines screen, and from that point the artist can submit jobs either from the app or straight out of a supported application through its RenderFlow menu.
 
 <Tip>
-**Settings → Automation** can activate a workstation after a period of user inactivity and suspend it again on the next keypress, which is how most studios get their artist machines rendering overnight without anyone having to remember.
+In **Settings → Automation**, turn on **Use idle machines** and a suspended workstation is activated after a set time without user input, which is how most studios get their artist machines rendering overnight. Turn on **Return to user** as well to suspend it again as soon as the artist is back.
 </Tip>
 
 ## 3. Render nodes
@@ -104,7 +102,7 @@ A machine installed as a node runs a stripped-down interface rather than the ful
 A new farm has one pool (Default) with every machine in it, which is the right place to start. As the farm grows, two things divide it up:
 
 - **Pools** carve up the machines by project, by hardware or by department. A pool can lend its idle machines to another pool and borrow under a limit, and it can admit only the job types and priorities you allow.
-- **Groups** decide what people may do: which screens they see, which features they can reach, which pools they may submit to, the highest priority they may use, and the most machines any one of their jobs may take.
+- **Groups** decide what people may do: which screens they see, which features they can reach, which pools they see and which they may submit to, the highest priority they may use, and the most machines any one of their jobs may take.
 
 ## Monitoring the farm
 
@@ -112,6 +110,12 @@ The **Machines** screen lists every machine with its status, hardware and whatev
 
 <Frame caption="The Machines screen">
   <img src="/images/renderflow/v2/rf_machines.webp" alt="The Machines screen listing every machine in the farm with its status and hardware" />
+</Frame>
+
+The **Jobs** and **Machines** screens both keep saved views as tabs above the table. Press the **+** that appears beside the tabs (**New view**), then press **Filter** or **Sort** to shape it: the view keeps its filters, sort and columns. Views are kept in the browser of the machine you set them up on.
+
+<Frame caption="The Jobs screen with saved views as tabs above the table">
+  <img src="/images/renderflow/v2/rf_jobs_list.webp" alt="The Jobs screen with the tabs All, My jobs, Failed and Lighting above the jobs table" />
 </Frame>
 
 The **Farm** shows the same farm as a diagram, with the machines clustered under the job each one is rendering, so you can see at a glance where the work is going and which machines are sitting idle. Double-click a job to zoom in on it and watch the machines rendering it live.

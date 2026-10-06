@@ -175,7 +175,7 @@ On the machine:
 rfsv status
 ```
 
-`running: true` and a node key mean the service is up and the machine has enrolled. On the server, the machine appears on the **Machines** screen: Idle for a node, Suspended for a workstation.
+The first line reads **running** when the service is up. A machine that has not joined the farm yet says so in the lines below. On the server, the machine appears on the **Machines** screen: Idle for a node, Suspended for a workstation.
 
 If the status is right but the machine does not appear, the service runs under an account that cannot reach the server or the share. Check the account first.
 

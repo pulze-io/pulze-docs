@@ -23,9 +23,9 @@ Run the installer on the machine that will coordinate the farm and launch Render
 </Frame>
 
 <Steps>
-<Step title="Accept the licence agreement">
-</Step>
 <Step title="Choose Server">
+</Step>
+<Step title="Accept the licence agreement">
 </Step>
 <Step title="Sign in">
 Press **Sign in with browser** and sign in with your Pulze account. Only the server needs to sign in, and it manages the licences for the whole farm.
@@ -97,6 +97,8 @@ If you are happy with the settings, press **Submit**.
 The job appears on the Jobs screen and the available machines pick it up.
 
 Double-click the job to open its details panel, which shows the steps, the tasks, the machines working on it and the numbers you actually want: progress, render time, average frame time and estimated finish.
+
+A step that waits instead of rendering says why in the details panel: it is waiting for a free licence seat, or for a machine that meets its requirements. For the second, press the **Who can render** button beside the message to see which machines qualify and what the others lack.
 
 <Frame caption="The details panel beside the jobs list">
   <img src="/images/renderflow/v2/rf_job_details.webp" alt="A running job's details panel showing per-task progress and the machines rendering it" />

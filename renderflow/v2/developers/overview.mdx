@@ -44,7 +44,7 @@ A recipe is how a DCC submits: `type`, `file`, `host`, and the handful of fields
 </Card>
 
 <Card title="Webhooks" icon="right-left" href="/renderflow/v2/developers/webhooks">
-  The farm calls you when a job or a machine changes.
+  The farm calls you when a job, a step, a task or a machine changes.
 </Card>
 
 </CardGroup>
@@ -60,7 +60,7 @@ A recipe is how a DCC submits: `type`, `file`, `host`, and the handful of fields
 | To be told when a job finishes | Webhooks |
 | To ask a question in plain language | The MCP server |
 
-Live updates and webhooks are not alternatives, and neither drives the farm the way the REST API, the SDKs and the CLI do: both only listen. A socket subscription sees every change across the farm's collections and needs a process of yours to stay connected. A webhook covers job and machine lifecycle and needs nothing running at all, because the farm makes the call.
+Live updates and webhooks are not alternatives, and neither drives the farm the way the REST API, the SDKs and the CLI do: both only listen. A socket subscription sees every change across the farm's collections and needs a process of yours to stay connected. A webhook covers the lifecycle of jobs, steps, tasks and machines and needs nothing running at all, because the farm makes the call.
 
 ## One vocabulary
 

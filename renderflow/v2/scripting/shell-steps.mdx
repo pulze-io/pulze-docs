@@ -16,14 +16,14 @@ A Shell step runs one command on a render machine. It is the shortest way to put
 Press the **+** button at the end of the chain and pick **Shell**.
 </Step>
 <Step title="Give it a script">
-Either press **Browse file** and pick one off disk, or press **Type** and write it in the editor.
+Either press **Browse file** and pick one off disk, or press **Type** and write it in the editor. The menu in the editor's header sets the language: **Cmd**, **Bash** or **PowerShell**, starting on PowerShell on Windows and Bash elsewhere.
 </Step>
 <Step title="Add arguments, if it takes any">
 The **Arguments** field is the whole of what the script receives.
 </Step>
 </Steps>
 
-A typed script is written to a temporary file on the machine that runs it, with the extension its language needs, and it runs as it was submitted.
+A browsed script is copied into the editor, and the copy is what runs, so the job keeps working if the file on disk changes. A file that is not a script, such as an `.exe`, runs from its path. A typed script is written to a temporary file on the machine that runs it, with the extension its language needs, and it runs as it was submitted.
 
 ## How the command is assembled
 
@@ -31,9 +31,11 @@ Worth knowing exactly, because it decides how you quote things:
 
 | Shell | What runs |
 |---|---|
-| Command Prompt | `cmd /c <script> <arguments>` |
-| PowerShell | `powershell -NoLogo -NoProfile -Command & "<script>" <arguments>` |
-| bash | `bash -lc "<script>" <arguments>` |
+| Cmd | `cmd /c <script> <arguments>` |
+| PowerShell | `powershell -NoLogo -NoProfile -NonInteractive -Command & "<script>" <arguments>` |
+| Bash | `bash -lc "<script>" <arguments>` |
+
+An `-ExecutionPolicy <policy>` pair among the PowerShell arguments is moved in front of `-Command`, where PowerShell reads it.
 
 Two consequences. **PowerShell and bash receive one command string**, so an argument containing a space needs quoting that survives the shell, and `&` is already spent as the call operator. **PowerShell runs with `-NoProfile`**, so nothing from a machine's user profile is loaded: modules your script relies on have to be imported by the script.
 
@@ -52,33 +54,37 @@ The environment is the contract. RenderFlow sets these before the shell starts:
 | `RF_TASK_INDEX` | Which task of this step, counting from 0 |
 | `RF_NODE_ID` | The machine |
 | `RF_NODE_NAME` | Its hostname |
-| `RF_OUTPUT_DIR` | The folder the previous steps wrote into |
-| `RF_PARAM_<NAME>` | One per row of the **Parameters** field |
+| `RF_OUTPUT_DIR` | The folder of the first file the earlier steps wrote. Empty on the first step |
+| `RF_WORK_COUNT` | How many work items this task has, when the step has a work list |
+| `RF_WORK_OFFSET` | Where this task's items start in the whole work list |
+| `RF_WORK_ITEM_<n>` | One per work item of this task, counting from 0 |
+| `RF_PARAM_<NAME>` | One per parameter of the step. See below |
 
 Each shell spells a variable its own way: `%RF_JOB_ID%` in the Command Prompt, `$env:RF_JOB_ID` in PowerShell, `"$RF_JOB_ID"` in bash.
 
 The **Tokens** button in the Script header inserts the right spelling for the language you are in, so you do not have to remember which of the three forms applies.
 
 <Frame caption="The token list over a PowerShell step, in PowerShell's own spelling">
-  <img src="/images/renderflow/v2/rf_submitter_shell_tokens.webp" alt="A Shell step in the submitter with the token list open, showing the ten RF variables written as $env:RF_JOB_ID and so on" />
+  <img src="/images/renderflow/v2/rf_submitter_shell_tokens.webp" alt="A Shell step in the submitter with the token list open, showing the RF variables written as $env:RF_JOB_ID and so on" />
 </Frame>
 
 ### Parameters
 
-Each row of the **Parameters** field arrives as `RF_PARAM_<NAME>`, upper-cased, with anything that is not a letter or a digit replaced by an underscore. A parameter named `output dir` is `RF_PARAM_OUTPUT_DIR`.
+A Shell step's parameters are set when the job is created through the REST API with `name` and `steps`, in the step's `params` prop; the submitter shows no field for them. Each one arrives as `RF_PARAM_<NAME>`, upper-cased, with anything that is not a letter or a digit replaced by an underscore. A parameter named `output dir` is `RF_PARAM_OUTPUT_DIR`.
 
-Values are always text. A switch arrives as `true` or `false`, a number as its digits, a list as JSON. A parameter left empty is not set at all, so test for it rather than comparing to an empty string.
+Values are always text. A switch arrives as `true` or `false`, a number as its digits, a list as JSON. A parameter with no value at all is not set, while an empty text arrives as an empty variable, so test for both.
 
 ## Examples
 
 <CodeGroup>
 ```bash Stage a project folder
 #!/usr/bin/env bash
-# Pre-render: make sure the render machines can reach what this job needs.
+# Pre-render: copy the project to where every render machine can reach it.
+# Arguments: the project folder, then the staging folder on the share.
 set -euo pipefail
 
-source="$RF_PARAM_PROJECT"
-staged="$RF_OUTPUT_DIR/project"
+source="$1"
+staged="$2/$RF_JOB_ID"
 
 echo "Staging $source for job $RF_JOB_NAME"
 mkdir -p "$staged"
