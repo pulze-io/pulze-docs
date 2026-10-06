@@ -23,10 +23,10 @@ RenderFlow detects the applications and render engines installed on every machin
 | Fusion | 17 to 21 | Windows, Linux, macOS | |
 | Harmony | 20 to 27 | Windows, Linux, macOS | |
 | Houdini | Any | Windows, Linux, macOS | Karma, Mantra, Arnold, Redshift |
-| KeyShot | 12, 13 and 2023 to 2026 | Windows, Linux, macOS | |
+| KeyShot | 2023 to 2026 | Windows, Linux, macOS | |
 | Maya | 2022 to 2027 | Windows, Linux, macOS | Arnold, V-Ray, Redshift, RenderMan |
 | Media Encoder | Any | Windows, macOS | |
-| Nuke | 14.0 to 17.1 | Windows, Linux, macOS | |
+| Nuke | 14.0 and newer | Windows, Linux, macOS | |
 | Premiere Pro | 25.3 and newer | Windows, macOS | |
 | Rhino | 7 and 8 | Windows | V-Ray, rendered by V-Ray Standalone |
 | SketchUp | Any | Windows, macOS | V-Ray, rendered by V-Ray Standalone |

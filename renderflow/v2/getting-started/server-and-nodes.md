@@ -108,14 +108,14 @@ A new farm has one pool (Default) with every machine in it, which is the right p
 
 The **Machines** screen lists every machine with its status, hardware and whatever it is working on.
 
+<Frame caption="The Machines screen">
+  <img src="/images/renderflow/v2/rf_machines.webp" alt="The Machines screen listing every machine in the farm with its status and hardware" />
+</Frame>
+
 The **Jobs** and **Machines** screens both keep saved views as tabs above the table. Press the **+** that appears beside the tabs (**New view**), then press **Filter** or **Sort** to shape it: the view keeps its filters, sort and columns. Views are kept in the browser of the machine you set them up on.
 
 <Frame caption="The Jobs screen with saved views as tabs above the table">
   <img src="/images/renderflow/v2/rf_jobs_list.webp" alt="The Jobs screen with the tabs All, My jobs, Failed and Lighting above the jobs table" />
-</Frame>
-
-<Frame caption="The Machines screen">
-  <img src="/images/renderflow/v2/rf_machines.webp" alt="The Machines screen listing every machine in the farm with its status and hardware" />
 </Frame>
 
 The **Farm** shows the same farm as a diagram, with the machines clustered under the job each one is rendering, so you can see at a glance where the work is going and which machines are sitting idle. Double-click a job to zoom in on it and watch the machines rendering it live.

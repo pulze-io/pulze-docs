@@ -11,8 +11,6 @@ keywords: ['render farm hardware requirements', 'render farm system requirements
 
 RenderFlow requires a Pulze account with either a RenderFlow subscription or an active trial. Only the server signs in to that account, and it holds the licences for the whole farm, so the machines that join it need no account of their own.
 
-Render engines and applications licensed per seat are counted by the farm. Press **Add licenses** in **Settings → Licenses**, pick the **Product** and enter the **Seats** you own. A step that needs a seat waits until one is free.
-
 ## Hardware
 
 ### Server
