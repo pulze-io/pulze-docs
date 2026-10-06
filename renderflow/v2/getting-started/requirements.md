@@ -11,6 +11,8 @@ keywords: ['render farm hardware requirements', 'render farm system requirements
 
 RenderFlow requires a Pulze account with either a RenderFlow subscription or an active trial. Only the server signs in to that account, and it holds the licences for the whole farm, so the machines that join it need no account of their own.
 
+Render engines and applications licensed per seat are counted by the farm. Press **Add licenses** in **Settings → Licenses**, pick the **Product** and enter the **Seats** you own. A step that needs a seat waits until one is free.
+
 ## Hardware
 
 ### Server
@@ -58,6 +60,8 @@ RenderFlow runs on all three platforms, and a single farm can mix them freely. *
 | 44444 | TCP | Database (MongoDB) |
 | 44445 | TCP | The farm interface over HTTPS, when TLS is enabled |
 
+Other machines only ever connect to the server: on 44442, on 44443 to discover it, and on 44445 when TLS is on. The database listens on the server's own loopback address, and workstations and nodes listen on theirs only.
+
 Port 44445 only listens when TLS is switched on, and even then the machine's own loopback API stays plaintext, so submitters, `rfcli` and the desktop app running on the server itself are unaffected.
 
 ### Firewall
@@ -83,7 +87,7 @@ How much bandwidth you need depends on the size of the farm and on the work it d
 The farm needs one folder that every machine can reach, called the **repository**, where RenderFlow keeps job files, task logs, frame previews and backups. The server asks for it during setup.
 
 <Tip>
-Address it with a UNC path (`\\server\share\...`) if any machine touching it runs RenderFlow as a service, which is the usual setup for a render node: a drive letter belongs to a logged-in user session, so a service has no session in which that letter exists. A mapped drive letter works fine on a machine you stay signed in to.
+Address it with a UNC path (`\\server\share\...`) if any machine touching it runs RenderFlow as a service, which is the usual setup for a render node: a drive letter belongs to a logged-in user session, so a service has no session in which that letter exists. A mapped drive letter works fine on a machine you stay signed in to. To use drive letters on machines that run as a service, add them in **Settings → Mapped Drives**, and each Windows machine maps them when RenderFlow starts.
 
 Running Windows, Linux and macOS side by side? Point your scenes and the repository at one UNC-style path and let **Settings → Mapped Paths** translate it to what each platform expects.
 </Tip>
@@ -107,7 +111,7 @@ Blocking `*.renderflow.com` costs you two optional conveniences and nothing more
 
 ### Behind a proxy
 
-Point the server at your proxy with `--proxy-host` and `--proxy-port` when you install it, adding `--proxy-user` and `--proxy-pass` if the proxy asks for credentials, and `--proxy-bypass` for internal hosts that must not go through it. [Silent Deployment](/renderflow/v2/getting-started/silent-deploy#installer-flags) lists every flag.
+Point the server at your proxy with `--proxy-host` and `--proxy-port` when you install it, adding `--proxy-user` and `--proxy-pass` if the proxy asks for credentials, and `--proxy-bypass` for internal hosts that must not go through it. [Silent Deployment](/renderflow/v2/getting-started/silent-deploy#installer-flags) lists every flag. On a server that is already installed, set the proxy and the **Certificate authority** in **Settings → Server**.
 
 **A proxy that inspects HTTPS.** Many corporate proxies decrypt HTTPS traffic and re-sign it with the company's own certificate authority. RenderFlow does not trust that authority on its own, so the server cannot reach Pulze and its log shows:
 
@@ -118,7 +122,7 @@ Failed to resolve https://backend.pulze.io, attempt 2/2: [GET] 'https://backend.
 Give RenderFlow your company's CA certificate as a PEM file with `--tls-ca`. RenderFlow trusts it in addition to the public certificate authorities, for every HTTPS connection it makes:
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
+renderflow-2.0.17.0044-windows-x64.exe --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
 ```
 
 **Saving the settings.** The installer saves its flags, so the service uses them every time it starts. Flags given to `rfsv` itself apply to that run only. To change the settings of a machine that is already installed, stop the service and run `rfsv config` with the new values, for example `rfsv config --tls-ca=C:\certs\studio-ca.pem`, then start the service again.

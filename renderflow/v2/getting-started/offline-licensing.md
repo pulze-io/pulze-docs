@@ -101,7 +101,7 @@ The **Offline** panel shows the seats the license holds, how many are in use, ho
   <img src="/images/renderflow/v2/rf_settings_subscription_offline.webp" alt="The Subscription settings page showing the Offline panel with 30 seats, 0 in use, 30 free and an expiry date, with the Apply license and Remove license buttons" />
 </Frame>
 
-**Grace period.** A license keeps working for 30 days after its expiry date, and during those 30 days the **Offline** panel shows a warning with the expiry date. The server checks the license when it starts and once a day after that, and the first check after the grace period has ended stops it handing out seats: every machine stops rendering until a new license is applied.
+**Grace period.** A license keeps working for its grace period after its expiry date, 30 days unless your license states another, and during the grace period the **Offline** panel shows a warning with the expiry date. The server checks the license when it starts and once a day after that, and the first check after the grace period has ended stops it handing out seats: every machine stops rendering until a new license is applied.
 
 **Upgrades.** A license can carry a maintenance period. A RenderFlow release built after that period ends does not accept the license, so ask Pulze for a renewed license before you upgrade the server past it.
 

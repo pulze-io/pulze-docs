@@ -372,38 +372,49 @@ A notification is a message for a person, attached to one job at submit time, an
 
 `job-errors` is the batched digest that fires while a job is still running, which is the one that reports a render going wrong before it has finished going wrong.
 
-Attach one at submit time:
+Attach one at submit time. Notifications go on the step-tree body, `name` and `steps`, and a recipe does not take them: the farm refuses a recipe that carries `notifications`. The examples below read the steps back from a job built in the submitter, as [the cookbook](/renderflow/v2/developers/cookbook) shows, and submit them with the notifications added:
 
 <CodeGroup>
 ```bash curl
-curl -X POST ".../jobs?wait=true" \
-  -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "type": "blender.render",
-    "name": "Hero 010 lighting",
-    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
-    "host": { "id": "blender", "version": "4.5" },
-    "frame": "1-240",
-    "notifications": [
-      { "channel": "slack", "type": "job-completed", "value": "68b1f0c2a4d3e5f6a7b8c9c1", "label": "#lighting" },
-      { "channel": "email", "type": "all", "value": "mia@studio.example" }
-    ]
-  }'
+curl ".../jobs/68b1f0c2a4d3e5f6a7b8c9d0" -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  | jq '{
+      name: "Hero 010 lighting",
+      steps,
+      notifications: [
+        { channel: "slack", type: "job-completed", value: "68b1f0c2a4d3e5f6a7b8c9c1", label: "#lighting" },
+        { channel: "email", type: "all", value: "mia@studio.example" }
+      ]
+    }' \
+  | curl -X POST ".../jobs?wait=true" \
+      -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d @-
 ```
 
 ```python Python
+template = farm.jobs.get_job(reference_job_id).to_dict()
+
 farm.jobs.create_job(body={
-    "type": "blender.render",
     "name": "Hero 010 lighting",
-    "file": "//NAS/projects/hero/shots/010/lighting_v014.blend",
-    "host": {"id": "blender", "version": "4.5"},
-    "frame": "1-240",
+    "steps": template["steps"],
     "notifications": [
         {"channel": "slack", "type": "job-completed", "value": slack_channel_id, "label": "#lighting"},
         {"channel": "email", "type": "all", "value": "mia@studio.example"}
     ]
 }, wait=True)
+```
+
+```typescript TypeScript
+const template = await rf.jobs.getJob(referenceJobId);
+
+await rf.jobs.createJob({
+    name: "Hero 010 lighting",
+    steps: template.steps,
+    notifications: [
+        { channel: "slack", type: "job-completed", value: slackChannelId, label: "#lighting" },
+        { channel: "email", type: "all", value: "mia@studio.example" }
+    ]
+}, { wait: true });
 ```
 </CodeGroup>
 

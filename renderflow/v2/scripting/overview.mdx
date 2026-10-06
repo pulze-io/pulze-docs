@@ -49,11 +49,11 @@ A plugin is a Python step with a name, an icon and a manifest. Nothing you learn
 
 **Paths cross machines through the farm's mapping table.** A workstation submits `P:/shots/010` and a Linux node mounts the same folder at `/mnt/shots/010`. A Python step asks for the local form with `rf.path()`. A shell step gets paths already mapped in the values it is handed.
 
-**A step's files are staged into the repository first**, unless **Copy to repository** is switched off on the step. That is why a render node can read a scene an artist saved locally. If your script needs a file that was not staged, it needs a path every machine can reach.
+**A step's files are staged into the repository first**, unless **Save to repository** is cleared on the step, or a project synced from Perforce has **Project source** set to **Render in place**. That is why a render node can read a scene an artist saved locally. If your script needs a file that was not staged, it needs a path every machine can reach.
 
-**A script step distributes only once it has a work list.** Without one it is a single run on a single machine. Give it a range, a count or a list of items and the farm splits it into tasks, hands them out, and retries the ones that fail. That is the same machinery a thousand-frame render uses.
+**A script step distributes only once it has a work list.** Without one it is a single run on a single machine. A plugin plans one with `@rf.tasks`, and a Python step is given one through the REST API; either way the farm splits it into tasks, hands them out, and retries the ones that fail. That is the same machinery a thousand-frame render uses.
 
-**Nothing is added to `sys.argv` or the environment behind your back.** The Arguments field is the whole of a script's arguments. The `RF_*` variables are the only ones RenderFlow adds, and they are [listed in full](/renderflow/v2/scripting/shell-steps).
+**Nothing is added to `sys.argv` or the environment behind your back.** The Arguments field is the whole of a script's arguments. RenderFlow adds the `RF_*` variables, [listed in full](/renderflow/v2/scripting/shell-steps), and the variables set in the job's **Environment** section and for the application in **Settings → Apps**.
 
 ## What a step can find out
 

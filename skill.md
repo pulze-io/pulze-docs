@@ -3,7 +3,7 @@ name: pulze
 description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
 metadata:
   author: pulze
-  version: "1.4"
+  version: "1.5"
 ---
 
 # Pulze Documentation
@@ -133,12 +133,17 @@ RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) docu
 - Quick Start: /renderflow/v2/getting-started/quick-start
 - System Requirements: /renderflow/v2/getting-started/requirements
 - Installation: /renderflow/v2/getting-started/installation
+- Supported Applications (versions, render engines, steps and platforms for every application): /renderflow/v2/getting-started/supported-apps
 - Server and Nodes: /renderflow/v2/getting-started/server-and-nodes
 - Silent Deployment: /renderflow/v2/getting-started/silent-deploy
 - Run as a Service: /renderflow/v2/getting-started/run-as-a-service
 - Offline Licensing (Enterprise, a server with no internet access): /renderflow/v2/getting-started/offline-licensing
 - Migrating (from RenderFlow 1 or Render Manager): /renderflow/v2/getting-started/migrating
 - Changelog: /renderflow/v2/changelog
+
+##### RenderFlow 2 — Guides
+Walkthroughs for one workflow from start to finish.
+- Unreal and Perforce (sync Unreal projects from Perforce on every node, checked-out files shelved for the job): /renderflow/v2/guides/unreal-and-perforce
 
 ##### RenderFlow 2 — Scripting
 Running your own code on the farm. Three ways: a shell step, a Python step, or a plugin that adds a job type to the submitter.
@@ -185,8 +190,9 @@ AI-powered creative project generation tool.
 - **Archive and restore jobs**: Archive completed jobs from the context menu to keep the list clean. Restore them anytime from the archive panel. See /renderflow/jobs/overview.
 - **Schedule overnight rendering**: Use the Scheduler to automatically activate workstations after hours and suspend them before the workday. See /renderflow/scheduler/overview.
 - **Submit cloud jobs**: Switch to the Cloud tab in the Submitter to render on cloud nodes with included V-Ray and Corona licenses. See /renderflow/cloud-rendering/overview.
-- **Run a script on the farm (RenderFlow 2)**: Add a Shell step for a command you already have, or a Python step when the work has to spread across machines. A Python declaration such as `rf.files("plates")` becomes a field in the submitter, a command-line flag and the value, from one line. See /renderflow/v2/scripting/overview.
+- **Run a script on the farm (RenderFlow 2)**: Add a Shell step for a command you already have, or a Python step when the work has to spread across machines. A Python declaration such as `rf.folder("plates")` becomes a field in the submitter, a command-line flag and the value, from one line. See /renderflow/v2/scripting/overview.
 - **Add a job type of your own (RenderFlow 2)**: Package a Python script as a plugin with a `plugin.toml` and install it once into the repository. It then appears in the submitter's template picker for the whole studio. See /renderflow/v2/scripting/plugins.
+- **Render Unreal projects from Perforce (RenderFlow 2)**: Add the server in Settings → Perforce, install `p4` on the nodes, and submit from Unreal with Tools → Submit to RenderFlow. Each node syncs the project instead of RenderFlow copying it, and checked-out files are shelved for the job. See /renderflow/v2/guides/unreal-and-perforce.
 - **Submit from code (RenderFlow 2)**: `POST /jobs` takes a flat per-application recipe or a step tree. On the machine running the service no credential is needed, which is how a DCC plugin submits; from anywhere else use an API key. See /renderflow/v2/developers/rest-api and /renderflow/v2/developers/cookbook.
 - **Follow a job without polling (RenderFlow 2)**: One WebSocket at `/api/v1/socket` carries every change. The TypeScript SDK wraps it as `rf.jobs.on()`, and both SDKs have `settled()` for waiting on one job. See /renderflow/v2/developers/websocket.
 - **Get called when a render finishes (RenderFlow 2)**: Subscribe a URL with `POST /webhooks` for signed, retried callbacks on job, step, task and machine events. For a message to a person instead, attach a notification channel at submit time. See /renderflow/v2/developers/webhooks.

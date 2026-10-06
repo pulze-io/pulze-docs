@@ -71,10 +71,10 @@ help(farm.jobs.get_jobs)     # what it takes, from the document
 
 >>> dir(farm.jobs)
 ['create_job', 'delete_job', 'delete_jobs', 'finish_jobs', 'get_job', 'get_job_step',
- 'get_job_summary', 'get_jobs', 'get_step_logs', 'open_submitter', 'reserve_job',
- 'reset_job', 'reset_job_nodes', 'reset_job_step', 'reset_jobs', 'settled', 'stage_scene',
- 'start_job', 'start_job_step', 'start_jobs', 'stop_job', 'stop_job_step', 'stop_jobs',
- 'update_job', 'update_job_pool', 'update_jobs']
+ 'get_job_summary', 'get_jobs', 'get_step_candidates', 'get_step_logs', 'on',
+ 'open_submitter', 'reserve_job', 'reset_job', 'reset_job_nodes', 'reset_job_step',
+ 'reset_jobs', 'settled', 'stage_scene', 'start_job', 'start_job_step', 'start_jobs',
+ 'stop_job', 'stop_job_step', 'stop_jobs', 'update_job', 'update_job_pool', 'update_jobs']
 ```
 
 Names are the document's operation ids in snake case, so one operation reads the same here:
@@ -160,7 +160,7 @@ if not result.opened:
     print(result.reason)
 ```
 
-The artist gets the full submitter, can change anything in it, and presses **Submit** to create the job. The RenderFlow app has to be running on this machine: when it is not, `opened` is `false` and `reason` says why. When several people are signed in to one machine, pass `user="<name>"` to open it on that person's desktop.
+The artist gets the full submitter, can change anything in it, and presses **Submit** to create the job. The RenderFlow app has to be running on this machine: when it is not, `opened` is `false` and `reason` says why. When several people are signed in to one machine, pass `user="<name>"` to open it on that person's desktop. When the scene lists several render items, the submitter opens one job per item by default; pass `batch=False` to open a single job.
 
 ## Waiting for a job
 
@@ -174,6 +174,20 @@ job = farm.jobs.settled(job.id, interval=30)    # a render measured in hours
 `None` means the job is no longer there: archiving and deleting look the same from outside, and neither is going to finish. A stop is **not** an end, because suspending a job is resumable, so pass `statuses=["completed", "failed", "suspended"]` when a stop is an answer for your caller. A timeout raises `TimeoutError` rather than handing back a job that has not finished.
 
 **This polls rather than watching**, so a wait needs no socket, no thread and no reconnect behaviour, and it still works where a proxy passes HTTP and refuses an upgrade. The interval is the cost: two seconds is right for a test render and wrong for an overnight one. When the moment a job finishes is what matters, watch it instead.
+
+## Which machines can run a step
+
+When a step is not starting, its `wait` says whether it is waiting for a render license seat or for a machine that meets its requirements. To see which machines could take it and why the rest cannot, ask for its candidates:
+
+```python
+report = farm.jobs.get_step_candidates(job_id, step_id, verdict="ineligible")
+
+print(report.counts.eligible, report.counts.ineligible, report.counts.excluded)
+for group in report.groups:
+    print(group.count, group.title)
+```
+
+The [REST API page](/renderflow/v2/developers/rest-api) explains the verdicts and the rest of the report.
 
 ## Live updates
 

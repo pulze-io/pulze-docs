@@ -20,9 +20,9 @@ The same flags work on every platform.
 | Flag | What it does |
 |------|--------------|
 | `--silent` | Silent installation. Windows only |
-| `--accept-eula` | Accept the licence agreement |
+| `--accept-eula` | Accept the licence agreement. Only a server needs it. `/ACCEPTEULA` also works on Windows |
 | `--type=<role>` | `server`, `node` or `workstation` |
-| `--server=<host>` | Address of the server to join. Node and workstation only |
+| `--server=<host>` | Address of the server to join. Node and workstation only. `--ip` also works |
 | `--repository=<path>` | The shared network folder. Server only |
 | `--pool=<name>` | Pool this machine is placed in when it first registers |
 | `--uri=<conn>` | External MongoDB connection string, which must be a replica set. Server only |
@@ -40,6 +40,8 @@ The same flags work on every platform.
 
 `--help` prints this list and exits.
 
+The uninstaller takes one flag of its own: `--purge` (`/PURGE` on Windows) also removes the database, the configuration and the logs. Without it, reinstalling finds the farm as it was.
+
 ## Examples
 
 <Tabs>
@@ -48,30 +50,30 @@ The same flags work on every platform.
 A server with a shared folder:
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow
+renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow
 ```
 
 A render node, placed straight into a named pool:
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=node --server=10.11.30.40 --pool=gpu
+renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=node --server=10.11.30.40 --pool=gpu
 ```
 
 A node behind a proxy:
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=node --server=render01 --proxy-host=proxy.studio --proxy-port=3128
+renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=node --server=render01 --proxy-host=proxy.studio --proxy-port=3128
 ```
 
 A server behind a proxy that inspects HTTPS, with the company's CA certificate. See [Behind a proxy](/renderflow/v2/getting-started/requirements#behind-a-proxy) for the error this fixes:
 
 ```powershell
-renderflow-2.0.0-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
+renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
 ```
 
-<Warning>
-`--silent` without `--accept-eula` fails with error level 3. A silent install shows no licence page, and the installer will not accept on your behalf.
-</Warning>
+<Note>
+A silent install without `--accept-eula` still installs and applies its flags. A server then starts only after the agreement is accepted, in the app or with `rfsv eula --accept`. Nodes and workstations do not need it.
+</Note>
 
 </Tab>
 <Tab title="Linux and macOS">
@@ -134,13 +136,13 @@ At the sign-in step it prints a link, a code and a QR code, and completing any o
 
 ## Accepting the licence agreement
 
-A headless machine cannot be asked, so the agreement has to be accepted before it will start:
+A headless server cannot ask, so accept the agreement before you start it. Nodes and workstations do not need it.
 
 ```bash
 rfsv eula --accept
 ```
 
-`--accept-eula` on the installer does the same thing at install time, and without one of the two `start.sh --headless` refuses to start. Running `rfsv eula` on its own prints what this machine accepted; it exits non-zero only when nothing has ever been accepted, since an agreement that is merely out of date never stops a node.
+`--accept-eula` on the installer does the same thing at install time. Without one of the two, `start.sh --headless` refuses to start a server. Running `rfsv eula` on its own prints what this machine accepted; it exits non-zero only on a server where nothing has ever been accepted, since an agreement that is merely out of date never stops a machine.
 
 ## Verifying a deployment
 
@@ -148,7 +150,7 @@ rfsv eula --accept
 rfsv status --json
 ```
 
-This reports the role, the server, the repository, the account, whether the machine has joined the farm and whether the service is running. On a machine you know you configured correctly, `running: false` with no node key is the signature of a service that was never registered.
+This reports the role, the server, the repository, the account, whether the machine has joined the farm and whether the service is running. A machine you configured that shows `running: false` and has not joined the farm is a machine whose service was never registered.
 
 ## Resetting a machine
 

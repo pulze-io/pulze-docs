@@ -15,7 +15,7 @@ The module a [Python step](/renderflow/v2/scripting/python-steps) and a [plugin]
 
 ## Declarations
 
-Each one is a field in the submitter and the value, from a single line. In a plugin, these are what generate the operator's UI automatically. Every declaration takes `label` (what the submitter shows), `required`, `default`, and `show_if`.
+Each one is a field in the submitter and the value, from a single line. In a plugin, these are what generate the operator's UI automatically. Every declaration takes `label` (what the submitter shows), `required` and `show_if`, and all of them except `rf.sequence` take a `default`.
 
 | | |
 |---|---|
@@ -30,6 +30,7 @@ Each one is a field in the submitter and the value, from a single line. In a plu
 | `rf.resolution(name)` | A width and a height, as a two-item list |
 | `rf.output(name)` | Where the job writes. See below |
 | `rf.frames(name)` | A frame range. `rf.expand()` turns it into a list |
+| `rf.sequence(name)` | An earlier step's output or a browsed file sequence, as a list of files. See below |
 | `rf.args(name, type=...)` | The escape hatch every one of the above compiles to |
 
 One rule the module enforces by raising at import: **one output per script**. A second is a mistake worth finding immediately rather than at dispatch.
@@ -46,6 +47,18 @@ With `extensions`, the submitter's browse button becomes the operating system's 
 
 `rf.paths.output` carries the value, which is how a handler downstream knows where the job wrote.
 
+### sequence
+
+```python
+frames = rf.sequence("frames", required=True, label="Frames")
+```
+
+In the submitter the field is a list of the outputs the earlier steps in the job declare, and a browse button. Pick a step's output, or browse to one frame of a sequence and RenderFlow finds the rest of it beside that frame.
+
+The script always reads a list of paths, already mapped for the machine it runs on with `rf.path()`. A browsed `shot.####.exr` gives every frame of its range. A step's output gives the files that step wrote, filled in when the task starts. Before that, in `@rf.submit` and `@rf.tasks`, the list is empty, because the step it reads has not run yet.
+
+A file in the list that does not exist, such as a frame the earlier step failed to write, is still in the list. Check with `os.path.isfile()` before reading it.
+
 ## Hooks
 
 | | Runs |
@@ -53,7 +66,6 @@ With `extensions`, the submitter's browse button becomes the operating system's 
 | `@rf.execute` | Once per item, on the machine that got it. The only one a script needs |
 | `@rf.tasks` | On the submitting machine, before the job exists. Returns the work list, one entry per task |
 | `@rf.submit` | On the submitting machine, before the job exists. Raise to stop the submission |
-| `@rf.read` | On the submitting machine, when the operator asks. Returns the fields it read out of the scene |
 | `@rf.prepare` | Once per task, before its items |
 | `@rf.cleanup` | Once per task, whatever happened |
 
@@ -75,36 +87,6 @@ An entry is anything JSON can carry, and it reaches `@rf.execute(item)` exactly 
 | `rf.list(folder, "*.exr", recursive=False)` | The matching files in a folder, sorted, mapped through `rf.path()` |
 
 It runs on the machine that is submitting, because the farm needs the list before it can make anything. Raising stops the submission with your message; returning an empty list is refused, since a job with no tasks never finishes. Without `@rf.tasks`, a script runs once on one machine.
-
-### Reading the scene
-
-A job type built into RenderFlow reads the scene an operator browsed for: a `.max` through its own reader, an `.aep` by starting After Effects. A plugin's scene is its own business, and `@rf.read` is where it answers what it found:
-
-```python
-@rf.read
-def scan():
-    flows = probe(rf.path(scene))
-
-    rf.state.flows = flows
-    return {
-        "flow": {"options": [entry["name"] for entry in flows], "value": flows[0]["name"]},
-        "scene": {"readonly": True},
-        "frame_start": 0,
-        "frame_end": 100
-    }
-```
-
-One key per field. A bare value answers the field; a dict may also carry `options`, which is what the operator may pick from, and `readonly`, for a field the scene has settled. Anything written to `rf.state` reaches `@rf.tasks` and `@rf.execute` unchanged.
-
-It runs on the machine that is submitting, and only when the operator presses Read the scene. Say so in the manifest before the button appears:
-
-```toml
-[submit]
-scene   = "read"
-open_in = true
-```
-
-`scene` is `"browse"` (a path field, the default), `"read"` (a path field and the button) or `"in-app"` (no path field, so RenderFlow says to submit from the application instead). `open_in` adds a button that opens the scene in the application named by `[requires]`.
 
 ### Distributing the work
 
@@ -150,7 +132,7 @@ Attribute access over what the task was given.
 
 | | |
 |---|---|
-| `rf.path(value)` | A path as **this** machine sees it, through the farm's mapping table |
+| `rf.path(value)` | A path as **this** machine sees it, through the rules in **Settings → Mapped Paths**. A path no rule covers comes back unchanged |
 | `rf.app(name, version=None, path="exe")` | An installed application's executable. Raises `AppNotFound` |
 | `rf.tool(name)` | What RenderFlow ships: `ffmpeg`, `ffprobe`, `imager`, `python`. Falls back to `PATH` |
 
@@ -162,14 +144,14 @@ Attribute access over what the task was given.
 |---|---|
 | `rf.progress(percent, info=None)` | 0 to 100, clamped. The driver already reports per-item progress |
 | `rf.log(message, level="info")` | One line into the task log. `print()` works too |
-| `rf.fatal(message)` | Ends the task with a reason. Raises `rf.Fatal` |
+| `rf.fatal(message)` | Stops the step with a reason. Raises `rf.Fatal` |
 | `rf.done(item)` | Marks one item finished. Only meaningful under `batch=True`, where the module cannot see your loop |
 
 ## Failures
 
 | | |
 |---|---|
-| `rf.Fatal` | End this task, with a sentence the operator reads |
+| `rf.Fatal` | Stop the step, with a sentence the operator reads. **Its other tasks fail too**, and the job stops unless a later step runs on failure |
 | `rf.AppNotFound` | This machine cannot do it. **The task moves to another machine**, and the job carries on |
 
 The difference between the first two is the whole of the retry behaviour. `Fatal` is the script saying the work is wrong; `AppNotFound` is the script saying the machine is wrong.
@@ -181,8 +163,8 @@ What the process leaves, and what the farm does with it:
 | | |
 |---|---|
 | 0 | Done |
-| 1 | Failed. The task fails here and is not retried elsewhere |
-| 2 | No `@rf.execute`, so a node had nothing to run |
+| 1 | Failed. The step stops: its other tasks fail too |
+| 2 | No `@rf.execute`, so a node had nothing to run. The step stops, as for 1 |
 | 66 | `AppNotFound`. The task is requeued on a different machine |
 
 ## Markers

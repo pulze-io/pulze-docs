@@ -91,9 +91,16 @@ rf.log("wrote {0}".format(target))
 | Exit | Means |
 |---|---|
 | 0 | Done |
-| 1 | The script failed. **The task fails here and is not retried elsewhere** |
+| 1 | The script failed. **The step stops**: its other tasks fail with it, and machines still running them are stopped. Start the job again once it is fixed |
+| 2 | The script had nothing to run. The step stops, as for 1 |
+| 66 | An application the script asked for with `rf.app()` is not on this machine (`rf.AppNotFound`). The machine is excluded and another one takes the task |
+| Any other | The process crashed. The machine is excluded and another one takes the task |
 
-`rf.Fatal` and an uncaught exception both end the task with exit code 1, and the difference is what the operator reads: `Fatal` shows your sentence, an uncaught exception shows a traceback.
+`rf.Fatal` and an uncaught exception both end the script with exit code 1, and the difference is what the operator reads: `Fatal` shows your sentence, an uncaught exception shows a traceback.
+
+## Which Python runs it
+
+The step runs the Python installed on the machine that takes the task. To ask for a particular version, pick it in the step's **Requirements** and choose under **Match** how closely a machine's Python has to agree with it.
 
 ## When a step needs more
 

@@ -52,19 +52,16 @@ A `[submit]` table says how a scene reaches your step. One key answers it, and o
 
 ```toml
 [submit]
-scene   = "read"
+scene   = "in-app"
 open_in = true
 ```
 
 | `scene` | What the operator gets |
 |---|---|
 | `"browse"` | A path field. The default, and what every plugin gets without a `[submit]` table |
-| `"read"` | A path field and a **Read the scene** button, which runs your `@rf.read` |
 | `"in-app"` | No path field. RenderFlow says to open the scene in the application and submit from there |
 
 Pick `"in-app"` when nothing outside the application can answer your fields: a Cinema 4D take, a Maya render layer, a tyFlow object in a closed `.max`.
-
-Pick `"read"` when your `@rf.read` can get those answers by starting the application itself. It is a button rather than something that happens on Browse, because a cold application start is a wait the operator should choose. A manifest with `scene = "read"` and no `@rf.read` is refused at installation, since the button would answer nothing.
 
 `open_in = true` puts an **open in \<application\>** button beside the field, using the first entry in `[requires]`. Without a `[requires]` application there is nothing to open, and no button appears.
 
@@ -83,7 +80,7 @@ plates = rf.folder("plates", label="Plates")
 - It **declares a field** in the submitter, labelled **Plates**, with a folder browser.
 - It **returns the value**, right there on the line, so the script reads it as an ordinary variable.
 
-The full set is in the [`rf` reference](/renderflow/v2/scripting/rf-reference): text, numbers, switches, choices, files, folders, resolutions, key-value pairs, a frame range and an output.
+The full set is in the [`rf` reference](/renderflow/v2/scripting/rf-reference): text, numbers, switches, choices, files, folders, resolutions, key-value pairs, a frame range, an output, and a sequence. A sequence field is how a plugin reads what an earlier step in the job wrote: the operator picks that step's output, or browses to a sequence on disk, and the script gets the list of files either way.
 
 <Note>
 Declarations run when the script is imported, and they return the operator's value at that moment. So they belong at module level, not inside a function. A declaration inside `@rf.execute` would be read once per item and would not appear in the submitter at all.
@@ -150,10 +147,6 @@ def plan():
 def check():
     """On the machine that is submitting, before the job exists."""
 
-@rf.read
-def scan():
-    """Reads the chosen scene into field values, when the operator asks for it."""
-
 @rf.prepare
 def open_things():
     """Once per task, before its items."""
@@ -189,7 +182,15 @@ one.map(batch=False, on_error="stop")
 one.once()          # one task over the whole list, on one machine
 ```
 
-`on_error="continue"` finishes the rest of a slice before failing it, for a batch where one bad file should not cost you the other ninety-nine.
+`on_error="continue"` finishes the rest of a slice before failing it, for a batch where one bad file should not cost you the files after it.
+
+## When a task fails
+
+**A failed task stops its step.** `rf.Fatal`, an uncaught exception and a non-zero exit all fail the task, and every other task of the step fails with it: the next one runs the same script and would fail the same way. Machines still rendering the step are stopped, and tasks already completed stay completed.
+
+The job then fails, unless a later step is set to run on failure. Fix the cause and press **Start**, and the job renders what is left.
+
+The one failure that does not stop the step is `rf.AppNotFound`, raised by `rf.app()` below: the machine is wrong, not the work, so the task moves to another machine.
 
 ## Finding applications
 
@@ -215,7 +216,9 @@ When the machine does not have it, `rf.app()` raises `rf.AppNotFound`:
 source = rf.path(plate)
 ```
 
-A Windows workstation submits `P:/shots/010`. A Linux node mounts the same folder at `/mnt/shots/010`. `rf.path()` returns the form **this** machine uses, through the farm's mapping table.
+A Windows workstation submits `P:/shots/010`. A Mac node mounts the same share at `/Volumes/projects/shots/010`. `rf.path()` returns the form **this** machine uses, through the rules in **Settings → Mapped Paths**: each rule names one location for Windows, macOS and Linux, and a path starting with any of them comes back in this machine's form. A drive letter and a UNC path to the same share are two rules.
+
+Call it on every path a field hands you before opening it: a `rf.file`, `rf.folder` or `rf.output` value arrives exactly as the artist's machine wrote it. `rf.list()` and `rf.sequence()` already return mapped paths.
 
 ## Requiring software
 
@@ -369,11 +372,15 @@ Three keys make it more than a plain submission:
 
 `fields` can only narrow a field your script declares. It cannot add a field or change its type.
 
+The job's own settings go in the same recipe: `pool_id` and `priority`, and `metadata`, the labelled values the job carries, such as the artist or the render settings, each a `label`, a `value` and `"type": "string"`.
+
+**SDK sample · Cinema 4D** carries a complete one: `submit_to_renderflow.py`, run from Cinema 4D's Script Manager, sends the open scene with its frame range, a pool, a priority and metadata.
+
 The artist gets the full submitter, can change anything in it, and the job is created when they press **Submit**. When the RenderFlow app is not running on this machine, `opened` is `false` and `reason` says why. To skip the submitter and send the job straight to the farm, call `farm.jobs.create_job(body=recipe)` with the same recipe.
 
 ## Example
 
-A studio job type in about thirty lines. It renders a Cinema 4D scene, one frame per task, and reports the renderer's own progress:
+A studio job type in under fifty lines. It renders a Cinema 4D scene, one frame per task, and reports the renderer's own progress:
 
 ```python
 """Render a Cinema 4D scene through the command-line renderer."""
@@ -396,6 +403,10 @@ FORMATS = {"png": "PNG", "exr": "EXR"}
 def check():
     if not os.path.isfile(rf.path(scene)):
         raise rf.Fatal("that scene is not reachable from this machine")
+
+@rf.tasks
+def plan():
+    return rf.expand(frames)
 
 @rf.execute
 def render(frame):
@@ -422,4 +433,18 @@ def render(frame):
         raise rf.Fatal("Cinema 4D exited with {0} on frame {1}".format(proc.returncode, frame))
 ```
 
-With `cinema4d = "2026"` in `[requires]`, only machines with that line get the work, and `rf.app()` then picks the newest build on whichever machine it landed on.
+`@rf.tasks` makes every frame one task. Without it the job is a single task.
+
+With `cinema4d = "2026"` in `[requires]`, only machines with that line get the work. `rf.app()` then starts the build pinned in the step's requirements, or the newest one on the machine that took the task.
+
+## SDK samples
+
+Five sample plugins come with RenderFlow, in the `sdk/examples` folder of the installation. The submitter lists them as **SDK sample · Blender**, **SDK sample · Cinema 4D** and so on. Add one in **Settings → Plugins** to try it, or copy its folder, change `id` and `name` in `plugin.toml`, and add the copy to make your own.
+
+| Folder | Submitter name | What it shows |
+|---|---|---|
+| `com.pulze.example` | **SDK sample · Starter** | The smallest useful plugin: a folder, one task per file |
+| `com.pulze.cinema4d` | **SDK sample · Cinema 4D** | A plugin paired with a submitter inside Cinema 4D that sends the open scene, its frame range, a pool, a priority and metadata; `@rf.submit`, `@rf.tasks`, `@rf.prepare` and `@rf.execute`; and the environment Cinema 4D starts with |
+| `com.pulze.blender` | **SDK sample · Blender** | Renders a `.blend` headless; `show_if` on a field that only shows for Cycles, and scene settings overridden per job |
+| `com.pulze.convert` | **SDK sample · Convert images** | Batch mode with `rf.done()`, `@rf.prepare` and `@rf.cleanup`, and a recursive folder listing |
+| `com.pulze.contactsheet` | **SDK sample · Contact sheet** | `rf.sequence()`: tiles an earlier step's frames, or a browsed sequence, into one image, with a tool RenderFlow ships and one task for the whole step |

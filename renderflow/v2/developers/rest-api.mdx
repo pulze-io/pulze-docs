@@ -151,6 +151,8 @@ const job = await rf.jobs.createJob({
 
 `type`, `file` and `host` are required on every recipe. `frame` is a single frame, a range, a range with a step (`1-240:4`) or a list (`1,7,22`). `resolution` is a `WIDTHxHEIGHT` string. `priority` runs 0 to 100, and a job you do not set one on is created at 50.
 
+Every recipe also takes the fields that place and prepare the job. `pool_id` sends it to one pool, `nodes` limits it to the machines you list, and `master` names the machine that runs a distributed render's dispatcher, which must be one of `nodes` when you give both. `dependencies` lists the ids of jobs that must complete before this one starts. `env` sets environment variables for every application the job starts, and `$NAME` in a value reads what the application would have had. `licenses` names the render licenses the step takes a seat of, for what the scene cannot declare, such as a plugin inside it. `metadata` attaches labelled values the job carries, such as the artist or the shot, each a `label`, a `value` and `"type": "string"`.
+
 **`wait` decides what you get back.** Without it the call answers **202** with a job that is still being built, which is right for a submitter that does not want to hold an artist's application open. With `?wait=true` it answers **201** and the job in the body is ready to start.
 
 A submitted job is `pending` and will be picked up. Pass `"status": "suspended"` to have it wait until an operator starts it.
@@ -188,6 +190,33 @@ PATCH /jobs
 ```
 
 One call, not a loop. The farm applies them together and reports the count.
+
+## Which machines can run a step
+
+A step that is held back carries a `wait` object saying why. `reason` is `license` when it is waiting for a seat of a counted render license, with that license's name on `license`, or `requirements` when no machine in its scope meets what the step requires. `title` is the sentence the job screens show, and `at` is when the wait began. A step that is not waiting has no `wait`, or `null`.
+
+To see which machines could take the step, and why the rest cannot, ask for its candidates:
+
+<CodeGroup>
+```bash curl
+curl "http://10.11.30.40:44442/api/v1/jobs/68b1f0c2a4d3e5f6a7b8c9d0/steps/68b1f0c2a4d3e5f6a7b8c9d4/candidates?verdict=ineligible" \
+  -H "Authorization: Bearer $RENDERFLOW_API_KEY"
+```
+
+```python Python
+report = farm.jobs.get_step_candidates(job_id, step_id, verdict="ineligible")
+print(report.counts.eligible, report.counts.ineligible, report.counts.excluded)
+```
+
+```typescript TypeScript
+const report = await rf.jobs.getStepCandidates(jobId, stepId, { verdict: "ineligible" });
+console.log(report.counts);
+```
+</CodeGroup>
+
+Every machine gets one of three verdicts. `eligible` can render the step, and its pool and its current status are never a reason against it. `ineligible` needs a different setup, such as software the step requires. `excluded` already failed this step, with a fatal error or with its tries spent. `counts` totals the three, `groups` collects the machines that cannot take the step by reason, `reqs` counts for each requirement how many machines in scope meet it, `licenses` lists the counted render licenses the step consumes with the seats in use, and `wait` repeats the step's own. `data` is a page of machines, each with its `verdict` and its `reasons`.
+
+`verdict` takes a comma-separated list, and `search` matches the machine name. `req_id` turns the page into one requirement's table, where each row carries `met` and, when the machine misses it, `have`, the closest thing it has. Add `met=false` to see only the machines that miss it.
 
 ## Status vocabularies
 

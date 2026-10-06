@@ -33,8 +33,8 @@ Call it by its full path, or add that folder to `PATH` yourself. Every example b
 **It needs an API key, always.** Even on the machine running the service, where the REST API itself would answer without one:
 
 ```bash
-export RENDERFLOW_API_KEY=rf_live_...      # bash
-$env:RENDERFLOW_API_KEY = "rf_live_..."    # PowerShell
+export RENDERFLOW_API_KEY=rf_a1b2c3...      # bash
+$env:RENDERFLOW_API_KEY = "rf_a1b2c3..."    # PowerShell
 ```
 
 Create one in the app under **Settings**, **API Keys**.
@@ -57,6 +57,8 @@ rfcli --server https://rf.studio.lan --ca //NAS/it/studio-ca.pem nodes list
 export RENDERFLOW_CA=//NAS/it/studio-ca.pem
 ```
 
+`--insecure` accepts a certificate this machine does not trust, for a test farm with a self-signed certificate. It also accepts one that is not the farm's, so keep it off a production farm.
+
 ## The shape of every command
 
 ```
@@ -73,6 +75,7 @@ The mapping is mechanical in both directions:
 | `POST /jobs/stop` | `rfcli jobs stop <id> <id> <id>` |
 | `PATCH /nodes/{id}/status` | `rfcli nodes status <id> --status suspended` |
 | `GET /jobs/{id}/steps/{step_id}/logs` | `rfcli jobs logs <id> <step_id>` |
+| `GET /jobs/{id}/steps/{step_id}/candidates` | `rfcli jobs candidates-step <id> <step_id>` |
 
 **One id uses the route built for one; more than one uses the bulk route.** They are the same sentence with a different number of nouns, and the CLI picks the endpoint. `--ids a,b,c` is the same thing comma separated, for a list that came out of another command.
 
@@ -84,10 +87,13 @@ A terminal gets a table; a pipe gets JSON.
 
 ```bash
 $ rfcli jobs list --status working --limit 3
-_id                       name                  status   priority  progress  pool_id
-68b1f0c2a4d3e5f6a7b8c9d0  Hero 010 lighting     working  80        42%       68b1f0...
-68b1f0c2a4d3e5f6a7b8c9d1  Hero 020 lighting     working  75        7%        68b1f0...
-68b1f0c2a4d3e5f6a7b8c9d2  Env 050 cryptomatte   working  50        91%       68b1f0...
+
+  ID                        NAME                 STATUS   PRIORITY  PROGRESS  POOL_ID                   CREATED_AT
+  68c2a91e4b7d3f0a1c5e8b20  Hero 010 lighting    working  80        42%       68b1f0c2a4d3e5f6a7b8c9e1  1785846207000
+  68c2a9a34b7d3f0a1c5e8b31  Hero 020 lighting    working  75        7%        68b1f0c2a4d3e5f6a7b8c9e1  1785849807000
+  68c2aa074b7d3f0a1c5e8b42  Env 050 cryptomatte  working  50        91%       68b1f0c2a4d3e5f6a7b8c9e2  1785853407000
+
+  3 of 96
 ```
 
 ```bash
@@ -113,11 +119,11 @@ rfcli live
 rfcli live nodes
 ```
 
-Two panes, jobs and nodes, fed by the same socket the operator UI uses rather than by polling.
+One pane at a time, under the tabs **JOBS** and **MACHINES**, fed by the same socket the operator UI uses rather than by polling. `rfcli top` is the same command. `--fps` caps how often the screen redraws, 8 times a second by default.
 
 | Key | |
 |---|---|
-| `Tab`, `1`, `2` | Between jobs and nodes |
+| `Tab`, `1`, `2` | Between **JOBS** and **MACHINES** |
 | `↑` `↓`, `k` `j` | Move the selection |
 | `s` | Stop a job, or suspend a machine |
 | `r` | Reset a job, or resume a machine |
