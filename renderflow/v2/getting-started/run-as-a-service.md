@@ -26,25 +26,49 @@ RenderFlow ships `srvctrl.exe` next to `rfsv.exe` in the install folder. It regi
 
 ### Register
 
-```cmd
-"C:\Program Files\Pulze\RenderFlow\srvctrl.exe" add --name RenderFlow -- "C:\Program Files\Pulze\RenderFlow\rfsv.exe"
-```
+Open PowerShell as administrator. Set the account and password on the first lines, then run the whole block. A local account is written `$env:COMPUTERNAME\renderfarm`.
 
-Set it to start on boot and give it an account:
+```powershell
+$account  = 'DOMAIN\renderfarm'
+$password = 'the account password'
+$install  = 'C:\Program Files\Pulze\RenderFlow'
 
-```cmd
-sc.exe config RenderFlow start= auto
-sc.exe config RenderFlow obj= "DOMAIN\renderfarm" password= "..."
+# Register the service
+& "$install\srvctrl.exe" add --name RenderFlow -- "$install\rfsv.exe"
+
+# Start on boot, as the service account
+sc.exe config RenderFlow start= auto obj= $account password= $password
 sc.exe description RenderFlow "RenderFlow Service"
+
+# Give the account the "Log on as a service" right
+$sid = (New-Object System.Security.Principal.NTAccount($account)).Translate([System.Security.Principal.SecurityIdentifier]).Value
+$inf = "$env:TEMP\renderflow-rights.inf"
+$sdb = "$env:TEMP\renderflow-rights.sdb"
+secedit /export /cfg $inf /areas USER_RIGHTS | Out-Null
+$rights = Get-Content $inf
+$line = $rights | Where-Object { $_ -like 'SeServiceLogonRight*' }
+if (-not $line) {
+    $rights = $rights -replace '^\[Privilege Rights\]$', "[Privilege Rights]`r`nSeServiceLogonRight = *$sid"
+} elseif ($line -notlike "*$sid*") {
+    $rights = $rights -replace '^SeServiceLogonRight = .*$', "$line,*$sid"
+}
+$rights | Set-Content $inf -Encoding Unicode
+secedit /configure /db $sdb /cfg $inf /areas USER_RIGHTS | Out-Null
+Remove-Item $inf, $sdb
+
+# Start it
+Start-Service RenderFlow
 ```
 
-Start it:
-
-```cmd
-net start RenderFlow
-```
+Keep the password in single quotes. In double quotes PowerShell reads a `$` in the password as a variable, the service gets the wrong password and does not start.
 
 `srvctrl.exe` relaunches `rfsv.exe` when it exits, which covers a restart after a configuration change or an update.
+
+<Warning>
+`sc.exe` sets the account but does not give it the **Log on as a service** right. Without that right the service does not start and Windows reports **Error 1069: The service did not start due to a logon failure**. The block above grants it. Entering the account in **Services → RenderFlow → Log On** grants it too, which is why saving the same credentials there also fixes the error.
+
+If a domain Group Policy sets **Log on as a service**, it replaces the local setting at the next policy refresh. Add the account to that policy instead.
+</Warning>
 
 ### The service account
 
@@ -60,10 +84,12 @@ A Windows service runs in Session 0, which has no mapped drive letters. A scene 
 
 ### Remove
 
-```cmd
-net stop RenderFlow
+```powershell
+Stop-Service RenderFlow
 sc.exe delete RenderFlow
 ```
+
+An update keeps the service, its account and its start setting. Only an uninstall removes it.
 
 ## Linux
 
