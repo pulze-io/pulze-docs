@@ -5,6 +5,44 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="2.0.18-beta" description="October 13, 2026">
+RenderFlow 2.0.18 adds benchmarks, node order, live previews for more renderers and VRED Pro and Core, along with fixes for Maya, Cinema 4D, Unreal Engine and the installers.
+
+**Updates:**
+- New Benchmarks: run Blender, Cinebench, Redshift, V-Ray or your own scene and save each machine's score
+- New Node order: send work to the best machines first, by benchmark, GPU memory, RAM, CPU threads or machine type
+- New scene browsing for 3ds Max, Blender, Cinema 4D and Maya, the same as submitting from the application
+- Live preview for V-Ray Standalone, Arnold, Cinema 4D and Maya with V-Ray
+- New Blacklist: keep machines off one step of a job
+- Render licences can exclude machines from the seat count
+- VRED Pro and VRED Core support, with the scene's viewpoints, clips and Render Settings
+- Nuke and Fusion steps can read an earlier step's render, and write their outputs elsewhere
+- Unreal Engine Movie Render Graph and Basic configs
+- New `rfsv service install` for the Windows service, and upgrades keep the service
+- `rfcli` accepts names instead of ids and prints readable tables
+- macOS tells you when Local Network access blocks RenderFlow
+- `Ctrl+O` (`⌘O` on macOS) opens a job's output folder, and shortcuts show next to their actions
+- Log search highlights every match
+- Error messages open in full, with Copy
+- The submitter remembers the last folder you browsed and offers each step's output formats
+- Version lists show the newest first, and a step asks for exactly the version you pick
+
+**Fixes:**
+- Fixed editing several jobs at once giving them all one job's frames
+- Fixed a second scene keeping the first scene's settings
+- Fixed the last frame of a batch keeping its in-progress preview
+- Fixed Cinema 4D frames on Linux counting toward the wrong task
+- Fixed Unreal projects missing from Perforce failing with "Scene file not found"
+- Fixed Submit staying off when a step's scene comes from an earlier step
+- Fixed slow `.vrscene` exports
+- Fixed single-frame RenderMan renders not being found
+- Fixed slow upgrades on machines with a large cache
+- Fixed Show in Explorer for backups
+- Fixed the VRED plugin not installing
+- Fixed the audit log filling up with retries from removed machines
+- Various stability improvements
+</Update>
+
 <Update label="2.0.17-beta" description="October 6, 2026">
 RenderFlow 2.0.17 adds Perforce sync for Unreal Engine, SketchUp, Rhino and Autograph, custom tabs and a view of which machines can render a step, along with many fixes.
 
@@ -17,7 +55,6 @@ RenderFlow 2.0.17 adds Perforce sync for Unreal Engine, SketchUp, Rhino and Auto
 - A step no machine can render waits with its reason instead of failing
 - New custom views for Jobs and Machines, named tabs with their own filters and sorting, per user
 - New Open in…: open a job's outputs in RV, mrv2, DJV or Chaos Player
-- New Render on…: rerun tasks on the machines you pick
 - Groups can hide pools from their members
 - Maya pre- and post-render scripts
 - Blender job can override the render engine and Cycles device

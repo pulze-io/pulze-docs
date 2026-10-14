@@ -94,6 +94,65 @@ rfcli jobs create --wait --data '{
 
 The path is the one thing worth being careful about. **It has to be reachable from every render machine**, so a UNC path or a mapped share, never `C:/Users/...`. A local path submits fine and fails on every machine but yours.
 
+## Submit jobs that run one after another
+
+A batch of jobs renders in the order it was submitted when each job depends on the one before it. A dependency names a job that already exists, so submit the jobs one at a time and pass each new id into the next job's `dependencies`:
+
+<CodeGroup>
+```bash rfcli
+PREV=""
+for SHOT in 010 020 030; do
+    DEPS=$([ -n "$PREV" ] && echo "\"dependencies\": [\"$PREV\"]," || echo "")
+    PREV=$(rfcli --json jobs create --data "{ $DEPS
+        \"type\": \"blender.render\",
+        \"name\": \"Hero $SHOT lighting\",
+        \"file\": \"//NAS/projects/hero/shots/$SHOT/lighting_v014.blend\",
+        \"host\": { \"id\": \"blender\", \"version\": \"4.5\" },
+        \"frame\": \"1-240\"
+    }" | jq -r '.data.id')
+    echo "Hero $SHOT lighting: $PREV"
+done
+```
+
+```python Python
+previous = None
+
+for shot in ["010", "020", "030"]:
+    body = {
+        "type": "blender.render",
+        "name": f"Hero {shot} lighting",
+        "file": f"//NAS/projects/hero/shots/{shot}/lighting_v014.blend",
+        "host": {"id": "blender", "version": "4.5"},
+        "frame": "1-240"
+    }
+    if previous:
+        body["dependencies"] = [previous]
+
+    previous = farm.jobs.create_job(body=body).id
+    print(body["name"], previous)
+```
+
+```typescript TypeScript
+let previous: string | undefined;
+
+for (const shot of ["010", "020", "030"]) {
+    const job = await client.jobs.createJob({
+        type: "blender.render",
+        name: `Hero ${shot} lighting`,
+        file: `//NAS/projects/hero/shots/${shot}/lighting_v014.blend`,
+        host: { id: "blender", version: "4.5" },
+        frame: "1-240",
+        ...(previous ? { dependencies: [previous] } : {})
+    });
+
+    previous = job.id;
+    console.log(job.name, job.id);
+}
+```
+</CodeGroup>
+
+A dependent job starts when the job it depends on completes. When that job fails, the next one waits until the failed job is reset and completes, so a failure holds the rest of the batch rather than rendering past it. Each job keeps its own name, priority and pool, and appears as its own row in the jobs table.
+
 ## Build a multi-step job by reading one back
 
 A step tree is the `steps` array, and each step's configuration is its `props`, the same tagged union the submitter fills in. Rather than assembling that from the schema, build the chain once in the submitter and read it back:

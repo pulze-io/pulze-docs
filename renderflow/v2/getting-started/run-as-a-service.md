@@ -22,53 +22,48 @@ A workstation does not need a service. The desktop app starts the background ser
 
 ## Windows
 
-RenderFlow ships `srvctrl.exe` next to `rfsv.exe` in the install folder. It registers the service and restarts the program when it exits.
+RenderFlow registers its own Windows service. It starts on boot as the account you give it, and that account is granted the **Log on as a service** right it needs. `srvctrl.exe`, next to `rfsv.exe` in the install folder, runs the service and relaunches `rfsv.exe` whenever it exits, which covers a restart after a configuration change.
 
-### Register
+### At install time
 
-Open PowerShell as administrator. Set the account and password on the first lines, then run the whole block. A local account is written `$env:COMPUTERNAME\renderfarm`.
+Add the account to the [silent install](/renderflow/v2/getting-started/silent-deploy):
 
-```powershell
-$account  = 'DOMAIN\renderfarm'
-$password = 'the account password'
-$install  = 'C:\Program Files\Pulze\RenderFlow'
-
-# Register the service
-& "$install\srvctrl.exe" add --name RenderFlow -- "$install\rfsv.exe"
-
-# Start on boot, as the service account
-sc.exe config RenderFlow start= auto obj= $account password= $password
-sc.exe description RenderFlow "RenderFlow Service"
-
-# Give the account the "Log on as a service" right
-$sid = (New-Object System.Security.Principal.NTAccount($account)).Translate([System.Security.Principal.SecurityIdentifier]).Value
-$inf = "$env:TEMP\renderflow-rights.inf"
-$sdb = "$env:TEMP\renderflow-rights.sdb"
-secedit /export /cfg $inf /areas USER_RIGHTS | Out-Null
-$rights = Get-Content $inf
-$line = $rights | Where-Object { $_ -like 'SeServiceLogonRight*' }
-if (-not $line) {
-    $rights = $rights -replace '^\[Privilege Rights\]$', "[Privilege Rights]`r`nSeServiceLogonRight = *$sid"
-} elseif ($line -notlike "*$sid*") {
-    $rights = $rights -replace '^SeServiceLogonRight = .*$', "$line,*$sid"
-}
-$rights | Set-Content $inf -Encoding Unicode
-secedit /configure /db $sdb /cfg $inf /areas USER_RIGHTS | Out-Null
-Remove-Item $inf, $sdb
-
-# Start it
-Start-Service RenderFlow
+<CodeGroup>
+```bat Command Prompt
+renderflow-2.0.17.0044-windows-x64.exe --silent --type=node --server=10.11.30.40 --service-account=DOMAIN\renderfarm --service-password="the password"
 ```
 
-Keep the password in single quotes. In double quotes PowerShell reads a `$` in the password as a variable, the service gets the wrong password and does not start.
+```powershell PowerShell
+.\renderflow-2.0.17.0044-windows-x64.exe --% --silent --type=node --server=10.11.30.40 --service-account=DOMAIN\renderfarm --service-password="the password"
+```
+</CodeGroup>
 
-`srvctrl.exe` relaunches `rfsv.exe` when it exits, which covers a restart after a configuration change or an update.
+The installer configures the machine, registers the service, grants the account the right and starts the service. If the service cannot be registered, the installer still installs, prints why and exits with error level 3.
 
-<Warning>
-`sc.exe` sets the account but does not give it the **Log on as a service** right. Without that right the service does not start and Windows reports **Error 1069: The service did not start due to a logon failure**. The block above grants it. Entering the account in **Services → RenderFlow → Log On** grants it too, which is why saving the same credentials there also fixes the error.
+### On an installed machine
 
-If a domain Group Policy sets **Log on as a service**, it replaces the local setting at the next policy refresh. Add the account to that policy instead.
-</Warning>
+Open a Command Prompt or PowerShell as administrator, in the install folder:
+
+<CodeGroup>
+```bat Command Prompt
+cd "C:\Program Files\Pulze\RenderFlow"
+rfsv service install --account DOMAIN\renderfarm
+```
+
+```powershell PowerShell
+cd "C:\Program Files\Pulze\RenderFlow"
+.\rfsv service install --account DOMAIN\renderfarm
+```
+</CodeGroup>
+
+It asks for the password, then registers the service, sets it to start on boot, grants the account the right and starts it.
+
+- A local account can be given by its name alone, as `--account renderfarm`.
+- A group managed service account (`DOMAIN\name$`) has no password, and is not asked for one.
+- In a script, set `RENDERFLOW_SERVICE_PASSWORD` instead of being asked.
+- `--no-start` leaves the service stopped.
+
+Run it again to change the account or its password. An existing service is updated in place and restarted. On a machine whose service already fails with Error 1069, run it without `--account`: it grants the right to the account the service already has.
 
 ### The service account
 
@@ -84,12 +79,13 @@ A Windows service runs in Session 0, which has no mapped drive letters. A scene 
 
 ### Remove
 
-```powershell
-Stop-Service RenderFlow
-sc.exe delete RenderFlow
+As administrator, in the install folder (`.\rfsv` in PowerShell):
+
+```bat
+rfsv service remove
 ```
 
-An update keeps the service, its account and its start setting. Only an uninstall removes it.
+This stops the service and removes it. RenderFlow stays installed. `rfsv service status` shows whether a service is registered, its state, start setting and account.
 
 ## Linux
 

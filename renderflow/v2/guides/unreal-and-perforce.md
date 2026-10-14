@@ -54,6 +54,8 @@ Open the **Tools** menu and press **Submit to RenderFlow**. If the project has u
 <Step title="Check the project source">
 The RenderFlow submitter opens with the job. Under the project, **Project source** reads **Sync from Perforce**, with the **Server** from Settings → Perforce and the artist's **Workspace**. **Copy to repository** and **Render in place** are there too, for a job that should not sync.
 
+If the `.uproject` file was added to Perforce but never submitted, the nodes cannot sync it. The submitter then keeps **Copy to repository** and says *The project file isn't submitted to Perforce, so the project is copied.* Submit the project file to Perforce to render it with a sync.
+
 <Frame caption="The submitter opened from Unreal, with the project synced from Perforce">
   <img src="/images/renderflow/v2/rf_submitter_unreal_perforce.webp" alt="The RenderFlow submitter with an Unreal step: Project source set to Sync from Perforce, the Studio depot server, the artist's workspace, a note that the checked-out files are shelved in changelist 48211, the render item and the frame range" />
 </Frame>
@@ -69,7 +71,7 @@ The nodes render the files the artist's workspace has, at the revisions the arti
 
 If `p4` is not installed on the workstation, or shelving fails, Unreal asks whether to submit anyway. A job submitted that way renders the workspace without the checked-out files, and the submitter shows how many files it leaves out.
 
-**The output folder.** Unreal's default output, `Saved/MovieRenders` inside the project, exists only in the artist's workspace. RenderFlow writes it to the job's folder in the repository instead, where every machine can reach it.
+**The output folder.** Each render item writes to the output directory of its config, `Saved/MovieRenders` inside the artist's project by default. A node renders into a folder of its own and copies the frames there as each task ends. A workspace on the artist's own disk is not reachable from the nodes, so set the config's output directory to a shared folder before you submit. If the copy fails, the job's log says so and names the folder on the node where the frames stayed.
 
 <Note>
 The submitter matches the address Unreal reports against the servers in **Settings → Perforce**. If it finds none, it says so above the project source. Add the server under that address, or pick the server it is reached by from **Server**.
@@ -81,14 +83,14 @@ Each task shows **Syncing from Perforce** with a percentage while its node syncs
 
 ```
 Perforce: connecting to perforce.studio.local:1666 as renderfarm
-Perforce: workspace rf-node-07-8d090b98db17 at C:\ProgramData\RenderFlow\cache\perforce\8d090b98db17
+Perforce: workspace rf-node-07-8d090b98db17 at C:\ProgramData\RenderFlow\cache\8d090b98db17\project
 Perforce: syncing //project/main/Hero/...@anna-hero, 1204 file(s), 18.6 GB to transfer
 Perforce: rf-node-07-8d090b98db17 now has //project/main/Hero/...@anna-hero
 ```
 
 The log lists the first 1,000 files a sync transfers and counts the rest.
 
-**Workspaces on the nodes.** A node keeps one workspace for each server and depot folder it has rendered, in the `cache\perforce` folder of the RenderFlow data folder (`C:\ProgramData\RenderFlow\cache\perforce` on Windows). After a sync it keeps the workspace it synced last and removes the older ones. Before transferring, it checks that the disk has room for the sync and 1 GB more.
+**Workspaces on the nodes.** A node keeps each project it renders in a folder of its own under `cache` in the RenderFlow data folder (`C:\ProgramData\RenderFlow\cache` on Windows). The project's files are in its `project` folder, whether they came from a Perforce sync or a copy, beside Unreal's own caches for that project. A node keeps the three projects it used most recently and removes older ones, but never a project a running job is using. Before transferring, it checks that the disk has room for the sync and 1 GB more.
 
 ## When a sync fails
 
@@ -101,3 +103,4 @@ The task fails with one of these errors, and the job's error list says what to d
 | **Perforce login failed** | Check the **User** and **Password** under **Settings → Perforce** |
 | **Perforce sync failed** | Check that the node can reach the server, and that the artist's workspace still exists |
 | **Not enough disk space for the Perforce sync** | Free space on the node, or exclude it from the job |
+| **Scene not in Perforce** | Submit the scene to Perforce, or set **Project source** to **Copy to repository** |

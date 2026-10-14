@@ -199,6 +199,20 @@ const buffer = Buffer.from(await blob.arrayBuffer());
 
 `size` is `thumb`, `preview` or `full`. A `full` frame is transcoded on demand, so it costs the farm something and a wall dashboard should ask for `thumb`.
 
+## Exports
+
+The statistics, the event and audit logs export as text: CSV or NDJSON, one JSON object per line.
+
+```typescript
+import { writeFile } from "node:fs/promises";
+
+const report = await rf.statistics.exportStatistics({ format: "csv", from: "2026-09-01T00:00:00Z", to: "2026-10-01T00:00:00Z" });
+await writeFile("september.csv", report);
+
+const events = await rf.events.exportEventLog({ from: Date.now() - 86_400_000 });
+for (const line of events.split("\n").filter(Boolean)) console.log(JSON.parse(line).action);
+```
+
 ## Nodes and the rest of the farm
 
 ```typescript
@@ -208,7 +222,7 @@ const node = await rf.nodes.getNode(id, { extend: true });   // joins hardware, 
 await rf.nodes.updateNodeStatus(id, { status: "suspended" });
 await rf.nodes.updateNodePool(id, { pool_id: pool.id });
 
-const ranking = await rf.nodes.getNodeBenchmarkRanking({ type: "vray" });
+for (const score of node.benchmarks ?? []) console.log(score.name, score.value);   // one score per benchmark
 ```
 
 ```typescript
