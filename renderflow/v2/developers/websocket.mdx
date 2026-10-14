@@ -115,7 +115,7 @@ Every one of these but `commands` mirrors a `public` REST route, so an API key s
 | `nodes` | a patch | A node's `alive` and `last_seen` heartbeat is dropped rather than sent. It is bookkeeping, and nothing renders it |
 | `hardware` | a patch | One sample per machine every few seconds. Filter it |
 | `software` | the document | Replaced whole when a machine re-reports |
-| `benchmarks` | the document | |
+| `benchmarks` | the document | One machine's score on one benchmark: `definition_id`, `name`, `value`, and the `job_id` of the run that measured it |
 | `pools` | a patch | |
 | `users`, `user-groups` | a patch | |
 | `errors` | a patch | |

@@ -66,8 +66,9 @@ help(farm.jobs.get_jobs)     # what it takes, from the document
 
 ```
 >>> farm.tags()
-['archive', 'errors', 'info', 'jobs', 'licenses', 'nodes', 'pools',
- 'schedule', 'service', 'tasks', 'user_groups', 'users', 'webhooks']
+['archive', 'audit', 'database', 'errors', 'events', 'info', 'jobs',
+ 'licenses', 'nodes', 'pools', 'schedule', 'service', 'statistics',
+ 'support', 'system', 'tasks', 'user_groups', 'users', 'webhooks']
 
 >>> dir(farm.jobs)
 ['create_job', 'delete_job', 'delete_jobs', 'finish_jobs', 'get_job', 'get_job_step',
@@ -87,7 +88,7 @@ Names are the document's operation ids in snake case, so one operation reads the
 | `POST /jobs/{id}/stop` | `farm.jobs.stop_job(job_id)` |
 | `GET /jobs/{id}/steps/{step_id}/logs` | `farm.jobs.get_step_logs(job_id, step_id, node_id=...)` |
 
-**Positional arguments are the path parameters, in the document's order.** Everything else is named: a query parameter by its own name, a request body as `body=`.
+**Positional arguments are the path parameters, in the document's order.** Everything else is named: a query parameter by its own name, a request body as `body=`. A parameter named like a Python keyword takes a trailing underscore, so `from` is written `from_`.
 
 ## Reading an answer
 
@@ -108,6 +109,17 @@ frame = farm.tasks.get_task_preview(task_id, size="preview")
 
 with open("frame.jpg", "wb") as handle:
     handle.write(frame)
+```
+
+The exports work the same way. A CSV export comes back as bytes, and an NDJSON export, which is one JSON object per line, comes back as text:
+
+```python
+report = farm.statistics.export_statistics(format="csv", from_="2026-09-01T00:00:00Z", to="2026-10-01T00:00:00Z")
+
+with open("september.csv", "wb") as handle:
+    handle.write(report)
+
+events = farm.events.export_event_log(from_=1788904037992)   # text, one JSON object per line
 ```
 
 ### Typed, with nothing installed

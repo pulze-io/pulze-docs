@@ -61,6 +61,15 @@ GET /tasks?job_id=68b1f0c2a4d3e5f6a7b8c9d0&status=failed&limit=200
 GET /nodes?status=busy
 ```
 
+**To find one thing by its name**, `GET /jobs`, `GET /nodes` and `GET /users` take `name`, which matches the name exactly, case included. `search` is the loose match: a substring, ignoring case, of the name, and also of a machine's alias or a user's account and email.
+
+```
+GET /nodes?name=RN-014
+GET /jobs?name=Hero%20010%20lighting
+```
+
+Two jobs can share a name, so a `name` filter on jobs can answer more than one row.
+
 ## Types on the wire
 
 | | |

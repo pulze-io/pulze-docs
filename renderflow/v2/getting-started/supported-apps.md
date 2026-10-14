@@ -32,7 +32,8 @@ RenderFlow detects the applications and render engines installed on every machin
 | SketchUp | Any | Windows, macOS | V-Ray, rendered by V-Ray Standalone |
 | Unreal Engine | 5.0 and newer | Windows, Linux, macOS | |
 | Vantage | 3.3 and newer | Windows | |
-| VRED | 2024 to 2027 | Windows | CPU and GPU raytracing |
+| VRED Pro | 2024 to 2027 | Windows | |
+| VRED Core | 2024 to 2027 | Windows | |
 
 A plugin found inside an application is reported with it, so a step can require it: Phoenix, tyFlow, Forest Pack and RailClone in 3ds Max, for example.
 
@@ -64,7 +65,7 @@ A plugin found inside an application is reported with it, so a step can require 
 | Fusion | Renders a Fusion composition |
 | Harmony | Renders the Write nodes of a Harmony scene |
 | KeyShot | Renders a KeyShot scene |
-| VRED | Renders a VRED scene, its clips or a sequence |
+| VRED | Renders a VRED scene |
 | Vantage | Renders a Vantage project |
 | Autograph | Renders an Autograph composition |
 | ComfyUI | Runs a ComfyUI workflow |

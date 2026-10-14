@@ -72,6 +72,12 @@ The installer configures the system firewall for you:
 
 A third-party firewall or a corporate security policy will need these exceptions added manually, along with outbound access on the server to `*.pulze.io` (skip it entirely if you are on offline licensing) and, optionally, `*.renderflow.com`. See [Internet access](#internet-access) below for what each domain is for.
 
+### Local Network access on macOS
+
+macOS asks before an application may reach other machines on the local network. The first time RenderFlow connects to the server, macOS asks whether to allow it. Press **Allow**, for both the RenderFlow app and `rfsv`.
+
+If access is off, the Mac cannot reach the server even though the network is fine, and RenderFlow reports **Local Network access is off**. Turn on **RenderFlow** and **rfsv** in **System Settings → Privacy & Security → Local Network**.
+
 ### Fixed IP addresses
 
 Give the server a fixed address. If it changes, every machine in the farm loses its connection and has to be pointed at the new one.

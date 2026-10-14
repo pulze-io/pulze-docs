@@ -10,7 +10,7 @@ keywords: ['silent install render farm', 'unattended render node deployment', 'd
 Everything the setup wizard asks can be answered on the command line instead. The installer lands the files and hands its flags to `rfsv config`, which layers them over whatever the machine already holds, so any flag you leave out keeps its current value rather than being reset.
 
 <Note>
-Installing and configuring a machine does not start it. A workstation is started by the desktop app at user login, while an unattended machine needs the service registered, a deliberate second step, because that is where you choose the account the service runs as. Finish a headless deployment with [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+Installing and configuring a machine does not start it. A workstation is started by the desktop app at user login, while an unattended machine needs the service registered under an account that can reach your storage. On Windows, `--service-account` does that during the install. On Linux and macOS, and for the details, see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## Installer flags
@@ -37,8 +37,12 @@ The same flags work on every platform.
 | `--tls-ca=<path>` | CA certificate to trust for HTTPS: a private server certificate, or a proxy that re-signs TLS |
 | `--tls-port=<port>` | Port of the HTTPS listener, default 44445. Server only |
 | `--server-tls` | The server answers over TLS, which `--server=https://host` also says. Node and workstation only |
+| `--service-account=<name>` | Register the RenderFlow service, started on boot as this account, and grant it **Log on as a service**. `DOMAIN\name`, a local account's name, or a gMSA (`name$`). Windows only |
+| `--service-password=<pass>` | The service account's password. Windows only |
 
 `--help` prints this list and exits.
+
+On Windows the installer exits with error level 1 when a flag is refused, 2 when a running application such as 3ds Max blocks it, and 3 when it installed but could not register the service. It prints the reason in each case.
 
 The uninstaller takes one flag of its own: `--purge` (`/PURGE` on Windows) also removes the database, the configuration and the logs. Without it, reinstalling finds the farm as it was.
 
@@ -58,6 +62,14 @@ A render node, placed straight into a named pool:
 ```powershell
 renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=node --server=10.11.30.40 --pool=gpu
 ```
+
+A render node that runs as a service under a domain account, from a Command Prompt or a deployment tool:
+
+```bat
+renderflow-2.0.17.0044-windows-x64.exe --silent --type=node --server=10.11.30.40 --service-account=DOMAIN\renderfarm --service-password="the password"
+```
+
+See [Run as a Service](/renderflow/v2/getting-started/run-as-a-service#windows) for the PowerShell form.
 
 A node behind a proxy:
 
