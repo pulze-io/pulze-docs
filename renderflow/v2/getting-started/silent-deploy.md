@@ -37,6 +37,8 @@ The same flags work on every platform.
 | `--tls-ca=<path>` | CA certificate to trust for HTTPS: a private server certificate, or a proxy that re-signs TLS |
 | `--tls-port=<port>` | Port of the HTTPS listener, default 44445. Server only |
 | `--server-tls` | The server answers over TLS, which `--server=https://host` also says. Node and workstation only |
+| `--server-port=<port>` | The server's port, when it is not the farm's own: a server behind a proxy or tunnel on 443, which `--server=https://host:443` also says. Node and workstation only |
+| `--ephemeral` | Remove this machine from the farm once it goes offline. For Spot and autoscaled cloud machines that never come back |
 | `--service-account=<name>` | Register the RenderFlow service, started on boot as this account, and grant it **Log on as a service**. `DOMAIN\name`, a local account's name, or a gMSA (`name$`). Windows only |
 | `--service-password=<pass>` | The service account's password. Windows only |
 
@@ -115,6 +117,8 @@ Every flag has an environment variable behind it, which is usually what a servic
 | `--type` | `RENDERFLOW_TYPE` |
 | `--ip` | `RENDERFLOW_IP` |
 | `--server-tls` | `RENDERFLOW_SERVER_TLS` |
+| `--server-port` | `RENDERFLOW_SERVER_PORT` |
+| `--ephemeral` | `RENDERFLOW_EPHEMERAL` |
 | `--repository` | `RENDERFLOW_REPOSITORY_PATH` |
 | `--pool` | `RENDERFLOW_POOL` |
 | `--uri` | `RENDERFLOW_DB_URI` |
@@ -179,4 +183,5 @@ A machine that is reset while the server still holds its old record rejoins as a
 ## Next steps
 
 - [Run as a Service](/renderflow/v2/getting-started/run-as-a-service): the step that makes a headless machine render
+- [Install with One Command](/renderflow/v2/getting-started/install-with-one-command): a node installed from the server, in the server's version
 - [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes): the same farm, set up through the app
