@@ -1,6 +1,6 @@
 ---
 title: "Run as a Service"
-description: "Run RenderFlow on unattended render nodes: Windows services, systemd units and launchd agents, and the service account and path rules a node needs to render."
+description: "Run RenderFlow on unattended render nodes: Windows services, systemd services and launchd daemons you can register with the installer or write yourself, and the account and path rules a node needs to render."
 "og:title": "Run RenderFlow as a Service (Windows, Linux, macOS)"
 "og:description": "Register RenderFlow to start on boot on every platform, with an account that can reach your storage."
 "twitter:title": "Run RenderFlow as a Service"
@@ -9,7 +9,7 @@ keywords: ['render farm Windows service', 'render node without login', 'headless
 
 A dedicated render node runs unattended. Registered as a service, RenderFlow starts after a reboot, joins the farm and renders without a user session.
 
-Registering the service is a step you do yourself, and it is where you choose the account RenderFlow runs under, an account that needs rights on your storage, so it is worth settling before you start.
+The installer puts RenderFlow in place and registers no service unless you ask for one. Add `--service` to register it on a server or a render node, or set it up yourself afterwards. On Windows you also choose the account RenderFlow runs under, an account that needs rights on your storage, so it is worth settling before you start.
 
 A workstation does not need a service. The desktop app starts the background service at user login.
 
@@ -22,7 +22,7 @@ A workstation does not need a service. The desktop app starts the background ser
 
 ## Windows
 
-RenderFlow registers its own Windows service. It starts on boot as the account you give it, and that account is granted the **Log on as a service** right it needs. `srvctrl.exe`, next to `rfsv.exe` in the install folder, runs the service and relaunches `rfsv.exe` whenever it exits, which covers a restart after a configuration change.
+RenderFlow registers its own Windows service when you ask it to. The service starts on boot as the account you give it, and that account is granted the **Log on as a service** right it needs. `srvctrl.exe`, next to `rfsv.exe` in the install folder, runs the service and relaunches `rfsv.exe` whenever it exits, which covers a restart after a configuration change.
 
 ### At install time
 
@@ -39,6 +39,14 @@ renderflow-2.0.17.0044-windows-x64.exe --silent --type=node --server=10.11.30.40
 </CodeGroup>
 
 The installer configures the machine, registers the service, grants the account the right and starts the service. If the service cannot be registered, the installer still installs, prints why and exits with error level 3.
+
+To run the service as LocalSystem instead, add `--service` and no account:
+
+```bat
+renderflow-2.0.17.0044-windows-x64.exe --silent --type=node --server=10.11.30.40 --service
+```
+
+LocalSystem reaches a share only as the computer itself, so on a share outside your domain it needs [Mapped Drives](#mapped-drives) with credentials. Without `--service` or `--service-account`, the installer registers no service, and a machine that has one keeps it, with its account, through every upgrade.
 
 ### On an installed machine
 
@@ -89,19 +97,42 @@ This stops the service and removes it. RenderFlow stays installed. `rfsv service
 
 ## Linux
 
-Use a systemd user unit, running as the user that ran `sudo ./install.sh`. That user owns `/var/lib/RenderFlow` and `/var/log/RenderFlow`.
+The installer puts RenderFlow in place and leaves running it to you. Add `--service` to register it as a systemd service, or write the unit yourself.
 
-Create `~/.config/systemd/user/renderflow.service`:
+### With the installer
 
-```ini
+```bash
+sudo ./install.sh --type=node --server=10.11.30.40 --service
+```
+
+On a server or a render node, this writes `/etc/systemd/system/renderflow.service`, enables it and starts it. A workstation gets no service, since its desktop app runs it. A machine with no role yet gets none either: set it up, then run the installer again with `--service`.
+
+```bash
+systemctl status renderflow
+```
+
+A machine that runs RenderFlow under a systemd user unit is told to remove that unit first, so the two never run at once:
+
+```bash
+systemctl --user disable --now renderflow
+rm ~/.config/systemd/user/renderflow.service
+```
+
+### By hand
+
+This is the unit `--service` writes. Change `HOME` to the home folder of the user who ran `sudo ./install.sh`, which is where the plugins for your applications were installed, and add what your studio needs:
+
+```ini /etc/systemd/system/renderflow.service
 [Unit]
-Description=Pulze RenderFlow
+Description=RenderFlow
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/Pulze/RenderFlow
+User=root
+Environment=HOME=/home/artist
+Environment=RENDERFLOW_DATA_DIR=/var/lib/RenderFlow
 ExecStart=/opt/Pulze/RenderFlow/rfsv
 Restart=on-failure
 RestartForceExitStatus=98 99
@@ -109,84 +140,97 @@ RestartSec=5
 LimitNOFILE=65535
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
 ```
-
-Enable and start it:
 
 ```bash
-systemctl --user daemon-reload
-systemctl --user enable --now renderflow
-loginctl enable-linger $USER
+sudo systemctl daemon-reload
+sudo systemctl enable --now renderflow
 ```
 
-Without `loginctl enable-linger` the unit runs only while that user is logged in.
+- **Keep `User=root`** if the machine should install the farm's updates by itself. Under another account it renders the same, but stops at an update and waits for you to run the installer.
+- **Keep the restart rule.** RenderFlow exits to restart itself after a configuration change or an update, and relies on systemd to start it again.
+- **Keep `LimitNOFILE=65535` on a server.** The default of 1024 open files runs out before a large farm has connected.
+- **Settings go in as `Environment=` lines**, with the variables listed in [Silent Deployment](/renderflow/v2/getting-started/silent-deploy#configure-a-machine-after-installing). A proxy or a mounted repository path are the usual ones.
+- **Mounts first.** If the repository is a network mount, add it to `After=` and `Requires=` (for example `After=mnt-renderflow.mount`), so RenderFlow never starts without it.
 
-Two lines to keep:
-
-- `RestartForceExitStatus=98 99`: the service exits with these codes to ask for a relaunch after a configuration change. Without the line, a configuration change stops the machine.
-- `LimitNOFILE=65535`: on a server, the default of 1024 file descriptors runs out before a large farm has connected.
-
-Set the role in the unit with `Environment=RENDERFLOW_TYPE=node` and `Environment=RENDERFLOW_IP=10.11.30.40`, or leave it to the configuration `rfsv config` wrote.
-
-### A system unit
-
-A unit under `/etc/systemd/system/` runs before login, for a machine with no interactive user. It needs one extra line:
-
-```ini
-Environment=HOME=/root
-```
-
-systemd starts a system service without `HOME`. Per-user plugin directories are derived from it, and without it the service creates a literal `~` directory under its working directory and plugin registration fails.
+Keep the name `renderflow.service`. Upgrading with `sudo ./install.sh` restarts a service of that name into the new files and leaves the unit as you wrote it.
 
 ### Remove
 
+`sudo ./uninstall.sh` stops and removes the service with the rest of RenderFlow. To keep RenderFlow installed and stop running it as a service:
+
 ```bash
-systemctl --user disable --now renderflow
-rm ~/.config/systemd/user/renderflow.service
-systemctl --user daemon-reload
+sudo systemctl disable --now renderflow
+sudo rm /etc/systemd/system/renderflow.service
 ```
 
 ## macOS
 
-Use a launchd LaunchAgent. It runs when the user logs in.
+The installer puts RenderFlow in place and leaves running it to you. Add `--service` to register it as a launchd daemon, or write the daemon yourself.
 
-Create `~/Library/LaunchAgents/io.pulze.renderflow.plist`:
+### With the installer
 
-```xml
+```bash
+sudo ./install.sh --type=node --server=10.11.30.40 --service
+```
+
+On a server or a render node, this writes `/Library/LaunchDaemons/io.pulze.renderflow.plist` and loads it. A workstation gets no daemon, since its desktop app runs it. A machine with no role yet gets none either: set it up, then run the installer again with `--service`.
+
+```bash
+sudo launchctl print system/io.pulze.renderflow
+```
+
+A machine that runs RenderFlow under a launch agent is told to remove the agent first, then to run the installer again:
+
+```bash
+launchctl bootout gui/$(id -u)/io.pulze.renderflow
+rm ~/Library/LaunchAgents/io.pulze.renderflow.plist
+```
+
+### By hand
+
+This is the daemon `--service` writes. Change `HOME` and `RENDERFLOW_DATA_DIR` to the home folder of the user who ran `sudo ./install.sh`, which holds the configuration and the plugins for your applications, and add what your studio needs:
+
+```xml /Library/LaunchDaemons/io.pulze.renderflow.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>Label</key><string>io.pulze.renderflow</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/Applications/Pulze/RenderFlow/start.sh</string>
-    <string>--headless</string>
-  </array>
-  <key>RunAtLoad</key><true/>
-  <key>KeepAlive</key><true/>
+    <key>Label</key><string>io.pulze.renderflow</string>
+    <key>Program</key><string>/Applications/Pulze/RenderFlow/rfsv</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key><string>/Users/artist</string>
+        <key>RENDERFLOW_DATA_DIR</key><string>/Users/artist/Library/Application Support/RenderFlow</string>
+    </dict>
+    <key>RunAtLoad</key><true/>
+    <key>KeepAlive</key><dict><key>SuccessfulExit</key><false/></dict>
+    <key>StandardOutPath</key><string>/var/log/renderflow.log</string>
+    <key>StandardErrorPath</key><string>/var/log/renderflow.log</string>
 </dict>
 </plist>
 ```
 
-Load it:
-
 ```bash
-launchctl load -w ~/Library/LaunchAgents/io.pulze.renderflow.plist
+sudo chown root:wheel /Library/LaunchDaemons/io.pulze.renderflow.plist
+sudo chmod 644 /Library/LaunchDaemons/io.pulze.renderflow.plist
+sudo launchctl bootstrap system /Library/LaunchDaemons/io.pulze.renderflow.plist
 ```
 
-`start.sh` runs without `sudo`, as a LaunchAgent expects. Remove the `--headless` entry to open the app at login as well.
+- **Keep it a daemon in `/Library/LaunchDaemons`**, which runs as root, if the machine should install the farm's updates by itself. Under a `UserName` key or as a launch agent it renders the same, but stops at an update and waits for you to run the installer.
+- **Keep `KeepAlive`.** RenderFlow exits to restart itself after a configuration change or an update, and relies on launchd to start it again.
+- **Settings go in `EnvironmentVariables`**, with the variables listed in [Silent Deployment](/renderflow/v2/getting-started/silent-deploy#configure-a-machine-after-installing).
 
-<Note>
-A LaunchDaemon starts before login and runs as root, which causes the `HOME` problem described under Linux. Use a LaunchAgent.
-</Note>
+Keep the label `io.pulze.renderflow`. Upgrading with `sudo ./install.sh` reloads a daemon with that label into the new files and leaves the plist as you wrote it.
 
 ### Remove
 
+`sudo ./uninstall.sh` stops and removes the daemon with the rest of RenderFlow. To keep RenderFlow installed and stop running it as a daemon:
+
 ```bash
-launchctl unload -w ~/Library/LaunchAgents/io.pulze.renderflow.plist
-rm ~/Library/LaunchAgents/io.pulze.renderflow.plist
+sudo launchctl bootout system/io.pulze.renderflow
+sudo rm /Library/LaunchDaemons/io.pulze.renderflow.plist
 ```
 
 ## Check that it worked

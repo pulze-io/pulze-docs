@@ -121,7 +121,7 @@ Run it as the user who installed RenderFlow; it refuses to run as root. Add `--h
 </Tabs>
 
 <Note>
-On Windows, RenderFlow starts at user login, so a workstation needs nothing further. On Linux and macOS, start it with `start.sh`. An unattended machine needs the service registered instead, a separate step: see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+On Windows, RenderFlow starts at user login, so a workstation needs nothing further. On Linux and macOS, start it with `start.sh`. The installer registers no service unless you ask: for an unattended machine, add `--service` to the install command, or set the service up yourself. See [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## The licence agreement
