@@ -102,7 +102,7 @@ ChatGPT cannot connect to a farm on your network. Like Claude's **Connectors**, 
 
 ## Without RenderFlow on the computer
 
-A computer that does not run RenderFlow, such as a laptop, connects to the server directly with an API key, once **AI clients** is on. An admin creates the key under **Settings > API Keys**. The client sends it in a header, and any client that can send a static header connects:
+A computer that does not run RenderFlow, such as a laptop, connects to the server directly with an API key, once **AI clients** is on. An admin creates the key under **Settings > API Keys** and ticks its [scopes](/renderflow/v2/developers/authentication#scopes): the assistant can do only what the key allows, so **Read only** makes an assistant that answers questions and changes nothing. The client sends it in a header, and any client that can send a static header connects:
 
 ```bash
 claude mcp add --transport http --scope user renderflow http://10.11.30.40:44442/api/v1/mcp --header "Authorization: Bearer rf_a1b2c3..."
