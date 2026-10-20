@@ -222,7 +222,8 @@
             "pages": [
               "renderflow/v2/guides/unreal-and-perforce",
               "renderflow/v2/guides/deploy",
-              "renderflow/v2/guides/backup-and-restore"
+              "renderflow/v2/guides/backup-and-restore",
+              "renderflow/v2/guides/external-database"
             ]
           },
           {
