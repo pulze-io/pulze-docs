@@ -54,6 +54,8 @@ cd renderflow-2.0.17.0044-linux-x64
 sudo ./install.sh
 ```
 
+On an Arm machine, use the `linux-arm64` archive instead.
+
 Everything lands in three places:
 
 | Path | Holds |

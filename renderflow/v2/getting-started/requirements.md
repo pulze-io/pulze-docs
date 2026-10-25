@@ -41,11 +41,13 @@ Any Windows, Linux or macOS machine that runs your application can be a render n
 
 RenderFlow runs on all three platforms, and a single farm can mix them freely. **Settings → Mapped Paths** translates file paths between operating systems so the same job renders everywhere.
 
-| OS | Status |
-|----|--------|
-| Windows 10, 11, Server 2019 and later | Supported |
-| macOS 13 (Ventura) and later | Supported |
-| Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | Supported |
+| OS | Processor | Status |
+|----|-----------|--------|
+| Windows 10, 11, Server 2019 and later | x64 (Windows on Arm runs the x64 build) | Supported |
+| macOS 13 (Ventura) and later | Apple silicon | Supported |
+| Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | x64 and Arm (arm64) | Supported |
+
+On Linux Arm machines, live previews are not available yet.
 
 ## Network
 
