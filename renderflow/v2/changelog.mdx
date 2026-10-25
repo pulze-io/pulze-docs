@@ -5,6 +5,61 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="2.0.20-rc" description="October 25, 2026">
+RenderFlow 2.0.20 adds cloud machines, personal sign-in, AI clients and centralized updates, along with fixes across many applications.
+
+**Updates:**
+- Cinema 4D 2027 and Blender 5.3 support
+- New Cloud machines on AWS and Azure: hybrid rendering alongside your existing machines
+- New centralized RenderFlow updates: update every machine from Settings > Deploy
+- New Sign in with pulze.io: each person carries their group's permissions (optional)
+- Add people in Users before they first sign in
+- API keys can be limited to the features they need
+- New AI Clients: use RenderFlow from Claude, Cursor, VS Code, Codex or LM Studio
+- New Denoise step with Intel Open Image Denoise
+- The Image Converter reads single layers from multi-layer EXRs
+- Unreal Engine renders real Cryptomatte
+- New Nuke Script and Fusion Script steps
+- Scheduled scripts: run scripts on your machines on a schedule
+- Job groups, and jobs filter by start and finish time
+- Backups and restores with your own MongoDB server
+- Password-protected exports, and restore from any export file
+- Move machines to another server
+- Default Python and FFmpeg versions in Settings > Apps
+- 3ds Max closes known plugin pop-ups during a render
+- Server addresses can include a port, for proxies and tunnels
+- Batch jobs can be named by item, file, or both
+- Who can render shows what each machine is working on
+- Page size options on lists longer than 100 rows
+
+**Fixes:**
+- Fixed jobs going to a pool the user group can't submit to
+- Fixed machines being moved into a pool the group can't see
+- Fixed distributed V-Ray and Corona renders stalling when the main machine fails
+- Fixed a resumed machine losing the frame it was rendering
+- Fixed Vantage and Autograph batch jobs overwriting each other's images
+- Fixed Cinema 4D live previews stopping after the first frame
+- Fixed V-Ray Standalone stills on Linux reported with the wrong name
+- Fixed DaVinci Resolve image sequences listing only some frames
+- Fixed After Effects and Nuke movies listed as one file per frame
+- Fixed `_conflicted` job folders on LucidLink
+- Fixed 3ds Max jobs changing the artist's output format settings
+- Fixed Maya render layers missing from the scene becoming jobs
+- Fixed custom `.rs` benchmarks rendering the wrong frame
+- Fixed `.rib` scenes being rejected
+- Fixed outdated machines taking work after a server update
+- Fixed the machine list failing after a benchmark was deleted
+- Fixed jobs no machine can render waiting without a reason
+- Fixed Rhino, SketchUp and Vantage needing write access to the share
+- Fixed the Windows installer cutting `--server` addresses at a hyphen
+- Fixed the VRED viewpoint list starting on None
+- Fixed Redshift for Houdini not being found
+- Fixed Blender scenes on shared drives not opening
+- Fixed idle GPUs showing as busy
+- Fixed batch submits opening on the scene's current state
+- Various stability improvements
+</Update>
+
 <Update label="2.0.18-beta" description="October 13, 2026">
 RenderFlow 2.0.18 adds benchmarks, node order, live previews for more renderers and VRED Pro and Core, along with fixes for Maya, Cinema 4D, Unreal Engine and the installers.
 

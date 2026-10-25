@@ -1,6 +1,6 @@
 ---
 title: "Install with One Command"
-description: "Install RenderFlow on a new render node or workstation with one command that downloads the server's own version and joins it to the farm."
+description: "Install RenderFlow on a new render node or workstation with one command that downloads the server's own version and joins it to the farm, or install a new farm's first server."
 "og:title": "Install a RenderFlow Node with One Command"
 "og:description": "One command installs RenderFlow on a Windows, Linux or macOS machine, in the version the server runs, and joins it to the farm."
 "twitter:title": "Install with One Command"
@@ -87,6 +87,28 @@ curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --pool Overnight
 </Tabs>
 
 A workstation is not registered as a service: the desktop app starts it at user login.
+
+## Install the first server on Linux or macOS
+
+A new farm has no server to download from yet. The script on `renderflow.com` installs the machine as the farm's server, from Pulze's downloads, in the newest release:
+
+```bash
+curl -fsSL https://renderflow.com/install.sh | sudo bash
+```
+
+It checks the download against its checksum and stops if they differ, then installs RenderFlow as a server registered as a service.
+
+- `--channel rc` or `--channel beta` installs the newest release candidate or beta instead of the newest release.
+- `--version 2.0.20.0261-rc` installs that exact build.
+- `--dry-run` prints what the script would download and run, and changes nothing.
+- `--server <address>` joins an existing farm instead: the script hands over to that server's own `install.sh`, so the machine installs the version the server runs.
+
+```bash
+curl -fsSL https://renderflow.com/install.sh | sudo bash -s -- --channel rc --accept-eula
+curl -fsSL https://renderflow.com/install.sh | sudo bash -s -- --server 10.0.0.5 --type workstation
+```
+
+Every other argument is passed on to the installer, with the same flags as a [silent installation](/renderflow/v2/getting-started/silent-deploy).
 
 ## When it does not install
 
