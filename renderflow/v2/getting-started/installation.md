@@ -247,6 +247,39 @@ An ordinary uninstall keeps the database, the configuration, the logs and the li
 On a server those files are the farm's entire history: every job, machine, user, statistic and audit entry. There is no undo.
 </Warning>
 
+## Other ways to install
+
+Install a node or workstation straight from the farm's server, in the version the server runs. The server hands out the installers added in [Settings → Deploy](/renderflow/v2/guides/deploy).
+
+<Tabs>
+<Tab title="Windows">
+
+```powershell
+irm http://10.0.0.5:44442/install.ps1 | iex
+& ([scriptblock]::Create((irm http://10.0.0.5:44442/install.ps1))) -Type workstation -Pool Overnight
+```
+
+</Tab>
+<Tab title="Linux">
+
+```bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --type workstation --pool Overnight
+```
+
+</Tab>
+<Tab title="macOS">
+
+```bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --type workstation --pool Overnight
+```
+
+</Tab>
+</Tabs>
+
+Other arguments go to the installer, as in [Silent Deployment](/renderflow/v2/getting-started/silent-deploy).
+
 ## Next steps
 
 - [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes): a studio farm, set up through the app

@@ -186,5 +186,5 @@ A machine that is reset while the server still holds its old record rejoins as a
 ## Next steps
 
 - [Run as a Service](/renderflow/v2/getting-started/run-as-a-service): the step that makes a headless machine render
-- [Install with One Command](/renderflow/v2/getting-started/install-with-one-command): a node installed from the server, in the server's version
+- [Other ways to install](/renderflow/v2/getting-started/installation#other-ways-to-install): a node installed from the server, in the server's version
 - [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes): the same farm, set up through the app

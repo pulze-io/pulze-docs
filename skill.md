@@ -136,7 +136,7 @@ RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) docu
 - Supported Applications (versions, render engines, steps and platforms for every application): /renderflow/v2/getting-started/supported-apps
 - Server and Nodes: /renderflow/v2/getting-started/server-and-nodes
 - Silent Deployment: /renderflow/v2/getting-started/silent-deploy
-- Install with One Command (curl or PowerShell, served by the farm server in its own version): /renderflow/v2/getting-started/install-with-one-command
+- Other ways to install (curl or PowerShell from the farm server, or the first server from renderflow.com): /renderflow/v2/getting-started/installation#other-ways-to-install
 - Run as a Service: /renderflow/v2/getting-started/run-as-a-service
 - Offline Licensing (Enterprise, a server with no internet access): /renderflow/v2/getting-started/offline-licensing
 - Migrating (from RenderFlow 1 or Render Manager): /renderflow/v2/getting-started/migrating
