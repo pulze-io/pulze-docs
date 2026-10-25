@@ -47,8 +47,6 @@ RenderFlow runs on all three platforms, and a single farm can mix them freely. *
 | macOS 13 (Ventura) and later | Apple silicon | Supported |
 | Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | x64 and Arm (arm64) | Supported |
 
-On Linux Arm machines, live previews are not available yet.
-
 ## Network
 
 ### Ports
