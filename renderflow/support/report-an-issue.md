@@ -1,20 +1,51 @@
 ---
 title: "Report an Issue"
-description: "How to report bugs and issues with RenderFlow. Use the built-in support menu, submit a ticket, or email the team with diagnostic information."
+description: "Send us a RenderFlow problem with a support package, so we can fix it fast."
 "og:title": "Report a RenderFlow Issue"
-"og:description": "Report bugs, errors, and issues with RenderFlow through the ticket form, email, or Discord community."
+"og:description": "Send us a RenderFlow problem with a support package, so we can fix it fast."
 "twitter:title": "Report a RenderFlow Issue"
-keywords: ['render farm support', 'report render farm bug', 'RenderFlow support']
+keywords: ['render farm support', 'report render farm bug', 'RenderFlow support', 'RenderFlow support package', 'render farm logs']
 ---
 
-If you encounter an error or issue with RenderFlow that you cannot resolve, there are several ways to reach our support team.
+Something broke? Send us a report with a support package and we can usually see the cause straight away.
 
-**Ticket form.** Submit a detailed report at [forms.pulze.io/submit-ticket](https://forms.pulze.io/submit-ticket). This creates a tracked support ticket.
+## 1. Make a support package
 
-**Email.** Write to [support@pulze.io](mailto:support@pulze.io) with a description of the issue.
+Open **Menu → Support → Error report collector**.
 
-**Discord.** Post a bug report in our Discord community at [discord.com/invite/BxtBs9aN4E](https://discord.com/invite/BxtBs9aN4E).
+1. Pick the machines that have the problem, then press **Next**.
+2. Pick the jobs it concerns, if any, then press **Collect**.
 
-## What to include
+<Frame>
+  <img src="/images/renderflow/v2/rf_support_error_report_collector.webp" alt="The Error report collector, picking the machines to collect from" />
+</Frame>
 
-The more information you provide, the faster we can help. Along with a detailed description of the issue, please include an [error report](/renderflow/support/collecting-logs) from RenderFlow. If the issue is related to a specific job, mention the job name and type. If it affects specific nodes, include their names.
+RenderFlow puts one package in the repository's `support` folder and shows you its path. It holds the logs, system information and the farm's settings, with passwords and keys removed. Nothing is sent until you send it.
+
+## 2. Send it
+
+| Use | When |
+|-----|------|
+| **Submit a ticket** (Menu → Support, or [forms.pulze.io/submit-ticket](https://forms.pulze.io/submit-ticket)) | Anything you need fixed. You get a tracked ticket. |
+| [support@pulze.io](mailto:support@pulze.io) | When a ticket doesn't suit, or to add files to one. |
+| [Discord](https://discord.gg/BxtBs9aN4E) | Quick questions and how-to. Don't post support packages there. |
+
+## 3. Tell us
+
+- What you did, what happened, and what you expected
+- The job and its application, or the machines, it happened on
+- Whether it happens every time
+
+<Info>
+Support packages are used only to solve your issue and are deleted within 90 days, as the RenderFlow licence agreement (section 15) describes.
+</Info>
+
+### Can't run the collector?
+
+Copy the logs folder from each affected machine and attach it instead:
+
+| OS | Logs folder |
+|----|-------------|
+| Windows | `C:\ProgramData\RenderFlow\logs\` |
+| macOS | `~/Library/Logs/RenderFlow/` |
+| Linux | `/var/log/RenderFlow/` |

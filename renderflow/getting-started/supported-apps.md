@@ -1,61 +1,82 @@
 ---
 title: "Supported Applications"
-description: "Full list of 3D applications, render engines, and plugins supported by RenderFlow."
-"og:title": "RenderFlow Supported Software List"
-"og:description": "Complete list of supported applications, render engines, and plugins for RenderFlow render farm manager."
-"twitter:title": "RenderFlow Supported Software"
-keywords: ['render farm supported software', '3ds Max render farm', 'Blender render farm', 'Cinema 4D render farm', 'V-Ray network rendering', 'Corona render farm', 'render farm plugin compatibility', 'RenderFlow supported applications']
+description: "The applications, versions, render engines and job types RenderFlow renders, on Windows, Linux and macOS."
+"og:title": "RenderFlow Supported Applications and Render Engines"
+"og:description": "Every application, version, render engine and job type RenderFlow can render, and the platforms each one runs on."
+"twitter:title": "RenderFlow Supported Applications"
+keywords: ['render farm supported software', 'render farm render engines', '3ds Max render farm', 'Blender render farm', 'Maya render farm', 'Houdini render farm', 'Unreal render farm', 'Cinema 4D render farm', 'V-Ray render farm', 'Corona render farm', 'Arnold render farm', 'Redshift render farm', 'RenderFlow supported applications']
 ---
 
-RenderFlow supports the most popular 3D rendering and post-production applications used in architectural visualization, motion graphics, and VFX.
-
-## How detection works
-
-When RenderFlow starts on a machine, it automatically scans for installed applications using the conventions of the host OS — the Windows registry and known install paths, the `/Applications` folder and standard Mac App locations on macOS, and `$PATH`, `$HFS`-style env vars, and the usual `/opt`, `/usr/local`, and `/Applications` (vendor) locations on Linux. The detected software list is saved per node and used for [job requirements matching](/renderflow/jobs/requirements) and [software analytics](/renderflow/software-analytics/overview).
-
-RenderFlow plugins and scripts for each detected application are installed automatically during the first run. You can also find them manually in the platform's install folder:
-
-| OS | Plugins folder |
-|----|----------------|
-| Windows | `C:\Program Files\Pulze\RenderFlow\plugins` |
-| macOS | `/Applications/Pulze/RenderFlow/plugins` |
-| Linux | `/opt/Pulze/RenderFlow/plugins` |
-
-To refresh the software list after installing new applications, right-click the node and select **Software > Refresh**.
+RenderFlow detects the applications and render engines installed on every machine and lists them on the **Inventory** screen. A step is only given to machines that have what it requires, so a farm can mix machines with different applications and versions.
 
 ## Applications
 
-| Application | Versions | Render engines |
-|----------------|------------------------------|--------------------------------------------|
-| 3ds Max | 2019 – 2027 | Arnold, Corona, FStorm, Octane, Redshift, V-Ray |
-| After Effects | 22 – 26 | — |
-| Arnold | Detected on the node | — |
-| Blender | 3.0 – 5.1 | Cycles, EEVEE, V-Ray |
-| Cinema 4D | 2023 – 2026 | Corona, Octane, Redshift, V-Ray |
-| Fusion | 17 – 21 | — |
-| Houdini | 19.0 – 21.0 | Mantra, Husk (USD), plus any ROP-driven engines |
-| Maya | 2022 – 2027 | Arnold, V-Ray, Redshift |
-| Nuke | 14.0 – 17.1 | — |
-| Python | — | — |
-| Redshift | Detected on the node | — |
-| Shell | — | — |
-| Unreal Engine | 5.4 and newer (Windows only) | — |
+| Application | Versions | Platforms | Render engines |
+|---|---|---|---|
+| 3ds Max | 2019 to 2027 | Windows | V-Ray, Corona, Arnold, Redshift, Octane, FStorm |
+| After Effects | 2022 to 2027 | Windows, macOS | |
+| Autograph | Any | Windows, macOS | |
+| Blender | 3.0 to 5.2 | Windows, Linux, macOS | Cycles, EEVEE, V-Ray |
+| Cinema 4D | 2023 to 2026 | Windows, Linux, macOS | Redshift, Arnold, Corona, V-Ray |
+| ComfyUI | Any | Windows, Linux, macOS | |
+| DaVinci Resolve Studio | Any | Windows, Linux, macOS | |
+| Fusion | 17 to 21 | Windows, Linux, macOS | |
+| Harmony | 20 to 27 | Windows, Linux, macOS | |
+| Houdini | Any | Windows, Linux, macOS | Karma, Mantra, Arnold, Redshift |
+| KeyShot | 2023 to 2026 | Windows, Linux, macOS | |
+| Maya | 2022 to 2027 | Windows, Linux, macOS | Arnold, V-Ray, Redshift, RenderMan |
+| Media Encoder | Any | Windows, macOS | |
+| Nuke | 14.0 and newer | Windows, Linux, macOS | |
+| Premiere Pro | 25.3 and newer | Windows, macOS | |
+| Rhino | 7 and 8 | Windows | V-Ray, rendered by V-Ray Standalone |
+| SketchUp | Any | Windows, macOS | V-Ray, rendered by V-Ray Standalone |
+| Unreal Engine | 5.0 and newer | Windows, Linux, macOS | |
+| Vantage | 3.3 and newer | Windows | |
+| VRED Pro | 2024 to 2027 | Windows | |
+| VRED Core | 2024 to 2027 | Windows | |
 
-### Format and plugin notes
+A plugin found inside an application is reported with it, so a step can require it: Phoenix, tyFlow, Forest Pack and RailClone in 3ds Max, for example.
 
-- **3ds Max** — supported plugins: Anima, BerconMaps, CityTraffic, CloneModifier, ColorCorrect, ColorEdge, Complex Fresnel, FloorGenerator, ForestPack Pro, Glue, GrowFX, MadCar, MultiScatter, MultiTexture, Ornatrix, Phoenix, Psd Manager, RailClone, SigerNoise, SigerScratches, SiNi Software, SmartRefs, SplineOffset, Substance, ThinFilm, tyFlow, VRayPattern.
-- **After Effects** — renders `.aep` projects through `aerender`. Each job submits one item from the project's Render Queue, selected by name.
-- **Arnold** — renders `.ass` scene files directly with the `kick` command-line renderer, without a host DCC installed on the node.
-- **Fusion** — renders `.comp` files using Fusion's command-line renderer. All Fuse scripts and custom tools must be identical across every machine. A missing effect will cause the render to fail.
-- **Houdini** — file types: `.hip`, `.hipnc`, `.hiplc` (Houdini), `.ifd` (Mantra), `.usd`, `.usda`, `.usdc`, `.usdz` (Husk).
-- **Nuke** — renders `.nk` comps.
-- **Python** — runs `.py` scripts; interpreters are enumerated from every Python on `PATH`.
-- **Redshift** — renders `.rs` scene files directly without needing a host DCC installed on the node.
-- **Shell** — hosts: Command Prompt (`.cmd` / `.bat`, Windows), PowerShell 5.1+ (`.ps1`, Windows), Bash (`.sh` / `.bash`, macOS / Linux / Windows via Git Bash or WSL).
-- **Unreal Engine** — renders through the Movie Render Queue.
+## Job types
 
-## Compatibility notes
-
-RenderFlow is compatible with all plugins and render engines, but can only verify version compatibility for the ones listed above. If your scene uses a plugin that isn't in the supported list, RenderFlow will still render the job. It just won't check whether the plugin is installed or at the correct version on each node.
-
-If you need support for an application, render engine, or plugin not listed here, contact [support@pulze.io](mailto:support@pulze.io).
+| Job type | What it does |
+|---|---|
+| 3ds Max | Renders a 3ds Max scene |
+| 3ds Max Script | Runs a MAXScript or Python script in 3ds Max |
+| 3ds Max Export | Exports a 3ds Max scene to V-Ray Scene, Arnold, Redshift Proxy or USD |
+| Blender | Renders a Blender scene |
+| Blender Script | Runs a Python script in Blender |
+| Blender Export | Exports a Blender scene to USD or V-Ray Scene |
+| Cinema 4D | Renders a Cinema 4D scene |
+| Cinema 4D Script | Runs a Python script in Cinema 4D |
+| Cinema 4D Export | Exports a Cinema 4D scene to Redshift Proxy, V-Ray Scene or USD |
+| Maya | Renders a Maya scene, with its render layers |
+| Maya Script | Runs a Python script in Maya |
+| Maya Export | Exports a Maya scene to Arnold, V-Ray Scene, Redshift Proxy or USD |
+| Houdini | Renders a ROP from a Houdini scene |
+| Houdini Script | Runs a Python script in Houdini |
+| Husk (USD) | Renders a USD file with Karma or another USD renderer |
+| Mantra (IFD) | Renders Mantra IFD files |
+| Nuke | Renders the Write nodes of a Nuke script |
+| After Effects | Renders the render queue of an After Effects project |
+| Premiere | Exports a Premiere Pro sequence through Media Encoder |
+| Media Encoder | Exports a movie or a Premiere project with a Media Encoder preset |
+| DaVinci Resolve | Renders the render queue of a DaVinci Resolve project |
+| Fusion | Renders a Fusion composition |
+| Harmony | Renders the Write nodes of a Harmony scene |
+| KeyShot | Renders a KeyShot scene |
+| VRED | Renders a VRED scene |
+| Vantage | Renders a Vantage project |
+| Autograph | Renders an Autograph composition |
+| ComfyUI | Runs a ComfyUI workflow |
+| SketchUp | Renders a SketchUp scene with V-Ray Standalone |
+| Rhino | Renders a Rhino named view with V-Ray Standalone |
+| Unreal | Renders Movie Render Queue jobs from an Unreal project |
+| Arnold | Renders Arnold scene files |
+| V-Ray Standalone | Renders V-Ray scene files |
+| Redshift | Renders Redshift proxy files |
+| RenderMan | Renders RenderMan RIB files |
+| Image Converter | Converts and resizes rendered frames |
+| Video Encoder | Turns a frame sequence into a movie |
+| Python | Runs a Python script on the farm |
+| Shell | Runs a command or a batch, PowerShell or Bash script |

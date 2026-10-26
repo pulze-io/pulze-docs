@@ -1,0 +1,22 @@
+/* 404: center the message in the viewport (below the top bar) on every screen size */
+.not-found-container {
+  min-height: calc(100dvh - 10rem);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  justify-content: center;
+}
+
+.not-found-container #error-description {
+  min-height: 0;
+  gap: 0.75rem;
+}
+
+.not-found-container #error-description p {
+  margin: 0;
+}
+
+/* The recommended-pages slot reserves space even when empty, which pushes the message off center */
+.not-found-container > div:last-child:empty,
+.not-found-container > div:last-child:not(:has(*)) {
+  display: none;
+}
