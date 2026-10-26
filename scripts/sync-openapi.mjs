@@ -19,7 +19,7 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const repo = process.argv[2] ?? process.env.RENDERFLOW_REPO ?? path.join(path.dirname(root), "pulze-renderflow");
 
 const source = path.join(repo, "packages", "service", "openapi.public.json");
-const target = path.join(root, "renderflow", "v2", "api-reference", "openapi.json");
+const target = path.join(root, "renderflow", "api-reference", "openapi.json");
 
 if (!fs.existsSync(source)) {
     console.error(`No document at ${source}.\nPass the renderflow repo as an argument, or set RENDERFLOW_REPO.`);

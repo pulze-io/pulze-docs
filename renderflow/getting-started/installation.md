@@ -1,201 +1,286 @@
 ---
 title: "Installation"
-description: "Step-by-step guide to installing and configuring RenderFlow on your server, render nodes, and workstations."
-"og:title": "How to Install RenderFlow"
-"og:description": "Complete installation guide for RenderFlow render farm manager. Set up your server, connect nodes, and start rendering."
-"twitter:title": "How to Install RenderFlow"
-keywords: ['how to install render farm manager', 'render farm manager setup', 'render node installation', 'render farm server setup', 'install render farm software', 'RenderFlow installation']
+description: "Install RenderFlow on Windows, Linux and macOS: what the installer does, where files land, and how a machine is configured."
+"og:title": "Install RenderFlow on Windows, Linux and macOS"
+"og:description": "Install RenderFlow, choose a machine's role, and complete setup from the app or the terminal."
+"twitter:title": "Install RenderFlow"
+keywords: ['install render farm software', 'RenderFlow installation', 'render farm setup Windows', 'render farm Linux install', 'render farm macOS install', 'rfsv config', 'render node installation']
 ---
 
-## Before you begin
+One installer covers every machine in the farm. What a machine becomes (server, workstation or render node) is decided after installation, either in the app's setup wizard or with `rfsv config` in a terminal.
 
-1. Review the [Requirements](/renderflow/getting-started/requirements) page to confirm your hardware, OS, and network are ready.
-2. Create a [Pulze account](https://www.pulze.io) if you don't have one. You'll need it to download the installer and log in during server setup.
-3. Close all 3D applications (3ds Max, Blender, Cinema 4D, etc.) on the machine you're installing on. The installer detects running apps and will ask you to close them.
-4. Download the installer from your [Pulze account](https://account.pulze.io/products/renderflow/downloads).
+## Before you start
 
-## Running the installer
+- A [Pulze account](https://account.pulze.io/) with a RenderFlow subscription or an active trial. Only the server signs in to it; the machines that join it do not.
+- A shared network folder that every machine can reach, addressed as a UNC path.
+- The installer for each platform, from your [Pulze account](https://account.pulze.io/products/renderflow/downloads).
+- On Windows, close 3ds Max, Maya, Blender and any other supported application on the machine first. The installer stops while one of them is open.
 
-[Download](https://account.pulze.io/products/renderflow/downloads) the latest version of RenderFlow from your Pulze account. RenderFlow uses a single installer for all machine types: server, node, and workstation. You choose the role after installation.
+## The three roles
 
-### Windows
+| Role | What it is |
+|------|------------|
+| **Server** | Holds the database, coordinates the farm and signs in to Pulze. One per farm. |
+| **Workstation** | An artist's machine, which submits jobs and can render while idle. |
+| **Node** | A dedicated render machine. |
 
-The Windows installer:
+A workstation starts suspended so that it never renders while an artist is working on it, whereas a node starts idle and takes work immediately. You can change either later on the Machines screen, and **Settings → Automation** can hand a workstation to the farm after a period of inactivity and give it back on the next keypress.
 
-- Auto-detects and closes any previous RenderFlow version before installing
-- Installs to `C:\Program Files\Pulze\RenderFlow` (not configurable)
-- Stores data in `C:\ProgramData\RenderFlow` (logs, config, database)
-- Bundles MongoDB and Visual C++ Redistributable. No separate installation needed.
-- Installs application plugins (3ds Max, Blender, etc.) on first launch
+## Install
 
-<Info>
-Upgrading from a previous version? Just run the new installer. Your jobs, settings, and database are preserved. They live in `C:\ProgramData\RenderFlow`, which the installer never touches.
-</Info>
+<Tabs>
+<Tab title="Windows">
 
-### macOS
+Run the downloaded installer:
 
-Download the macOS archive from your Pulze account and extract it. There is no drag-to-Applications installer yet — you set up RenderFlow by running the bundled `install.sh` script (recommended) or by copying the unzipped folder into place manually.
-
-The recommended path:
-
-```bash
-cd ~/Downloads/RenderFlow
-./install.sh
+```powershell
+renderflow-2.0.17.0044-windows-x64.exe
 ```
 
-The script:
+RenderFlow is installed to:
 
-- Copies the app to `/Applications/Pulze/RenderFlow` (clearing any previous install in that location)
-- Marks `rfsv`, `rfcli`, and the bundled MongoDB / `rclone` / `rfpm` binaries executable
-- Clears the Gatekeeper quarantine flag on the install folder
-- Adds per-process Application Firewall exceptions for `rfsv` and the RenderFlow app (macOS firewall is per-process rather than per-port)
-- Runs `rfsv install` to register the DCC plugins and scripts
-
-To start RenderFlow afterwards, run `/Applications/Pulze/RenderFlow/start.sh`. For dedicated render nodes that don't need the UI, use `start.sh --headless` (see [Run as a service](/renderflow/getting-started/run-as-a-service)).
-
-<Note>
-Run `install.sh` and `uninstall.sh` as your normal admin user — **do not prefix them with `sudo`**. The scripts call `sudo` internally when they need root (writing to `/Applications`, Application Firewall rules). Running the whole script under `sudo` makes `$USER` resolve to `root`, which breaks per-user paths. `start.sh` doesn't need root at all.
-</Note>
-
-### Linux
-
-Tested on Rocky Linux 8/9 and Ubuntu. Other RHEL- and Debian-based distributions also work. Download the Linux archive, extract it, and run the bundled `install.sh`:
-
-```bash
-cd ~/Downloads/RenderFlow
-./install.sh
+```text
+C:\Program Files\Pulze\RenderFlow
 ```
 
-The script:
+</Tab>
+<Tab title="Linux">
 
-- Copies the app to `/opt/Pulze/RenderFlow`
-- Sets the SUID bit on `chrome-sandbox` (required by Electron)
-- Marks `rfsv`, `rfcli`, the bundled MongoDB binaries, `rclone`, and `rfpm` executable
-- Creates `/var/lib/RenderFlow` (runtime state) and `/var/log/RenderFlow` (logs), both owned by your user
-- Opens ports `44442/tcp`, `44443/udp`, and `44444/tcp` through `firewalld` (RHEL-based) or `ufw` (Debian-based)
-- Runs `rfsv install` to register the DCC plugins and scripts
+Unpack the downloaded archive and run the installer inside it as root:
 
-To start RenderFlow, run `/opt/Pulze/RenderFlow/start.sh`. For dedicated render nodes, use `start.sh --headless`.
+```bash
+tar -xzf renderflow-2.0.17.0044-linux-x64.tar.gz
+cd renderflow-2.0.17.0044-linux-x64
+sudo ./install.sh
+```
+
+On an Arm machine, use the `linux-arm64` archive instead.
+
+Everything lands in three places:
+
+| Path | Holds |
+|------|-------|
+| `/opt/Pulze/RenderFlow` | The program |
+| `/var/lib/RenderFlow` | Database and configuration |
+| `/var/log/RenderFlow` | Logs |
+
+`install.sh` requires root but never calls `sudo` itself, which means a container or a deployment tool that already runs as root can install it too. The data and log directories are handed to the user who invoked the installer rather than to root, so that `start.sh` can run as that user afterwards.
+
+Firewall ports are opened through `firewalld` or `ufw`; on any other firewall the installer prints the ports so you can open them yourself.
+
+</Tab>
+<Tab title="macOS">
+
+Unpack the downloaded archive and run the installer inside it as root:
+
+```bash
+tar -xzf renderflow-2.0.17.0044-macos-arm64.tar.gz
+cd renderflow-2.0.17.0044-macos-arm64
+sudo ./install.sh
+```
+
+RenderFlow is installed to:
+
+```text
+/Applications/Pulze/RenderFlow
+```
+
+The installer also adds Application Firewall exceptions for `rfsv` and the app. As on Linux, `install.sh` requires root but never calls `sudo` itself.
+
+</Tab>
+</Tabs>
+
+## Start RenderFlow
+
+<Tabs>
+<Tab title="Windows">
+
+Launch **RenderFlow** from the Start menu, and it starts the background service (`rfsv.exe`) if it is not already running.
+
+</Tab>
+<Tab title="Linux">
+
+```bash
+/opt/Pulze/RenderFlow/start.sh
+```
+
+Run it as the user who installed RenderFlow; it refuses to run as root. Add `--headless` to start the service without the desktop app:
+
+```bash
+/opt/Pulze/RenderFlow/start.sh --headless
+```
+
+</Tab>
+<Tab title="macOS">
+
+```bash
+/Applications/Pulze/RenderFlow/start.sh
+```
+
+Run it as the user who installed RenderFlow; it refuses to run as root. Add `--headless` to start the service without the desktop app.
+
+</Tab>
+</Tabs>
 
 <Note>
-Run `install.sh` and `uninstall.sh` as your normal admin user — **do not prefix them with `sudo`**. The scripts prompt for `sudo` themselves when they need root (`/opt`, `/var/lib`, `/var/log`, the system firewall, `chrome-sandbox` SUID). Running the whole script under `sudo` makes `$USER` resolve to `root`, which breaks the per-user `chown` on the data directories. `start.sh` doesn't need root at all — it's safe in user-level service managers (systemd user units, launchd LaunchAgents).
+On Windows, RenderFlow starts at user login, so a workstation needs nothing further. On Linux and macOS, start it with `start.sh`. The installer registers no service unless you ask: for an unattended machine, add `--service` to the install command, or set the service up yourself. See [Run as a Service](/renderflow/getting-started/run-as-a-service).
 </Note>
 
-## Configuring the server
+## The licence agreement
 
-The server is the central hub of your render farm. Start here, then connect other machines to it.
+A server asks you to accept the licence agreement the first time it runs, either in the app's setup wizard or in the `rfsv config` wizard, and stores your acceptance on the machine. Workstations and nodes do not ask for it. You can read the agreement any time at [pulze.io/eula/renderflow](https://www.pulze.io/eula/renderflow).
 
-### 1. Select Server mode
+To deploy a server unattended, pass `--accept-eula` to the installer:
 
-On the welcome screen, choose **Server**. This machine will run the database and coordinate all connected nodes.
+<Tabs>
+<Tab title="Windows">
 
-<Frame caption="Mode selection screen: Server / Node / Workstation">
-  <img src="/images/renderflow/rf_install_mode_selection.png" alt="Mode selection screen: Server / Node / Workstation" />
+```powershell
+renderflow-2.0.17.0044-windows-x64.exe --silent --accept-eula --type=server --repository=\\NAS\renderflow
+```
+
+</Tab>
+<Tab title="Linux">
+
+```bash
+sudo ./install.sh --accept-eula --type=server --repository=//NAS/renderflow
+```
+
+</Tab>
+<Tab title="macOS">
+
+```bash
+sudo ./install.sh --accept-eula --type=server --repository=//NAS/renderflow
+```
+
+</Tab>
+</Tabs>
+
+On a machine that is already installed, `rfsv` accepts it just as well:
+
+```bash
+rfsv eula --accept
+```
+
+A silent install without `--accept-eula` still installs and applies its configuration. The server then starts only after the agreement is accepted, in the app or with `rfsv eula --accept`.
+
+## Finish setup
+
+An installed machine still has to be configured, and there are two places to do that.
+
+**In the app.** The setup wizard opens by itself on first run and asks for the role. A server then asks for the agreement, sign-in and the repository; a workstation or node asks for the server's address.
+
+<Frame caption="The setup wizard, asking what this machine is">
+  <img src="/images/renderflow/v2/rf_wizard_mode.webp" alt="The setup wizard offering three roles: Node, Workstation and Server" />
 </Frame>
 
-### 2. Log in with your Pulze account
+**In a terminal.** `rfsv config` asks the same questions where there is no screen to show them on:
 
-Click **Login with Browser**. Your default browser will open for authentication. After logging in, you'll be redirected back to RenderFlow.
+<Tabs>
+<Tab title="Windows">
 
-<Frame caption="Login with Browser button">
-  <img src="/images/renderflow/rf_install_login_browser.png" alt="Login with Browser button" />
-</Frame>
+```powershell
+& "C:\Program Files\Pulze\RenderFlow\rfsv.exe" config
+```
 
-### 3. Configure licensing
+</Tab>
+<Tab title="Linux">
 
-RenderFlow checks your Pulze account for available licenses. If you haven't purchased licenses yet or need to manage your subscription, do that at [pulze.io](https://account.pulze.io/products/renderflow/licenses) before continuing. You have several options:
+```bash
+/opt/Pulze/RenderFlow/rfsv config
+```
 
-- **Automatic** (recommended). All RenderFlow licenses on your account are automatically reserved and used by this server.
-- **Manual**: you choose how many of your available licenses this server should use. Useful when splitting licenses across multiple servers.
+</Tab>
+<Tab title="macOS">
 
-<Frame caption="License selection: Automatic / Manual / Trial / Skip">
-  <img src="/images/renderflow/rf_install_license_selection.png" alt="License selection: Automatic / Manual / Trial / Skip" />
-</Frame>
+```bash
+/Applications/Pulze/RenderFlow/rfsv config
+```
 
-### 4. Set the Repository
+</Tab>
+</Tabs>
 
-The Repository is a shared network folder that all connected machines must be able to access. RenderFlow uses it to store:
+Without flags it asks the questions one at a time; with flags it applies them and exits, which is what a provisioning script wants. See [Silent Deployment](/renderflow/getting-started/silent-deploy) for the full list and for signing in over SSH.
 
-- Submitted scene files
-- Render logs
-- Frame thumbnails
-- Database backups
-- Software updates
+## Check a machine
 
-Browse to a folder on your NAS or file server. You can use a UNC path (e.g., `\\server\renderflow`) or a mapped drive letter (e.g., `S:\RenderFlow`), as long as every connected machine can access the same location.
+```bash
+rfsv status
+```
 
-<Frame caption="Repository folder selection">
-  <img src="/images/renderflow/rf_install_repository_folder.png" alt="Repository folder selection" />
-</Frame>
+This prints the machine's role, its server, the repository, the signed-in account, whether the machine has joined the farm and whether the service is running.
+
+## Uninstall
+
+<Tabs>
+<Tab title="Windows">
+
+Uninstall from **Apps & features**, or run the uninstaller directly:
+
+```powershell
+"C:\Program Files\Pulze\RenderFlow\uninst.exe"
+"C:\Program Files\Pulze\RenderFlow\uninst.exe" --purge
+```
+
+</Tab>
+<Tab title="Linux">
+
+```bash
+sudo /opt/Pulze/RenderFlow/uninstall.sh
+sudo /opt/Pulze/RenderFlow/uninstall.sh --purge
+```
+
+</Tab>
+<Tab title="macOS">
+
+```bash
+sudo /Applications/Pulze/RenderFlow/uninstall.sh
+sudo /Applications/Pulze/RenderFlow/uninstall.sh --purge
+```
+
+</Tab>
+</Tabs>
+
+An ordinary uninstall keeps the database, the configuration, the logs and the licence record, so that reinstalling finds the farm exactly as it was. Adding `--purge` removes them as well.
 
 <Warning>
-The Repository folder must be accessible from every connected machine. If a node can't reach it, jobs will fail to start.
+On a server those files are the farm's entire history: every job, machine, user, statistic and audit entry. There is no undo.
 </Warning>
 
-<Note>
-If your farm mixes operating systems (e.g. Windows artists submitting to macOS or Linux render nodes), the same share will be reached through different paths on each OS. Set up [Mapped Paths](/renderflow/settings/overview#mapped-paths) in Settings so RenderFlow can translate scene file, output, and asset paths between platforms automatically.
-</Note>
+## Other ways to install
 
-### 5. Done
+Install a node or workstation straight from the farm's server, in the version the server runs. The server hands out the installers added in [Settings → Deploy](/renderflow/guides/deploy).
 
-After a short loading time, RenderFlow opens to an empty job list. Your server appears in the Nodes view, ready to accept connections.
+<Tabs>
+<Tab title="Windows">
 
-## Configuring render nodes and workstations
+```powershell
+irm http://10.0.0.5:44442/install.ps1 | iex
+& ([scriptblock]::Create((irm http://10.0.0.5:44442/install.ps1))) -Type workstation -Pool Overnight
+```
 
-Install RenderFlow on each additional machine using the same installer.
+</Tab>
+<Tab title="Linux">
 
-### 1. Select Node or Workstation
+```bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --type workstation --pool Overnight
+```
 
-On the welcome screen, choose your role:
+</Tab>
+<Tab title="macOS">
 
-- **Node**: a minimal, always-on monitoring UI. Shows the machine's name, current status, and active job at a glance. Includes quick commands (suspend, open logs, restart) so administrators can act without opening the full interface. Node mode does not include job submission — it is designed for dedicated render machines that only need to be managed, not operated.
-- **Workstation**: opens the full RenderFlow interface with job submission, the Jobs view, Nodes view, and all settings. Starts in **Suspended** state so it won't render until you activate it, keeping the machine responsive for the artist working on it.
+```bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --type workstation --pool Overnight
+```
 
-As a general practice, configure dedicated render machines as Nodes and artist machines as Workstations.
+</Tab>
+</Tabs>
 
-### 2. Connect to the server
+Other arguments go to the installer, as in [Silent Deployment](/renderflow/getting-started/silent-deploy).
 
-Enter the server's **IP address or hostname** and click Connect. Alternatively, click **Discover** to automatically find the server on your local network via UDP broadcast.
+## Next steps
 
-<Frame caption="Server connection: IP entry and Discover button">
-  <img src="/images/renderflow/rf_install_server_connection.png" alt="Server connection: IP entry and Discover button" />
-</Frame>
-
-After a successful connection, you'll see the Jobs view. Your machine will also appear in the server's Nodes list.
-
-<Tip>
-If discovery doesn't find the server, check that UDP port 44443 is open and both machines are on the same subnet.
-</Tip>
-
-## Single workstation setup
-
-You can use RenderFlow on a single machine as a local batch renderer. No render farm needed.
-
-1. Install RenderFlow and configure it as a **Server**.
-2. Enable **Node Mode** from the top menu bar, or go to the Nodes view and set your status to **Idle**.
-3. Submit jobs as normal. Your machine will process them.
-
-This is useful for queuing up multiple render jobs (overnight renders, animation sequences) and letting them run unattended.
-
-<Frame caption="Enabling node mode on a single workstation">
-  <img src="/images/renderflow/rf_install_workstation_node_mode.png" alt="Enabling node mode on a single workstation" />
-</Frame>
-
-## Uninstallation
-
-**Windows.** Use **Windows Settings > Apps > RenderFlow** or the Control Panel to uninstall. The installer removes the application files from `C:\Program Files\Pulze\RenderFlow` but preserves the data folder at `C:\ProgramData\RenderFlow`. To perform a complete removal (including all jobs, logs, config, and database), manually delete `C:\ProgramData\RenderFlow` after uninstalling.
-
-**macOS.** Run `/Applications/Pulze/RenderFlow/uninstall.sh` (as your admin user, not with `sudo` — the script elevates internally). It stops any running RenderFlow processes, runs `rfsv cleanup` to remove the DCC plugins and scripts, removes the Application Firewall exceptions, and deletes `/Applications/Pulze/RenderFlow`.
-
-**Linux.** Run `/opt/Pulze/RenderFlow/uninstall.sh` (as your admin user, not with `sudo`). It stops the processes, runs `rfsv cleanup`, removes the firewall rules, and deletes `/opt/Pulze/RenderFlow`, `/var/lib/RenderFlow`, and `/var/log/RenderFlow`.
-
-## Troubleshooting
-
-If you encounter issues during installation or first-time setup:
-
-- Use the **help menu** in the bottom-right corner of RenderFlow to access documentation, submit a support request, or view logs.
-- Check that all [required ports](/renderflow/getting-started/requirements#ports) are open.
-- Verify your server has internet access to `*.pulze.io` for licensing.
-- Make sure the Repository folder is accessible from the machine you're configuring.
-
-For persistent issues, see [Collecting Logs](/renderflow/support/collecting-logs) and [Contact Us](/renderflow/support/contact-us).
+- [Server and Nodes](/renderflow/getting-started/server-and-nodes): a studio farm, set up through the app
+- [Silent Deployment](/renderflow/getting-started/silent-deploy): provisioning many machines from a script

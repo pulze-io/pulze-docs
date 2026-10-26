@@ -1,0 +1,217 @@
+---
+title: "MCP server"
+description: "Point Claude, Cursor or any MCP client at your RenderFlow farm and ask it questions in plain language: what is running, why a job failed, submit this scene."
+"og:title": "RenderFlow MCP server"
+"og:description": "Point Claude or Cursor at your farm and ask in plain language what is running and why a job failed."
+"twitter:title": "RenderFlow MCP server"
+keywords: ['render farm mcp server', 'claude render farm', 'ai render farm management', 'mcp render farm', 'render farm assistant']
+---
+
+Every RenderFlow server speaks the **Model Context Protocol**, so an assistant can read the farm and act on it.
+
+## Connecting a client
+
+AI clients are off until an admin turns on **AI clients** under **Settings > Security**. Then, on any computer that runs RenderFlow, an admin opens **Settings > AI Clients**, presses **Connect** next to the client, and follows the steps. Claude Desktop, Cursor, VS Code and LM Studio have an **Install** button; the others need one command or a few lines of config.
+
+The client connects to RenderFlow on the same computer, at `http://127.0.0.1:44442/api/v1/mcp`, which passes it on to the farm as that computer. There is no API key and no account: an assistant can do what the RenderFlow app on that computer can do.
+
+<Tabs>
+<Tab title="Claude Desktop">
+1. In **Settings > AI Clients**, press **Connect** next to **Claude Desktop**, then **Install**. Claude Desktop opens and shows the RenderFlow extension.
+2. Press **Install** in Claude Desktop. There is nothing to fill in.
+
+If Claude Desktop does not open, install `RenderFlow.mcpb` from your Downloads folder under **Settings > Extensions** in Claude Desktop.
+
+Claude Desktop runs on Windows and macOS. Do not add RenderFlow under **Connectors** in Claude: Claude opens those connections from Anthropic's servers, which cannot reach a farm on your network.
+</Tab>
+<Tab title="Claude Code">
+```bash
+claude mcp add --transport http --scope user renderflow http://127.0.0.1:44442/api/v1/mcp
+```
+
+`--scope user` makes RenderFlow available in every project. Type `/mcp` in Claude Code to check that it is connected.
+</Tab>
+<Tab title="Cursor">
+Press **Install** in **Settings > AI Clients** and confirm in Cursor. By hand, add this to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "renderflow": { "url": "http://127.0.0.1:44442/api/v1/mcp" }
+  }
+}
+```
+</Tab>
+<Tab title="VS Code">
+Press **Install** in **Settings > AI Clients** and confirm in VS Code. By hand, run **MCP: Open User Configuration** from the Command Palette and add:
+
+```json
+{
+  "servers": {
+    "renderflow": { "type": "http", "url": "http://127.0.0.1:44442/api/v1/mcp" }
+  }
+}
+```
+
+The tools are available in Copilot Chat's agent mode.
+</Tab>
+<Tab title="Codex">
+```bash
+codex mcp add renderflow --url http://127.0.0.1:44442/api/v1/mcp
+```
+
+Or add this to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.renderflow]
+url = "http://127.0.0.1:44442/api/v1/mcp"
+```
+</Tab>
+<Tab title="LM Studio">
+Press **Install** in **Settings > AI Clients** and confirm in LM Studio. By hand, open **Program > Install > Edit mcp.json** and add:
+
+```json
+{
+  "mcpServers": {
+    "renderflow": { "url": "http://127.0.0.1:44442/api/v1/mcp" }
+  }
+}
+```
+
+Use a model that supports tool calling.
+</Tab>
+<Tab title="Other clients">
+Add an MCP server with the address `http://127.0.0.1:44442/api/v1/mcp`. It uses streamable HTTP and needs no key. Many clients take this in their config file:
+
+```json
+{
+  "mcpServers": {
+    "renderflow": { "type": "http", "url": "http://127.0.0.1:44442/api/v1/mcp" }
+  }
+}
+```
+</Tab>
+</Tabs>
+
+ChatGPT cannot connect to a farm on your network. Like Claude's **Connectors**, it reaches MCP servers from its own servers on the internet.
+
+## Turning it on and off
+
+- **AI clients** under **Settings > Security** decides whether the farm answers AI clients at all: on the server, on every workstation, and with an API key. It is off on a new farm. The rest of the API is not affected.
+- **Settings > AI Clients** is for admins. To let others connect their own assistants, turn on **Connect AI clients** for their role under **Settings > Groups**.
+
+## Without RenderFlow on the computer
+
+A computer that does not run RenderFlow, such as a laptop, connects to the server directly with an API key, once **AI clients** is on. An admin creates the key under **Settings > API Keys** and ticks its [scopes](/renderflow/developers/authentication#scopes): the assistant can do only what the key allows, so **Read only** makes an assistant that answers questions and changes nothing. The client sends it in a header, and any client that can send a static header connects:
+
+```bash
+claude mcp add --transport http --scope user renderflow http://10.11.30.40:44442/api/v1/mcp --header "Authorization: Bearer rf_a1b2c3..."
+```
+
+```json
+{
+  "mcpServers": {
+    "renderflow": {
+      "type": "http",
+      "url": "http://10.11.30.40:44442/api/v1/mcp",
+      "headers": { "Authorization": "Bearer rf_a1b2c3..." }
+    }
+  }
+}
+```
+
+Use your server's address. Claude Desktop needs RenderFlow on the same computer.
+
+The server speaks MCP 2026-07-28 and earlier revisions, over streamable HTTP.
+
+## The tools
+
+### Reading the farm
+
+| | |
+|---|---|
+| `farm_overview` | How the farm is doing: jobs, tasks and machines by status, the pools and the error count. Where to start |
+| `find_jobs` | Jobs, newest first, by status, pool, user or name. `archived: true` searches the archive |
+| `get_job` | One job: its steps, progress and errors |
+| `find_tasks` | A job's frames or chunks, by status, step or machine |
+| `get_task_log` | What a task printed, with the lines your error catalog recognises |
+| `get_task_preview` | A task's rendered frame, as an image |
+| `find_nodes` | The machines and what each is doing |
+| `find_errors` | The errors the farm recorded, each with what your error catalog says about it |
+| `find_events` | Who started, stopped or changed what, and when |
+| `list_schedule` | What runs on a schedule, and when it next fires |
+
+### Acting on it
+
+| | |
+|---|---|
+| `submit_job` | Submit a render or a script |
+| `control_jobs` | Start, stop, reset, finish, archive or restore jobs |
+| `update_jobs` | Change a job's priority, pool, name or tags |
+| `control_tasks` | Requeue or hold specific frames |
+| `control_nodes` | Resume, suspend, finish or reserve machines, or move them to another pool |
+| `control_schedule` | Run a scheduled event now, switch one on or off, or create one |
+| `error_catalog` | Search your error catalog, or add and improve entries |
+| `sanity_checks` | Search your sanity checks, or draft new ones |
+
+Nothing here deletes.
+
+## Error catalog and sanity checks
+
+Errors and logs reach the assistant with what your error catalog says about them: what the failure means and what to do. Where the catalog has no answer, the assistant works from the log and, if your client can search the web, from the application's own documentation and forums, and says which parts came from where.
+
+When it finds the cause of a failure the catalog does not know yet, it offers to write it down. It shows you the entry first and saves it only when you agree. A new entry starts switched off.
+
+When a failure could have been caught before it rendered, such as an unsaved scene, a missing camera or a missing plugin, the assistant also offers a sanity check: a script that runs inside the artist's application when they submit. It shows you the check and its code, and you switch it on under **Sanity checks** in RenderFlow.
+
+Clients that list MCP prompts offer **diagnose**: give it a job's name, and the assistant finds why it failed, explains it, and offers any new catalog entry or sanity check.
+
+## Worth trying
+
+Questions a wrangler asks every day:
+
+<AccordionGroup>
+
+<Accordion title="How did the overnight renders go?">
+`farm_overview` for the totals, then `find_jobs` for what failed and `find_errors` for why.
+</Accordion>
+
+<Accordion title="Why did my render fail?">
+`get_job`, `find_tasks` for the failed frames, then `get_task_log` on one of them. It comes back with the renderer's own words and what your error catalog says about them.
+</Accordion>
+
+<Accordion title="Which machines keep failing today?">
+`find_errors` for today's errors, then `find_nodes` for the machines that come up most. Suspend one with `control_nodes` if you agree.
+</Accordion>
+
+<Accordion title="Requeue the frames that failed last night.">
+`find_tasks` for the failed frames, then `control_tasks` to put them back in the queue.
+</Accordion>
+
+<Accordion title="Are the last frames of my render actually there, or black?">
+`find_tasks` for the completed frames, then `get_task_preview` on a few of them.
+</Accordion>
+
+<Accordion title="Who stopped my render?">
+`find_events` for the job, with who did it and when.
+</Accordion>
+
+<Accordion title="Shut the render nodes down at 22:00 every night until Friday.">
+`control_schedule` creates the event once you agree. `list_schedule` shows it next to everything else that runs tonight.
+</Accordion>
+
+<Accordion title="My render crashed overnight. Why, and can we remember it?">
+`get_task_log` turns up a line your error catalog does not know: "Missing plugin: ForestPack". The assistant explains it, shows the catalog entry it would add, and saves it with `error_catalog` when you agree. Next time that error arrives already explained.
+</Accordion>
+
+<Accordion title="Could we have caught that before it rendered?">
+The assistant drafts a sanity check that warns when a scene uses Forest Pack and the plugin is missing, shows you its code, and saves it with `sanity_checks`. You switch it on under **Sanity checks**, and the next artist hears about it when they submit.
+</Accordion>
+
+</AccordionGroup>
+
+## What it does not do
+
+There is no memory between calls: each question starts from the farm as it is now.
+
+If you want an assistant that watches a farm over time rather than answering a question about it, that is [the socket](/renderflow/developers/websocket) plus your own loop, and the MCP tools are the hands it would use.
