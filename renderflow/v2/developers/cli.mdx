@@ -38,7 +38,7 @@ $env:RENDERFLOW_API_KEY = "rf_a1b2c3..."    # PowerShell, this terminal
 setx RENDERFLOW_API_KEY "rf_a1b2c3..."      # Windows, every new terminal
 ```
 
-Create one in the app under **Settings**, **API Keys**, with the **+** button (**New API key**). On Linux and macOS, add the `export` line to `~/.bashrc` or `~/.zshrc` to keep it for every new terminal. When the key is missing or refused, `rfcli` prints these same steps for the platform it runs on.
+Create one in the app under **Settings**, **API Keys**, with the **+** button (**New API key**), and tick the [scopes](/renderflow/v2/developers/authentication#scopes) for the commands you will run. On Linux and macOS, add the `export` line to `~/.bashrc` or `~/.zshrc` to keep it for every new terminal. When the key is missing or refused, `rfcli` prints these same steps for the platform it runs on.
 
 **It reaches a remote farm with an address.** Without one it talks to the service on this machine:
 

@@ -3,7 +3,7 @@ name: pulze
 description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
 metadata:
   author: pulze
-  version: "1.5"
+  version: "1.6"
 ---
 
 # Pulze Documentation
@@ -136,6 +136,7 @@ RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) docu
 - Supported Applications (versions, render engines, steps and platforms for every application): /renderflow/v2/getting-started/supported-apps
 - Server and Nodes: /renderflow/v2/getting-started/server-and-nodes
 - Silent Deployment: /renderflow/v2/getting-started/silent-deploy
+- Other ways to install (curl or PowerShell from the farm server, or the first server from renderflow.com): /renderflow/v2/getting-started/installation#other-ways-to-install
 - Run as a Service: /renderflow/v2/getting-started/run-as-a-service
 - Offline Licensing (Enterprise, a server with no internet access): /renderflow/v2/getting-started/offline-licensing
 - Migrating (from RenderFlow 1 or Render Manager): /renderflow/v2/getting-started/migrating
@@ -144,6 +145,8 @@ RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) docu
 ##### RenderFlow 2 — Guides
 Walkthroughs for one workflow from start to finish.
 - Unreal and Perforce (sync Unreal projects from Perforce on every node, checked-out files shelved for the job): /renderflow/v2/guides/unreal-and-perforce
+- Deploy RenderFlow Versions (versions kept in Settings → Deploy; deploy one to the whole farm when nothing renders): /renderflow/v2/guides/deploy
+- Backup, Restore and Moving the Server (hourly backups, farm export, moving the farm to a new server): /renderflow/v2/guides/backup-and-restore
 
 ##### RenderFlow 2 — Scripting
 Running your own code on the farm. Three ways: a shell step, a Python step, or a plugin that adds a job type to the submitter.

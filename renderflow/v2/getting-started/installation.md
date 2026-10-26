@@ -54,6 +54,8 @@ cd renderflow-2.0.17.0044-linux-x64
 sudo ./install.sh
 ```
 
+On an Arm machine, use the `linux-arm64` archive instead.
+
 Everything lands in three places:
 
 | Path | Holds |
@@ -121,7 +123,7 @@ Run it as the user who installed RenderFlow; it refuses to run as root. Add `--h
 </Tabs>
 
 <Note>
-On Windows, RenderFlow starts at user login, so a workstation needs nothing further. On Linux and macOS, start it with `start.sh`. An unattended machine needs the service registered instead, a separate step: see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+On Windows, RenderFlow starts at user login, so a workstation needs nothing further. On Linux and macOS, start it with `start.sh`. The installer registers no service unless you ask: for an unattended machine, add `--service` to the install command, or set the service up yourself. See [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## The licence agreement
@@ -244,6 +246,39 @@ An ordinary uninstall keeps the database, the configuration, the logs and the li
 <Warning>
 On a server those files are the farm's entire history: every job, machine, user, statistic and audit entry. There is no undo.
 </Warning>
+
+## Other ways to install
+
+Install a node or workstation straight from the farm's server, in the version the server runs. The server hands out the installers added in [Settings → Deploy](/renderflow/v2/guides/deploy).
+
+<Tabs>
+<Tab title="Windows">
+
+```powershell
+irm http://10.0.0.5:44442/install.ps1 | iex
+& ([scriptblock]::Create((irm http://10.0.0.5:44442/install.ps1))) -Type workstation -Pool Overnight
+```
+
+</Tab>
+<Tab title="Linux">
+
+```bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --type workstation --pool Overnight
+```
+
+</Tab>
+<Tab title="macOS">
+
+```bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash
+curl -fsSL http://10.0.0.5:44442/install.sh | sudo bash -s -- --type workstation --pool Overnight
+```
+
+</Tab>
+</Tabs>
+
+Other arguments go to the installer, as in [Silent Deployment](/renderflow/v2/getting-started/silent-deploy).
 
 ## Next steps
 

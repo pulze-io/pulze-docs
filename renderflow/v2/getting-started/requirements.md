@@ -41,11 +41,11 @@ Any Windows, Linux or macOS machine that runs your application can be a render n
 
 RenderFlow runs on all three platforms, and a single farm can mix them freely. **Settings → Mapped Paths** translates file paths between operating systems so the same job renders everywhere.
 
-| OS | Status |
-|----|--------|
-| Windows 10, 11, Server 2019 and later | Supported |
-| macOS 13 (Ventura) and later | Supported |
-| Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | Supported |
+| OS | Processor | Status |
+|----|-----------|--------|
+| Windows 10, 11, Server 2019 and later | x64 (Windows on Arm runs the x64 build) | Supported |
+| macOS 13 (Ventura) and later | Apple silicon | Supported |
+| Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | x64 and Arm (arm64) | Supported |
 
 ## Network
 
@@ -100,7 +100,7 @@ Running Windows, Linux and macOS side by side? Point your scenes and the reposit
 
 The server ships with **MongoDB 8.2.6** and runs it for you as a replica set, so there is nothing to install and nothing to configure.
 
-If you would rather use your own cluster, point the server at it with `--uri` at install time or in **Settings → Server**. It has to be a replica set, because RenderFlow relies on change streams, which a standalone MongoDB does not provide.
+If you would rather use your own cluster, point the server at it with `--uri` at install time or in **Settings → Server**. It has to be a replica set, because RenderFlow relies on change streams, which a standalone MongoDB does not provide. [Your Own MongoDB](/renderflow/v2/guides/external-database) shows how to set one up, connect the server and move an existing farm onto it.
 
 ## Internet access
 

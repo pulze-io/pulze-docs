@@ -10,7 +10,7 @@ keywords: ['silent install render farm', 'unattended render node deployment', 'd
 Everything the setup wizard asks can be answered on the command line instead. The installer lands the files and hands its flags to `rfsv config`, which layers them over whatever the machine already holds, so any flag you leave out keeps its current value rather than being reset.
 
 <Note>
-Installing and configuring a machine does not start it. A workstation is started by the desktop app at user login, while an unattended machine needs the service registered under an account that can reach your storage. On Windows, `--service-account` does that during the install. On Linux and macOS, and for the details, see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
+Installing and configuring a machine does not start it. A workstation is started by the desktop app at user login, while an unattended machine needs the service registered under an account that can reach your storage. `--service` does that during the install, and on Windows `--service-account` does it under an account of your choice. To write the service yourself, and for the details, see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service).
 </Note>
 
 ## Installer flags
@@ -37,8 +37,11 @@ The same flags work on every platform.
 | `--tls-ca=<path>` | CA certificate to trust for HTTPS: a private server certificate, or a proxy that re-signs TLS |
 | `--tls-port=<port>` | Port of the HTTPS listener, default 44445. Server only |
 | `--server-tls` | The server answers over TLS, which `--server=https://host` also says. Node and workstation only |
+| `--server-port=<port>` | The server's port, when it is not the farm's own: a server behind a proxy or tunnel on 443, which `--server=https://host:443` also says. Node and workstation only |
+| `--ephemeral` | Remove this machine from the farm once it goes offline. For Spot and autoscaled cloud machines that never come back |
 | `--service-account=<name>` | Register the RenderFlow service, started on boot as this account, and grant it **Log on as a service**. `DOMAIN\name`, a local account's name, or a gMSA (`name$`). Windows only |
 | `--service-password=<pass>` | The service account's password. Windows only |
+| `--service` | Register the service for a server or a render node and start it: a Windows service as LocalSystem, a systemd service on Linux, a launchd daemon on macOS. Without it or `--service-account` the installer only puts the files in place |
 
 `--help` prints this list and exits.
 
@@ -95,6 +98,8 @@ sudo ./install.sh --accept-eula --type=server --repository=//NAS/renderflow
 sudo ./install.sh --accept-eula --type=node --server=10.11.30.40 --pool=gpu
 ```
 
+Add `--service` to run a server or a node as a service from the first boot. Without it, nothing starts RenderFlow until you do: see [Run as a Service](/renderflow/v2/getting-started/run-as-a-service#linux).
+
 `install.sh` requires root but never calls `sudo` itself, so run it as `sudo ./install.sh`. A container or a deployment tool already running as root installs it the same way.
 
 </Tab>
@@ -115,6 +120,8 @@ Every flag has an environment variable behind it, which is usually what a servic
 | `--type` | `RENDERFLOW_TYPE` |
 | `--ip` | `RENDERFLOW_IP` |
 | `--server-tls` | `RENDERFLOW_SERVER_TLS` |
+| `--server-port` | `RENDERFLOW_SERVER_PORT` |
+| `--ephemeral` | `RENDERFLOW_EPHEMERAL` |
 | `--repository` | `RENDERFLOW_REPOSITORY_PATH` |
 | `--pool` | `RENDERFLOW_POOL` |
 | `--uri` | `RENDERFLOW_DB_URI` |
@@ -179,4 +186,5 @@ A machine that is reset while the server still holds its old record rejoins as a
 ## Next steps
 
 - [Run as a Service](/renderflow/v2/getting-started/run-as-a-service): the step that makes a headless machine render
+- [Other ways to install](/renderflow/v2/getting-started/installation#other-ways-to-install): a node installed from the server, in the server's version
 - [Server and Nodes](/renderflow/v2/getting-started/server-and-nodes): the same farm, set up through the app

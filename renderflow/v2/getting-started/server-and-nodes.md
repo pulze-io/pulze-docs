@@ -104,6 +104,12 @@ A new farm has one pool (Default) with every machine in it, which is the right p
 - **Pools** carve up the machines by project, by hardware or by department. A pool can lend its idle machines to another pool and borrow under a limit, and it can admit only the job types and priorities you allow.
 - **Groups** decide what people may do: which screens they see, which features they can reach, which pools they see and which they may submit to, the highest priority they may use, and the most machines any one of their jobs may take.
 
+A job always goes to one of the pools its group may **Submit to**. **Visible** decides which machines people see and manage, and narrows the pools the submitter offers to those that are also visible; when only one pool is left, the job goes there without asking. If none of the Submit-to pools is visible, the job goes to the first Submit-to pool. A job can't be submitted to, or moved into, a pool outside Submit-to, so a group can submit to an empty pool that borrows its machines from the others.
+
+## Moving a machine to another server
+
+On the machine itself, choose **Switch** from the menu or from the server settings. RenderFlow restarts the machine into setup, where you pick its role and the server it joins again.
+
 ## Monitoring the farm
 
 The **Machines** screen lists every machine with its status, hardware and whatever it is working on.
