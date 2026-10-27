@@ -47,10 +47,6 @@ Open `mongosh` on the database machine and start the replica set. Use the hostna
 rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "db01.studio.local:27017" }] })
 ```
 
-<Warning>
-Do not start it with a bare `rs.initiate()`, or with `localhost` as the member's host. A replica set tells every client which addresses its members have, and the RenderFlow server then connects to those. If the member is `localhost`, the server connects to its own machine, where no database runs. See [The replica set names its members localhost](#the-replica-set-names-its-members-localhost).
-</Warning>
-
 Check the result with `rs.status()`: the member should be listed with the address you gave and the state `PRIMARY`.
 </Step>
 </Steps>
@@ -67,7 +63,7 @@ In `mongosh` on the database machine, create an administrator and the user Rende
 db.getSiblingDB("admin").createUser({ user: "admin", pwd: "choose-a-password", roles: ["root"] })
 db.getSiblingDB("admin").createUser({
   user: "renderflow",
-  pwd: "choose-another-password",
+  pwd: "password",
   roles: [
     { role: "readWrite", db: "renderflow" },
     { role: "readWrite", db: "renderflow_restore" }
@@ -100,23 +96,22 @@ security:
   authorization: enabled
   keyFile: /etc/mongodb-keyfile
 ```
-
-On Windows, write the key file's Windows path, for example `C:\Program Files\MongoDB\keyfile`.
 </Step>
 </Steps>
 
 ## 3. Write the connection string
 
-The connection string names the database machine, the replica set and, with sign-in on, the user:
+The connection string names the database machine, the replica set and the user:
 
 ```
-mongodb://renderflow:choose-another-password@db01.studio.local:27017/?replicaSet=rs0&authSource=admin
+mongodb://renderflow:<password>@db01.studio.local:27017/?replicaSet=rs0&authSource=admin
 ```
 
+- Replace `<password>` with the password of the `renderflow` user, and `db01.studio.local` with your database machine.
 - `replicaSet` is the name you gave the replica set.
 - `authSource=admin` is where the user was created.
 - A password with characters such as `@`, `:` or `/` in it must be written percent-encoded: `@` as `%40`, `:` as `%3A`, `/` as `%2F`.
-- If the database requires TLS, add `&tls=true&tlsCAFile=<path to the CA certificate>`, with the path on the RenderFlow server. These are standard MongoDB connection-string options.
+- If the database requires TLS, add `&tls=true&tlsCAFile=<path to the CA certificate>`, with the path on the RenderFlow server.
 
 ## 4. Connect the RenderFlow server
 
@@ -127,7 +122,7 @@ Choose one of the three ways below. In each, the server starts on the new databa
 Add the connection string to the [silent install](/renderflow/getting-started/silent-deploy) of the server:
 
 ```bat
-renderflow-2.0.19.0044-windows-x64.exe --silent --accept-eula --type=server --uri="mongodb://renderflow:choose-another-password@db01.studio.local:27017/?replicaSet=rs0&authSource=admin"
+renderflow-2.0.19.0044-windows-x64.exe --silent --accept-eula --type=server --uri="mongodb://renderflow:<password>@db01.studio.local:27017/?replicaSet=rs0&authSource=admin"
 ```
 
 ### In the app
@@ -146,15 +141,32 @@ A **Restart required** message appears. Press **Restart now**. The server comes 
 
 ### From the command line
 
-On the server, stop the RenderFlow service, write the connection string with `rfsv config`, and start the service again. On Windows, in an administrator Command Prompt or PowerShell:
+On the server, stop the RenderFlow service, write the connection string with `rfsv config`, and start the service again.
+
+<Tabs>
+<Tab title="Windows">
+
+In an administrator Command Prompt or PowerShell:
 
 ```bat
-sc.exe stop RenderFlow
-"C:\Program Files\Pulze\RenderFlow\rfsv.exe" config --uri="mongodb://renderflow:choose-another-password@db01.studio.local:27017/?replicaSet=rs0&authSource=admin"
-sc.exe start RenderFlow
+sc stop RenderFlow
+rfsv config --uri="mongodb://renderflow:<password>@db01.studio.local:27017/?replicaSet=rs0&authSource=admin"
+sc start RenderFlow
 ```
 
-On Linux, the same with `sudo systemctl stop renderflow`, `/opt/Pulze/RenderFlow/rfsv config --uri="…"` and `sudo systemctl start renderflow`.
+</Tab>
+<Tab title="Linux">
+
+In a terminal, as a user who can run `sudo`:
+
+```bash
+sudo systemctl stop renderflow
+sudo /opt/Pulze/RenderFlow/rfsv config --uri="mongodb://renderflow:<password>@db01.studio.local:27017/?replicaSet=rs0&authSource=admin"
+sudo systemctl start renderflow
+```
+
+</Tab>
+</Tabs>
 
 The connection string is stored on the server, so the service reads it again on every start.
 
@@ -183,8 +195,6 @@ The same works from the command line on the server: `rfsv db export <file>` befo
 
 The server keeps backing up the farm on its own database: a backup every hour into the repository's `backups` folder, the last 24 hourly and 14 daily backups kept. They are listed in **Settings → Backup** and restore the same way as on the bundled database.
 
-These backups hold the farm's database. Back up the MongoDB server itself the way your studio backs up its other database servers.
-
 ## Check that it worked
 
 On the server, run:
@@ -196,54 +206,10 @@ On the server, run:
 The **Database** line names the external database, with the password left out:
 
 ```
-Database       external — mongodb://db01.studio.local:27017/?replicaSet=rs0&authSource=admin
+Database external — mongodb://db01.studio.local:27017/?replicaSet=rs0&authSource=admin
 ```
 
-In the app, **Settings → Server** shows **Database** switched on with the connection string.
-
-## When it does not connect
-
-The server says why on its error screen, in **Settings → Server** when you save, and in the service log (`C:\ProgramData\RenderFlow\logs` on Windows).
-
-### The replica set names its members localhost
-
-```
-The external database db01.studio.local:27017 answers, but its replica set names its members localhost:27017: reconfigure it with that server's address (rs.reconfig).
-```
-
-The replica set was started without the database machine's network address, so it sends the RenderFlow server back to its own machine. In the service log this also appears as `connect ECONNREFUSED 127.0.0.1:27017, connect ECONNREFUSED ::1:27017`. Fix it on the database machine, in `mongosh`:
-
-```js
-cfg = rs.conf()
-cfg.members[0].host = "db01.studio.local:27017"
-rs.reconfig(cfg)
-```
-
-Then restart the RenderFlow service.
-
-### The database is not a replica set
-
-```
-The database is not a replica set — change streams require one
-```
-
-RenderFlow says this when you save a connection string to a MongoDB that runs as a standalone server. Give it a replica set name and start the replica set, as in [Set up the replica set](#1-set-up-the-replica-set), then save the connection string again.
-
-### The database did not answer
-
-```
-The external database did not answer — it is not running, or the connection is blocked by a firewall
-```
-
-The RenderFlow server cannot reach the database machine. Check that the MongoDB service runs, that `bindIp` includes an address the server can reach, and that the database machine's firewall allows the RenderFlow server in on port 27017.
-
-### The database refused the sign-in
-
-```
-The external database refused the sign-in: check the user, the password and authSource in the connection string.
-```
-
-The user name, the password or `authSource` in the connection string does not match the user on the database. A password with special characters must be percent-encoded in the connection string.
+In the app, **Settings → Server** shows **Database** switched on with the connection string.from
 
 ## Go back to the bundled database
 

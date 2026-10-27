@@ -53,8 +53,3 @@ rfsv db export farm.rfx
 rfsv db restore farm.rfx
 rfsv db handover render-server-02
 ```
-
-## Next steps
-
-- [Your Own MongoDB](/renderflow/guides/external-database): run the farm's database on your own replica set
-- [Deploy RenderFlow Versions](/renderflow/guides/deploy): move the whole farm to another version

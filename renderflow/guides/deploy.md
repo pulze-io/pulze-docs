@@ -38,8 +38,3 @@ A machine updates by itself when RenderFlow runs on it as a service with adminis
 <Warning>
 A machine on a different version from the server can't render for the farm.
 </Warning>
-
-## Next steps
-
-- [Backup, Restore and Moving the Server](/renderflow/guides/backup-and-restore): keep a copy of the farm before you deploy
-- [Other ways to install](/renderflow/getting-started/installation#other-ways-to-install): add new machines in the server's version
