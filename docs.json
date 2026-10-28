@@ -214,6 +214,7 @@
     "options": [
       "copy",
       "view",
+      "download-spec",
       "chatgpt",
       "claude"
     ]
