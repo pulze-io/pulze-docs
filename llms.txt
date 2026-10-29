@@ -1,0 +1,93 @@
+# Pulze Docs
+
+> Documentation for the three Pulze products. RenderFlow is a render farm manager for studios: it runs on the studio's own machines, with hybrid cloud in their own Azure or AWS account, on Windows, Linux (x64 and Arm) and macOS (Arm). Scene Manager is a scene and batch rendering plugin for 3ds Max. Project Dream is an AI toolset for visualization.
+
+Product pages and pricing are on https://pulze.io (its own index: https://www.pulze.io/llms.txt; RenderFlow facts: https://www.pulze.io/renderflow/llms.txt). The full text of every page is in https://docs.pulze.io/llms-full.txt, and any page reads as Markdown by adding .md to its URL. Problems with a running product go to support@pulze.io or Discord (https://discord.gg/BxtBs9aN4E), not to a guess.
+
+## Set up a RenderFlow farm
+
+The order to follow when installing and configuring a farm:
+
+1. [System Requirements](https://docs.pulze.io/renderflow/getting-started/requirements.md): check hardware, operating systems, network and ports first.
+2. [Installation](https://docs.pulze.io/renderflow/getting-started/installation.md): install on each machine; what the installer does and where files land.
+3. [Server and Nodes](https://docs.pulze.io/renderflow/getting-started/server-and-nodes.md): make one machine the server and connect the others to it.
+4. [Run as a Service](https://docs.pulze.io/renderflow/getting-started/run-as-a-service.md): keep unattended render nodes running, and the account and path rules a node needs to render.
+5. [Application Submitters](https://docs.pulze.io/renderflow/getting-started/submitters.md): find Submit to RenderFlow inside each application, or install the submitter by hand.
+6. [Quick Start](https://docs.pulze.io/renderflow/getting-started/quick-start.md): the same path in one page, ending with the first render job.
+
+For many machines without touching each one, use [Silent Deployment](https://docs.pulze.io/renderflow/getting-started/silent-deploy.md) instead of steps 2 and 3.
+
+## RenderFlow: getting started
+
+- [RenderFlow overview](https://docs.pulze.io/renderflow/introduction.md): what RenderFlow is and how the docs are organized.
+- [Supported Applications](https://docs.pulze.io/renderflow/getting-started/supported-apps.md): every application, version, render engine and job type RenderFlow runs, per operating system.
+- [Silent Deployment](https://docs.pulze.io/renderflow/getting-started/silent-deploy.md): installer flags, the rfsv config, environment variables, and signing in a headless server over SSH.
+- [Offline Licensing](https://docs.pulze.io/renderflow/getting-started/offline-licensing.md): license a server that has no internet access with a licence file from Pulze.
+- [Migrating](https://docs.pulze.io/renderflow/getting-started/migrating.md): move from RenderFlow 1 or Pulze Render Manager.
+
+## RenderFlow: running the farm
+
+- [Unreal and Perforce](https://docs.pulze.io/renderflow/guides/unreal-and-perforce.md): render Unreal Engine projects synced from Perforce.
+- [Deploy RenderFlow Versions](https://docs.pulze.io/renderflow/guides/deploy.md): keep versions on the server and update the whole farm to one of them.
+- [Backup, Restore and Moving the Server](https://docs.pulze.io/renderflow/guides/backup-and-restore.md): hourly backups, restoring, a password-protected export, and moving to a new server.
+- [Your Own MongoDB](https://docs.pulze.io/renderflow/guides/external-database.md): run the farm on a MongoDB replica set the studio manages.
+
+## RenderFlow: your own code in a job
+
+- [Running your own code](https://docs.pulze.io/renderflow/scripting/overview.md): the three ways: a shell step, a Python step, or a plugin that adds a job type.
+- [Shell steps](https://docs.pulze.io/renderflow/scripting/shell-steps.md): run a command or a batch, PowerShell or bash script as a step, and read the job from its environment.
+- [Python steps](https://docs.pulze.io/renderflow/scripting/python-steps.md): read the job, log, report progress and reuse another step's output.
+- [Python reference](https://docs.pulze.io/renderflow/scripting/rf-reference.md): every declaration, hook, context object and function in the renderflow module.
+- [Plugins](https://docs.pulze.io/renderflow/scripting/plugins.md): package a script as a job type the whole studio submits, with its own fields, icon and software requirements.
+
+## RenderFlow: developers and AI
+
+- [Automating RenderFlow](https://docs.pulze.io/renderflow/developers/overview.md): the REST API, the TypeScript and Python SDKs, the CLI, live updates and webhooks, and when to use each.
+- [Authentication](https://docs.pulze.io/renderflow/developers/authentication.md): API keys and their scopes, the Bearer header, and why a call from the machine itself needs no credential.
+- [Using the REST API](https://docs.pulze.io/renderflow/developers/rest-api.md): base URLs, list envelopes, sorting, error bodies, bulk actions and how a job is submitted.
+- [TypeScript SDK](https://docs.pulze.io/renderflow/developers/typescript-sdk.md): every endpoint typed, one socket for live updates.
+- [Python SDK](https://docs.pulze.io/renderflow/developers/python-sdk.md): no dependencies, so it runs inside Maya, Houdini, Nuke and VRED as they ship.
+- [Command line](https://docs.pulze.io/renderflow/developers/cli.md): rfcli, every endpoint as a command, a table for people and JSON for scripts.
+- [Live updates](https://docs.pulze.io/renderflow/developers/websocket.md): one WebSocket that reports everything happening on the farm.
+- [Webhooks](https://docs.pulze.io/renderflow/developers/webhooks.md): signed HTTP callbacks on job, step, task and machine events, with retries and a delivery log.
+- [MCP server](https://docs.pulze.io/renderflow/developers/mcp-server.md): connect Claude, Cursor or any MCP client to the farm and ask what is running, why a job failed, or to submit a scene.
+- [Cookbook](https://docs.pulze.io/renderflow/developers/cookbook.md): whole tasks in curl, Python, TypeScript and rfcli: submit and wait, requeue failures, pull frames, archive nightly.
+- [API Reference](https://docs.pulze.io/renderflow/api-reference/introduction.md): every published endpoint, with a console to try each against your own farm.
+- [OpenAPI document](https://docs.pulze.io/renderflow/api-reference/openapi.json): every public REST operation, machine-readable.
+
+## RenderFlow: support
+
+- [Report an Issue](https://docs.pulze.io/renderflow/support/report-an-issue.md): send a support package with the problem, so it can be fixed fast.
+
+## Scene Manager
+
+- [Scene Manager overview](https://docs.pulze.io/scene-manager/index.md): the 3ds Max plugin for organizing scenes into setups, each with its own cameras, lighting and render settings.
+- [Installation](https://docs.pulze.io/scene-manager/installation.md): prerequisites, supported 3ds Max versions and installation.
+- [Managing Setups](https://docs.pulze.io/scene-manager/setups.md): create, organize and manage setups, the base of every per-setup setting.
+- [Camera & Framing](https://docs.pulze.io/scene-manager/camera-and-framing.md): cameras, resolutions and frame ranges per setup.
+- [Lighting & Environment](https://docs.pulze.io/scene-manager/lighting.md): sun and dome lights, HDRIs, environment maps and atmosphere per setup.
+- [Scene Control](https://docs.pulze.io/scene-manager/scene-control.md): layer and object visibility, Xref scenes and product variants per setup.
+- [Render Settings](https://docs.pulze.io/scene-manager/rendering.md): output paths, render settings, render elements and post-production per setup.
+- [Scripting](https://docs.pulze.io/scene-manager/scripting.md): custom MaxScript with the Script Editor and Script File modules.
+- [Bake Setups](https://docs.pulze.io/scene-manager/bake-setups.md): turn setups into native 3ds Max scene states, render presets and batch render entries.
+
+## Project Dream
+
+- [Project Dream overview](https://docs.pulze.io/project-dream/index.md): for more information and to try it out, go to https://dream.pulze.io.
+- [Models](https://docs.pulze.io/project-dream/models.md): all 100+ AI models available in Project Dream, for images, video, 3D, audio and music.
+
+## Support
+
+- [Email support](mailto:support@pulze.io): include the product version, operating system and logs.
+- [Discord](https://discord.gg/BxtBs9aN4E): questions and how-to.
+- [Contact](https://docs.pulze.io/contact.md): sales, partnerships and everything else.
+
+## Optional
+
+- [RenderFlow changelog](https://docs.pulze.io/renderflow/changelog.md): release notes and version history.
+- [RenderFlow roadmap](https://docs.pulze.io/renderflow/roadmap.md): planned features and their target quarters.
+- [Scene Manager changelog](https://docs.pulze.io/scene-manager/changelog.md)
+- [Scene Manager: Misc](https://docs.pulze.io/scene-manager/misc.md): thumbnails, notes and todo lists.
+- [Scene Manager: Preferences](https://docs.pulze.io/scene-manager/settings.md): notifications, theme, viewport and columns.
+- [Project Dream changelog](https://docs.pulze.io/project-dream/changelog.md)
+- [Welcome](https://docs.pulze.io/index.md): the docs home page.

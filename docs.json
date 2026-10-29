@@ -60,6 +60,7 @@
               "renderflow/getting-started/requirements",
               "renderflow/getting-started/supported-apps",
               "renderflow/getting-started/installation",
+              "renderflow/getting-started/submitters",
               "renderflow/getting-started/server-and-nodes",
               "renderflow/getting-started/silent-deploy",
               "renderflow/getting-started/run-as-a-service",
