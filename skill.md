@@ -3,7 +3,7 @@ name: pulze
 description: Pulze documentation for RenderFlow, Scene Manager and Project Dream. Use when answering questions about Pulze products, render farm management, setting up a render farm, job submission, render nodes, the RenderFlow API, SDKs and MCP server, scene organization in 3ds Max, or AI tools for visualization.
 metadata:
   author: pulze
-  version: "2.0.20"
+  version: "1.0"
 ---
 
 # Pulze Documentation
