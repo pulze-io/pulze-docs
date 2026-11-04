@@ -36,4 +36,4 @@ Tell us on [Discord](https://discord.gg/BxtBs9aN4E) or at support@pulze.io. For 
 
 ## Pulze
 
-[pulze.io](https://www.pulze.io) · [Book a 30-minute demo](https://calendar.google.com/appointments/schedules/AcZssZ1B5r7WhemCJihYTPpeTXekzS_XMNFUAbSTfpQGKneJb6M9gy7ZgAmbmwO9XrLhuN_p0LHVBllv) · [YouTube](https://www.youtube.com/c/pulzeio) · [LinkedIn](https://www.linkedin.com/company/pulze-io) · [Instagram](https://www.instagram.com/pulzeio)
+[pulze.io](https://www.pulze.io) · [YouTube](https://www.youtube.com/c/pulzeio) · [LinkedIn](https://www.linkedin.com/company/pulze-io) · [Instagram](https://www.instagram.com/pulzeio)
