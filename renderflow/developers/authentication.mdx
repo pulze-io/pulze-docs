@@ -1,0 +1,151 @@
+---
+title: "Authentication"
+description: "How a caller identifies itself to a RenderFlow farm: API keys and their scopes, the Bearer header, and why a call from the machine itself needs no credential."
+"og:title": "RenderFlow API Authentication"
+"og:description": "API keys, the Bearer header, and why a call from the machine itself needs no credential."
+"twitter:title": "RenderFlow API Authentication"
+keywords: ['render farm API key', 'render farm API authentication', 'RenderFlow API key', 'render farm REST authentication']
+---
+
+## Creating a key
+
+<Steps>
+<Step title="Open Settings">
+Press the gear icon, then **API Keys** under **Access**.
+</Step>
+<Step title="Press New API key">
+Give it the name of the thing that will use it, not the person who made it. A key called `ftrack sync` is one you can revoke without wondering what breaks.
+</Step>
+<Step title="Tick what it may do">
+Tick the scopes the key needs, or press a preset: **Read only**, **Submit**, **Jobs** or **Everything**. Turn on **Only jobs this key submitted** to keep the key away from other people's jobs. See [Scopes](#scopes).
+</Step>
+<Step title="Press Create and copy the value">
+It is shown once. The farm keeps only a fingerprint of it, so afterwards the list shows the key's **Name**, a masked fingerprint under **Key**, its **Scopes**, **Created By** and **Created At**. Nothing in the list can be used as a key.
+</Step>
+</Steps>
+
+<Frame caption="Settings, API Keys, with a key per thing that uses one">
+  <img src="/images/renderflow/v2/rf_settings_apikeys.webp" alt="The API Keys settings panel listing two keys with their names, masked values, who created them and when" />
+</Frame>
+
+Press the pencil on a row to change a key's name or scopes. The change applies to the key's next call. Revoking a row stops that key working everywhere, at once. A key carries no expiry.
+
+## Using it
+
+The key goes in an `Authorization` header:
+
+```
+Authorization: Bearer rf_a1b2c3...
+```
+
+Never in a query string. A URL ends up in server logs, proxy logs and browser history, and a credential in one of those is a credential you have to rotate.
+
+<CodeGroup>
+```bash curl
+curl -H "Authorization: Bearer $RENDERFLOW_API_KEY" \
+  http://10.11.30.40:44442/api/v1/jobs?limit=5
+```
+
+```python Python
+import renderflow as rf
+
+farm = rf.connect("http://10.11.30.40:44442", api_key="rf_a1b2c3...")
+print(farm.jobs.get_jobs(limit=5).total)
+```
+
+```typescript TypeScript
+import { RenderFlow } from "@pulze-io/renderflow";
+
+const rf = new RenderFlow({
+    baseUrl: "http://10.11.30.40:44442/api/v1",
+    apiKey: process.env.RENDERFLOW_API_KEY
+});
+
+const { total } = await rf.jobs.getJobs({ limit: 5 });
+```
+</CodeGroup>
+
+The Python SDK reads `RENDERFLOW_API_KEY` from the environment when you do not pass a key, and `rfcli` requires that variable. The TypeScript SDK reads nothing from the environment, so pass `apiKey` yourself, as above.
+
+## From the machine itself
+
+A call to `127.0.0.1` needs no credential. Being on the machine is the proof, and it is the trust boundary the whole API is written around rather than a gap in it.
+
+This is how a DCC submitter works. The plugins inside 3ds Max, Maya, Houdini, Nuke and the rest build `http://127.0.0.1:44442/api/v1` with their host application's own standard library and post a job to it, with no key to configure and nothing for an artist to paste.
+
+```python
+import renderflow as rf
+
+# No address and no key: the service on this machine.
+farm = rf.connect()
+farm.jobs.create_job(body={
+    "type": "maya.render",
+    "file": "//NAS/projects/hero/shots/010/lighting_v014.mb",
+    "host": {"id": "maya", "version": "2026"},
+    "frame": "1-240"
+})
+```
+
+<Warning>
+Submit from the machine holding the scene, on loopback, rather than posting to the server from elsewhere. The service that receives a submission is the one that stages its files, and a server cannot read an artist's drive on their behalf. Submitting remotely works, but only where the farm's path mappings cover every path in the job.
+</Warning>
+
+## Ports
+
+| Port | Serves | TLS |
+|---|---|---|
+| 44442 | The service on this machine, for submitters, `rfcli` and the app. With TLS off, the farm as well | Never |
+| 44445 | The farm, for everything off the machine | Always. The port is opened only when TLS is turned on |
+
+Loopback is plaintext on every role. A certificate for a public name does not validate against `127.0.0.1`, and a local caller cannot carry a private authority, so TLS there would break every submitter to encrypt traffic that never reaches a wire.
+
+Turn TLS on with the **TLS** switch under **Settings**, **Server**, giving it your own certificate and private key, or start the service with `--tls`, `--tls-cert` and `--tls-key`. With TLS on, the server answers the farm over HTTPS on 44445 and 44442 answers loopback only. With TLS off, the farm is served in plaintext on 44442. A caller names the scheme in the address, so `https://10.11.30.40:44445` and `http://10.11.30.40:44442` reach the same farm through different listeners.
+
+## What a key reaches
+
+An API key reaches the published API: the operations in the [reference](/renderflow/api-reference/introduction), which is jobs, tasks, machines, pools, users, groups, the schedule, licenses, errors and webhooks, and the administration a studio scripts: the event and audit logs and their exports, the statistics and their export, maintenance mode, the database status, listing and taking backups, and collecting a support bundle.
+
+Within that, a key can call only what its scopes allow.
+
+## Scopes
+
+A key can do exactly what is ticked on it, whoever holds it. The scopes are the same permissions as in **Settings > Groups**, and they decide what the key may do, not the group of the person who created it. A key an admin creates and hands to a TD with **Submit** ticked can submit and control jobs, and nothing more.
+
+- You can only tick what your own group may do. The rest is greyed out.
+- **Only jobs this key submitted** limits the key's job scopes to the jobs it created itself. It can still see every job with `job.view`.
+- A key without any scopes can do nothing. Edit it and tick what it needs.
+- A key stops working when the person who created it is deleted.
+
+| Scope | Allows |
+|---|---|
+| `job.view` | Reading jobs, steps, tasks, errors and the archive |
+| `job.output` | Reading task and step logs and frame previews |
+| `job.create` | Submitting jobs |
+| `job.start`, `job.stop`, `job.finish` | Starting, stopping and finishing jobs and steps |
+| `job.reset` | Resetting jobs, steps and tasks, and clearing their errors |
+| `job.update` | Editing jobs and tasks: priority, pool, blacklist and the other settings |
+| `job.delete` | Deleting jobs |
+| `job.archive.create`, `job.archive.restore`, `job.archive.delete` | Archiving jobs, restoring them, deleting archived jobs |
+| `node.view` | Reading machines, their hardware and their tags |
+| `node.update`, `node.pool.change`, `node.delete` | Editing machines, moving them to a pool, removing them |
+| `node.suspend`, `node.resume`, `node.reserve`, `node.finish` | Setting a machine's status |
+| `system.view` | Reading pools, licenses, users, groups, webhooks, sanity checks, the error catalog, the database status and backups, and the event and audit logs |
+| `system.settings` | Changing pools, licenses, users, groups and webhooks, and taking a database backup |
+| `scheduler.view`, `scheduler.edit` | Reading and changing the schedule |
+| `sanity.edit` | Changing sanity checks |
+| `errorcatalog.edit` | Changing the error catalog |
+| `statistics` | Reading the statistics and exporting them |
+| `cloud.view`, `cloud.operate`, `cloud.manage` | Reading cloud machines, scaling them, managing cloud connections |
+| `report.create` | Collecting a support bundle |
+| `system.maintenance` | Turning maintenance mode on and off |
+
+The API Keys settings page lists the scopes your farm offers, and `GET /api/v1/api-keys/scopes` on the server returns them with the operations each one covers.
+
+## When a call is refused
+
+| Status | Means |
+|---|---|
+| 401 | No credential, or one that does not verify. A revoked key gets this from everywhere, including loopback |
+| 403 | The credential is valid but this operation is not part of the published API, the operation only answers the machine it runs on, or the key lacks the scope it needs. The message names the scope, as in `This API key lacks job.delete` |
+
+`rfcli` separates the two cases by exit code, so a script can tell "ask for a key" from "this key is wrong": **8** means no key was set, **9** means the key was rejected.

@@ -1,22 +1,79 @@
 ---
 name: pulze
-description: Pulze documentation for Scene Manager, RenderFlow, and Project Dream. Use when answering questions about Pulze products, render farm management, scene organization in 3ds Max, distributed rendering, job submission, node management, or the RenderFlow API.
+description: Pulze documentation for RenderFlow, Scene Manager, Project Dream and LayerWise. Use when answering questions about Pulze products, render farm management, setting up a render farm, job submission, render nodes, the RenderFlow API, SDKs and MCP server, scene organization in 3ds Max, AI tools for visualization, or building and updating layered Photoshop files from render elements.
 metadata:
   author: pulze
-  version: "1.3"
+  version: "1.0"
 ---
 
 # Pulze Documentation
 
-Pulze builds tools for 3D artists and studios. This skill covers three products:
+Pulze builds software for 3D artists and studios. This skill covers RenderFlow, Scene Manager, Project Dream and LayerWise. Every page is also available as Markdown by adding `.md` to its path, and the full text of the docs is at `/llms-full.txt`. Product pages and pricing are on https://www.pulze.io, with RenderFlow facts at https://www.pulze.io/renderflow/llms.txt.
 
 ## Products
 
-### Scene Manager
-A 3ds Max plugin for organizing and managing scenes with per-setup control over cameras, lighting, rendering, and more. Supports batch rendering, bake setups, and RenderFlow integration.
+### RenderFlow
+A render farm manager for studios and in-house creative teams. It runs on the studio's own machines, on Windows, Linux (x64 and Arm) and macOS (Arm), and one farm can mix all three. It submits, monitors and manages render jobs from 26 applications and render engines, and can add cloud machines from the studio's own Azure or AWS account. Licensed per machine rendering at the same time; monitoring and managing the farm are free.
+
+#### Set up a farm, in this order
+1. System Requirements: /renderflow/getting-started/requirements
+2. Installation (one installer for every machine): /renderflow/getting-started/installation
+3. Server and Nodes (make one machine the server, connect the others): /renderflow/getting-started/server-and-nodes
+4. Run as a Service (unattended render nodes): /renderflow/getting-started/run-as-a-service
+5. Quick Start (the same path on one page, ending with the first job): /renderflow/getting-started/quick-start
+
+For many machines at once, use Silent Deployment instead of steps 2 and 3: /renderflow/getting-started/silent-deploy
 
 #### Getting Started
-- Overview: /scene-manager/overview
+- Introduction: /renderflow/introduction
+- Supported Applications (versions, render engines, job types and platforms for every application): /renderflow/getting-started/supported-apps
+- Other ways to install (curl or PowerShell from the farm server): /renderflow/getting-started/installation#other-ways-to-install
+- Offline Licensing (Enterprise, a server with no internet access): /renderflow/getting-started/offline-licensing
+- Migrating (from RenderFlow 1 or Render Manager): /renderflow/getting-started/migrating
+
+#### Guides
+Walkthroughs for one workflow from start to finish.
+- Unreal and Perforce (sync Unreal projects from Perforce on every node, checked-out files shelved for the job): /renderflow/guides/unreal-and-perforce
+- Deploy RenderFlow Versions (update every machine from Settings → Deploy): /renderflow/guides/deploy
+- Backup, Restore and Moving the Server: /renderflow/guides/backup-and-restore
+- Your Own MongoDB: /renderflow/guides/external-database
+
+#### Scripting
+- Overview: /renderflow/scripting/overview
+- Shell steps: /renderflow/scripting/shell-steps
+- Python steps: /renderflow/scripting/python-steps
+- rf module reference: /renderflow/scripting/rf-reference
+- Plugins: /renderflow/scripting/plugins
+
+#### Developers
+- Overview: /renderflow/developers/overview
+- Authentication: /renderflow/developers/authentication
+- REST API: /renderflow/developers/rest-api
+- TypeScript SDK (`@pulze-io/renderflow`): /renderflow/developers/typescript-sdk
+- Python SDK (`pulze-renderflow`, no dependencies, imports inside Maya and Houdini): /renderflow/developers/python-sdk
+- CLI (`rfcli`): /renderflow/developers/cli
+- Live updates over WebSocket: /renderflow/developers/websocket
+- Webhooks (signed event callbacks) and notification channels: /renderflow/developers/webhooks
+- MCP server: /renderflow/developers/mcp-server
+- Cookbook (whole tasks in curl, Python, TypeScript and rfcli): /renderflow/developers/cookbook
+
+#### API Reference
+Generated from the farm's own published OpenAPI document (/renderflow/api-reference/openapi.json), one page per operation, with a request playground.
+- Introduction: /renderflow/api-reference/introduction
+- 116 operation pages at /renderflow/api-reference/[tag]/[action], for example /renderflow/api-reference/jobs/create
+
+#### Support
+- Report an issue (support package from the Error report collector, ticket, email or Discord, log locations): /renderflow/support/report-an-issue
+
+#### Resources
+- Changelog: /renderflow/changelog
+- Roadmap: /renderflow/roadmap
+
+### Scene Manager
+A 3ds Max plugin for organizing scenes into setups, each with its own cameras, lighting, render settings and more. Supports batch rendering, baking setups into native 3ds Max scene states, and submitting to RenderFlow.
+
+#### Getting Started
+- Overview: /scene-manager
 - Installation: /scene-manager/installation
 
 #### Modules
@@ -37,162 +94,82 @@ A 3ds Max plugin for organizing and managing scenes with per-setup control over 
 #### Reference
 - Changelog: /scene-manager/changelog
 
-### RenderFlow
-Render farm management software. Submit jobs, manage nodes, monitor progress, and automate rendering workflows across machines.
-
-#### Getting Started
-- Quick start: /renderflow/getting-started/quick-start
-- Render farm basics: /renderflow/getting-started/render-farm-basics
-- System requirements: /renderflow/getting-started/requirements
-- Supported apps: /renderflow/getting-started/supported-apps
-- Installation: /renderflow/getting-started/installation
-- Licensing: /renderflow/getting-started/licensing
-- Silent deploy: /renderflow/getting-started/silent-deploy
-- Run as a service: /renderflow/getting-started/run-as-a-service
-- Network setup: /renderflow/getting-started/network-setup
-- VPN remote access: /renderflow/getting-started/vpn-remote-access
-- Migrating from Render Manager: /renderflow/getting-started/migrating-from-render-manager
-
-#### Jobs
-- How jobs work: /renderflow/jobs/overview
-- Submitter: /renderflow/jobs/submitter
-- Templates: /renderflow/jobs/templates
-- Requirements: /renderflow/jobs/requirements
-- Sanity checks: /renderflow/jobs/sanity-checks
-- Assets: /renderflow/jobs/assets
-- Monitoring: /renderflow/jobs/monitoring
-- Tasks and details: /renderflow/jobs/tasks-and-details
-- Notifications: /renderflow/jobs/notifications
-- Errors: /renderflow/jobs/errors
-
-#### Job Types
-- 3ds Max: /renderflow/job-types/3ds-max
-- After Effects: /renderflow/job-types/after-effects
-- Arnold: /renderflow/job-types/arnold
-- Blender: /renderflow/job-types/blender
-- Cinema 4D: /renderflow/job-types/cinema-4d
-- Corona DR: /renderflow/job-types/corona-dr
-- Fusion: /renderflow/job-types/fusion
-- Houdini (Beta): /renderflow/job-types/houdini
-- Maya: /renderflow/job-types/maya
-- Nuke: /renderflow/job-types/nuke
-- Python: /renderflow/job-types/python
-- Redshift: /renderflow/job-types/redshift
-- Scene Manager: /renderflow/job-types/scene-manager
-- Shell: /renderflow/job-types/shell
-- Unreal Engine (Beta): /renderflow/job-types/unreal
-- V-Ray DR: /renderflow/job-types/vray-dr
-- V-Ray Standalone: /renderflow/job-types/vray-standalone
-
-#### Cloud Rendering
-- Overview: /renderflow/cloud-rendering/overview
-- Credits and pricing: /renderflow/cloud-rendering/credits-and-pricing
-- Request access: /renderflow/cloud-rendering/request-access
-
-#### Nodes
-- How nodes work: /renderflow/nodes/overview
-- Commands: /renderflow/nodes/commands
-- Tags: /renderflow/nodes/tags
-- CPU affinity: /renderflow/nodes/cpu-affinity
-- Spawner mode: /renderflow/nodes/spawner-mode
-- Hardware and network: /renderflow/nodes/hardware-and-network
-- Software: /renderflow/nodes/software
-- Benchmark: /renderflow/nodes/benchmark
-
-#### Analytics
-- Software analytics: /renderflow/software-analytics/overview
-- Statistics: /renderflow/statistics/overview
-
-#### Scheduler
-- Overview: /renderflow/scheduler/overview
-
-#### Sanity Check
-- Overview: /renderflow/sanity-check/overview
-- Defaults: /renderflow/sanity-check/defaults
-- Custom checks: /renderflow/sanity-check/custom-checks
-
-#### Settings
-- Overview: /renderflow/settings/overview
-
-#### Developers
-- Authentication: /renderflow/developers/authentication
-- REST API: /renderflow/developers/rest-api
-- JavaScript SDK: /renderflow/developers/javascript-sdk
-- Python SDK: /renderflow/developers/python-sdk
-- CLI: /renderflow/developers/cli
-- MCP Server: /renderflow/developers/mcp-server
-
-#### Reference
-- FAQ: /renderflow/faq
-- Glossary: /renderflow/glossary
-- Changelog: /renderflow/changelog
-
-#### RenderFlow 2 (Beta)
-RenderFlow 2 is in beta. Paths without a version prefix (`/renderflow/...`) document RenderFlow 1; paths under `/renderflow/v2/...` document RenderFlow 2. Pages are added as they are written.
-- Introduction: /renderflow/v2/introduction
-- Quick Start: /renderflow/v2/getting-started/quick-start
-- System Requirements: /renderflow/v2/getting-started/requirements
-- Installation: /renderflow/v2/getting-started/installation
-- Server and Nodes: /renderflow/v2/getting-started/server-and-nodes
-- Silent Deployment: /renderflow/v2/getting-started/silent-deploy
-- Run as a Service: /renderflow/v2/getting-started/run-as-a-service
-- Migrating (from RenderFlow 1 or Render Manager): /renderflow/v2/getting-started/migrating
-- Changelog: /renderflow/v2/changelog
-
-##### RenderFlow 2 — Scripting
-Running your own code on the farm. Three ways: a shell step, a Python step, or a plugin that adds a job type to the submitter.
-- Overview: /renderflow/v2/scripting/overview
-- Shell steps: /renderflow/v2/scripting/shell-steps
-- Python steps: /renderflow/v2/scripting/python-steps
-- rf module reference: /renderflow/v2/scripting/rf-reference
-- Plugins: /renderflow/v2/scripting/plugins
-
-##### RenderFlow 2 — Developers
-Driving the farm from outside. Every client is generated from one OpenAPI document, so an operation is named the same in the REST route, both SDKs, `rfcli` and the MCP tools.
-- Overview: /renderflow/v2/developers/overview
-- Authentication: /renderflow/v2/developers/authentication
-- REST API: /renderflow/v2/developers/rest-api
-- TypeScript SDK (`@pulze-io/renderflow`): /renderflow/v2/developers/typescript-sdk
-- Python SDK (`pulze-renderflow`, no dependencies, imports inside Maya and Houdini): /renderflow/v2/developers/python-sdk
-- CLI (`rfcli`): /renderflow/v2/developers/cli
-- Live updates over WebSocket: /renderflow/v2/developers/websocket
-- Webhooks (signed event callbacks) and notification channels: /renderflow/v2/developers/webhooks
-- MCP server: /renderflow/v2/developers/mcp-server
-- Cookbook (whole tasks in curl, Python, TypeScript and rfcli): /renderflow/v2/developers/cookbook
-
-##### RenderFlow 2 — API Reference
-Generated from the farm's own published document, one page per operation, with a request playground.
-- Introduction: /renderflow/v2/api-reference/introduction
-- 98 operation pages at /renderflow/v2/api-reference/[tag]/[action], for example /renderflow/v2/api-reference/jobs/create
-
 ### Project Dream
-AI-powered creative project generation tool.
+An AI toolset for visualization: image generation from the 3D viewport, upscaling, character enhancement, image editing with prompts, and image-to-video, from inside 3D applications and Photoshop. For more information and to try it out, go to https://dream.pulze.io.
 
 - Overview: /project-dream/index
+- Models (100+ AI models, for images, video, 3D, audio and music): /project-dream/models
+- Changelog: /project-dream/changelog
+
+### LayerWise
+A free Photoshop plugin for render elements (Photoshop 2025 or newer, Windows or macOS, a free Pulze account). It builds an organized, masked PSD from a folder of render elements, with presets for V-Ray, Corona and FStorm and any engine through your own element names, and swaps new renders into the same PSD while keeping masks, smart filters, layer styles and retouching.
+
+#### Getting Started
+- Overview: /layerwise
+- How LayerWise Works: /layerwise/how-it-works
+- Installation: /layerwise/installation
+- The Interface: /layerwise/interface
+
+#### Workflows
+- Create New Document: /layerwise/workflows/create-document
+- Update Renders: /layerwise/workflows/update-renders
+- Merge Region Renders: /layerwise/workflows/merge-regions
+- Multichannel EXR: /layerwise/workflows/multichannel-exr
+
+#### Masks and Templates
+- Masks (multimatte and luminance passes): /layerwise/masks
+- Cryptomatte: /layerwise/cryptomatte
+- Templates: /layerwise/templates
+- Template Editor: /layerwise/template-editor
+- Cloud Templates: /layerwise/cloud-templates
+
+#### Tools and Settings
+- Render Elements (recognized names, adding your own): /layerwise/render-elements
+- Tools: /layerwise/tools
+- Settings: /layerwise/settings
+- AI Assistant (Claude or another AI app over a local MCP bridge): /layerwise/ai-assistant
+
+#### Resources
+- FAQ: /layerwise/faq
+- Migrating from Post Manager: /layerwise/migrating-from-post-manager
+- Changelog: /layerwise/changelog
 
 ## Common Tasks
 
-- **Submit a render job**: Open the Submitter, select a scene file, review settings, and click Submit. See /renderflow/jobs/submitter and /renderflow/getting-started/quick-start.
-- **Install RenderFlow**: Run the installer on each machine and choose Server, Node, or Workstation. Silent deploy available via PowerShell. See /renderflow/getting-started/installation and /renderflow/getting-started/silent-deploy.
+### RenderFlow
+
+- **Set up a render farm**: Install RenderFlow on every machine with the same installer, then decide in the setup wizard or with `rfsv config` which machine is the server and which are workstations or render nodes. See /renderflow/getting-started/installation and /renderflow/getting-started/server-and-nodes.
+- **Submit a render job**: Use Submit to RenderFlow inside the application, or open the Submitter in RenderFlow, pick a scene, review the settings and submit. See /renderflow/getting-started/quick-start.
+- **Use the REST API**: Generate an API key in Settings, then call endpoints for jobs, tasks, machines, pools and users. See /renderflow/developers/authentication and /renderflow/developers/rest-api.
+- **Connect an AI assistant**: An admin turns on AI clients under Settings > Security, then connects Claude Desktop, Claude Code, Codex, Cursor, VS Code or LM Studio from Settings > AI Clients on a computer that runs RenderFlow. ChatGPT and Claude's Connectors cannot reach a farm on a private network. See /renderflow/developers/mcp-server.
+- **Set up pools and groups**: Pools divide the machines; groups decide what people may do and which pools they may submit to. See /renderflow/getting-started/server-and-nodes.
+- **Troubleshoot failures**: Check the task's render log, then collect an error report for support. See /renderflow/support/report-an-issue.
+- **Run a script on the farm**: Add a Shell step for a command you already have, or a Python step when the work has to spread across machines. A Python declaration such as `rf.folder("plates")` becomes a field in the submitter, a command-line flag and the value, from one line. See /renderflow/scripting/overview.
+- **Add a job type of your own**: Package a Python script as a plugin with a `plugin.toml` and install it once into the repository. It then appears in the submitter's template picker for the whole studio. See /renderflow/scripting/plugins.
+- **Render Unreal projects from Perforce**: Add the server in Settings → Perforce, install `p4` on the nodes, and submit from Unreal with Tools → Submit to RenderFlow. Each node syncs the project instead of RenderFlow copying it, and checked-out files are shelved for the job. See /renderflow/guides/unreal-and-perforce.
+- **Submit from code**: `POST /jobs` takes a flat per-application recipe or a step tree. On the machine running RenderFlow no credential is needed, which is how an application plugin submits; from anywhere else use an API key. See /renderflow/developers/rest-api and /renderflow/developers/cookbook.
+- **Follow a job without polling**: One WebSocket at `/api/v1/socket` carries every change. The TypeScript SDK wraps it as `rf.jobs.on()`, and both SDKs have `settled()` for waiting on one job. See /renderflow/developers/websocket.
+- **Get called when a render finishes**: Subscribe a URL with `POST /webhooks` for signed, retried callbacks on job, step, task and machine events. For a message to a person instead, attach a notification channel at submit time. See /renderflow/developers/webhooks.
+
+### Scene Manager
+
 - **Install Scene Manager**: Run the installer, then add the toolbar button in 3ds Max via Customize > Customize User Interface > Toolbars > Pulze. See /scene-manager/installation.
-- **Manage render nodes**: View node status, hardware, and current jobs from the Nodes table. Suspend, restart, shutdown, or wake nodes remotely. See /renderflow/nodes/overview and /renderflow/nodes/commands.
-- **Use the REST API**: Generate an API key in Settings, then call endpoints for jobs, tasks, nodes, pools, and users. See /renderflow/developers/authentication and /renderflow/developers/rest-api.
-- **Connect via MCP**: Configure Claude Desktop, ChatGPT Desktop, or Claude Code with the RenderFlow MCP server. See /renderflow/developers/mcp-server.
-- **Set up pools**: Create pools in Settings, assign nodes to pools, and submit jobs to specific pools. See /renderflow/nodes/overview and /renderflow/settings/overview.
-- **Configure permissions**: Create user groups with policies controlling job, node, and system access. See /renderflow/settings/overview.
-- **Troubleshoot failures**: Check task render logs, review sanity check results, and collect diagnostic logs. See /renderflow/jobs/errors, /renderflow/sanity-check/overview, and /renderflow/support/collecting-logs.
-- **Archive and restore jobs**: Archive completed jobs from the context menu to keep the list clean. Restore them anytime from the archive panel. See /renderflow/jobs/overview.
-- **Schedule overnight rendering**: Use the Scheduler to automatically activate workstations after hours and suspend them before the workday. See /renderflow/scheduler/overview.
-- **Submit cloud jobs**: Switch to the Cloud tab in the Submitter to render on cloud nodes with included V-Ray and Corona licenses. See /renderflow/cloud-rendering/overview.
-- **Run a script on the farm (RenderFlow 2)**: Add a Shell step for a command you already have, or a Python step when the work has to spread across machines. A Python declaration such as `rf.files("plates")` becomes a field in the submitter, a command-line flag and the value, from one line. See /renderflow/v2/scripting/overview.
-- **Add a job type of your own (RenderFlow 2)**: Package a Python script as a plugin with a `plugin.toml` and install it once into the repository. It then appears in the submitter's template picker for the whole studio. See /renderflow/v2/scripting/plugins.
-- **Submit from code (RenderFlow 2)**: `POST /jobs` takes a flat per-application recipe or a step tree. On the machine running the service no credential is needed, which is how a DCC plugin submits; from anywhere else use an API key. See /renderflow/v2/developers/rest-api and /renderflow/v2/developers/cookbook.
-- **Follow a job without polling (RenderFlow 2)**: One WebSocket at `/api/v1/socket` carries every change. The TypeScript SDK wraps it as `rf.jobs.on()`, and both SDKs have `settled()` for waiting on one job. See /renderflow/v2/developers/websocket.
-- **Get called when a render finishes (RenderFlow 2)**: Subscribe a URL with `POST /webhooks` for signed, retried callbacks on job, step, task and machine events. For a message to a person instead, attach a notification channel at submit time. See /renderflow/v2/developers/webhooks.
-- **Batch render in Scene Manager**: Press the Batch Render button in the top toolbar to render all setups with one click. Or bake setups to native scene states. See /scene-manager/bake-setups.
-- **Organize 3ds Max scenes**: Create setups in Scene Manager to manage cameras, lighting, scene visibility, and render settings per shot. See /scene-manager/setups.
+- **Organize 3ds Max scenes**: Create setups to manage cameras, lighting, scene visibility and render settings per shot. See /scene-manager/setups.
+- **Batch render**: Press the Batch Render button in the top toolbar to render all setups with one click, or bake setups to native scene states. See /scene-manager/bake-setups.
+
+### Project Dream
+
+- **Try Project Dream**: Go to https://dream.pulze.io for more information and to get started.
+- **Choose an AI model**: All 100+ models for images, video, 3D, audio and music are listed at /project-dream/models.
+
+### LayerWise
+
+- **Install LayerWise**: Install the plugin in Photoshop 2025 or newer and sign in with a free Pulze account. See /layerwise/installation.
+- **Build a PSD from render elements**: Pick the render folder and a template; LayerWise sorts the passes into groups with the right blend modes and masks. See /layerwise/workflows/create-document.
+- **Swap in new renders**: Update Renders replaces each render element layer with its new file and keeps everything built on top. See /layerwise/workflows/update-renders.
+- **Masks from mattes**: MultiMatte and luminance passes become layer masks on the groups named by their tags; with a Cryptomatte, pick objects or materials after rendering. See /layerwise/masks and /layerwise/cryptomatte.
+- **Use an AI assistant**: Open the menu → AI assistant, switch on "Let AI apps on this computer use LayerWise" (off by default, local only) and connect Claude Desktop, Claude Code or another MCP app. See /layerwise/ai-assistant.
 
 ## Support
 
-Contact Pulze at support@pulze.io for questions or issues.
-Discord: https://discord.com/invite/BxtBs9aN4E
+Email support@pulze.io with the product version, operating system and logs. Questions and how-to: Discord, https://discord.gg/BxtBs9aN4E. Sales and partnerships: /contact.

@@ -1,86 +1,86 @@
 ---
 title: "RenderFlow Documentation"
 sidebarTitle: "Introduction"
-description: "Complete documentation for RenderFlow, the render farm management software by Pulze. Learn how to set up, manage, and scale your render farm."
-"og:title": "RenderFlow Documentation - Render Farm Management"
-"og:description": "Everything you need to set up, manage, and scale your render farm with RenderFlow."
-"twitter:title": "RenderFlow Documentation - Render Farm Management"
-keywords: ['RenderFlow documentation', 'render farm manager', 'render farm management software', 'RenderFlow guide', 'render farm setup', 'Pulze RenderFlow']
+description: "Install RenderFlow, set up a render farm, and submit your first job."
+"og:title": "RenderFlow Documentation"
+"og:description": "Install RenderFlow, set up a render farm, and submit your first job."
+"twitter:title": "RenderFlow Documentation"
+keywords: ['RenderFlow', 'render farm manager', 'Pulze RenderFlow', 'render farm management software']
 mode: "wide"
 ---
-
-RenderFlow manages your render farm, from a single workstation to hundreds of nodes. This guide walks you through the fastest path to getting your first job running.
 
 <CardGroup cols={3}>
 
 <Card title="Quick Start" icon="rocket" href="/renderflow/getting-started/quick-start">
-  Get your first render job running in under 10 minutes.
+  Set up a server, connect a machine, submit a job.
 </Card>
 
-<Card title="Getting Started" icon="book-open" href="/renderflow/getting-started/requirements">
-  Requirements, installation, licensing, and network setup.
+<Card title="System Requirements" icon="list-check" href="/renderflow/getting-started/requirements">
+  Hardware, operating systems, ports, and storage.
 </Card>
 
-<Card title="Jobs" icon="list-check" href="/renderflow/jobs/overview">
-  Submit, monitor, and manage render jobs.
+<Card title="Installation" icon="download" href="/renderflow/getting-started/installation">
+  The installer on Windows, Linux, and macOS.
 </Card>
 
-<Card title="Job Types" icon="cube" href="/renderflow/job-types/3ds-max">
-  Per-application guides.
+<Card title="Server and Nodes" icon="server" href="/renderflow/getting-started/server-and-nodes">
+  A studio farm, set up through the app.
 </Card>
 
-<Card title="Nodes" icon="server" href="/renderflow/nodes/overview">
-  Manage render nodes, hardware, software, and tags.
+<Card title="Silent Deployment" icon="terminal" href="/renderflow/getting-started/silent-deploy">
+  Installer flags, rfsv config, and headless servers.
 </Card>
 
-<Card title="Cloud Rendering" icon="cloud" href="/renderflow/cloud-rendering/overview">
-  Burst to the cloud with credit-based pricing.
-</Card>
-
-<Card title="Sanity Check" icon="shield-check" href="/renderflow/sanity-check/overview">
-  Catch scene errors before they waste render time.
-</Card>
-
-<Card title="Scheduler" icon="calendar" href="/renderflow/scheduler/overview">
-  Automate node availability and off-hours rendering.
-</Card>
-
-<Card title="Software Analytics" icon="chart-bar" href="/renderflow/software-analytics/overview">
-  Compare software versions across your farm.
-</Card>
-
-<Card title="Statistics" icon="chart-line" href="/renderflow/statistics/overview">
-  Track render times and farm performance.
-</Card>
-
-<Card title="Settings" icon="gear" href="/renderflow/settings/overview">
-  Configure RenderFlow to match your workflow.
-</Card>
-
-<Card title="Developers" icon="code" href="/renderflow/developers/authentication">
-  REST API, SDKs, CLI, and MCP Server.
+<Card title="Run as a Service" icon="gear" href="/renderflow/getting-started/run-as-a-service">
+  Unattended render nodes that start on boot.
 </Card>
 
 </CardGroup>
 
-## Additional Resources
+## Running your own code
 
-<CardGroup cols={4}>
+<CardGroup cols={3}>
 
-<Card title="FAQ" icon="circle-question" href="/renderflow/faq">
-  Common questions answered.
+<Card title="Shell steps" icon="terminal" href="/renderflow/scripting/shell-steps">
+  A command, a batch file, a PowerShell or bash script.
 </Card>
 
-<Card title="Glossary" icon="spell-check" href="/renderflow/glossary">
-  Render farm terminology.
+<Card title="Python steps" icon="python" href="/renderflow/scripting/python-steps">
+  Reading the job, logging, and reporting progress.
 </Card>
 
-<Card title="Support" icon="life-ring" href="/renderflow/support/report-an-issue">
-  Report issues or get help.
-</Card>
-
-<Card title="Changelog" icon="clock-rotate-left" href="/renderflow/changelog">
-  Release notes and version history.
+<Card title="Plugins" icon="puzzle-piece" href="/renderflow/scripting/plugins">
+  A job type of your own, in the submitter for the whole studio.
 </Card>
 
 </CardGroup>
+
+## Driving the farm from code
+
+<CardGroup cols={3}>
+
+<Card title="REST API" icon="code" href="/renderflow/developers/rest-api">
+  The conventions every endpoint shares, and the generated reference.
+</Card>
+
+<Card title="SDKs and CLI" icon="cube" href="/renderflow/developers/overview">
+  TypeScript, Python and rfcli, all generated from one document.
+</Card>
+
+<Card title="Live updates" icon="bolt" href="/renderflow/developers/websocket">
+  One socket for everything happening on the farm.
+</Card>
+
+<Card title="Webhooks" icon="bell" href="/renderflow/developers/webhooks">
+  Signed callbacks when a job, a step or a machine changes.
+</Card>
+
+<Card title="Cookbook" icon="book-open" href="/renderflow/developers/cookbook">
+  Whole tasks in curl, Python, TypeScript and rfcli.
+</Card>
+
+</CardGroup>
+
+## Need help?
+
+Questions and feedback: [support@pulze.io](mailto:support@pulze.io) or [Discord](https://discord.gg/BxtBs9aN4E).

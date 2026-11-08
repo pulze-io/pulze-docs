@@ -1,87 +1,141 @@
 ---
-title: "Requirements"
-description: "Hardware, operating system, network, and port requirements for running RenderFlow."
+title: "System Requirements"
+description: "Hardware, operating systems, licensing, network and port requirements for RenderFlow."
 "og:title": "RenderFlow System Requirements"
-"og:description": "Hardware, OS, network ports, and infrastructure needed to run RenderFlow render farm manager."
+"og:description": "Hardware, operating systems, licensing, network ports and storage needed to run RenderFlow."
 "twitter:title": "RenderFlow System Requirements"
 keywords: ['render farm hardware requirements', 'render farm system requirements', 'render node specs', 'render farm ports', 'render farm network requirements', 'MongoDB render farm', 'RenderFlow requirements']
 ---
+
+## Licensing
+
+RenderFlow requires a Pulze account with either a RenderFlow subscription or an active trial. Only the server signs in to that account, and it holds the licences for the whole farm, so the machines that join it need no account of their own.
 
 ## Hardware
 
 ### Server
 
-The server runs the RenderFlow database and coordinates all connected nodes. It does not need to be a powerful machine. Even a modest desktop or a dedicated mini PC will work.
+The server holds the database and coordinates every machine in the farm, which is book-keeping rather than heavy computation, so a modest desktop or a mini PC is usually enough.
 
 | Spec | Minimum | Recommended |
 |------|---------|-------------|
 | CPU | 2 cores | 4+ cores |
 | RAM | 8 GB | 16 GB |
-| Disk | 50 GB free | 100 GB+ free (SSD recommended) |
+| Disk | 50 GB free | 100 GB+ free, SSD |
 
-A recommended server comfortably handles 50+ nodes. RenderFlow has been tested with up to 250 nodes on a single server.
+Scale the server with the farm: the more machines that connect and the more jobs that sit in the queue, the more RAM and CPU cores the server wants.
 
-<Warning>
-Avoid running the server on a machine that also renders heavy jobs. When a render consumes all available CPU and RAM, the database and connections might not be able to keep up and nodes will lose connection.
-</Warning>
+<Note>
+Rendering on the server is not recommended. A heavy render competing with the database for CPU and memory can cause problems across the farm, so it is better to leave the server to coordinate.
+</Note>
 
 ### Render nodes and workstations
 
-There are no strict hardware requirements for render nodes. Any Windows, macOS, or Linux machine that can run your 3D application can be a render node. More CPU cores, more RAM, and faster storage all translate to faster renders.
+Any Windows, Linux or macOS machine that runs your application can be a render node, and more cores, more RAM and faster storage all translate directly into faster renders.
 
-A few things to keep in mind:
+- **RAM matters most.** Match or exceed your workstations, because a scene that needs 90 GB on a workstation will either page to disk or fail outright on a node with 64 GB.
+- **Disk.** Keep around 100 GB free on the system drive, since applications write temporary files there while rendering.
+- **Network.** Every node reads scenes and writes frames over the same shared storage as the rest of the farm, so a slow connection becomes the bottleneck before CPU or RAM do. See [Network speed](#network-speed) below.
 
-- **RAM matters most.** If your workstation uses 90 GB of RAM on a scene, a render node with only 64 GB will either render slowly (paging to disk) or crash with an out-of-memory error. Match or exceed your workstation's RAM on render nodes.
-- **Keep 100 GB free on the system drive (C:).** Windows and 3D applications use temporary disk space during rendering. Running low causes slowdowns and failures.
-- **1 GB disk space** is needed for the RenderFlow installation itself.
+## Operating systems
 
-## Operating system
+RenderFlow runs on all three platforms, and a single farm can mix them freely. **Settings → Mapped Paths** translates file paths between operating systems so the same job renders everywhere.
 
-| OS | Status |
-|----|--------|
-| Windows 10, 11, and Server 2019+ | Supported |
-| macOS 13 (Ventura) and later | Supported |
-| Linux (Rocky 8/9, Ubuntu, and other RHEL/Debian-based distributions) | Supported |
+| OS | Processor | Status |
+|----|-----------|--------|
+| Windows 10, 11, Server 2019 and later | x64 (Windows on Arm runs the x64 build) | Supported |
+| macOS 13 (Ventura) and later | Apple silicon | Supported |
+| Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | x64 and Arm (arm64) | Supported |
 
 ## Network
 
 ### Ports
 
-RenderFlow uses four TCP/UDP ports. All must be open between the server and every connected machine.
-
 | Port | Protocol | Purpose |
 |------|----------|---------|
-| 44442 | TCP | REST API, log streaming, web interface, integrations |
-| 44443 | UDP | Server discovery broadcast |
-| 44444 | TCP | Database access (MongoDB) |
+| 44442 | TCP | REST API and live updates |
+| 44443 | UDP | Server discovery |
+| 44444 | TCP | Database (MongoDB) |
+| 44445 | TCP | The farm interface over HTTPS, when TLS is enabled |
+
+Other machines only ever connect to the server: on 44442, on 44443 to discover it, and on 44445 when TLS is on. The database listens on the server's own loopback address, and workstations and nodes listen on theirs only.
+
+Port 44445 only listens when TLS is switched on, and even then the machine's own loopback API stays plaintext, so submitters, `rfcli` and the desktop app running on the server itself are unaffected.
 
 ### Firewall
 
-RenderFlow's installer configures the system firewall for you:
+The installer configures the system firewall for you:
 
-- **Windows** — adds program rules for `RenderFlow.exe` (user interface), `rfsv.exe` (background service), `rfpm.exe` (process manager), and the bundled `mongod.exe`, `mongosh.exe`, `mongodump.exe`, and `mongorestore.exe` binaries.
-- **macOS** — adds Application Firewall exceptions for `rfsv` and the RenderFlow app. macOS's firewall is per-process and is off by default, so no per-port rules are needed.
-- **Linux** — opens ports `44442/tcp`, `44443/udp`, and `44444/tcp` through `firewalld` (on RHEL-based distributions like Rocky and Fedora) or `ufw` (on Debian-based distributions like Ubuntu). On other firewalls the ports must be opened manually.
+- **Windows**: program rules for `RenderFlow.exe` and `rfsv.exe`, plus port rules for `44443/udp`, `44444/tcp`, `44445/tcp`.
+- **Linux**: `44442/tcp`, `44443/udp`, `44444/tcp` and `44445/tcp` through `firewalld` (Rocky, RHEL, Fedora) or `ufw` (Ubuntu, Debian). On any other firewall the installer prints the ports so you can open them by hand.
+- **macOS**: Application Firewall exceptions for `rfsv` and the RenderFlow app. The macOS firewall works per process rather than per port, so no port rules are needed.
 
-If you use a third-party firewall or corporate security policy, you'll need to add these exceptions manually along with the ports listed above.
+A third-party firewall or a corporate security policy will need these exceptions added manually, along with outbound access on the server to `*.pulze.io` (skip it entirely if you are on offline licensing) and, optionally, `*.renderflow.com`. See [Internet access](#internet-access) below for what each domain is for.
+
+### Local Network access on macOS
+
+macOS asks before an application may reach other machines on the local network. The first time RenderFlow connects to the server, macOS asks whether to allow it. Press **Allow**, for both the RenderFlow app and `rfsv`.
+
+If access is off, the Mac cannot reach the server even though the network is fine, and RenderFlow reports **Local Network access is off**. Turn on **RenderFlow** and **rfsv** in **System Settings → Privacy & Security → Local Network**.
 
 ### Fixed IP addresses
 
-Fixed (static) IP addresses are highly recommended for all machines, especially the server. If the server's IP changes, every node loses its connection and must be reconfigured.
-
-For render nodes, fixed IPs prevent issues with DHCP lease changes causing nodes to appear as new machines in RenderFlow.
+Give the server a fixed address. If it changes, every machine in the farm loses its connection and has to be pointed at the new one.
 
 ### Network speed
 
-10 Gigabit Ethernet is a nice-to-have for multi-node setups. When multiple nodes open a scene simultaneously, they all read from the same network storage. With 1 GbE, scene loading times increase as the number of active nodes grows. If your budget allows, 10 GbE will make a noticeable difference, but it is not a requirement to use RenderFlow.
+How much bandwidth you need depends on the size of the farm and on the work it does, since every machine that opens a scene reads it from the same storage at the same time. 1 GbE is workable for a small farm, but 10 GbE is highly recommended and becomes difficult to avoid as the farm grows.
+
+## Shared storage
+
+The farm needs one folder that every machine can reach, called the **repository**, where RenderFlow keeps job files, task logs, frame previews and backups. The server asks for it during setup.
+
+<Tip>
+Address it with a UNC path (`\\server\share\...`) if any machine touching it runs RenderFlow as a service, which is the usual setup for a render node: a drive letter belongs to a logged-in user session, so a service has no session in which that letter exists. A mapped drive letter works fine on a machine you stay signed in to. To use drive letters on machines that run as a service, add them in **Settings → Mapped Drives**, and each Windows machine maps them when RenderFlow starts.
+
+Running Windows, Linux and macOS side by side? Point your scenes and the repository at one UNC-style path and let **Settings → Mapped Paths** translate it to what each platform expects.
+</Tip>
+
+## Database
+
+The server ships with **MongoDB 8.2.6** and runs it for you as a replica set, so there is nothing to install and nothing to configure.
+
+If you would rather use your own cluster, point the server at it with `--uri` at install time or in **Settings → Server**. It has to be a replica set, because RenderFlow relies on change streams, which a standalone MongoDB does not provide. [Your Own MongoDB](/renderflow/guides/external-database) shows how to set one up, connect the server and move an existing farm onto it.
 
 ## Internet access
 
-Only the server requires internet access. It connects to Pulze servers once daily (weekdays at 8 AM) for license verification and authentication.
+Only the server needs internet access; render nodes and workstations do not.
 
-| Domain | Purpose |
-|--------|---------|
-| `*.pulze.io` | Licensing, authentication, account management |
-| `*.renderflow.com` | Notifications, Cloud rendering service (optional) |
+| Domain | Purpose | Required |
+|--------|---------|----------|
+| `*.pulze.io` | Sign-in, licensing and the update check | On the server, unless you are on offline licensing |
+| `*.renderflow.com` | Relayed email notifications and the AI agent features | Optional |
 
-Render nodes and workstations do not need internet access. However, fully offline operation (no internet on the server) is not supported.
+Blocking `*.renderflow.com` costs you two optional conveniences and nothing more: email notifications sent through Pulze's relay, and the AI agent features. Slack, Teams, Discord and webhook notifications go straight to those services, and an email channel pointed at your own SMTP server is unaffected.
+
+### Behind a proxy
+
+Point the server at your proxy with `--proxy-host` and `--proxy-port` when you install it, adding `--proxy-user` and `--proxy-pass` if the proxy asks for credentials, and `--proxy-bypass` for internal hosts that must not go through it. [Silent Deployment](/renderflow/getting-started/silent-deploy#installer-flags) lists every flag. On a server that is already installed, set the proxy and the **Certificate authority** in **Settings → Server**.
+
+**A proxy that inspects HTTPS.** Many corporate proxies decrypt HTTPS traffic and re-sign it with the company's own certificate authority. RenderFlow does not trust that authority on its own, so the server cannot reach Pulze and its log shows:
+
+```
+Failed to resolve https://backend.pulze.io, attempt 2/2: [GET] 'https://backend.pulze.io': unable to get local issuer certificate
+```
+
+Give RenderFlow your company's CA certificate as a PEM file with `--tls-ca`. RenderFlow trusts it in addition to the public certificate authorities, for every HTTPS connection it makes:
+
+```powershell
+renderflow-2.0.17.0044-windows-x64.exe --proxy-host=proxy.studio --proxy-port=3128 --tls-ca=C:\certs\studio-ca.pem
+```
+
+**Saving the settings.** The installer saves its flags, so the service uses them every time it starts. Flags given to `rfsv` itself apply to that run only. To change the settings of a machine that is already installed, stop the service and run `rfsv config` with the new values, for example `rfsv config --tls-ca=C:\certs\studio-ca.pem`, then start the service again.
+
+### No internet access
+
+RenderFlow can also run in a sealed environment with no route to the internet at all, on **offline licensing**, which is part of RenderFlow Enterprise. See [Offline Licensing](/renderflow/getting-started/offline-licensing).
+
+## Next steps
+
+- [Installation](/renderflow/getting-started/installation)
+- [Server and Nodes](/renderflow/getting-started/server-and-nodes)
