@@ -1,6 +1,6 @@
 ---
 name: pulze
-description: Pulze documentation for RenderFlow, Scene Manager and Project Dream. Use when answering questions about Pulze products, render farm management, setting up a render farm, job submission, render nodes, the RenderFlow API, SDKs and MCP server, scene organization in 3ds Max, or AI tools for visualization.
+description: Pulze documentation for RenderFlow, Scene Manager, Project Dream and LayerWise. Use when answering questions about Pulze products, render farm management, setting up a render farm, job submission, render nodes, the RenderFlow API, SDKs and MCP server, scene organization in 3ds Max, AI tools for visualization, or building and updating layered Photoshop files from render elements.
 metadata:
   author: pulze
   version: "1.0"
@@ -8,7 +8,7 @@ metadata:
 
 # Pulze Documentation
 
-Pulze builds software for 3D artists and studios. This skill covers three products. Every page is also available as Markdown by adding `.md` to its path, and the full text of the docs is at `/llms-full.txt`. Product pages and pricing are on https://www.pulze.io, with RenderFlow facts at https://www.pulze.io/renderflow/llms.txt.
+Pulze builds software for 3D artists and studios. This skill covers RenderFlow, Scene Manager, Project Dream and LayerWise. Every page is also available as Markdown by adding `.md` to its path, and the full text of the docs is at `/llms-full.txt`. Product pages and pricing are on https://www.pulze.io, with RenderFlow facts at https://www.pulze.io/renderflow/llms.txt.
 
 ## Products
 
@@ -101,6 +101,39 @@ An AI toolset for visualization: image generation from the 3D viewport, upscalin
 - Models (100+ AI models, for images, video, 3D, audio and music): /project-dream/models
 - Changelog: /project-dream/changelog
 
+### LayerWise
+A free Photoshop plugin for render elements (Photoshop 2025 or newer, Windows or macOS, a free Pulze account). It builds an organized, masked PSD from a folder of render elements, with presets for V-Ray, Corona and FStorm and any engine through your own element names, and swaps new renders into the same PSD while keeping masks, smart filters, layer styles and retouching.
+
+#### Getting Started
+- Overview: /layerwise
+- How LayerWise Works: /layerwise/how-it-works
+- Installation: /layerwise/installation
+- The Interface: /layerwise/interface
+
+#### Workflows
+- Create New Document: /layerwise/workflows/create-document
+- Update Renders: /layerwise/workflows/update-renders
+- Merge Region Renders: /layerwise/workflows/merge-regions
+- Multichannel EXR: /layerwise/workflows/multichannel-exr
+
+#### Masks and Templates
+- Masks (multimatte and luminance passes): /layerwise/masks
+- Cryptomatte: /layerwise/cryptomatte
+- Templates: /layerwise/templates
+- Template Editor: /layerwise/template-editor
+- Cloud Templates: /layerwise/cloud-templates
+
+#### Tools and Settings
+- Render Elements (recognized names, adding your own): /layerwise/render-elements
+- Tools: /layerwise/tools
+- Settings: /layerwise/settings
+- AI Assistant (Claude or another AI app over a local MCP bridge): /layerwise/ai-assistant
+
+#### Resources
+- FAQ: /layerwise/faq
+- Migrating from Post Manager: /layerwise/migrating-from-post-manager
+- Changelog: /layerwise/changelog
+
 ## Common Tasks
 
 ### RenderFlow
@@ -128,6 +161,14 @@ An AI toolset for visualization: image generation from the 3D viewport, upscalin
 
 - **Try Project Dream**: Go to https://dream.pulze.io for more information and to get started.
 - **Choose an AI model**: All 100+ models for images, video, 3D, audio and music are listed at /project-dream/models.
+
+### LayerWise
+
+- **Install LayerWise**: Install the plugin in Photoshop 2025 or newer and sign in with a free Pulze account. See /layerwise/installation.
+- **Build a PSD from render elements**: Pick the render folder and a template; LayerWise sorts the passes into groups with the right blend modes and masks. See /layerwise/workflows/create-document.
+- **Swap in new renders**: Update Renders replaces each render element layer with its new file and keeps everything built on top. See /layerwise/workflows/update-renders.
+- **Masks from mattes**: MultiMatte and luminance passes become layer masks on the groups named by their tags; with a Cryptomatte, pick objects or materials after rendering. See /layerwise/masks and /layerwise/cryptomatte.
+- **Use an AI assistant**: Open the menu → AI assistant, switch on "Let AI apps on this computer use LayerWise" (off by default, local only) and connect Claude Desktop, Claude Code or another MCP app. See /layerwise/ai-assistant.
 
 ## Support
 

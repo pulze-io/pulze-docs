@@ -1,5 +1,5 @@
 // Override primary color based on current product section
-// Scene Manager: #14C9E1 | RenderFlow: #9E3CEC | Project Dream: #F97316
+// Scene Manager: #14C9E1 | RenderFlow: #9E3CEC | Project Dream: #F97316 | LayerWise: #5CCF8E
 (function () {
   var lastPath = '';
 
@@ -30,6 +30,8 @@
       applyColor(root, '#9E3CEC');
     } else if (path.startsWith('/project-dream')) {
       applyColor(root, '#F97316');
+    } else if (path.startsWith('/layerwise')) {
+      applyColor(root, '#5CCF8E');
     } else {
       root.style.removeProperty('--primary');
       root.style.removeProperty('--primary-dark');
@@ -59,9 +61,11 @@
     '.pcard-sm:hover { border-color: #14C9E1 !important; }' +
     '.pcard-rf:hover { border-color: #9E3CEC !important; }' +
     '.pcard-pd:hover { border-color: #F97316 !important; }' +
+    '.pcard-lw:hover { border-color: #5CCF8E !important; }' +
     '.dark .pcard-sm:hover { border-color: #14C9E1 !important; }' +
     '.dark .pcard-rf:hover { border-color: #9E3CEC !important; }' +
     '.dark .pcard-pd:hover { border-color: #F97316 !important; }' +
+    '.dark .pcard-lw:hover { border-color: #5CCF8E !important; }' +
     '.dark .pcard { border-color: rgba(255, 255, 255, 0.1) !important; }' +
     '.dark .pcard-title { color: #ffffff !important; }' +
     '.dark .pcard-desc { color: #9f9f9f !important; }';

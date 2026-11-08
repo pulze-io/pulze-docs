@@ -1,0 +1,68 @@
+---
+title: "The Interface"
+description: "A tour of the LayerWise panel: the Home screen, the menu, progress and undo."
+---
+
+LayerWise lives in a single Photoshop panel that adapts to its size: docked and narrow, it shows one column; floating and wide, it spreads the wizards over two.
+
+## Home
+
+Every workflow starts here.
+
+<Frame caption="The Home screen">
+  <img src="/images/layerwise/lw_ui_home.webp" alt="The LayerWise Home screen with the engine picker, the two workflow cards, shortcuts and the Getting started list" />
+</Frame>
+
+- **Your renders come from.** Pick the render engine: V-Ray, Corona or FStorm. This sets which element names and templates LayerWise uses, and it's remembered.
+- **Create new document.** Build a new PSD from a template and your render output. See [Create new document](/layerwise/workflows/create-document).
+- **Update renders.** Swap new renders into the open PSD, or merge region renders into it. See [Update renders](/layerwise/workflows/update-renders).
+- **Tools, Templates and Elements.** Shortcuts to [Tools](/layerwise/tools), [Templates](/layerwise/templates) and [Render elements](/layerwise/render-elements), with a count for the current engine.
+- **Getting started.** A short checklist for your first days. Items tick off as you do them; hide the list with ✕.
+
+## The menu
+
+The menu button in the header opens:
+
+| Item | What it opens |
+|---|---|
+| **Templates** | Your templates, the built-in ones and your [cloud templates](/layerwise/cloud-templates) |
+| **Render elements** | The [element list](/layerwise/render-elements) for each engine |
+| **Settings** | [Layer, mask and account settings](/layerwise/settings), and About |
+| **AI assistant** | [Connect Claude or another AI app](/layerwise/ai-assistant) |
+| **Sign out** | Signs you out of your Pulze account |
+
+Every screen has a back button at the top left, and its main actions sit at the bottom, always in reach.
+
+<Frame caption="The header menu">
+  <img src="/images/layerwise/lw_ui_menu.webp" alt="The LayerWise header menu opened" />
+</Frame>
+
+## Wizards
+
+Both workflows are step-by-step wizards with a step bar at the top. Nothing changes in Photoshop until you press the wizard's final button.
+
+## Progress and cancelling
+
+While a job runs, an overlay shows what LayerWise is doing, how far along it is, and a **Cancel** button. After a couple of seconds Photoshop also shows its own progress bar, where **Esc** cancels too.
+
+<Frame caption="A job in progress">
+  <img src="/images/layerwise/lw_ui_progress.webp" alt="The LayerWise progress overlay with a progress bar and a Cancel button" />
+</Frame>
+
+Every change LayerWise makes appears in the History panel as a named step (for example *Replacing Reflection*), so **Ctrl+Z / Cmd+Z** undoes it step by step.
+
+## Update banner
+
+When a new version is out, a green banner appears under the header. **What's new** lists the changes, and ✕ hides the banner until the next version.
+
+## Messages you may see
+
+| Message | Meaning |
+|---|---|
+| **No document is open** | Open the PSD you want to work on first. |
+| **No *engine* render elements in this document** | LayerWise found no smart objects named like render elements of the selected engine. Check the engine on Home. |
+| **Photoshop is busy** | Finish what you're doing in Photoshop (for example editing text) and try again. |
+
+<Tip>
+On Windows, Photoshop shortcuts may stop working after you click in the LayerWise panel. Click once on the canvas to get them back. It's a known Photoshop issue with panels like this one.
+</Tip>

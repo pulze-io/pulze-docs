@@ -1,6 +1,6 @@
 # Pulze Docs
 
-> Documentation for the three Pulze products. RenderFlow is a render farm manager for studios: it runs on the studio's own machines, with hybrid cloud in their own Azure or AWS account, on Windows, Linux (x64 and Arm) and macOS (Arm). Scene Manager is a scene and batch rendering plugin for 3ds Max. Project Dream is an AI toolset for visualization.
+> Documentation for RenderFlow, Scene Manager, Project Dream and LayerWise. RenderFlow is a render farm manager for studios: it runs on the studio's own machines, with hybrid cloud in their own Azure or AWS account, on Windows, Linux (x64 and Arm) and macOS (Arm). Scene Manager is a scene and batch rendering plugin for 3ds Max. Project Dream is an AI toolset for visualization. LayerWise is a free Photoshop plugin that builds layered, masked PSDs from render elements (presets for V-Ray, Corona and FStorm, any engine through your own element names) and swaps new renders into them without losing the retouching.
 
 Product pages and pricing are on https://pulze.io (its own index: https://www.pulze.io/llms.txt; RenderFlow facts: https://www.pulze.io/renderflow/llms.txt). The full text of every page is in https://docs.pulze.io/llms-full.txt, and any page reads as Markdown by adding .md to its URL. Problems with a running product go to support@pulze.io or Discord (https://discord.gg/BxtBs9aN4E), not to a guess.
 
@@ -76,6 +76,27 @@ For many machines without touching each one, use [Silent Deployment](https://doc
 - [Project Dream overview](https://docs.pulze.io/project-dream/index.md): for more information and to try it out, go to https://dream.pulze.io.
 - [Models](https://docs.pulze.io/project-dream/models.md): all 100+ AI models available in Project Dream, for images, video, 3D, audio and music.
 
+## LayerWise
+
+- [LayerWise overview](https://docs.pulze.io/layerwise/index.md): the free Photoshop plugin for render elements, what it is good for, and where to start.
+- [How LayerWise Works](https://docs.pulze.io/layerwise/how-it-works.md): render engines, render elements, name matching, templates, smart objects and mask targets.
+- [Installation](https://docs.pulze.io/layerwise/installation.md): requirements (Photoshop 2025 or newer, Windows or macOS, a free Pulze account), installing the plugin and signing in.
+- [The Interface](https://docs.pulze.io/layerwise/interface.md): the LayerWise panel, its menu, progress and undo.
+- [Create New Document](https://docs.pulze.io/layerwise/workflows/create-document.md): build an organized PSD from a template and a render folder in one go.
+- [Update Renders](https://docs.pulze.io/layerwise/workflows/update-renders.md): swap new renders into an existing PSD while keeping masks, smart filters, layer styles and retouching.
+- [Merge Region Renders](https://docs.pulze.io/layerwise/workflows/merge-regions.md): blend a re-rendered region into the existing layers, cropped by a mask.
+- [Multichannel EXR](https://docs.pulze.io/layerwise/workflows/multichannel-exr.md): one EXR that holds every render element, split into one layer per element.
+- [Masks](https://docs.pulze.io/layerwise/masks.md): multimatte and luminance passes as layer masks, named by nametags.
+- [Cryptomatte](https://docs.pulze.io/layerwise/cryptomatte.md): pick objects and materials from a Cryptomatte render and turn them into masked groups.
+- [Templates](https://docs.pulze.io/layerwise/templates.md): built-in and custom templates, the layer structure new documents are built from.
+- [Template Editor](https://docs.pulze.io/layerwise/template-editor.md): groups, element slots, label colours, blend modes and opacity, with a live preview.
+- [Cloud Templates](https://docs.pulze.io/layerwise/cloud-templates.md): templates stored in the Pulze account and available on every computer.
+- [Render Elements](https://docs.pulze.io/layerwise/render-elements.md): the element names LayerWise recognizes for V-Ray, Corona and FStorm, and how to add your own.
+- [Tools](https://docs.pulze.io/layerwise/tools.md): one-click macros for templates, layer transforms, masks, merged layers and batch conversion.
+- [Settings](https://docs.pulze.io/layerwise/settings.md): layer, mask, AI assistant and account settings.
+- [AI Assistant](https://docs.pulze.io/layerwise/ai-assistant.md): let Claude or another AI app use LayerWise and Photoshop through a local MCP bridge.
+- [LayerWise FAQ](https://docs.pulze.io/layerwise/faq.md): common questions and fixes.
+
 ## Support
 
 - [Email support](mailto:support@pulze.io): include the product version, operating system and logs.
@@ -90,4 +111,6 @@ For many machines without touching each one, use [Silent Deployment](https://doc
 - [Scene Manager: Misc](https://docs.pulze.io/scene-manager/misc.md): thumbnails, notes and todo lists.
 - [Scene Manager: Preferences](https://docs.pulze.io/scene-manager/settings.md): notifications, theme, viewport and columns.
 - [Project Dream changelog](https://docs.pulze.io/project-dream/changelog.md)
+- [LayerWise changelog](https://docs.pulze.io/layerwise/changelog.md): release notes and version history.
+- [Migrating from Post Manager](https://docs.pulze.io/layerwise/migrating-from-post-manager.md): for users of the plugin LayerWise replaces, and how to bring their templates along.
 - [Welcome](https://docs.pulze.io/index.md): the docs home page.
