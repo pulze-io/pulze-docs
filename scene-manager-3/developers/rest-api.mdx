@@ -1,0 +1,80 @@
+---
+title: "Using the REST API"
+sidebarTitle: "REST API"
+description: "The conventions every Scene Manager 3 endpoint shares: the base URL, errors, and a setup from list to render."
+"og:title": "Using the Scene Manager REST API"
+"og:description": "The base URL, errors, and a setup from list to render."
+"twitter:title": "Using the Scene Manager REST API"
+keywords: ['Scene Manager REST API', '3ds Max REST API', '3ds Max batch render API']
+---
+
+Every endpoint is listed in the [API reference](/scene-manager-3/api-reference/introduction). This page covers what they share.
+
+## Base URL
+
+```
+http://127.0.0.1:45710/api/v1
+```
+
+The service listens on this computer only and takes no credential. Set `SCENEMANAGER_PORT` before Scene Manager starts to use another port. There is one version, `v1`, and it is in the path.
+
+`GET /health` always answers. It says whether an app is connected (`connected`), whether this computer has a licence (`licensed`), and what the app is busy with, if anything (`busy`).
+
+## Setups, from list to render
+
+<CodeGroup>
+```bash List
+curl http://127.0.0.1:45710/api/v1/setups
+```
+
+```bash Activate
+curl -X POST http://127.0.0.1:45710/api/v1/setups/<id>/activate \
+  -H "Content-Type: application/json" \
+  -d '{ "wait": true }'
+```
+
+```bash Render
+curl -X POST http://127.0.0.1:45710/api/v1/render \
+  -H "Content-Type: application/json" \
+  -d '{ "setups": ["<id>", "<id>"] }'
+```
+
+```bash Progress
+curl http://127.0.0.1:45710/api/v1/render
+```
+</CodeGroup>
+
+`GET /setups` answers `{ "setups": [...] }` in the list's order, each with its `id`, `name`, `folder`, `tags`, `color` and the modules off in it.
+
+`POST /setups/{id}/activate` writes the setup into the scene and answers what was applied and what was skipped, with the reason. `wait: true` answers once the viewport has drawn too.
+
+`POST /render` starts a batch render of the setups you list, in that order. `quality` renders at one of the scene's quality levels and puts the scene back afterwards. `GET /render` answers the current or last batch: its `state` (`running`, `done` or `stopped`) and each item's `status` and `output` file. `POST /render/stop` ends it.
+
+## Changing values
+
+```bash
+curl -X POST http://127.0.0.1:45710/api/v1/values \
+  -H "Content-Type: application/json" \
+  -d '{ "changes": [ { "owner": "<setup or folder id>", "values": { "output#path": "D:/Renders/{{setup}}_{{camera}}_v{{version:3}}.exr" } } ] }'
+```
+
+Property keys are `<target>#<param>`. `GET /setups/{id}/state` shows the keys and values a setup resolves to. A value set on a folder applies to every setup in it. `modulesOn` and `modulesOff` switch modules in the same write.
+
+For what the routes do not cover, `POST /scene/script` runs MaxScript or Python in 3ds Max and answers its value.
+
+## When a call fails
+
+```json
+{ "error": "no DCC or CAD app is connected" }
+```
+
+`error` is one sentence, written to be shown to a person.
+
+| Status | Means |
+|---|---|
+| 400 | The request is malformed or failed validation |
+| 402 | No Scene Manager licence on this computer |
+| 403 | The operation is only for Scene Manager's own panel |
+| 404 | No such setup, folder, module or comment |
+| 409 | The scene is read-only, a batch render is already running, or 3ds Max is busy. A busy answer carries `"busy": true`: try again when the app is free |
+| 503 | Scene Manager is running but 3ds Max is not connected |

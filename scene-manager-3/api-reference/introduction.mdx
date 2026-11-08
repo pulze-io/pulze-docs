@@ -1,0 +1,25 @@
+---
+title: "API Reference"
+sidebarTitle: "Introduction"
+description: "Every published Scene Manager 3 endpoint, with a console for trying each one against Scene Manager on your computer."
+"og:title": "Scene Manager API Reference"
+"og:description": "Every published Scene Manager 3 endpoint, with a console for trying each one."
+"twitter:title": "Scene Manager API Reference"
+keywords: ['Scene Manager API reference', 'Scene Manager OpenAPI', '3ds Max REST endpoints']
+---
+
+<Warning>
+Scene Manager 3 is in beta. Endpoints may change before release.
+</Warning>
+
+The pages under this one are generated from Scene Manager's own API document. Each endpoint carries its parameters, request body, response schema and a console.
+
+The Python SDK and the MCP tools are built on that same document, which is why an operation is named the same in all of them. See [Using the REST API](/scene-manager-3/developers/rest-api) for what every endpoint shares.
+
+## Using the console
+
+The console's server is `http://127.0.0.1:45710/api/v1`: Scene Manager on the computer you read this on. There is no credential to fill in.
+
+<Warning>
+The console sends real requests to the scene open in 3ds Max. `DELETE /setups/{id}` removes a setup, and `POST /render` starts a batch render. Read the summary before pressing **Send** on anything that is not a `GET`.
+</Warning>

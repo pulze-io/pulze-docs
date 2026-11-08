@@ -1,0 +1,99 @@
+---
+title: "Python SDK"
+description: "The official Scene Manager 3 client for Python: no dependencies, so it imports inside 3ds Max's own Python."
+"og:title": "Scene Manager Python SDK"
+"og:description": "No dependencies, so it imports inside 3ds Max's own Python."
+"twitter:title": "Scene Manager Python SDK"
+keywords: ['Scene Manager python sdk', '3ds Max python batch render', 'pymxs scene manager']
+---
+
+```bash
+pip install pulze-scenemanager
+```
+
+```python
+import scenemanager as sm
+
+scene = sm.connect()   # Scene Manager on this computer
+
+for setup in scene.setups.list_setups().setups:
+    print(setup.id, setup.name)
+```
+
+The package is standard library only, so it also imports inside 3ds Max's own Python. It needs Python 3.10 or newer.
+
+## Connecting
+
+```python
+scene = sm.connect()                           # http://127.0.0.1:45710
+scene = sm.connect("http://127.0.0.1:45800")   # another port
+```
+
+With no address, `connect()` reads `SCENEMANAGER_URL`, then `SCENEMANAGER_PORT`, then uses port 45710. `timeout` is per request and defaults to 120 seconds.
+
+## Finding the operation you want
+
+The methods are the operations of the API document shipped inside the package. They are grouped by the route's first segment and named after the operation id in snake case:
+
+```python
+scene.groups()        # ['activation', 'comments', 'document', 'folders', 'hdri', ...]
+dir(scene.setups)     # every operation in one group
+help(scene.setups.activate_setup)
+```
+
+| You want | You write |
+|---|---|
+| `GET /setups` | `scene.setups.list_setups()` |
+| `POST /setups/{id}/activate` | `scene.setups.activate_setup(setup_id)` |
+| `POST /values` | `scene.values.set_values(body=...)` |
+| `POST /render` | `scene.render.start_render(body=...)` |
+| `POST /scene/script` | `scene.scene.run_script(body=...)` |
+
+Path parameters are positional. Query parameters are named. A request body is `body=`. Answers read with dot access, and `to_dict()` gives the raw payload. Pictures, such as thumbnails and shots, come back as `bytes`.
+
+`models.pyi` types every payload for your editor and type checker.
+
+## Activating and rendering
+
+```python
+setups = scene.setups.list_setups().setups
+kitchen = [s for s in setups if s.name.startswith("Kitchen")]
+
+result = scene.setups.activate_setup(kitchen[0].id, body={"wait": True})
+for item in result.results:
+    for skipped in item.skipped:
+        print(item.target, skipped.name, skipped.reason)
+
+scene.render.start_render(body={"setups": [s.id for s in kitchen]})
+batch = scene.render.wait()   # until the batch is done or stopped
+
+for item in batch.items:
+    print(item.name, item.status, item.output)
+```
+
+`scene.render.wait()` polls `get_render` every two seconds. Pass `timeout` in seconds to give up with `TimeoutError`.
+
+## Running a script
+
+```python
+answer = scene.scene.run_script(body={"language": "python", "code": "from pymxs import runtime as rt\nresult = rt.maxFileName"})
+print(answer.value)
+```
+
+`language` is `maxscript` (the default) or `python`. In Python, the value is the variable named `result`.
+
+## Errors
+
+```python
+from scenemanager import ApiError
+
+try:
+    scene.render.start_render(body={"setups": [setup_id]})
+except ApiError as refused:
+    if refused.status == 409:
+        print("A batch render is already running.")
+    else:
+        raise
+```
+
+`ApiError` carries `status`, `body`, and Scene Manager's own sentence as its message. Without a licence every call except `scene.health.get_health()` raises it with status `402`. When Scene Manager is not running at all, `status` is `0`.

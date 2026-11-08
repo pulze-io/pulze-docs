@@ -175,6 +175,31 @@
         ]
       },
       {
+        "tab": "Scene Manager 3",
+        "hidden": true,
+        "groups": [
+          {
+            "group": "Developers",
+            "pages": [
+              "scene-manager-3/developers/overview",
+              "scene-manager-3/developers/rest-api",
+              "scene-manager-3/developers/python-sdk",
+              "scene-manager-3/developers/mcp-server"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "openapi": {
+              "source": "/scene-manager-3/api-reference/openapi.json",
+              "directory": "scene-manager-3/api-reference"
+            },
+            "pages": [
+              "scene-manager-3/api-reference/introduction"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Project Dream",
         "cta": {
           "label": "Get Started",
