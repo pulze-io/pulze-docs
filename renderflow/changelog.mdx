@@ -15,7 +15,7 @@ RenderFlow 2.0.21 is the first public release of RenderFlow 2. It finishes the 2
 - The app says why it is waiting for RenderFlow: different app and service versions, a refused credential, or a pending system permission
 - The 3ds Max asset check is off
 - Reset in Settings is shown only to people with system settings rights
-- The Windows installer takes `--skip-open-submitters`: a silent install no longer stops when 3ds Max, Cinema 4D or another application is open, it skips that application's plugin and RenderFlow adds it later
+- The installers take `--skip-plugins`: they install no plugins, and a silent install on Windows no longer stops when 3ds Max, Cinema 4D or another application is open. RenderFlow installs the plugins when it next starts
 - 3ds Max jobs rendering with Corona have Save frame in the job menu: Corona stops where it is, saves what it has rendered, and the job completes, freeing the machine
 - The bundled database is MongoDB 8.3 on every platform. An existing database is kept as it is, with nothing to migrate
 - Admins can create an API key for another person, such as the account an integration submits as. The key can do only what that person's group allows
