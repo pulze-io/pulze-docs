@@ -42,6 +42,7 @@ The same flags work on every platform.
 | `--service-account=<name>` | Register the RenderFlow service, started on boot as this account, and grant it **Log on as a service**. `DOMAIN\name`, a local account's name, or a gMSA (`name$`). Windows only |
 | `--service-password=<pass>` | The service account's password. Windows only |
 | `--service` | Register the service for a server or a render node and start it: a Windows service as LocalSystem, a systemd service on Linux, a launchd daemon on macOS. Without it or `--service-account` the installer only puts the files in place |
+| `--skip-open-submitters` | Install even when 3ds Max, Cinema 4D or another application RenderFlow adds a menu to is open: that application's plugin is skipped, and RenderFlow adds it the next time it starts with the application closed. Without it, a silent install stops. Windows only |
 
 `--help` prints this list and exits.
 

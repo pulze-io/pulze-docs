@@ -16,11 +16,14 @@ Press the gear icon, then **API Keys** under **Access**.
 <Step title="Press New API key">
 Give it the name of the thing that will use it, not the person who made it. A key called `ftrack sync` is one you can revoke without wondering what breaks.
 </Step>
+<Step title="Choose who it is for">
+With system settings rights, pick the person the key acts as under **For**, such as the account an integration submits as. Its jobs are that person's. Without those rights, a key is always your own.
+</Step>
 <Step title="Tick what it may do">
 Tick the scopes the key needs, or press a preset: **Read only**, **Submit**, **Jobs** or **Everything**. Turn on **Only jobs this key submitted** to keep the key away from other people's jobs. See [Scopes](#scopes).
 </Step>
 <Step title="Press Create and copy the value">
-It is shown once. The farm keeps only a fingerprint of it, so afterwards the list shows the key's **Name**, a masked fingerprint under **Key**, its **Scopes**, **Created By** and **Created At**. Nothing in the list can be used as a key.
+It is shown once. The farm keeps only a fingerprint of it, so afterwards the list shows the key's **Name**, a masked fingerprint under **Key**, its **Scopes**, **Owner** and **Created At**. Nothing in the list can be used as a key.
 </Step>
 </Steps>
 
@@ -109,12 +112,12 @@ Within that, a key can call only what its scopes allow.
 
 ## Scopes
 
-A key can do exactly what is ticked on it, whoever holds it. The scopes are the same permissions as in **Settings > Groups**, and they decide what the key may do, not the group of the person who created it. A key an admin creates and hands to a TD with **Submit** ticked can submit and control jobs, and nothing more.
+A key can do exactly what is ticked on it, whoever holds it. The scopes are the same permissions as in **Settings > Groups**, and they narrow what the key's owner may do. A key an admin creates and hands to a TD with **Submit** ticked can submit and control jobs, and nothing more.
 
-- You can only tick what your own group may do. The rest is greyed out.
+- You can only tick what the owner's group may do. The rest is greyed out. Take a right away from the group and its keys lose it too.
 - **Only jobs this key submitted** limits the key's job scopes to the jobs it created itself. It can still see every job with `job.view`.
 - A key without any scopes can do nothing. Edit it and tick what it needs.
-- A key stops working when the person who created it is deleted.
+- A key stops working when its owner is deleted.
 
 | Scope | Allows |
 |---|---|

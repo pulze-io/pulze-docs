@@ -1,0 +1,51 @@
+---
+title: "Automating Scene Manager 3"
+sidebarTitle: "Overview"
+description: "Drive Scene Manager 3 from your own code: the local REST API, the Python SDK and the MCP server."
+"og:title": "Automating Scene Manager 3"
+"og:description": "The local REST API, the Python SDK and the MCP server."
+"twitter:title": "Automating Scene Manager 3"
+keywords: ['Scene Manager API', '3ds Max automation', '3ds Max batch render API', 'Scene Manager MCP']
+---
+
+<Warning>
+Scene Manager 3 is in beta. Routes, operation names and tools may change before release.
+</Warning>
+
+Scene Manager 3 runs a small service on your computer. The panel in 3ds Max talks to it, and so can your scripts and your AI assistant. The API covers setups, folders, modules, batch renders, variations and scene comments.
+
+## The model
+
+- A **setup** is a saved state of the scene: camera, lighting, resolution, output and so on.
+- A setup's values live in **modules**. A module off in a setup leaves that part of the scene as it is.
+- Setups can sit in **folders**. A folder's values go down to its setups.
+- **Activating** a setup writes its values into the open scene. A **batch render** activates and renders each setup in turn.
+
+Scene Manager never creates scene content for you. It records what the scene already has and switches between states of it.
+
+## Which surface
+
+<CardGroup cols={3}>
+
+<Card title="REST API" icon="cloud" href="/scene-manager-3/developers/rest-api">
+  The whole surface. Everything else is built on it.
+</Card>
+
+<Card title="Python SDK" icon="python" href="/scene-manager-3/developers/python-sdk">
+  No dependencies, so it imports inside 3ds Max's own Python.
+</Card>
+
+<Card title="MCP server" icon="robot" href="/scene-manager-3/developers/mcp-server">
+  Let Claude, Cursor or another assistant work on the open scene.
+</Card>
+
+</CardGroup>
+
+## Before you start
+
+- **3ds Max only**, for now.
+- **Scene Manager must be running.** Open it from 3ds Max. The service answers on `http://127.0.0.1:45710`. Set `SCENEMANAGER_PORT` to change the port.
+- **It is local.** The service listens on `127.0.0.1` only. There is no API key: being on the computer is the proof.
+- **A Scene Manager licence** on this computer is needed for every call except `GET /health`. Without one, calls answer **402**.
+
+One operation has one name everywhere. `GET /setups` is `listSetups` in the [API reference](/scene-manager-3/api-reference/introduction) and `scene.setups.list_setups()` in Python.

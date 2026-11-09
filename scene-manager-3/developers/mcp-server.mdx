@@ -1,0 +1,155 @@
+---
+title: "MCP server"
+description: "Point Claude, Cursor or any MCP client at Scene Manager 3 and let it read the open 3ds Max scene, make setups and render them."
+"og:title": "Scene Manager MCP server"
+"og:description": "Let Claude or Cursor read the open 3ds Max scene, make setups and render them."
+"twitter:title": "Scene Manager MCP server"
+keywords: ['Scene Manager mcp server', 'claude 3ds Max', 'ai 3ds Max setups', 'mcp 3ds Max']
+---
+
+Scene Manager speaks the **Model Context Protocol**, so an assistant can work on the scene open in 3ds Max: read it, make setups from what it holds, and render them. Its tools call the same routes as the [REST API](/scene-manager-3/developers/rest-api).
+
+## Connecting a client
+
+Open **Settings > Assistants** in Scene Manager, press **Connect** next to the client, and follow the steps.
+
+Clients connect to Scene Manager on the same computer, at `http://127.0.0.1:45710/api/v1/mcp`, over streamable HTTP. There is no API key. Scene Manager must be open in 3ds Max.
+
+<Tabs>
+<Tab title="Claude Desktop">
+1. In **Settings > Assistants**, press **Connect** next to **Claude Desktop**. Claude Desktop opens and shows the Scene Manager extension.
+2. Press **Install** in Claude Desktop. There is nothing to fill in.
+
+If Claude Desktop does not open, drag `SceneManager.mcpb` from your Downloads folder into **Settings > Extensions** in Claude Desktop.
+</Tab>
+<Tab title="Claude Code">
+```bash
+claude mcp add --transport http --scope user scenemanager http://127.0.0.1:45710/api/v1/mcp
+```
+
+Type `/mcp` in Claude Code to check that `scenemanager` is connected.
+</Tab>
+<Tab title="Cursor">
+Add this to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "scenemanager": { "url": "http://127.0.0.1:45710/api/v1/mcp" }
+  }
+}
+```
+</Tab>
+<Tab title="VS Code">
+Run **MCP: Open User Configuration** from the Command Palette and add:
+
+```json
+{
+  "servers": {
+    "scenemanager": { "type": "http", "url": "http://127.0.0.1:45710/api/v1/mcp" }
+  }
+}
+```
+
+The tools are available in Copilot Chat's agent mode.
+</Tab>
+<Tab title="Codex">
+```bash
+codex mcp add scenemanager --url http://127.0.0.1:45710/api/v1/mcp
+```
+</Tab>
+<Tab title="Other clients">
+A client that speaks HTTP takes the address `http://127.0.0.1:45710/api/v1/mcp`.
+
+A client that only starts a command can run the service in stdio mode. It passes each message on to the running Scene Manager:
+
+```json
+{
+  "mcpServers": {
+    "scenemanager": {
+      "command": "C:\\Program Files\\Pulze\\Scene Manager\\smsv.exe",
+      "args": ["--mcp-stdio"]
+    }
+  }
+}
+```
+</Tab>
+</Tabs>
+
+Do not add Scene Manager under **Connectors** in Claude or ChatGPT. Those connect from their own servers on the internet, which cannot reach your computer.
+
+## The tools
+
+Start with `scene_overview`. It names everything else by id.
+
+### Reading the scene
+
+| | |
+|---|---|
+| `scene_overview` | The setups, folders, modules, quality levels and output path placeholders |
+| `get_setup` | One setup as it resolves: each value and where it comes from |
+| `compare_setups` | What differs between two setups, module by module |
+| `find_properties` | The scene's cameras, lights, materials, layers and so on, or one object's properties |
+| `selection` | What is selected in 3ds Max, or select objects there |
+| `look` | A small picture of the viewport or the frame buffer |
+| `missing_things` | What setups point at that the scene no longer has, and relink it |
+
+### Setups and folders
+
+| | |
+|---|---|
+| `make_setup` | A setup in one call: a copy or the scene as it is, with its name, folder, values and modules |
+| `setup_from_scene` | A first setup from the scene as it is |
+| `set_values` | Change values and switch modules on setups or folders |
+| `activate_setup` | Apply a setup to the scene |
+| `update_setup` | Rename, retag, recolor or move a setup or folder |
+| `create_folder`, `delete` | Make a folder; remove setups and folders. The scene itself is not changed |
+| `add_module`, `add_property`, `add_rows` | Add a module to every setup, properties to a module, objects to a table |
+| `setup_thumbnail`, `setup_notes`, `setup_todos` | A setup's picture, notes and to-do list |
+| `setup_brief` | A setup's prompts and camera view, for an image model |
+| `create_setup` | Kept for older clients. Use `make_setup` |
+
+### Rendering and variations
+
+| | |
+|---|---|
+| `render` | Start, follow or stop a batch render of setups |
+| `variation_sets`, `make_set` | List or make variation sets |
+| `set_variation` | Apply one variation to the scene |
+| `render_sets` | Render every variation of a set, each to its own file |
+| `set_list` | Every variation of a set with its file, or as CSV |
+
+### Comments
+
+| | |
+|---|---|
+| `comments_list`, `comments_wait` | Find comments asked of the assistant, or wait for new ones |
+| `comment_read` | One comment with its shot, pin and context |
+| `comment_create` | Pin a comment on a shot of the viewport or the frame buffer |
+| `comment_take`, `comment_reply`, `comment_resolve` | Take a comment, reply with what changed, and mark it done for a person to review |
+
+### Anything else
+
+| | |
+|---|---|
+| `run_script` | Run MaxScript or Python in 3ds Max |
+
+Scene Manager does not create scene content such as materials, lights or maps. It turns what the scene has into setups.
+
+## Worth trying
+
+<AccordionGroup>
+
+<Accordion title="Which setups are there, and which are missing an output path?">
+`scene_overview`, then `get_setup` on the ones that look incomplete.
+</Accordion>
+
+<Accordion title="Make a dusk version of every kitchen setup.">
+`make_setup` with `copyOf` for each, and the sun's time changed in `values`. `compare_setups` checks that only the sun changed.
+</Accordion>
+
+<Accordion title="Render the Exterior folder at Draft quality.">
+`scene_overview` with the folder as `filter`, then `render` with those setups and `quality: "Draft"`.
+</Accordion>
+
+</AccordionGroup>
