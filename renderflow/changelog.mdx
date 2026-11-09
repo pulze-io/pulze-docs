@@ -5,6 +5,43 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="2.0.21" description="November 2026">
+RenderFlow 2.0.21 is the first public release of RenderFlow 2. It finishes the 2.0.20 release candidate with fixes for upgrades from RenderFlow 1, NAS shares and domain accounts.
+
+**Updates:**
+- Upgrading from RenderFlow 1 asks before the old database is set aside: RenderFlow 2 starts from an empty database, and the old one is kept in a backup folder
+- Settings > Deploy > Add version takes every installer of a release, one row per platform
+- Who can render shows the job each machine is on in its own column
+- The app says why it is waiting for RenderFlow: different app and service versions, a refused credential, or a pending system permission
+- The 3ds Max asset check is off
+- Reset in Settings is shown only to people with system settings rights
+- The Windows installer takes `--skip-open-submitters`: a silent install no longer stops when 3ds Max, Cinema 4D or another application is open, it skips that application's plugin and RenderFlow adds it later
+- 3ds Max jobs rendering with Corona have Save frame in the job menu: Corona stops where it is, saves what it has rendered, and the job completes, freeing the machine
+- The bundled database is MongoDB 8.3 on every platform. An existing database is kept as it is, with nothing to migrate
+- Admins can create an API key for another person, such as the account an integration submits as. The key can do only what that person's group allows
+
+**Fixes:**
+- Fixed the Windows installer hanging when upgrading from RenderFlow 1
+- Fixed a RenderFlow 1 role left on the machine blocking the role choice after an upgrade
+- Fixed a 3ds Max frame that could not be saved to the share being marked completed
+- Fixed Corona Render Selected in Include/Exclude List mode being refused at submit
+- Fixed Cinema 4D render outputs missing from the Video Encoder and Image step Source list
+- Fixed the last frame of a Blender, Cinema 4D, Fusion or Houdini chunk being skipped when a frame already existed
+- Fixed Corona's time limit showing milliseconds instead of minutes
+- Fixed 3ds Max plugins in the extra plugin folders (Configure User and System Paths > 3rd Party Plug-Ins) not being detected
+- Fixed 3ds Max TIFF outputs always rendering 8-bit on the farm. A job now takes the format settings saved with the scene's output (TIFF, PNG, JPEG, Targa, EXR), as 3ds Max renders it, rather than the defaults on the submitting machine
+- Fixed a frame preview that did nothing when the frame itself was out of reach
+- Fixed the sign-in screen returning without saying why a sign-in failed
+- Fixed the live preview not loading in V-Ray 7.5 (Standalone, Maya)
+- The job count in the overview now counts the jobs you can see, not the whole farm, when your group's job view is limited
+- A Video Encoder, Image or Denoise step no longer offers an Export step's scene file as its source
+- Choosing Node, Workstation or Server on first start now says why when it can't be saved, instead of doing nothing
+- Fixed installs on NAS shares that refuse dot-files (QNAP, Samba veto files)
+- Fixed domain accounts appearing once per machine instead of once
+- Fixed the submit-from-the-application hints for Premiere Pro, DaVinci Resolve and After Effects
+- Fixed the tray menu on macOS
+</Update>
+
 <Update label="2.0.20-rc" description="October 25, 2026">
 RenderFlow 2.0.20 adds cloud machines, personal sign-in, AI clients and centralized updates, along with fixes across many applications.
 
