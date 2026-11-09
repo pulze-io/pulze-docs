@@ -330,6 +330,11 @@
       "website": "https://pulze.io"
     }
   },
+  "seo": {
+    "metatags": {
+      "msvalidate.01": "10F67821BB629A36D1DAA406047423FA"
+    }
+  },
   "redirects": [
     { "source": "/renderflow/v2/api-reference/archive/archive-jobs", "destination": "/renderflow/api-reference/archive/archive-jobs" },
     { "source": "/renderflow/v2/api-reference/archive/archive-size-on-disk", "destination": "/renderflow/api-reference/archive/archive-size-on-disk" },
