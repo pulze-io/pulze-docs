@@ -1,0 +1,9 @@
+User-agent: *
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+Disallow: /cdn-cgi/
+Allow: /_next/image
+Disallow: /_next/
+Disallow: /mintlify-assets/_next/static/
+Allow: /
+
+Sitemap: https://docs.pulze.io/sitemap.xml
