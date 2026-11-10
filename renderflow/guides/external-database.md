@@ -12,7 +12,7 @@ The RenderFlow server ships with its own MongoDB and runs it for you. A studio t
 ## What you need
 
 - A MongoDB **replica set**. A single server is fine, as long as it runs as a one-member replica set. RenderFlow relies on change streams, which a standalone MongoDB does not provide, so it refuses a connection string to one.
-- MongoDB 8.2 is the version RenderFlow is tested with; it is the version the bundled database runs.
+- MongoDB 8.3 is the version RenderFlow is tested with; it is the version the bundled database runs.
 - The database reachable from the RenderFlow server on its port (27017 by default). Only the server connects to the database; render nodes and workstations never do.
 - A database user for RenderFlow, if the database requires sign-in (see [Create the database user](#2-create-the-database-user)).
 
@@ -22,10 +22,10 @@ Skip this section if your MongoDB already runs as a replica set.
 
 <Steps>
 <Step title="Install MongoDB">
-Install MongoDB Server 8.2 on the database machine. On Windows the installer registers it as the **MongoDB** service; on Linux it runs as the `mongod` service.
+Install MongoDB Server 8.3 on the database machine. On Windows the installer registers it as the **MongoDB** service; on Linux it runs as the `mongod` service.
 </Step>
 <Step title="Name the replica set and open it to the network">
-Edit the MongoDB configuration file: `C:\Program Files\MongoDB\Server\8.2\bin\mongod.cfg` on Windows, `/etc/mongod.conf` on Linux. Set the address it listens on and give the replica set a name:
+Edit the MongoDB configuration file: `C:\Program Files\MongoDB\Server\8.3\bin\mongod.cfg` on Windows, `/etc/mongod.conf` on Linux. Set the address it listens on and give the replica set a name:
 
 ```yaml
 net:

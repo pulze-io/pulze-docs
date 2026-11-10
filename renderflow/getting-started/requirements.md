@@ -98,7 +98,7 @@ Running Windows, Linux and macOS side by side? Point your scenes and the reposit
 
 ## Database
 
-The server ships with **MongoDB 8.2.6** and runs it for you as a replica set, so there is nothing to install and nothing to configure.
+The server ships with **MongoDB 8.3.13** and runs it for you as a replica set, so there is nothing to install and nothing to configure.
 
 If you would rather use your own cluster, point the server at it with `--uri` at install time or in **Settings → Server**. It has to be a replica set, because RenderFlow relies on change streams, which a standalone MongoDB does not provide. [Your Own MongoDB](/renderflow/guides/external-database) shows how to set one up, connect the server and move an existing farm onto it.
 
