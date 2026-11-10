@@ -1,8 +1,10 @@
 ---
 title: "Python SDK"
-description: "The official Scene Manager 3 client for Python: no dependencies, so it imports inside 3ds Max's own Python."
+description: "The official Scene Manager 3 client for Python. It has no dependencies, so it also runs inside 3ds Max's own Python."
+"og:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-python-sdk.png"
+"twitter:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-python-sdk.png"
 "og:title": "Scene Manager Python SDK"
-"og:description": "No dependencies, so it imports inside 3ds Max's own Python."
+"og:description": "No dependencies, so it also runs inside 3ds Max's own Python."
 "twitter:title": "Scene Manager Python SDK"
 keywords: ['Scene Manager python sdk', '3ds Max python batch render', 'pymxs scene manager']
 ---
@@ -14,34 +16,33 @@ pip install pulze-scenemanager
 ```python
 import scenemanager as sm
 
-scene = sm.connect()   # Scene Manager on this computer
+scene = sm.connect()
 
 for setup in scene.setups.list_setups().setups:
     print(setup.id, setup.name)
 ```
 
-The package is standard library only, so it also imports inside 3ds Max's own Python. It needs Python 3.10 or newer.
+The package uses only the standard library, so you can also import it inside 3ds Max's Python. It needs Python 3.10 or newer.
 
 ## Connecting
 
 ```python
-scene = sm.connect()                           # http://127.0.0.1:45710
-scene = sm.connect("http://127.0.0.1:45800")   # another port
+scene = sm.connect()   # http://127.0.0.1:45710
 ```
 
-With no address, `connect()` reads `SCENEMANAGER_URL`, then `SCENEMANAGER_PORT`, then uses port 45710. `timeout` is per request and defaults to 120 seconds.
+`connect()` finds Scene Manager on this computer. Each request times out after 120 seconds; pass `timeout` to change that.
 
-## Finding the operation you want
+## Finding a method
 
-The methods are the operations of the API document shipped inside the package. They are grouped by the route's first segment and named after the operation id in snake case:
+Each endpoint in the [API reference](/scene-manager-3/api-reference/introduction) is a method. Methods are grouped by the first part of the path and named after the operation, in snake case:
 
 ```python
 scene.groups()        # ['activation', 'comments', 'document', 'folders', 'hdri', ...]
-dir(scene.setups)     # every operation in one group
+dir(scene.setups)     # every method in a group
 help(scene.setups.activate_setup)
 ```
 
-| You want | You write |
+| Endpoint | Method |
 |---|---|
 | `GET /setups` | `scene.setups.list_setups()` |
 | `POST /setups/{id}/activate` | `scene.setups.activate_setup(setup_id)` |
@@ -49,9 +50,9 @@ help(scene.setups.activate_setup)
 | `POST /render` | `scene.render.start_render(body=...)` |
 | `POST /scene/script` | `scene.scene.run_script(body=...)` |
 
-Path parameters are positional. Query parameters are named. A request body is `body=`. Answers read with dot access, and `to_dict()` gives the raw payload. Pictures, such as thumbnails and shots, come back as `bytes`.
+Path parameters are positional, query parameters are keyword arguments, and a request body goes in `body=`. Results support dot access, and `to_dict()` returns the raw data. Images such as thumbnails and shots come back as `bytes`.
 
-`models.pyi` types every payload for your editor and type checker.
+The package ships `models.pyi`, so your editor and type checker know every result's fields.
 
 ## Activating and rendering
 
@@ -65,13 +66,13 @@ for item in result.results:
         print(item.target, skipped.name, skipped.reason)
 
 scene.render.start_render(body={"setups": [s.id for s in kitchen]})
-batch = scene.render.wait()   # until the batch is done or stopped
+batch = scene.render.wait()   # returns when the batch is done or stopped
 
 for item in batch.items:
     print(item.name, item.status, item.output)
 ```
 
-`scene.render.wait()` polls `get_render` every two seconds. Pass `timeout` in seconds to give up with `TimeoutError`.
+`scene.render.wait()` checks the render every two seconds. Pass `timeout` in seconds to stop waiting with a `TimeoutError`.
 
 ## Running a script
 
@@ -80,7 +81,7 @@ answer = scene.scene.run_script(body={"language": "python", "code": "from pymxs 
 print(answer.value)
 ```
 
-`language` is `maxscript` (the default) or `python`. In Python, the value is the variable named `result`.
+`language` is `maxscript` (the default) or `python`. In Python, set a variable named `result` to return a value.
 
 ## Errors
 
@@ -96,4 +97,4 @@ except ApiError as refused:
         raise
 ```
 
-`ApiError` carries `status`, `body`, and Scene Manager's own sentence as its message. Without a licence every call except `scene.health.get_health()` raises it with status `402`. When Scene Manager is not running at all, `status` is `0`.
+`ApiError` has the HTTP `status`, the response `body`, and Scene Manager's message. Without a licence, every call except `scene.health.get_health()` raises it with status `402`. If Scene Manager isn't running, `status` is `0`.

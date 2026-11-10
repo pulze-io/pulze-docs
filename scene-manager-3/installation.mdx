@@ -1,0 +1,36 @@
+---
+title: "Installation"
+description: "Requirements, installing Scene Manager 3, and installing it silently from a script."
+keywords: ['Scene Manager 3 install', 'Scene Manager silent install', '3ds Max plugin install', 'Scene Manager requirements']
+---
+
+## Requirements
+
+| | |
+|---|---|
+| System | Windows 10 or 11, 64-bit |
+| 3ds Max | 2021 to 2027 |
+| Render engines | V-Ray, V-Ray GPU, Corona and FStorm |
+| Licence | A Scene Manager licence, or the 30-day trial |
+
+## Install
+
+Close 3ds Max, run the installer and follow the steps. Scene Manager is added to every supported 3ds Max on the computer.
+
+Scene Manager 3 replaces 2.x: the installer removes the old plugin. Your 2.x setups come over the first time you open a scene that has them.
+
+## Silent install
+
+```bash
+scene-manager-<version>-windows-x64.exe --silent --accept-eula
+```
+
+| Flag | What it does |
+|---|---|
+| `--silent` | Install without the wizard. `/S` works too |
+| `--accept-eula` | Accept the [licence agreement](https://www.pulze.io/eula/scene-manager) on the user's behalf |
+| `--update` | Don't open Scene Manager when the install is done |
+
+3ds Max must be closed. If it is running, the installer stops with error level 2.
+
+To uninstall silently, run `uninst.exe /S` from the install folder. Add `--purge` to also remove settings and the sign-in.

@@ -1,24 +1,26 @@
 ---
 title: "MCP server"
 description: "Point Claude, Cursor or any MCP client at Scene Manager 3 and let it read the open 3ds Max scene, make setups and render them."
+"og:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-mcp-server.png"
+"twitter:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-mcp-server.png"
 "og:title": "Scene Manager MCP server"
 "og:description": "Let Claude or Cursor read the open 3ds Max scene, make setups and render them."
 "twitter:title": "Scene Manager MCP server"
 keywords: ['Scene Manager mcp server', 'claude 3ds Max', 'ai 3ds Max setups', 'mcp 3ds Max']
 ---
 
-Scene Manager speaks the **Model Context Protocol**, so an assistant can work on the scene open in 3ds Max: read it, make setups from what it holds, and render them. Its tools call the same routes as the [REST API](/scene-manager-3/developers/rest-api).
+With the **Model Context Protocol** (MCP), an AI assistant can work on the scene open in 3ds Max: read it, make setups from what is there, and render them. The tools use the same endpoints as the [REST API](/scene-manager-3/developers/rest-api).
 
 ## Connecting a client
 
-Open **Settings > Assistants** in Scene Manager, press **Connect** next to the client, and follow the steps.
+In Scene Manager, open **Settings > Assistants**, press **Connect** next to your client and follow the steps.
 
-Clients connect to Scene Manager on the same computer, at `http://127.0.0.1:45710/api/v1/mcp`, over streamable HTTP. There is no API key. Scene Manager must be open in 3ds Max.
+Clients connect over streamable HTTP to `http://127.0.0.1:45710/api/v1/mcp` on the same computer. No API key is needed, but Scene Manager must be open in 3ds Max.
 
 <Tabs>
 <Tab title="Claude Desktop">
-1. In **Settings > Assistants**, press **Connect** next to **Claude Desktop**. Claude Desktop opens and shows the Scene Manager extension.
-2. Press **Install** in Claude Desktop. There is nothing to fill in.
+1. In **Settings > Assistants**, press **Connect** next to **Claude Desktop**. Claude Desktop opens with the Scene Manager extension.
+2. Press **Install** in Claude Desktop. There is nothing else to set.
 
 If Claude Desktop does not open, drag `SceneManager.mcpb` from your Downloads folder into **Settings > Extensions** in Claude Desktop.
 </Tab>
@@ -59,9 +61,9 @@ codex mcp add scenemanager --url http://127.0.0.1:45710/api/v1/mcp
 ```
 </Tab>
 <Tab title="Other clients">
-A client that speaks HTTP takes the address `http://127.0.0.1:45710/api/v1/mcp`.
+A client that supports HTTP only needs the address `http://127.0.0.1:45710/api/v1/mcp`.
 
-A client that only starts a command can run the service in stdio mode. It passes each message on to the running Scene Manager:
+A client that can only start a command can run the Scene Manager service in stdio mode, which forwards each message to the running Scene Manager:
 
 ```json
 {
@@ -76,11 +78,11 @@ A client that only starts a command can run the service in stdio mode. It passes
 </Tab>
 </Tabs>
 
-Do not add Scene Manager under **Connectors** in Claude or ChatGPT. Those connect from their own servers on the internet, which cannot reach your computer.
+Don't add Scene Manager as a **Connector** in Claude or ChatGPT. Connectors run on their servers on the internet, which can't reach your computer.
 
 ## The tools
 
-Start with `scene_overview`. It names everything else by id.
+Start with `scene_overview`: it lists everything else, with the ids the other tools need.
 
 ### Reading the scene
 
@@ -103,7 +105,7 @@ Start with `scene_overview`. It names everything else by id.
 | `set_values` | Change values and switch modules on setups or folders |
 | `activate_setup` | Apply a setup to the scene |
 | `update_setup` | Rename, retag, recolor or move a setup or folder |
-| `create_folder`, `delete` | Make a folder; remove setups and folders. The scene itself is not changed |
+| `create_folder`, `delete` | Create a folder, or delete setups and folders. The scene isn't changed |
 | `add_module`, `add_property`, `add_rows` | Add a module to every setup, properties to a module, objects to a table |
 | `setup_thumbnail`, `setup_notes`, `setup_todos` | A setup's picture, notes and to-do list |
 | `setup_brief` | A setup's prompts and camera view, for an image model |
@@ -134,7 +136,7 @@ Start with `scene_overview`. It names everything else by id.
 |---|---|
 | `run_script` | Run MaxScript or Python in 3ds Max |
 
-Scene Manager does not create scene content such as materials, lights or maps. It turns what the scene has into setups.
+Scene Manager doesn't create materials, lights or maps. It turns what is already in the scene into setups.
 
 ## Worth trying
 

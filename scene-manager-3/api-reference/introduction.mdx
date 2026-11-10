@@ -2,6 +2,8 @@
 title: "API Reference"
 sidebarTitle: "Introduction"
 description: "Every published Scene Manager 3 endpoint, with a console for trying each one against Scene Manager on your computer."
+"og:image": "https://docs.pulze.io/images/og/scene-manager-3-api-reference-introduction.png"
+"twitter:image": "https://docs.pulze.io/images/og/scene-manager-3-api-reference-introduction.png"
 "og:title": "Scene Manager API Reference"
 "og:description": "Every published Scene Manager 3 endpoint, with a console for trying each one."
 "twitter:title": "Scene Manager API Reference"
@@ -12,14 +14,29 @@ keywords: ['Scene Manager API reference', 'Scene Manager OpenAPI', '3ds Max REST
 Scene Manager 3 is in beta. Endpoints may change before release.
 </Warning>
 
-The pages under this one are generated from Scene Manager's own API document. Each endpoint carries its parameters, request body, response schema and a console.
+Every endpoint of the Scene Manager service, with its parameters, request body and response, and a console to try it. The Python SDK and the MCP tools are generated from the same definitions, so each operation has the same name in all of them. For what all endpoints have in common, see the [REST API](/scene-manager-3/developers/rest-api) guide.
 
-The Python SDK and the MCP tools are built on that same document, which is why an operation is named the same in all of them. See [Using the REST API](/scene-manager-3/developers/rest-api) for what every endpoint shares.
+## Sections
+
+| Section | What it covers |
+|---|---|
+| Service | Whether Scene Manager is running and connected to 3ds Max |
+| Setups | Creating, changing and activating setups, and their values |
+| Folders | Folders of setups. A folder's values apply to its setups |
+| Modules | Modules and the properties in them |
+| Rendering | Starting, following and stopping batch renders |
+| Variations | Rendering every combination of a set of options |
+| Comments | Comments pinned on shots, for people and agents |
+| Shots | Viewport and frame buffer captures for comments |
+| Scene | The open scene: objects, materials, properties, selection, scripts |
+| Document | Scene Manager's data in the scene, and 2.x import |
+| Settings | Your settings on this computer |
+| HDRI library | HDRI maps in your library folders and in the scene |
 
 ## Using the console
 
-The console's server is `http://127.0.0.1:45710/api/v1`: Scene Manager on the computer you read this on. There is no credential to fill in.
+The console sends requests to `http://127.0.0.1:45710/api/v1`, the Scene Manager on the computer you are reading this on. There is nothing to sign in with.
 
 <Warning>
-The console sends real requests to the scene open in 3ds Max. `DELETE /setups/{id}` removes a setup, and `POST /render` starts a batch render. Read the summary before pressing **Send** on anything that is not a `GET`.
+These are real requests to the scene open in 3ds Max: `DELETE /setups/{id}` deletes a setup and `POST /render` starts a batch render. Check what an endpoint does before you press **Send** on anything other than a `GET`.
 </Warning>

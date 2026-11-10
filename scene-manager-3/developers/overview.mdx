@@ -2,6 +2,8 @@
 title: "Automating Scene Manager 3"
 sidebarTitle: "Overview"
 description: "Drive Scene Manager 3 from your own code: the local REST API, the Python SDK and the MCP server."
+"og:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-overview.png"
+"twitter:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-overview.png"
 "og:title": "Automating Scene Manager 3"
 "og:description": "The local REST API, the Python SDK and the MCP server."
 "twitter:title": "Automating Scene Manager 3"
@@ -12,27 +14,27 @@ keywords: ['Scene Manager API', '3ds Max automation', '3ds Max batch render API'
 Scene Manager 3 is in beta. Routes, operation names and tools may change before release.
 </Warning>
 
-Scene Manager 3 runs a small service on your computer. The panel in 3ds Max talks to it, and so can your scripts and your AI assistant. The API covers setups, folders, modules, batch renders, variations and scene comments.
+Everything Scene Manager 3 does goes through the **Scene Manager service**, which runs on your computer next to 3ds Max. The Scene Manager UI uses it, and your scripts and AI assistants can use it the same way: to manage setups and folders, change modules, run batch renders, build variations and work with comments.
 
-## The model
+## How Scene Manager thinks
 
-- A **setup** is a saved state of the scene: camera, lighting, resolution, output and so on.
-- A setup's values live in **modules**. A module off in a setup leaves that part of the scene as it is.
-- Setups can sit in **folders**. A folder's values go down to its setups.
+- A **setup** is a saved state of the scene: its camera, lighting, resolution, output and so on.
+- A setup's values are grouped into **modules**. When a module is off, that part of the scene is left alone.
+- Setups can be organized into **folders**, and a folder's values apply to every setup inside it.
 - **Activating** a setup writes its values into the open scene. A **batch render** activates and renders each setup in turn.
 
-Scene Manager never creates scene content for you. It records what the scene already has and switches between states of it.
+Scene Manager doesn't create anything in your scene. It works with what is already there and switches between saved states of it.
 
-## Which surface
+## Three ways in
 
 <CardGroup cols={3}>
 
 <Card title="REST API" icon="cloud" href="/scene-manager-3/developers/rest-api">
-  The whole surface. Everything else is built on it.
+  Everything Scene Manager can do. The other two are built on it.
 </Card>
 
 <Card title="Python SDK" icon="python" href="/scene-manager-3/developers/python-sdk">
-  No dependencies, so it imports inside 3ds Max's own Python.
+  No dependencies, so it also runs inside 3ds Max's own Python.
 </Card>
 
 <Card title="MCP server" icon="robot" href="/scene-manager-3/developers/mcp-server">
@@ -41,11 +43,18 @@ Scene Manager never creates scene content for you. It records what the scene alr
 
 </CardGroup>
 
-## Before you start
+An operation has the same name everywhere: `GET /setups` is `listSetups` in the [API reference](/scene-manager-3/api-reference/introduction) and `scene.setups.list_setups()` in Python.
 
-- **3ds Max only**, for now.
-- **Scene Manager must be running.** Open it from 3ds Max. The service answers on `http://127.0.0.1:45710`. Set `SCENEMANAGER_PORT` to change the port.
-- **It is local.** The service listens on `127.0.0.1` only. There is no API key: being on the computer is the proof.
-- **A Scene Manager licence** on this computer is needed for every call except `GET /health`. Without one, calls answer **402**.
+## What the API covers
 
-One operation has one name everywhere. `GET /setups` is `listSetups` in the [API reference](/scene-manager-3/api-reference/introduction) and `scene.setups.list_setups()` in Python.
+| Area | What you can do |
+|---|---|
+| Setups and folders | List, create, change and activate setups, and organize them in folders |
+| Modules | Add modules (Camera, Output, Lights…) and choose their properties |
+| Rendering | Start a batch render, follow its progress, stop it |
+| Variations | Render every combination of a set of options |
+| Comments and shots | Pin comments on viewport and frame buffer shots, for people and agents |
+| Scene | Read the open scene: objects, materials, properties, selection, scripts |
+| Document, settings, HDRI library | The whole document, your settings and the HDRI library |
+
+The [API reference](/scene-manager-3/api-reference/introduction) lists every endpoint by area.

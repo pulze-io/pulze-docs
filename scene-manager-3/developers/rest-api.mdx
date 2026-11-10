@@ -1,26 +1,28 @@
 ---
-title: "Using the REST API"
+title: "REST API"
 sidebarTitle: "REST API"
-description: "The conventions every Scene Manager 3 endpoint shares: the base URL, errors, and a setup from list to render."
+description: "What every Scene Manager 3 endpoint has in common: the address, a first workflow, changing values and errors."
+"og:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-rest-api.png"
+"twitter:image": "https://docs.pulze.io/images/og/scene-manager-3-developers-rest-api.png"
 "og:title": "Using the Scene Manager REST API"
-"og:description": "The base URL, errors, and a setup from list to render."
+"og:description": "The address, a first workflow, changing values and errors."
 "twitter:title": "Using the Scene Manager REST API"
 keywords: ['Scene Manager REST API', '3ds Max REST API', '3ds Max batch render API']
 ---
 
-Every endpoint is listed in the [API reference](/scene-manager-3/api-reference/introduction). This page covers what they share.
+This page covers what all endpoints have in common. The [API reference](/scene-manager-3/api-reference/introduction) describes each one.
 
-## Base URL
+## Address
 
 ```
 http://127.0.0.1:45710/api/v1
 ```
 
-The service listens on this computer only and takes no credential. Set `SCENEMANAGER_PORT` before Scene Manager starts to use another port. There is one version, `v1`, and it is in the path.
+The Scene Manager service only accepts connections from the same computer, so there is no API key. Open Scene Manager in 3ds Max to start it.
 
-`GET /health` always answers. It says whether an app is connected (`connected`), whether this computer has a licence (`licensed`), and what the app is busy with, if anything (`busy`).
+Every call needs a Scene Manager licence on the computer, except `GET /health`. That one always answers: it tells you whether 3ds Max is connected (`connected`), whether there is a licence (`licensed`), and whether 3ds Max is busy (`busy`).
 
-## Setups, from list to render
+## Activate and render setups
 
 <CodeGroup>
 ```bash List
@@ -44,11 +46,10 @@ curl http://127.0.0.1:45710/api/v1/render
 ```
 </CodeGroup>
 
-`GET /setups` answers `{ "setups": [...] }` in the list's order, each with its `id`, `name`, `folder`, `tags`, `color` and the modules off in it.
-
-`POST /setups/{id}/activate` writes the setup into the scene and answers what was applied and what was skipped, with the reason. `wait: true` answers once the viewport has drawn too.
-
-`POST /render` starts a batch render of the setups you list, in that order. `quality` renders at one of the scene's quality levels and puts the scene back afterwards. `GET /render` answers the current or last batch: its `state` (`running`, `done` or `stopped`) and each item's `status` and `output` file. `POST /render/stop` ends it.
+1. `GET /setups` returns the setups in the order of the list, with their `id`, `name`, `folder`, `tags` and `color`.
+2. `POST /setups/{id}/activate` writes a setup into the scene and tells you what was applied and what was skipped, and why. With `"wait": true` it returns after the viewport has redrawn.
+3. `POST /render` renders the setups you list, in that order. Add `quality` to render at one of the scene's quality levels.
+4. `GET /render` shows the batch's `state` (`running`, `done` or `stopped`) and each setup's `status` and output file. `POST /render/stop` stops it.
 
 ## Changing values
 
@@ -58,23 +59,23 @@ curl -X POST http://127.0.0.1:45710/api/v1/values \
   -d '{ "changes": [ { "owner": "<setup or folder id>", "values": { "output#path": "D:/Renders/{{setup}}_{{camera}}_v{{version:3}}.exr" } } ] }'
 ```
 
-Property keys are `<target>#<param>`. `GET /setups/{id}/state` shows the keys and values a setup resolves to. A value set on a folder applies to every setup in it. `modulesOn` and `modulesOff` switch modules in the same write.
+A value's key is `<target>#<property>`. To see a setup's keys and values, call `GET /setups/{id}/state`. Values set on a folder apply to every setup in it. `modulesOn` and `modulesOff` turn modules on or off in the same call.
 
-For what the routes do not cover, `POST /scene/script` runs MaxScript or Python in 3ds Max and answers its value.
+When no endpoint does what you need, `POST /scene/script` runs MaxScript or Python in 3ds Max and returns the result.
 
-## When a call fails
+## Errors
 
 ```json
 { "error": "no DCC or CAD app is connected" }
 ```
 
-`error` is one sentence, written to be shown to a person.
+`error` is a single sentence you can show to a user.
 
-| Status | Means |
+| Status | Meaning |
 |---|---|
-| 400 | The request is malformed or failed validation |
-| 402 | No Scene Manager licence on this computer |
-| 403 | The operation is only for Scene Manager's own panel |
-| 404 | No such setup, folder, module or comment |
-| 409 | The scene is read-only, a batch render is already running, or 3ds Max is busy. A busy answer carries `"busy": true`: try again when the app is free |
-| 503 | Scene Manager is running but 3ds Max is not connected |
+| 400 | The request is malformed |
+| 402 | There is no Scene Manager licence on this computer |
+| 403 | The endpoint is reserved for the Scene Manager UI |
+| 404 | The setup, folder, module or comment doesn't exist |
+| 409 | The scene is read-only, a batch render is running, or 3ds Max is busy. When busy, the answer has `"busy": true`: try again shortly |
+| 503 | Scene Manager is running, but 3ds Max isn't connected |

@@ -179,6 +179,18 @@
         "hidden": true,
         "groups": [
           {
+            "group": "Overview",
+            "pages": [
+              "scene-manager-3/index"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "scene-manager-3/installation"
+            ]
+          },
+          {
             "group": "Developers",
             "pages": [
               "scene-manager-3/developers/overview",
@@ -195,6 +207,12 @@
             },
             "pages": [
               "scene-manager-3/api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "scene-manager-3/changelog"
             ]
           }
         ]
