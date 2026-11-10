@@ -1,6 +1,8 @@
 ---
 title: "Submitters"
 description: "Where to find Submit to RenderFlow inside each application, and how to install the submitter with rfsv or by hand when it is missing."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-submitters.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-submitters.png"
 "og:title": "RenderFlow Submitters for 3ds Max, Blender, Maya, Premiere Pro, DaVinci Resolve and more"
 "og:description": "The menu that holds Submit to RenderFlow in every supported application, and how to install each submitter with rfsv or by hand on Windows, Linux and macOS."
 "twitter:title": "RenderFlow Application Submitters"

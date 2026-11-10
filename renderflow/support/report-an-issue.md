@@ -1,6 +1,8 @@
 ---
 title: "Report an Issue"
 description: "Send us a RenderFlow problem with a support package, so we can fix it fast."
+"og:image": "https://docs.pulze.io/images/og/renderflow-support-report-an-issue.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-support-report-an-issue.png"
 "og:title": "Report a RenderFlow Issue"
 "og:description": "Send us a RenderFlow problem with a support package, so we can fix it fast."
 "twitter:title": "Report a RenderFlow Issue"

@@ -1,6 +1,8 @@
 ---
 title: "Silent Deployment"
 description: "Install and configure RenderFlow without touching each machine: installer flags, rfsv config, environment variables, and signing in a headless server over SSH."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-silent-deploy.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-silent-deploy.png"
 "og:title": "Silent RenderFlow Deployment"
 "og:description": "Deploy RenderFlow across a fleet from a script: silent installer flags, rfsv config, environment variables, and headless server setup over SSH."
 "twitter:title": "Silent RenderFlow Deployment"

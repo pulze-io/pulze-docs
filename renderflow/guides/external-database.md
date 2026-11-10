@@ -1,6 +1,8 @@
 ---
 title: "Your Own MongoDB"
 description: "Run the farm on a MongoDB replica set your studio manages: set it up, connect the server, move an existing farm onto it and keep it backed up."
+"og:image": "https://docs.pulze.io/images/og/renderflow-guides-external-database.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-guides-external-database.png"
 "og:title": "Run RenderFlow on Your Own MongoDB Replica Set"
 "og:description": "Set up a MongoDB replica set for RenderFlow, connect the server to it, move an existing farm onto it, and fix the errors you are most likely to see."
 "twitter:title": "Your Own MongoDB"

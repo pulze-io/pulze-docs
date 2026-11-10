@@ -1,6 +1,8 @@
 ---
 title: "Migrating"
 description: "Move to RenderFlow from RenderFlow 1 or from Pulze Render Manager: what to expect and how to plan it."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-migrating.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-migrating.png"
 "og:title": "Migrating to RenderFlow"
 "og:description": "RenderFlow is a breaking change with no data carried over. Plan the move from RenderFlow 1 or Render Manager."
 "twitter:title": "Migrating to RenderFlow"

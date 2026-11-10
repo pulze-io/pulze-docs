@@ -1,6 +1,8 @@
 ---
 title: "Deploy RenderFlow Versions"
 description: "Keep RenderFlow versions on the server in Settings → Deploy and update the whole farm to one of them."
+"og:image": "https://docs.pulze.io/images/og/renderflow-guides-deploy.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-guides-deploy.png"
 "og:title": "Deploy a RenderFlow Version to the Render Farm"
 "og:description": "Add RenderFlow versions to the server once, deploy one to every node and workstation when the farm is idle, and roll back the same way."
 "twitter:title": "Deploy RenderFlow Versions"

@@ -1,6 +1,8 @@
 ---
 title: "Server and Nodes"
 description: "Set up a render farm through the RenderFlow desktop app."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-server-and-nodes.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-server-and-nodes.png"
 "og:title": "Set Up a Render Farm with RenderFlow"
 "og:description": "Set up a RenderFlow server, connect workstations, and add render nodes through the desktop app."
 "twitter:title": "Set Up a Render Farm"

@@ -1,6 +1,8 @@
 ---
 title: "Supported Applications"
 description: "The applications, versions, render engines and job types RenderFlow renders, on Windows, Linux and macOS."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-supported-apps.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-supported-apps.png"
 "og:title": "RenderFlow Supported Applications and Render Engines"
 "og:description": "Every application, version, render engine and job type RenderFlow can render, and the platforms each one runs on."
 "twitter:title": "RenderFlow Supported Applications"

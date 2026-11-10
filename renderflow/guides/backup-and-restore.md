@@ -1,6 +1,8 @@
 ---
 title: "Backup, Restore and Moving the Server"
 description: "The server backs up the farm every hour. Restore a backup, export the farm with a password, or move it to a new server."
+"og:image": "https://docs.pulze.io/images/og/renderflow-guides-backup-and-restore.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-guides-backup-and-restore.png"
 "og:title": "Back Up, Restore and Move a RenderFlow Server"
 "og:description": "Hourly farm backups, restoring one, exporting the farm with a password, and moving it to a new server while every machine follows."
 "twitter:title": "Backup, Restore and Moving the Server"

@@ -1,6 +1,8 @@
 ---
 title: "Offline Licensing"
 description: "License a RenderFlow server that has no internet access with a license file from Pulze."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-offline-licensing.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-offline-licensing.png"
 "og:title": "RenderFlow Offline Licensing"
 "og:description": "Run a RenderFlow farm in an air-gapped network with a signed license file instead of a Pulze account sign-in."
 "twitter:title": "RenderFlow Offline Licensing"

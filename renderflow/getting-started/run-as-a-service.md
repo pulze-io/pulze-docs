@@ -1,6 +1,8 @@
 ---
 title: "Run as a Service"
 description: "Run RenderFlow on unattended render nodes: Windows services, systemd services and launchd daemons you can register with the installer or write yourself, and the account and path rules a node needs to render."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-run-as-a-service.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-run-as-a-service.png"
 "og:title": "Run RenderFlow as a Service (Windows, Linux, macOS)"
 "og:description": "Register RenderFlow to start on boot on every platform, with an account that can reach your storage."
 "twitter:title": "Run RenderFlow as a Service"

@@ -1,6 +1,8 @@
 ---
 title: "Quick Start"
 description: "Install RenderFlow, set up the server, connect a machine, and submit your first render job."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-quick-start.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-quick-start.png"
 "og:title": "RenderFlow Quick Start"
 "og:description": "Install RenderFlow, set up the server, connect a machine, and submit your first render job."
 "twitter:title": "RenderFlow Quick Start"

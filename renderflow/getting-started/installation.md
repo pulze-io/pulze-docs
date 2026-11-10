@@ -1,6 +1,8 @@
 ---
 title: "Installation"
 description: "Install RenderFlow on Windows, Linux and macOS: what the installer does, where files land, and how a machine is configured."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-installation.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-installation.png"
 "og:title": "Install RenderFlow on Windows, Linux and macOS"
 "og:description": "Install RenderFlow, choose a machine's role, and complete setup from the app or the terminal."
 "twitter:title": "Install RenderFlow"

@@ -1,6 +1,8 @@
 ---
 title: "System Requirements"
 description: "Hardware, operating systems, licensing, network and port requirements for RenderFlow."
+"og:image": "https://docs.pulze.io/images/og/renderflow-getting-started-requirements.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-getting-started-requirements.png"
 "og:title": "RenderFlow System Requirements"
 "og:description": "Hardware, operating systems, licensing, network ports and storage needed to run RenderFlow."
 "twitter:title": "RenderFlow System Requirements"

@@ -350,7 +350,9 @@
   },
   "seo": {
     "metatags": {
-      "msvalidate.01": "10F67821BB629A36D1DAA406047423FA"
+      "msvalidate.01": "10F67821BB629A36D1DAA406047423FA",
+      "og:image": "https://docs.pulze.io/images/og/docs.png",
+      "twitter:image": "https://docs.pulze.io/images/og/docs.png"
     }
   },
   "redirects": [
