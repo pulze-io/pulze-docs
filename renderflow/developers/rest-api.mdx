@@ -2,6 +2,8 @@
 title: "Using the REST API"
 sidebarTitle: "REST API"
 description: "The conventions every RenderFlow endpoint shares: base URLs, list envelopes, sorting, error bodies, bulk actions and how a job is submitted."
+"og:image": "https://docs.pulze.io/images/og/renderflow-developers-rest-api.png"
+"twitter:image": "https://docs.pulze.io/images/og/renderflow-developers-rest-api.png"
 "og:title": "Using the RenderFlow REST API"
 "og:description": "Base URLs, list envelopes, sorting, error bodies, bulk actions and how a job is submitted."
 "twitter:title": "Using the RenderFlow REST API"
@@ -158,7 +160,7 @@ const job = await rf.jobs.createJob({
 ```
 </CodeGroup>
 
-`type`, `file` and `host` are required on every recipe. `frame` is a single frame, a range, a range with a step (`1-240:4`) or a list (`1,7,22`). `resolution` is a `WIDTHxHEIGHT` string. `priority` runs 0 to 100, and a job you do not set one on is created at 50.
+`type`, `file` and `host` are required on a render recipe. A script or export recipe takes no `host`, a Shell recipe can leave it out, and a plugin recipe names the plugin's `id` instead of a file. The [Submit a job reference](/renderflow/api-reference/jobs/create) has an example body for each of the 40 recipe types. `frame` is a single frame, a range, a range with a step (`1-240:4`) or a list (`1,7,22`). `resolution` is a `WIDTHxHEIGHT` string. `priority` runs 0 to 100, and a job you do not set one on is created at 50.
 
 Every recipe also takes the fields that place and prepare the job. `pool_id` sends it to one pool, which must be one your group may **Submit to**: another answers **409** with `Pool outside what this role may submit to`, and a job with no `pool_id` goes to the group's first Submit-to pool. Moving a job with `PATCH /jobs/{id}/pool` follows the same rule. `nodes` limits it to the machines you list, and `master` names the machine that runs a distributed render's dispatcher, which must be one of `nodes` when you give both. `dependencies` lists the ids of jobs that must complete before this one starts. `env` sets environment variables for every application the job starts, and `$NAME` in a value reads what the application would have had. `licenses` names the render licenses the step takes a seat of, for what the scene cannot declare, such as a plugin inside it. `metadata` attaches labelled values the job carries, such as the artist or the shot, each a `label`, a `value` and `"type": "string"`.
 
