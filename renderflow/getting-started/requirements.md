@@ -45,9 +45,14 @@ RenderFlow runs on all three platforms, and a single farm can mix them freely. *
 
 | OS | Processor | Status |
 |----|-----------|--------|
-| Windows 10, 11, Server 2019 and later | x64 (Windows on Arm runs the x64 build) | Supported |
+| Windows 11, Server 2022 and later | x64 (Windows on Arm runs the x64 build) | Supported |
+| Windows 10, Server 2019 | x64 | Supported. The server needs the Windows 10 / Server 2019 build |
 | macOS 13 (Ventura) and later | Apple silicon | Supported |
 | Linux: Rocky 8, 9, 10, Ubuntu, and other RHEL- and Debian-based distributions | x64 and Arm (arm64) | Supported |
+
+<Note>
+The standard Windows build runs MongoDB 8.3, which needs Windows 11 or Windows Server 2022. To run the server on Windows 10 or Windows Server 2019, download the **Windows 10 / Server 2019** build instead: it is the same RenderFlow with MongoDB 8.2. Nodes and workstations run no database, so they use the standard build on any of these versions.
+</Note>
 
 ## Network
 
@@ -100,7 +105,7 @@ Running Windows, Linux and macOS side by side? Point your scenes and the reposit
 
 ## Database
 
-The server ships with **MongoDB 8.3.13** and runs it for you as a replica set, so there is nothing to install and nothing to configure.
+The server ships with **MongoDB 8.3.13** and runs it for you as a replica set, so there is nothing to install and nothing to configure. The Windows 10 / Server 2019 build ships **MongoDB 8.2.12**, because MongoDB 8.3 needs Windows 11 or Windows Server 2022.
 
 If you would rather use your own cluster, point the server at it with `--uri` at install time or in **Settings → Server**. It has to be a replica set, because RenderFlow relies on change streams, which a standalone MongoDB does not provide. [Your Own MongoDB](/renderflow/guides/external-database) shows how to set one up, connect the server and move an existing farm onto it.
 
