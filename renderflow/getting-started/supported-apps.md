@@ -60,11 +60,13 @@ A plugin found inside an application is reported with it, so a step can require 
 | Husk (USD) | Renders a USD file with Karma or another USD renderer |
 | Mantra (IFD) | Renders Mantra IFD files |
 | Nuke | Renders the Write nodes of a Nuke script |
+| Nuke Script | Runs a Python script in Nuke, in terminal mode |
 | After Effects | Renders the render queue of an After Effects project |
 | Premiere | Exports a Premiere Pro sequence through Media Encoder |
 | Media Encoder | Exports a movie or a Premiere project with a Media Encoder preset |
 | DaVinci Resolve | Renders the render queue of a DaVinci Resolve project |
 | Fusion | Renders a Fusion composition |
+| Fusion Script | Runs a Python script in Fusion Studio |
 | Harmony | Renders the Write nodes of a Harmony scene |
 | KeyShot | Renders a KeyShot scene |
 | VRED | Renders a VRED scene |
@@ -79,6 +81,7 @@ A plugin found inside an application is reported with it, so a step can require 
 | Redshift | Renders Redshift proxy files |
 | RenderMan | Renders RenderMan RIB files |
 | Image Converter | Converts and resizes rendered frames |
+| Denoise | Denoises rendered frames with Intel Open Image Denoise |
 | Video Encoder | Turns a frame sequence into a movie |
 | Python | Runs a Python script on the farm |
 | Shell | Runs a command or a batch, PowerShell or Bash script |
