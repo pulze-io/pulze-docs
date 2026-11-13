@@ -20,3 +20,12 @@
 .not-found-container > div:last-child:not(:has(*)) {
   display: none;
 }
+
+/* Callouts: a code block as the last item keeps its page margin (mb-8), leaving a tall empty band */
+.callout .code-block {
+  margin-top: 0.75rem;
+}
+
+.callout [data-component-part="callout-content"] > :last-child {
+  margin-bottom: 0;
+}
