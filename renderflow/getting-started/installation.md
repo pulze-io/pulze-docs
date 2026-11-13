@@ -11,6 +11,14 @@ keywords: ['install render farm software', 'RenderFlow installation', 'render fa
 
 One installer covers every machine in the farm. What a machine becomes (server, workstation or render node) is decided after installation, either in the app's setup wizard or with `rfsv config` in a terminal.
 
+<Tip>
+**Quick setup with an AI agent.** Paste this prompt into Claude Code, Codex or any agent that can run commands on your machines. The agent checks your network, downloads the latest version and walks you through installing RenderFlow on your server, workstations and render nodes.
+
+```text
+Set up RenderFlow for me: https://renderflow.com/setup.md
+```
+</Tip>
+
 ## Before you start
 
 - A [Pulze account](https://account.pulze.io/) with a RenderFlow subscription or an active trial. Only the server signs in to it; the machines that join it do not.

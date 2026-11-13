@@ -13,7 +13,7 @@ Pulze builds software for 3D artists and studios. This skill covers RenderFlow, 
 ## Products
 
 ### RenderFlow
-A render farm manager for studios and in-house creative teams. It runs on the studio's own machines, on Windows, Linux (x64 and Arm) and macOS (Arm), and one farm can mix all three. It submits, monitors and manages render jobs from 26 applications and render engines, and can add cloud machines from the studio's own Azure or AWS account. Licensed per machine rendering at the same time; monitoring and managing the farm are free.
+A render farm manager for studios and in-house creative teams, running on the studio's own machines, on Windows, Linux (x64 and Arm) and macOS (Arm); one farm can mix all three. RenderFlow submits, monitors and manages render jobs from 26 applications and render engines, and can add cloud machines from the studio's own Azure or AWS account. Licensed per machine rendering at the same time; monitoring and managing the farm are free.
 
 #### Set up a farm, in this order
 1. System Requirements: /renderflow/getting-started/requirements
@@ -23,6 +23,8 @@ A render farm manager for studios and in-house creative teams. It runs on the st
 5. Quick Start (the same path on one page, ending with the first job): /renderflow/getting-started/quick-start
 
 For many machines at once, use Silent Deployment instead of steps 2 and 3: /renderflow/getting-started/silent-deploy
+
+If you can run commands on the person's machines and they want RenderFlow set up, follow https://renderflow.com/setup.md: checks, install commands for each platform, adding machines and a farm report, step by step.
 
 #### Getting Started
 - Introduction: /renderflow/introduction
@@ -102,7 +104,7 @@ An AI toolset for visualization: image generation from the 3D viewport, upscalin
 - Changelog: /project-dream/changelog
 
 ### LayerWise
-A free Photoshop plugin for render elements (Photoshop 2025 or newer, Windows or macOS, a free Pulze account). It builds an organized, masked PSD from a folder of render elements, with presets for V-Ray, Corona and FStorm and any engine through your own element names, and swaps new renders into the same PSD while keeping masks, smart filters, layer styles and retouching.
+A free Photoshop plugin for render elements (Photoshop 2025 or newer, Windows or macOS, a free Pulze account). LayerWise builds an organized, masked PSD from a folder of render elements, with presets for V-Ray, Corona and FStorm and any engine through your own element names, and swaps new renders into the same PSD while keeping masks, smart filters, layer styles and retouching.
 
 #### Getting Started
 - Overview: /layerwise
@@ -145,7 +147,7 @@ A free Photoshop plugin for render elements (Photoshop 2025 or newer, Windows or
 - **Set up pools and groups**: Pools divide the machines; groups decide what people may do and which pools they may submit to. See /renderflow/getting-started/server-and-nodes.
 - **Troubleshoot failures**: Check the task's render log, then collect an error report for support. See /renderflow/support/report-an-issue.
 - **Run a script on the farm**: Add a Shell step for a command you already have, or a Python step when the work has to spread across machines. A Python declaration such as `rf.folder("plates")` becomes a field in the submitter, a command-line flag and the value, from one line. See /renderflow/scripting/overview.
-- **Add a job type of your own**: Package a Python script as a plugin with a `plugin.toml` and install it once into the repository. It then appears in the submitter's template picker for the whole studio. See /renderflow/scripting/plugins.
+- **Add a job type of your own**: Package a Python script as a plugin with a `plugin.toml` and install it once into the repository. The job type then appears in the submitter's template picker for the whole studio. See /renderflow/scripting/plugins.
 - **Render Unreal projects from Perforce**: Add the server in Settings → Perforce, install `p4` on the nodes, and submit from Unreal with Tools → Submit to RenderFlow. Each node syncs the project instead of RenderFlow copying it, and checked-out files are shelved for the job. See /renderflow/guides/unreal-and-perforce.
 - **Submit from code**: `POST /jobs` takes a flat per-application recipe or a step tree. On the machine running RenderFlow no credential is needed, which is how an application plugin submits; from anywhere else use an API key. See /renderflow/developers/rest-api and /renderflow/developers/cookbook.
 - **Follow a job without polling**: One WebSocket at `/api/v1/socket` carries every change. The TypeScript SDK wraps it as `rf.jobs.on()`, and both SDKs have `settled()` for waiting on one job. See /renderflow/developers/websocket.

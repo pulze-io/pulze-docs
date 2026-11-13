@@ -17,6 +17,8 @@ The order to follow when installing and configuring a farm:
 
 For many machines without touching each one, use [Silent Deployment](https://docs.pulze.io/renderflow/getting-started/silent-deploy.md) instead of steps 2 and 3.
 
+An AI agent that can run commands on the person's machines (Claude Code, Codex or similar) should follow [Set up RenderFlow](https://renderflow.com/setup.md): checks, install commands for each platform, adding machines and a farm report, step by step.
+
 ## RenderFlow: getting started
 
 - [RenderFlow overview](https://docs.pulze.io/renderflow/introduction.md): what RenderFlow is and how the docs are organized.
