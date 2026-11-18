@@ -7,6 +7,28 @@ mode: "wide"
 rss: true
 ---
 
+<Update label="2.0.23" description="November 18, 2026">
+RenderFlow 2.0.23 makes startup errors say what happened and what to do, submits large projects from a workstation without timing out, and fixes macOS 27 machines and batches on Egnyte shares.
+
+**Updates:**
+- Startup errors say what happened and what to do next
+- A workstation copies a large project in the background, so the submit returns at once
+- A distributed render's helper machines count against the step's machine limit
+- An application that exits shows its real exit code
+- 3ds Max waits for a scene to load as long as it takes
+- V-Ray GPU scene checks read V-Ray GPU's own settings
+
+**Fixes:**
+- Fixed macOS 27 machines being refused by the server
+- Fixed the second job of a batch failing on Egnyte shares
+- Fixed a large project timing out mid-copy, and a second submit making a duplicate job
+- Fixed startup errors that never reached the screen
+- Fixed the setup wizard not hearing from the service
+- Fixed 3ds Max Scene Manager render elements losing their own file type
+- Fixed Redshift bundled with Cinema 4D not being found on Windows
+- Fixed a workstation showing "Unexpected error" instead of the server's message
+</Update>
+
 <Update label="2.0.22" description="November 12, 2026">
 RenderFlow 2.0.22 adds a separate Windows 10 / Windows Server 2019 build, fixes issues with browsing large 3ds Max scenes and crashes with Corona 16.
 

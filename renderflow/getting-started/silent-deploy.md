@@ -37,7 +37,7 @@ The same flags work on every platform.
 | `--tls-cert=<path>` | Server certificate (PEM) |
 | `--tls-key=<path>` | Its private key (PEM) |
 | `--tls-ca=<path>` | CA certificate to trust for HTTPS: a private server certificate, or a proxy that re-signs TLS |
-| `--tls-port=<port>` | Port of the HTTPS listener, default 44445. Server only |
+| `--tls-port=<port>` | Port of the HTTPS listener, default 44445. Server only. Nodes and workstations then join with `--server=https://host:<port>` |
 | `--server-tls` | The server answers over TLS, which `--server=https://host` also says. Node and workstation only |
 | `--server-port=<port>` | The server's port, when it is not the farm's own: a server behind a proxy or tunnel on 443, which `--server=https://host:443` also says. Node and workstation only |
 | `--ephemeral` | Remove this machine from the farm once it goes offline. For Spot and autoscaled cloud machines that never come back |

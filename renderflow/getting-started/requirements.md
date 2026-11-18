@@ -69,6 +69,16 @@ Other machines only ever connect to the server: on 44442, on 44443 to discover i
 
 Port 44445 only listens when TLS is switched on, and even then the machine's own loopback API stays plaintext, so submitters, `rfcli` and the desktop app running on the server itself are unaffected.
 
+### Changing the ports
+
+**The HTTPS port** can be changed on the server at any time: set **Port** under **TLS** in **Settings → Server** (or `--tls-port` when you install, or `rfsv config --tls-port`), then restart the service. Every node and workstation then needs the port in its server address, for example `https://rf-server:8443`. The installer only opens 44445 in the firewall, so open the new port yourself.
+
+**The plain port 44442** is set with the `RENDERFLOW_SERVICE_API_PORT` environment variable, and there is no setting for it in the app. Change it only if you have to:
+
+- Set it as a **system** environment variable, with the same value, on **every** machine in the farm, then restart them. The desktop app, `rfcli` and the submitters find their machine's service by that variable. If it is set only for the RenderFlow service, the app waits for RenderFlow forever.
+- The Python SDK reads `RENDERFLOW_URL` instead. Set it too, for example `RENDERFLOW_URL=http://127.0.0.1:45500`.
+- The Premiere Pro panel always uses 44442.
+
 ### Firewall
 
 The installer configures the system firewall for you:

@@ -73,7 +73,7 @@ Install RenderFlow on each artist's machine and launch it.
 The machine starts **Suspended**, so it will not render while the artist is working on it.
 </Step>
 <Step title="Connect to the server">
-Type the server's address, or press **Discover** to list the servers answering on this network. If your server serves the farm over TLS, write `https://` in front of the address.
+Type the server's address, or press **Discover** to list the servers answering on this network. If your server serves the farm over TLS, write `https://` in front of the address, and `:port` after it if the server's HTTPS port is not 44445.
 
 <Frame caption="Pointing a workstation at the server">
   <img src="/images/renderflow/v2/rf_wizard_connect.webp" alt="The setup wizard asking for the server address, with a Discover button" />
